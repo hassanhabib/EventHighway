@@ -5,7 +5,7 @@
 using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Storages;
-using EventHighway.Core.Models.EventAddress;
+using EventHighway.Core.Models.EventAddresses;
 
 namespace EventHighway.Core.Services.EventAddresses
 {

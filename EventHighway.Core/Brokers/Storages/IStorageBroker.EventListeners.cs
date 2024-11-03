@@ -2,13 +2,13 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System.Diagnostics.Tracing;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.EventAddresses;
 
-namespace EventHighway.Core.Services.EventAddresses
+namespace EventHighway.Core.Brokers.Storages
 {
-    internal partial interface IEventAddressService
+    internal partial interface IStorageBroker
     {
-        ValueTask<EventAddress> AddEventAddressAsync(EventAddress eventAddress);
+        ValueTask<EventListener> InsertEventListenerAsync(EventListener eventListener);
     }
 }

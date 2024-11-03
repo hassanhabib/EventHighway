@@ -3,19 +3,21 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using EventHighway.Core.Models.EventAddresses;
+using System.Collections.Generic;
+using EventHighway.Core.Models.EventListeners;
+using EventHighway.Core.Models.Events;
 
-namespace EventHighway.Core.Models.Events
+namespace EventHighway.Core.Models.EventAddresses
 {
-    public class Event
+    public class EventAddress
     {
         public Guid Id { get; set; }
-        public string Content { get; set; }
-        
-        public Guid EventAddressId { get; set; }
-        public EventAddress EventAddress { get; set; }
-
+        public string Name { get; set; }
+        public string Description { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
         public DateTimeOffset UpdatedDate { get; set; }
+
+        public IEnumerable<Event> Events { get; set; }
+        public IEnumerable<EventListener> EventListeners { get; set; }
     }
 }

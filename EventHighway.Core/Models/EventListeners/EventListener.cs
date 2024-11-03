@@ -3,14 +3,18 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using EventHighway.Core.Models.EventAddresses;
 
-namespace EventHighway.Core.Models.EventAddress
+namespace EventHighway.Core.Models.EventListeners
 {
-    public class EventAddress
+    public class EventListener
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public string Endpoint { get; set; }
+        
+        public Guid EventAddressId { get; set; }
+        public EventAddress EventAddress { get; set; }
+
         public DateTimeOffset CreatedDate { get; set; }
         public DateTimeOffset UpdatedDate { get; set; }
     }

@@ -4,7 +4,7 @@
 
 using System.Threading.Tasks;
 using EFxceptions;
-using EventHighway.Core.Models.EventAddress;
+using EventHighway.Core.Models.EventAddresses;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventHighway.Core.Brokers.Storages
@@ -18,6 +18,12 @@ namespace EventHighway.Core.Brokers.Storages
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
              optionsBuilder.UseSqlServer(this.connectionString);
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            ConfigureEvents(modelBuilder);
+            ConfigureEventListeners(modelBuilder);
+        }
 
         private async ValueTask<T> InsertAsync<T>(T @object)
         {

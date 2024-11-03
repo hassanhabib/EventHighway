@@ -2,13 +2,17 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System.Diagnostics.Tracing;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.EventAddresses;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventHighway.Core.Brokers.Storages
 {
-    internal partial interface IStorageBroker
+    internal partial class StorageBroker
     {
-        ValueTask<EventAddress> InsertEventAddressAsync(EventAddress eventAddress);
+        public DbSet<EventListener> EventListeners { get; set; }
+
+        public async ValueTask<EventListener> InsertEventListenerAsync(EventListener eventListener) =>
+            await this.InsertAsync(eventListener);
     }
 }
