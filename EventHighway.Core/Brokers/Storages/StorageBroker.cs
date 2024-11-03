@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using EFxceptions;
 using EventHighway.Core.Models.EventAddresses;
@@ -32,6 +33,13 @@ namespace EventHighway.Core.Brokers.Storages
             await broker.SaveChangesAsync();
 
             return @object;
+        }
+
+        private async ValueTask<T> SelectAsync<T>(params object[] objectIds) where T : class
+        {
+            var broker = new StorageBroker(this.connectionString);
+
+            return await broker.FindAsync<T>(objectIds);
         }
     }
 }
