@@ -2,8 +2,9 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
-using System.Diagnostics.Tracing;
+using System.Linq;
 using System.Threading.Tasks;
+using EventHighway.Core.Models.EventListeners;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventHighway.Core.Brokers.Storages
@@ -14,5 +15,8 @@ namespace EventHighway.Core.Brokers.Storages
 
         public async ValueTask<EventListener> InsertEventListenerAsync(EventListener eventListener) =>
             await this.InsertAsync(eventListener);
+
+        public async ValueTask<IQueryable<EventListener>> SelectAllEventListenersAsync() =>
+            this.SelectAll<EventListener>();
     }
 }

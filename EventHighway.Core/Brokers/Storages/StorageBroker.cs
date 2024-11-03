@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using EFxceptions;
 using EventHighway.Core.Models.EventAddresses;
@@ -40,6 +41,13 @@ namespace EventHighway.Core.Brokers.Storages
             var broker = new StorageBroker(this.connectionString);
 
             return await broker.FindAsync<T>(objectIds);
+        }
+
+        private IQueryable<T> SelectAll<T>() where T : class
+        {
+            var broker = new StorageBroker(this.connectionString);
+
+            return broker.Set<T>();
         }
     }
 }
