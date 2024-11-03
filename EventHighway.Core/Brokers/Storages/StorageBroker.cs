@@ -4,6 +4,7 @@
 
 using System.Threading.Tasks;
 using EFxceptions;
+using EventHighway.Core.Models.EventAddress;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventHighway.Core.Brokers.Storages

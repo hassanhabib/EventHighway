@@ -4,15 +4,11 @@
 
 using System.Threading.Tasks;
 using EventHighway.Core.Models.EventAddress;
-using Microsoft.EntityFrameworkCore;
 
-namespace EventHighway.Core.Brokers.Storages
+namespace EventHighway.Core.Services.EventAddresses
 {
-    internal partial class StorageBroker
+    internal partial interface IEventAddressService
     {
-        public DbSet<EventAddress> EventAddresses { get; set; }
-
-        public async ValueTask<EventAddress> InsertEventAddressAsync(EventAddress eventAddress) =>
-            await this.InsertAsync(eventAddress);
+        ValueTask<EventAddress> AddEventAddressAsync(EventAddress eventAddress);
     }
 }
