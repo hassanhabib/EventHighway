@@ -19,9 +19,7 @@ namespace EventHighway.Core.Services.EventAddresses
         public async ValueTask<EventAddress> AddEventAddressAsync(EventAddress eventAddress) =>
             await this.storageBroker.InsertEventAddressAsync(eventAddress);
 
-        public ValueTask<EventAddress> RetrieveEventAddressByIdAsync(Guid eventAddressId)
-        {
-            throw new NotImplementedException();
-        }
+        public async ValueTask<EventAddress> RetrieveEventAddressByIdAsync(Guid eventAddressId) =>
+            await this.storageBroker.SelectEventAddressByIdAsync(eventAddressId);
     }
 }
