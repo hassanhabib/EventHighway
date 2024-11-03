@@ -19,7 +19,7 @@ namespace EventHighway.Core.Services.EventListeners
         public async ValueTask<EventListener> AddEventListenerAsync(EventListener eventListener) =>
             await this.storageBroker.InsertEventListenerAsync(eventListener);
 
-        public ValueTask<IQueryable<EventListener>> RetrieveAllEventListenersAsync() =>
-            throw new System.NotImplementedException();
+        public async ValueTask<IQueryable<EventListener>> RetrieveAllEventListenersAsync() =>
+            await this.storageBroker.SelectAllEventListenersAsync();
     }
 }
