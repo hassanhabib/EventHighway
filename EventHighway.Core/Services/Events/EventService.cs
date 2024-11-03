@@ -15,7 +15,7 @@ namespace EventHighway.Core.Services.Events
         public EventService(IStorageBroker storageBroker) => 
             this.storageBroker = storageBroker;
 
-        public ValueTask<Event> AddEventAsync(Event @event) => 
-            throw new System.NotImplementedException();
+        public async ValueTask<Event> AddEventAsync(Event @event) => 
+            await this.storageBroker.InsertEventAsync(@event);
     }
 }
