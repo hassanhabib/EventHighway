@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using EventHighway.Core.Brokers.Storages;
 using EventHighway.Core.Models.EventListeners;
 using EventHighway.Core.Services.EventListeners;
@@ -26,6 +27,12 @@ namespace EventHighway.Core.Tests.Unit.Services.EventListeners
 
         private static EventListener CreateRandomEventListener() =>
             CreateEventListenerFiller().Create();
+
+        private static IQueryable<EventListener> CreateRandomEventListeners() =>
+            CreateEventListenerFiller().Create(count: GetRandomNumber()).AsQueryable();
+
+        private static int GetRandomNumber() =>
+            new IntRange(min: 2, max: 9).GetValue();
 
         private static DateTimeOffset CreateRandomDateTime() =>
             new DateTimeRange(earliestDate: new DateTime()).GetValue();

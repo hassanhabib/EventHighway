@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Storages;
 using EventHighway.Core.Models.EventListeners;
@@ -17,5 +18,8 @@ namespace EventHighway.Core.Services.EventListeners
 
         public async ValueTask<EventListener> AddEventListenerAsync(EventListener eventListener) =>
             await this.storageBroker.InsertEventListenerAsync(eventListener);
+
+        public ValueTask<IQueryable<EventListener>> RetrieveAllEventListenersAsync() =>
+            throw new System.NotImplementedException();
     }
 }
