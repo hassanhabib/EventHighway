@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/EventHighway.Core/bin/Debug/net8.0
+/EventHighway.Core/obj
