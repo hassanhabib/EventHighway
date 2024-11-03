@@ -2,7 +2,6 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
-using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Apis;
 using EventHighway.Core.Models.EventCall;
@@ -16,7 +15,16 @@ namespace EventHighway.Core.Services.EventCalls
         public EventCallService(IApiBroker apiBroker) =>
             this.apiBroker = apiBroker;
 
-        public ValueTask<EventCall> RunAsync(EventCall eventCall) => 
-            throw new NotImplementedException();
+        public async ValueTask<EventCall> RunAsync(EventCall eventCall)
+        {
+            string response =
+                await this.apiBroker.PostAsync(
+                    content: eventCall.Content,
+                    url: eventCall.Endpoint);
+
+            eventCall.Response = response;
+
+            return eventCall;
+        }
     }
 }
