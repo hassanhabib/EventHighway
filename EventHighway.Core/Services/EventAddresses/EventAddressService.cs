@@ -16,7 +16,7 @@ namespace EventHighway.Core.Services.EventAddresses
         public EventAddressService(IStorageBroker storageBroker) =>
             this.storageBroker = storageBroker;
 
-        public ValueTask<EventAddress> AddEventAddressAsync(EventAddress eventAddress) =>
-            throw new NotImplementedException();
+        public async ValueTask<EventAddress> AddEventAddressAsync(EventAddress eventAddress) =>
+            await this.storageBroker.InsertEventAddressAsync(eventAddress);
     }
 }
