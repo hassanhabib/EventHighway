@@ -10,5 +10,6 @@ namespace EventHighway.Core.Services.ListernEvents
     internal interface IListenerEventService
     {
         ValueTask<ListenerEvent> AddListenerEventAsync(ListenerEvent listenerEvent);
+        ValueTask<ListenerEvent> ModifyListenerEventAsync(ListenerEvent listenerEvent);
     }
 }
