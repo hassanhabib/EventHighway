@@ -18,5 +18,10 @@ namespace EventHighway.Core.Services.Processings.ListenerEvents
 
         public async ValueTask<ListenerEvent> AddListenerEventAsync(ListenerEvent listenerEvent) =>
             await this.listenerEventService.AddListenerEventAsync(listenerEvent);
+
+        public ValueTask<ListenerEvent> ModifyListenerEventAsync(ListenerEvent listenerEvent)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
