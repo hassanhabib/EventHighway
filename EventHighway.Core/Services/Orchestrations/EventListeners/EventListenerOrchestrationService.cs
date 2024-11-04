@@ -3,7 +3,6 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Times;
@@ -38,7 +37,7 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners
 
         public async ValueTask<Event> SubmitEventToListenersAsync(Event @event)
         {
-            IQueryable<EventListener> eventListeners = 
+            IQueryable<EventListener> eventListeners =
                 await this.eventListenerProcessingService
                     .RetrieveEventListenersByAddressIdAsync(@event.EventAddressId);
 
@@ -55,7 +54,7 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners
                     UpdatedDate = @event.CreatedDate,
                 };
 
-                ListenerEvent addedListenerEvent = 
+                ListenerEvent addedListenerEvent =
                     await this.listenerEventProcessingService
                         .AddListenerEventAsync(listenerEvent);
 
@@ -72,7 +71,7 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners
 
                 addedListenerEvent.Response = ranEventCall.Response;
 
-                addedListenerEvent.UpdatedDate = 
+                addedListenerEvent.UpdatedDate =
                     await this.dateTimeBroker.GetDateTimeOffsetAsync();
 
                 addedListenerEvent.Status = ListenerEventStatus.Completed;
