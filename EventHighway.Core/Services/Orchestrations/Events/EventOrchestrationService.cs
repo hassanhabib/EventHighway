@@ -23,9 +23,12 @@ namespace EventHighway.Core.Services.Orchestrations.Events
             this.eventService = eventService;
         }
 
-        public ValueTask<Event> SubmitEventAsync(Event @event)
+        public async ValueTask<Event> SubmitEventAsync(Event @event)
         {
-            throw new NotImplementedException();
+            _ = await this.eventAddressService.RetrieveEventAddressByIdAsync(
+                @event.EventAddressId);
+
+            return await this.eventService.AddEventAsync(@event);
         }
     }
 }
