@@ -5,6 +5,18 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <NoWarn>CS1998</NoWarn>
+    <Title>EventHighway</Title>
+    <Authors>Hassan Habib</Authors>
+    <Company>The Standard Community</Company>
+    <Product>EventHighway</Product>
+    <Version>0.1.0</Version>
+    <PackageId>EventHighway</PackageId>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Copyright>Hassan Habib 2024 (c)</Copyright>
+    <PackageIcon>EventHighwayLogo.png</PackageIcon>
+    <PackageLicenseFile>license.txt</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,6 +37,25 @@
   <ItemGroup>
     <InternalsVisibleTo Include="EventHighway.Core.Tests.Unit" />
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="EventHighwayLogo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="license.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
