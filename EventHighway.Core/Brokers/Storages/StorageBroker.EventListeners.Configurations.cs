@@ -10,7 +10,8 @@ namespace EventHighway.Core.Brokers.Storages
             modelBuilder.Entity<EventListener>()
                 .HasOne(eventListener => eventListener.EventAddress)
                 .WithMany(eventAddress => eventAddress.EventListeners)
-                .HasForeignKey(eventListener => eventListener.EventAddressId);
+                .HasForeignKey(eventListener => eventListener.EventAddressId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

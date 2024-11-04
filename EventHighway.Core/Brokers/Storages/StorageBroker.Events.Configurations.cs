@@ -14,7 +14,8 @@ namespace EventHighway.Core.Brokers.Storages
             modelBuilder.Entity<Event>()
                 .HasOne(@event => @event.EventAddress)
                 .WithMany(eventAddress => eventAddress.Events)
-                .HasForeignKey(@event => @event.EventAddressId);
+                .HasForeignKey(@event => @event.EventAddressId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace EventHighway.Core.Clients.EventAddresses
 {
     public interface IEventAddressesClient
     {
-        ValueTask<EventAddress> RegisterEventAddress(EventAddress eventAddress);
+        ValueTask<EventAddress> RegisterEventAddressAsync(EventAddress eventAddress);
         ValueTask<EventAddress> RetrieveEventAddressByIdAsync(Guid eventAddressId);
     }
 }

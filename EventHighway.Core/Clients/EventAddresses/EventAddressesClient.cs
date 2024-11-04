@@ -16,7 +16,7 @@ namespace EventHighway.Core.Clients.EventAddresses
         public EventAddressesClient(IEventAddressService eventAddressService) =>
             this.eventAddressService = eventAddressService;
 
-        public async ValueTask<EventAddress> RegisterEventAddress(EventAddress eventAddress) =>
+        public async ValueTask<EventAddress> RegisterEventAddressAsync(EventAddress eventAddress) =>
             await this.eventAddressService.AddEventAddressAsync(eventAddress);
 
         public async ValueTask<EventAddress> RetrieveEventAddressByIdAsync(Guid eventAddressId) =>

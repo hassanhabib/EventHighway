@@ -24,7 +24,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace EventHighway.Core.Clients.EventHighways
 {
-    internal class EventHighwayClient : IEventHighwayClient
+    public class EventHighwayClient : IEventHighwayClient
     {
         private readonly string dataConnectionString;
 
@@ -55,6 +55,8 @@ namespace EventHighway.Core.Clients.EventHighways
         {
             var serviceCollection = new ServiceCollection()
                 .AddTransient<IDateTimeBroker, DateTimeBroker>()
+
+                .AddDbContext<StorageBroker>()
 
                 .AddTransient<IStorageBroker, StorageBroker>(broker =>
                     new StorageBroker(this.dataConnectionString))
@@ -98,7 +100,12 @@ namespace EventHighway.Core.Clients.EventHighways
 
                 .AddTransient<
                     IEventCoordinationService,
-                    EventCoordinationService>();
+                    EventCoordinationService>()
+
+                .AddTransient<IEventsClient, EventsClient>()
+                .AddTransient<IEventListenersClient, EventListenersClient>()
+                .AddTransient<IEventAddressesClient, EventAddressesClient>()
+                .AddTransient<IEventHighwayClient, EventHighwayClient>();
 
             IServiceProvider serviceProvider =
                 serviceCollection.BuildServiceProvider();

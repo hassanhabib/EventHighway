@@ -14,17 +14,20 @@ namespace EventHighway.Core.Brokers.Storages
             modelBuilder.Entity<ListenerEvent>()
                 .HasOne(listenerEvent => listenerEvent.Event)
                 .WithMany(@event => @event.ListenerEvents)
-                .HasForeignKey(listenerEvent => listenerEvent.EventId);
+                .HasForeignKey(listenerEvent => listenerEvent.EventId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<ListenerEvent>()
                 .HasOne(listenerEvent => listenerEvent.EventAddress)
                 .WithMany(eventAddress => eventAddress.ListenerEvents)
-                .HasForeignKey(listenerEvent => listenerEvent.EventAddressId);
+                .HasForeignKey(listenerEvent => listenerEvent.EventAddressId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<ListenerEvent>()
                 .HasOne(listenerEvent => listenerEvent.EventListener)
                 .WithMany(eventListener => eventListener.ListenerEvents)
-                .HasForeignKey(listenerEvent => listenerEvent.EventListenerId);
+                .HasForeignKey(listenerEvent => listenerEvent.EventListenerId)
+                .OnDelete(DeleteBehavior.NoAction); ;
         }
     }
 }

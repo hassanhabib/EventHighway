@@ -13,8 +13,11 @@ namespace EventHighway.Core.Brokers.Storages
     {
         private readonly string connectionString;
 
-        public StorageBroker(string connectionString) =>
+        public StorageBroker(string connectionString)
+        {
             this.connectionString = connectionString;
+            this.Database.Migrate();
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
              optionsBuilder.UseSqlServer(this.connectionString);
