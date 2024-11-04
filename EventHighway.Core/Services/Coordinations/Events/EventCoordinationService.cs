@@ -22,9 +22,14 @@ namespace EventHighway.Core.Services.Coordinations.Events
             this.eventListenerOrchestrationService = eventListenerOrchestrationService;
         }
 
-        public ValueTask<Event> SubmitEventAsync(Event @event)
+        public async ValueTask<Event> SubmitEventAsync(Event @event)
         {
-            throw new System.NotImplementedException();
+            Event submittedEvent =
+                await this.eventOrchestrationService
+                    .SubmitEventAsync(@event);
+
+            return await this.eventListenerOrchestrationService
+                .SubmitEventToListenersAsync(submittedEvent);
         }
     }
 }
