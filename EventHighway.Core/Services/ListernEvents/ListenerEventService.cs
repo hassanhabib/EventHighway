@@ -19,7 +19,7 @@ namespace EventHighway.Core.Services.ListernEvents
         public async ValueTask<ListenerEvent> AddListenerEventAsync(ListenerEvent listenerEvent) =>
             await this.storageBroker.InsertListenerEventAsync(listenerEvent);
 
-        public ValueTask<ListenerEvent> ModifyListenerEventAsync(ListenerEvent listenerEvent) =>
-            throw new NotImplementedException();
+        public async ValueTask<ListenerEvent> ModifyListenerEventAsync(ListenerEvent listenerEvent) =>
+            await this.storageBroker.UpdateListenerEventAsync(listenerEvent);
     }
 }
