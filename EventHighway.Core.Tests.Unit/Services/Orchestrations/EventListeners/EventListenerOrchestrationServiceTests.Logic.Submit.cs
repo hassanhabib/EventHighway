@@ -42,9 +42,14 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners
                     {
                         EventListenerId = retrievedEventListener.Id,
                         EventId = inputEvent.Id,
+                        Status = ListenerEventStatus.Pending,
+                        EventAddressId = eventAddressId,
                         CreatedDate = inputEvent.CreatedDate,
                         UpdatedDate = inputEvent.UpdatedDate
                     }).ToList();
+
+            List<ListenerEvent> expectedListenerEventOnModify =
+                expectedListenerEvents.DeepClone();
 
             List<EventCall> expectedCallEvents =
                 retrievedEventListeners.Select(retrievedEventListener =>
@@ -70,7 +75,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners
                 this.listenerEventProcessingServiceMock.Setup(service =>
                     service.AddListenerEventAsync(
                         It.Is(SameListenerEventAs(expectedListenerEvent))))
-                            .ReturnsAsync(expectedListenerEvent);
+                            .ReturnsAsync(expectedListenerEvent.DeepClone());
             }
 
             foreach (EventCall expectedCallEvent in expectedCallEvents)
@@ -92,14 +97,14 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners
 
             for (int i = 0; i < retrievedEventListeners.Count(); i++)
             {
-                expectedListenerEvents[i].UpdatedDate = updatedDate;
-                expectedListenerEvents[i].Status = ListenerEventStatus.Completed;
-                expectedListenerEvents[i].Response = ranEventCalls[i].Response;
+                expectedListenerEventOnModify[i].UpdatedDate = updatedDate;
+                expectedListenerEventOnModify[i].Status = ListenerEventStatus.Completed;
+                expectedListenerEventOnModify[i].Response = ranEventCalls[i].Response;
 
                 this.listenerEventProcessingServiceMock.Setup(service =>
                     service.ModifyListenerEventAsync(
-                        It.Is(SameListenerEventAs(expectedListenerEvents[i]))))
-                            .ReturnsAsync(expectedListenerEvents[i]);
+                        It.Is(SameListenerEventAs(expectedListenerEventOnModify[i]))))
+                            .ReturnsAsync(expectedListenerEventOnModify[i]);
             }
 
             // when
@@ -134,11 +139,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners
                             Times.Once);
             }
 
-            for (int i = 0; i < retrievedEventListeners.Count(); i++)
+            foreach (ListenerEvent expectedListenerEvent in expectedListenerEventOnModify)
             {
                 this.listenerEventProcessingServiceMock.Verify(service =>
                     service.ModifyListenerEventAsync(
-                        It.Is(SameListenerEventAs(expectedListenerEvents[i]))),
+                        It.Is(SameListenerEventAs(expectedListenerEvent))),
                             Times.Once);
             }
 

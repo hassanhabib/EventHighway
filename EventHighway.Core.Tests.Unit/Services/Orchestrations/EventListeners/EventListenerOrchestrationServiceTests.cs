@@ -43,7 +43,12 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners
             this.dateTimeBrokerMock =
                 new Mock<IDateTimeBroker>();
 
-            this.compareLogic = new CompareLogic();
+            var compareConfiguration = new ComparisonConfig();
+
+            compareConfiguration.IgnoreProperty<ListenerEvent>(listenerEvent =>
+                listenerEvent.Id);
+
+            this.compareLogic = new CompareLogic(compareConfiguration);
 
             this.eventListenerOrchestrationService = new EventListenerOrchestrationService(
                 eventListenerProcessingService: this.eventListenerProcessingServiceMock.Object,
@@ -88,7 +93,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners
             var filler = new Filler<Event>();
 
             filler.Setup()
-                .OnType<DateTimeOffset>().Use(GetRandomDateTime);
+                .OnType<DateTimeOffset>().Use(GetRandomDateTime());
 
             return filler;
         }

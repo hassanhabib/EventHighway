@@ -3,9 +3,14 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Times;
+using EventHighway.Core.Models.EventCall;
+using EventHighway.Core.Models.EventListeners;
 using EventHighway.Core.Models.Events;
+using EventHighway.Core.Models.ListenerEvents;
 using EventHighway.Core.Services.Processings.EventCalls;
 using EventHighway.Core.Services.Processings.EventListeners;
 using EventHighway.Core.Services.Processings.ListenerEvents;
@@ -31,9 +36,52 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners
             this.dateTimeBroker = dateTimeBroker;
         }
 
-        public ValueTask<Event> SubmitEventToListenersAsync(Event @event)
+        public async ValueTask<Event> SubmitEventToListenersAsync(Event @event)
         {
-            throw new NotImplementedException();
+            IQueryable<EventListener> eventListeners = 
+                await this.eventListenerProcessingService
+                    .RetrieveEventListenersByAddressIdAsync(@event.EventAddressId);
+
+            foreach (EventListener listener in eventListeners)
+            {
+                var listenerEvent = new ListenerEvent
+                {
+                    Id = Guid.NewGuid(),
+                    EventId = @event.Id,
+                    EventListenerId = listener.Id,
+                    EventAddressId = @event.EventAddressId,
+                    Status = ListenerEventStatus.Pending,
+                    CreatedDate = @event.CreatedDate,
+                    UpdatedDate = @event.CreatedDate,
+                };
+
+                ListenerEvent addedListenerEvent = 
+                    await this.listenerEventProcessingService
+                        .AddListenerEventAsync(listenerEvent);
+
+                var eventCall = new EventCall
+                {
+                    Content = @event.Content,
+                    Endpoint = listener.Endpoint,
+                    Response = null
+                };
+
+                EventCall ranEventCall =
+                    await this.eventCallProcessingService
+                        .RunAsync(eventCall);
+
+                addedListenerEvent.Response = ranEventCall.Response;
+
+                addedListenerEvent.UpdatedDate = 
+                    await this.dateTimeBroker.GetDateTimeOffsetAsync();
+
+                addedListenerEvent.Status = ListenerEventStatus.Completed;
+
+                await this.listenerEventProcessingService
+                    .ModifyListenerEventAsync(addedListenerEvent);
+            }
+
+            return @event;
         }
     }
 }
