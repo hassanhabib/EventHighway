@@ -8,7 +8,7 @@ using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
 
-namespace EventHighway.Core.Tests.Unit.Services.Orchestrations
+namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events
 {
     public partial class EventOrchestrationServiceTests
     {

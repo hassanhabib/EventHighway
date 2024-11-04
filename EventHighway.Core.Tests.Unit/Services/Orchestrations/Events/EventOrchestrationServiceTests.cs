@@ -10,7 +10,7 @@ using EventHighway.Core.Services.Orchestrations.Events;
 using Moq;
 using Tynamix.ObjectFiller;
 
-namespace EventHighway.Core.Tests.Unit.Services.Orchestrations
+namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events
 {
     public partial class EventOrchestrationServiceTests
     {
