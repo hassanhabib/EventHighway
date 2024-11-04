@@ -13,7 +13,7 @@ namespace EventHighway.Core.Services.EventListeners
     {
         private readonly IStorageBroker storageBroker;
 
-        public EventListenerService(IStorageBroker storageBroker) => 
+        public EventListenerService(IStorageBroker storageBroker) =>
             this.storageBroker = storageBroker;
 
         public async ValueTask<EventListener> AddEventListenerAsync(EventListener eventListener) =>

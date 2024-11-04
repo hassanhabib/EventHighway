@@ -22,10 +22,10 @@ namespace EventHighway.Core.Tests.Unit.Services.EventAddresses
 
             EventAddress randomEventAddress =
                 CreateRandomEventAddress();
-            
+
             EventAddress selectedEventAddress =
                 randomEventAddress;
-            
+
             EventAddress expectedEventAddress =
                 selectedEventAddress.DeepClone();
 

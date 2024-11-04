@@ -13,7 +13,7 @@ namespace EventHighway.Core.Models.EventListeners
     {
         public Guid Id { get; set; }
         public string Endpoint { get; set; }
-        
+
         public Guid EventAddressId { get; set; }
         public EventAddress EventAddress { get; set; }
 

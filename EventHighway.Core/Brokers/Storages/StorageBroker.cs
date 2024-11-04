@@ -2,11 +2,9 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using EFxceptions;
-using EventHighway.Core.Models.EventAddresses;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventHighway.Core.Brokers.Storages

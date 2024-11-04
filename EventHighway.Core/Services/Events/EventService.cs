@@ -12,10 +12,10 @@ namespace EventHighway.Core.Services.Events
     {
         private readonly IStorageBroker storageBroker;
 
-        public EventService(IStorageBroker storageBroker) => 
+        public EventService(IStorageBroker storageBroker) =>
             this.storageBroker = storageBroker;
 
-        public async ValueTask<Event> AddEventAsync(Event @event) => 
+        public async ValueTask<Event> AddEventAsync(Event @event) =>
             await this.storageBroker.InsertEventAsync(@event);
     }
 }

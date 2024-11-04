@@ -19,7 +19,7 @@ namespace EventHighway.Core.Tests.Unit.Services.EventAddresses
         public EventAddressServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
-            
+
             this.eventAddressService = new EventAddressService(
                 storageBroker: this.storageBrokerMock.Object);
         }
@@ -36,7 +36,7 @@ namespace EventHighway.Core.Tests.Unit.Services.EventAddresses
 
             filler.Setup()
                 .OnType<DateTimeOffset>().Use(CreateRandomDateTime);
-            
+
             return filler;
         }
     }
