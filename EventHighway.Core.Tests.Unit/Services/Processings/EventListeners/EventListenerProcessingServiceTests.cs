@@ -7,7 +7,6 @@ using System.Linq;
 using EventHighway.Core.Models.EventListeners;
 using EventHighway.Core.Services.Foundations.EventListeners;
 using EventHighway.Core.Services.Processings.EventListeners;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using Tynamix.ObjectFiller;
 

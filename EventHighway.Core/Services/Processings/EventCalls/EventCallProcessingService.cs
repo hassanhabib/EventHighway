@@ -2,7 +2,6 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
-using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.EventCall;
 using EventHighway.Core.Services.Foundations.EventCalls;

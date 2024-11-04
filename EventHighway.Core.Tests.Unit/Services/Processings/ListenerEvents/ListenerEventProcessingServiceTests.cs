@@ -2,8 +2,8 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
-using EventHighway.Core.Models.ListenerEvents;
 using System;
+using EventHighway.Core.Models.ListenerEvents;
 using EventHighway.Core.Services.Foundations.ListernEvents;
 using EventHighway.Core.Services.Processings.ListenerEvents;
 using Moq;

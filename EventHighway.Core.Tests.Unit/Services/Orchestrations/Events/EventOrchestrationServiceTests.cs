@@ -2,8 +2,8 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
-using EventHighway.Core.Models.Events;
 using System;
+using EventHighway.Core.Models.Events;
 using EventHighway.Core.Services.Foundations.EventAddresses;
 using EventHighway.Core.Services.Foundations.Events;
 using EventHighway.Core.Services.Orchestrations.Events;

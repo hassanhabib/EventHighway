@@ -6,11 +6,11 @@ using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.EventAddresses;
 
-namespace EventHighway.Core.Services.Foundations.EventAddresses
+namespace EventHighway.Core.Clients.EventAddresses
 {
-    public partial interface IEventAddressService
+    public interface IEventAddressesClient
     {
-        ValueTask<EventAddress> AddEventAddressAsync(EventAddress eventAddress);
+        ValueTask<EventAddress> RegisterEventAddress(EventAddress eventAddress);
         ValueTask<EventAddress> RetrieveEventAddressByIdAsync(Guid eventAddressId);
     }
 }

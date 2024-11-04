@@ -7,7 +7,7 @@ using EventHighway.Core.Models.Events;
 
 namespace EventHighway.Core.Services.Coordinations.Events
 {
-    internal interface IEventCoordinationService
+    public interface IEventCoordinationService
     {
         ValueTask<Event> SubmitEventAsync(Event @event);
     }

@@ -18,10 +18,10 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations
             // given
             Event randomEvent = CreateRandomEvent();
             Event inputEvent = randomEvent;
-            
+
             Event submittedEvent =
                 inputEvent.DeepClone();
-            
+
             Event submittedForListenersEvent =
                 submittedEvent.DeepClone();
 

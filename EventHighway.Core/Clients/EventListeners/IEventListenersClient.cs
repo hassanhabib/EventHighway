@@ -6,11 +6,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.EventListeners;
 
-namespace EventHighway.Core.Services.Foundations.EventListeners
+namespace EventHighway.Core.Clients.EventListeners
 {
-    public interface IEventListenerService
+    public interface IEventListenersClient
     {
-        ValueTask<EventListener> AddEventListenerAsync(EventListener eventListener);
-        ValueTask<IQueryable<EventListener>> RetrieveAllEventListenersAsync();
+        ValueTask<EventListener> RegisterEventListenerAsync(EventListener eventListener);
+        ValueTask<IQueryable<EventListener>> GetAllEventListenersAsync();
     }
 }

@@ -33,13 +33,13 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners
         {
             this.eventListenerProcessingServiceMock =
                 new Mock<IEventListenerProcessingService>();
-            
+
             this.listenerEventProcessingServiceMock =
                 new Mock<IListenerEventProcessingService>();
-            
+
             this.eventCallProcessingServiceMock =
                 new Mock<IEventCallProcessingService>();
-            
+
             this.dateTimeBrokerMock =
                 new Mock<IDateTimeBroker>();
 

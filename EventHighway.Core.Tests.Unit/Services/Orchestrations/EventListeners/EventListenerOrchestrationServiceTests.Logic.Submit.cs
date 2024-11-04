@@ -108,7 +108,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners
             }
 
             // when
-            Event actualEvent = 
+            Event actualEvent =
                 await this.eventListenerOrchestrationService
                     .SubmitEventToListenersAsync(inputEvent);
 

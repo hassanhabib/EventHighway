@@ -5,9 +5,9 @@
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Events;
 
-namespace EventHighway.Core.Services.Orchestrations.Events
+namespace EventHighway.Core.Clients.Events
 {
-    internal interface IEventOrchestrationService
+    public interface IEventsClient
     {
         ValueTask<Event> SubmitEventAsync(Event @event);
     }
