@@ -3,23 +3,27 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
+using EventHighway.Core.Models.EventAddresses;
 using EventHighway.Core.Models.EventListeners;
 using EventHighway.Core.Models.Events;
-using EventHighway.Core.Models.ListenerEvents;
 
-namespace EventHighway.Core.Models.EventAddresses
+namespace EventHighway.Core.Models.ListenerEvents
 {
-    public class EventAddress
+    public class ListenerEvent
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public ListenerEventStatus Status { get; set; }
+        public string Response { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
         public DateTimeOffset UpdatedDate { get; set; }
 
-        public IEnumerable<Event> Events { get; set; }
-        public IEnumerable<EventListener> EventListeners { get; set; }
-        public IEnumerable<ListenerEvent> ListenerEvents { get; set; }
+        public Guid EventId { get; set; }
+        public Event Event { get; set; }
+
+        public Guid EventAddressId { get; set; }
+        public EventAddress EventAddress { get; set; }
+
+        public Guid EventListenerId { get; set; }
+        public EventListener EventListener { get; set; }
     }
 }

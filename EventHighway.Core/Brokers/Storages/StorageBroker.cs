@@ -25,6 +25,7 @@ namespace EventHighway.Core.Brokers.Storages
         {
             ConfigureEvents(modelBuilder);
             ConfigureEventListeners(modelBuilder);
+            ConfigureListenerEvent(modelBuilder);
         }
 
         private async ValueTask<T> InsertAsync<T>(T @object)

@@ -3,7 +3,10 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using EventHighway.Core.Models.EventAddresses;
+using EventHighway.Core.Models.ListenerEvents;
 
 namespace EventHighway.Core.Models.Events
 {
@@ -17,5 +20,7 @@ namespace EventHighway.Core.Models.Events
 
         public DateTimeOffset CreatedDate { get; set; }
         public DateTimeOffset UpdatedDate { get; set; }
+
+        public IEnumerable<ListenerEvent> ListenerEvents { get; set; }
     }
 }
