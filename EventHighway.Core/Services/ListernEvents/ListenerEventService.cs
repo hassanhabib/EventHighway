@@ -16,7 +16,7 @@ namespace EventHighway.Core.Services.ListernEvents
         public ListenerEventService(IStorageBroker storageBroker) =>
             this.storageBroker = storageBroker;
 
-        public ValueTask<ListenerEvent> AddListenerEventAsync(ListenerEvent listenerEvent) =>
-            throw new NotImplementedException();
+        public async ValueTask<ListenerEvent> AddListenerEventAsync(ListenerEvent listenerEvent) =>
+            await this.storageBroker.InsertListenerEventAsync(listenerEvent);
     }
 }
