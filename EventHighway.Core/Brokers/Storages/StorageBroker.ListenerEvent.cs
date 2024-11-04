@@ -14,5 +14,8 @@ namespace EventHighway.Core.Brokers.Storages
 
         public async ValueTask<ListenerEvent> InsertListenerEventAsync(ListenerEvent listenerEvent) =>
             await this.InsertAsync(listenerEvent);
+
+        public async ValueTask<ListenerEvent> UpdateListenerEventAsync(ListenerEvent listenerEvent) =>
+            await this.UpdateAsync(listenerEvent);
     }
 }

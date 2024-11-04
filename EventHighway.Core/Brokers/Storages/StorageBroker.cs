@@ -48,5 +48,14 @@ namespace EventHighway.Core.Brokers.Storages
 
             return broker.Set<T>();
         }
+
+        private async ValueTask<T> UpdateAsync<T>(T @object)
+        {
+            var broker = new StorageBroker(this.connectionString);
+            broker.Entry(@object).State = EntityState.Modified;
+            await broker.SaveChangesAsync();
+
+            return @object;
+        }
     }
 }
