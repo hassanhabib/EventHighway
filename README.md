@@ -10,6 +10,13 @@
 # 0/ EventHighway
 EventHighway is Standard-Compliant .NET library for event-driven programming. It is designed to be simple, lightweight, and easy to use.
 
+## 0.1/ High-Level Flow
+![image](https://github.com/user-attachments/assets/f34e1048-6f18-41f9-bee5-52c289b8bd3f)
+
+
+## 0.2/ In-Depth Architecture
+<img width="1400" alt="image" src="https://github.com/user-attachments/assets/a9c00896-6879-4832-83c6-f12923a226bd">
+
 
 # 1/ How to Use
 ## 1.0/ Installation
