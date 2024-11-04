@@ -37,7 +37,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventListeners
             IQueryable<EventListener> randomEventListeners =
                 CreateRandomEventListeners();
 
-            randomEventListeners.ForEachAsync(listener =>
+            randomEventListeners.ToList().ForEach(listener =>
             {
                 listener.EventAddressId = eventAddressId;
             });

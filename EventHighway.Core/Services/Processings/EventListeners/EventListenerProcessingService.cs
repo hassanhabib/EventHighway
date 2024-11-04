@@ -17,9 +17,12 @@ namespace EventHighway.Core.Services.Processings.EventListeners
         public EventListenerProcessingService(IEventListenerService eventListenerService) =>
             this.eventListenerService = eventListenerService;
 
-        public ValueTask<IQueryable<EventListener>> RetrieveEventListenersByAddressIdAsync(Guid addressId)
+        public async ValueTask<IQueryable<EventListener>> RetrieveEventListenersByAddressIdAsync(Guid addressId)
         {
-            throw new NotImplementedException();
+            IQueryable<EventListener> storageEventListeners =
+                await this.eventListenerService.RetrieveAllEventListenersAsync();
+
+            return storageEventListeners.Where(eventListener => eventListener.EventAddressId == addressId);
         }
     }
 }
