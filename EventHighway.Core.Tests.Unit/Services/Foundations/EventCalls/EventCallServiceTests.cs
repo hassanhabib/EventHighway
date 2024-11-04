@@ -4,7 +4,7 @@
 
 using EventHighway.Core.Brokers.Apis;
 using EventHighway.Core.Models.EventCall;
-using EventHighway.Core.Services.EventCalls;
+using EventHighway.Core.Services.Foundations.EventCalls;
 using Moq;
 using Tynamix.ObjectFiller;
 

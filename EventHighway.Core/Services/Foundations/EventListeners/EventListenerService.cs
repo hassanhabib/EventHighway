@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Storages;
 using EventHighway.Core.Models.EventListeners;
 
-namespace EventHighway.Core.Services.EventListeners
+namespace EventHighway.Core.Services.Foundations.EventListeners
 {
     internal class EventListenerService : IEventListenerService
     {
@@ -17,9 +17,9 @@ namespace EventHighway.Core.Services.EventListeners
             this.storageBroker = storageBroker;
 
         public async ValueTask<EventListener> AddEventListenerAsync(EventListener eventListener) =>
-            await this.storageBroker.InsertEventListenerAsync(eventListener);
+            await storageBroker.InsertEventListenerAsync(eventListener);
 
         public async ValueTask<IQueryable<EventListener>> RetrieveAllEventListenersAsync() =>
-            await this.storageBroker.SelectAllEventListenersAsync();
+            await storageBroker.SelectAllEventListenersAsync();
     }
 }

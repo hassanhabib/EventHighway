@@ -3,12 +3,12 @@
 // ----------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
-using EventHighway.Core.Models.EventCall;
+using EventHighway.Core.Models.Events;
 
-namespace EventHighway.Core.Services.EventCalls
+namespace EventHighway.Core.Services.Foundations.Events
 {
-    internal interface IEventCallService
+    internal interface IEventService
     {
-        ValueTask<EventCall> RunAsync(EventCall eventCall);
+        ValueTask<Event> AddEventAsync(Event @event);
     }
 }

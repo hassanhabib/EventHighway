@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Storages;
 using EventHighway.Core.Models.Events;
 
-namespace EventHighway.Core.Services.Events
+namespace EventHighway.Core.Services.Foundations.Events
 {
     internal partial class EventService : IEventService
     {
@@ -16,6 +16,6 @@ namespace EventHighway.Core.Services.Events
             this.storageBroker = storageBroker;
 
         public async ValueTask<Event> AddEventAsync(Event @event) =>
-            await this.storageBroker.InsertEventAsync(@event);
+            await storageBroker.InsertEventAsync(@event);
     }
 }

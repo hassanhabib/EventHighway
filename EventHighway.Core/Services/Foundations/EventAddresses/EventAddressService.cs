@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Storages;
 using EventHighway.Core.Models.EventAddresses;
 
-namespace EventHighway.Core.Services.EventAddresses
+namespace EventHighway.Core.Services.Foundations.EventAddresses
 {
     internal partial class EventAddressService : IEventAddressService
     {
@@ -17,9 +17,9 @@ namespace EventHighway.Core.Services.EventAddresses
             this.storageBroker = storageBroker;
 
         public async ValueTask<EventAddress> AddEventAddressAsync(EventAddress eventAddress) =>
-            await this.storageBroker.InsertEventAddressAsync(eventAddress);
+            await storageBroker.InsertEventAddressAsync(eventAddress);
 
         public async ValueTask<EventAddress> RetrieveEventAddressByIdAsync(Guid eventAddressId) =>
-            await this.storageBroker.SelectEventAddressByIdAsync(eventAddressId);
+            await storageBroker.SelectEventAddressByIdAsync(eventAddressId);
     }
 }

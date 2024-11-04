@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Apis;
 using EventHighway.Core.Models.EventCall;
 
-namespace EventHighway.Core.Services.EventCalls
+namespace EventHighway.Core.Services.Foundations.EventCalls
 {
     internal class EventCallService : IEventCallService
     {
@@ -18,7 +18,7 @@ namespace EventHighway.Core.Services.EventCalls
         public async ValueTask<EventCall> RunAsync(EventCall eventCall)
         {
             string response =
-                await this.apiBroker.PostAsync(
+                await apiBroker.PostAsync(
                     content: eventCall.Content,
                     url: eventCall.Endpoint);
 

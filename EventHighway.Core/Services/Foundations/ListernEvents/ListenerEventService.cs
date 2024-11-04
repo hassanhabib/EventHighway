@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Storages;
 using EventHighway.Core.Models.ListenerEvents;
 
-namespace EventHighway.Core.Services.ListernEvents
+namespace EventHighway.Core.Services.Foundations.ListernEvents
 {
     internal class ListenerEventService : IListenerEventService
     {
@@ -17,9 +17,9 @@ namespace EventHighway.Core.Services.ListernEvents
             this.storageBroker = storageBroker;
 
         public async ValueTask<ListenerEvent> AddListenerEventAsync(ListenerEvent listenerEvent) =>
-            await this.storageBroker.InsertListenerEventAsync(listenerEvent);
+            await storageBroker.InsertListenerEventAsync(listenerEvent);
 
         public async ValueTask<ListenerEvent> ModifyListenerEventAsync(ListenerEvent listenerEvent) =>
-            await this.storageBroker.UpdateListenerEventAsync(listenerEvent);
+            await storageBroker.UpdateListenerEventAsync(listenerEvent);
     }
 }

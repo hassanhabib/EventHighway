@@ -4,35 +4,35 @@
 
 using System;
 using EventHighway.Core.Brokers.Storages;
-using EventHighway.Core.Models.Events;
-using EventHighway.Core.Services.Events;
+using EventHighway.Core.Models.EventAddresses;
+using EventHighway.Core.Services.Foundations.EventAddresses;
 using Moq;
 using Tynamix.ObjectFiller;
 
-namespace EventHighway.Core.Tests.Unit.Services.Events
+namespace EventHighway.Core.Tests.Unit.Services.EventAddresses
 {
-    public partial class EventServiceTests
+    public partial class EventAddressServiceTests
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
-        private readonly IEventService eventService;
+        private readonly IEventAddressService eventAddressService;
 
-        public EventServiceTests()
+        public EventAddressServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
 
-            this.eventService = new EventService(
+            this.eventAddressService = new EventAddressService(
                 storageBroker: this.storageBrokerMock.Object);
         }
 
-        private static Event CreateRandomEvent() =>
-            CreateEventFiller().Create();
+        private static EventAddress CreateRandomEventAddress() =>
+            CreateEventAddressFiller().Create();
 
         private static DateTimeOffset CreateRandomDateTime() =>
             new DateTimeRange(earliestDate: new DateTime()).GetValue();
 
-        private static Filler<Event> CreateEventFiller()
+        private static Filler<EventAddress> CreateEventAddressFiller()
         {
-            var filler = new Filler<Event>();
+            var filler = new Filler<EventAddress>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>().Use(CreateRandomDateTime);

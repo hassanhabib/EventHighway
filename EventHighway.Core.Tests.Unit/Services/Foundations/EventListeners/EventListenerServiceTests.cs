@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using EventHighway.Core.Brokers.Storages;
 using EventHighway.Core.Models.EventListeners;
-using EventHighway.Core.Services.EventListeners;
+using EventHighway.Core.Services.Foundations.EventListeners;
 using Moq;
 using Tynamix.ObjectFiller;
 

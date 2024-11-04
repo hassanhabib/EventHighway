@@ -5,7 +5,7 @@
 using System.Threading.Tasks;
 using EventHighway.Core.Models.ListenerEvents;
 
-namespace EventHighway.Core.Services.ListernEvents
+namespace EventHighway.Core.Services.Foundations.ListernEvents
 {
     internal interface IListenerEventService
     {

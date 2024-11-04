@@ -6,7 +6,7 @@ using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.EventAddresses;
 
-namespace EventHighway.Core.Services.EventAddresses
+namespace EventHighway.Core.Services.Foundations.EventAddresses
 {
     internal partial interface IEventAddressService
     {
