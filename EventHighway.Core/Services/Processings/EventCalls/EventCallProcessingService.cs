@@ -16,9 +16,7 @@ namespace EventHighway.Core.Services.Processings.EventCalls
         public EventCallProcessingService(IEventCallService eventCallService) =>
             this.eventCallService = eventCallService;
 
-        public ValueTask<EventCall> RunAsync(EventCall eventCall)
-        {
-            throw new NotImplementedException();
-        }
+        public async ValueTask<EventCall> RunAsync(EventCall eventCall) =>
+            await this.eventCallService.RunAsync(eventCall);
     }
 }
