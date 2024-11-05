@@ -9,7 +9,7 @@
     <Authors>Hassan Habib</Authors>
     <Company>The Standard Community</Company>
     <Product>EventHighway</Product>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <PackageId>EventHighway</PackageId>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Copyright>Hassan Habib 2024 (c)</Copyright>
@@ -17,6 +17,11 @@
     <PackageLicenseFile>license.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Description>Standard-Compliant Open-Source Pub/Sub .NET library for managing events in distributed systems.</Description>
+    <PackageProjectUrl>https://github.com/hassanhabib/EventHighway</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/hassanhabib/EventHighway</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Event-Driven</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
