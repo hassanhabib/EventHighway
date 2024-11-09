@@ -4,7 +4,6 @@
 
 using Xeptions;
 
-
 namespace EventHighway.Core.Models.EventAddresses.Exceptions
 {
     public class EventAddressValidationException : Xeption
