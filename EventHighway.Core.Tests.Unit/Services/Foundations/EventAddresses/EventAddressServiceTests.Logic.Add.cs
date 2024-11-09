@@ -2,11 +2,13 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
 using EventHighway.Core.Models.EventAddresses;
+using EventHighway.Core.Models.EventAddresses.Exceptions;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
+using System;
+using System.Threading.Tasks;
 
 namespace EventHighway.Core.Tests.Unit.Services.EventAddresses
 {
@@ -45,6 +47,39 @@ namespace EventHighway.Core.Tests.Unit.Services.EventAddresses
                 broker.InsertEventAddressAsync(inputEventAddress),
                     Times.Once);
 
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionIfEventAddressIsNullAndLogItAsync()
+        {
+            // given
+            EventAddress nullEventAddress = null;
+            var nullEventAddressException = new NullEventAddressException(message: "EventAddress is null");
+
+            var expectedEventAddressValidationException =
+                new EventAddressValidationException
+                (message: "EventAddress validation error occurred, fix errors and try again",
+                innerException: nullEventAddressException);
+
+
+            // when
+            Func<Task> addEventAddressTask = async () =>
+                await this.eventAddressService.AddEventAddressAsync(nullEventAddress);
+
+            // then
+            await addEventAddressTask.Should().ThrowAsync<EventAddressValidationException>()
+                .WithMessage(expectedEventAddressValidationException.Message);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(expectedEventAddressValidationException))),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertEventAddressAsync(It.IsAny<EventAddress>()),
+                    Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
     }

@@ -4,6 +4,7 @@
 
 using System;
 using EventHighway.Core.Brokers.Apis;
+using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Storages;
 using EventHighway.Core.Brokers.Times;
 using EventHighway.Core.Clients.EventAddresses;
@@ -60,6 +61,8 @@ namespace EventHighway.Core.Clients.EventHighways
 
                 .AddTransient<IStorageBroker, StorageBroker>(broker =>
                     new StorageBroker(this.dataConnectionString))
+
+                .AddTransient<ILoggingBroker, LoggingBroker>()
 
                 .AddTransient<IApiBroker, ApiBroker>()
                 .AddTransient<IEventService, EventService>()
