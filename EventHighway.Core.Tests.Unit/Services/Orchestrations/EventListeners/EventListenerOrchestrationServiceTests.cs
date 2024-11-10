@@ -63,6 +63,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners
         private static IQueryable<EventListener> CreateRandomEventListeners() =>
             CreateEventListenerFiller().Create(count: GetRandomNumber()).AsQueryable();
 
+        private static string CreateRandomExceptionMessage() =>
+            new MnemonicString(wordCount: GetRandomNumber()).GetValue();
+
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
 
