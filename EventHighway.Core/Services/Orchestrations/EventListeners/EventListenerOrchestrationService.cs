@@ -43,44 +43,65 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners
 
             foreach (EventListener listener in eventListeners)
             {
-                var listenerEvent = new ListenerEvent
-                {
-                    Id = Guid.NewGuid(),
-                    EventId = @event.Id,
-                    EventListenerId = listener.Id,
-                    EventAddressId = @event.EventAddressId,
-                    Status = ListenerEventStatus.Pending,
-                    CreatedDate = @event.CreatedDate,
-                    UpdatedDate = @event.CreatedDate,
-                };
+                ListenerEvent listenerEvent =
+                    CreateEventListener(@event, listener);
 
                 ListenerEvent addedListenerEvent =
                     await this.listenerEventProcessingService
                         .AddListenerEventAsync(listenerEvent);
 
-                var eventCall = new EventCall
-                {
-                    Content = @event.Content,
-                    Endpoint = listener.Endpoint,
-                    Response = null
-                };
+                await RunEventCallAsync(@event, listener, addedListenerEvent);
+            }
 
+            return @event;
+        }
+
+        private async Task RunEventCallAsync(
+            Event @event,
+            EventListener listener,
+            ListenerEvent addedListenerEvent)
+        {
+            var eventCall = new EventCall
+            {
+                Content = @event.Content,
+                Endpoint = listener.Endpoint,
+                Response = null
+            };
+
+            try
+            {
                 EventCall ranEventCall =
                     await this.eventCallProcessingService
                         .RunAsync(eventCall);
 
                 addedListenerEvent.Response = ranEventCall.Response;
-
-                addedListenerEvent.UpdatedDate =
-                    await this.dateTimeBroker.GetDateTimeOffsetAsync();
-
-                addedListenerEvent.Status = ListenerEventStatus.Completed;
-
-                await this.listenerEventProcessingService
-                    .ModifyListenerEventAsync(addedListenerEvent);
+            }
+            catch (Exception exception)
+            {
+                addedListenerEvent.Response = exception.Message;
             }
 
-            return @event;
+            addedListenerEvent.UpdatedDate =
+                    await this.dateTimeBroker.GetDateTimeOffsetAsync();
+
+            addedListenerEvent.Status = ListenerEventStatus.Completed;
+
+            await this.listenerEventProcessingService
+                .ModifyListenerEventAsync(addedListenerEvent);
+        }
+
+        private static ListenerEvent CreateEventListener(Event @event, EventListener listener)
+        {
+            return new ListenerEvent
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                EventListenerId = listener.Id,
+                EventAddressId = @event.EventAddressId,
+                Status = ListenerEventStatus.Pending,
+                CreatedDate = @event.CreatedDate,
+                UpdatedDate = @event.CreatedDate,
+            };
         }
     }
 }
