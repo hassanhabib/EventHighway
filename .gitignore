@@ -9,3 +9,6 @@
 /EventHighway.Core.Tests.Unit/obj
 /EventHighway.Core/bin/Release
 /EventHighway.Core.Tests.Unit/bin/Release/net8.0
+/EventHighway.App/bin
+/EventHighway.App/obj/Release/net8.0
+/EventHighway.Core/bin/Debug

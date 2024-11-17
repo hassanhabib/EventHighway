@@ -12,6 +12,10 @@ namespace EventHighway.Core.Models.EventListeners
     public class EventListener
     {
         public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Header { get; set; }
+        public string Secret { get; set; }
         public string Endpoint { get; set; }
 
         public Guid EventAddressId { get; set; }
