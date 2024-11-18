@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.EventAddresses;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,9 @@ namespace EventHighway.Core.Brokers.Storages
 
         public async ValueTask<EventAddress> InsertEventAddressAsync(EventAddress eventAddress) =>
             await this.InsertAsync(eventAddress);
+
+        public async ValueTask<IQueryable<EventAddress>> SelectAllEventsAsync() =>
+            SelectAll<EventAddress>();
 
         public async ValueTask<EventAddress> SelectEventAddressByIdAsync(Guid eventAddressId) =>
             await this.SelectAsync<EventAddress>(eventAddressId);
