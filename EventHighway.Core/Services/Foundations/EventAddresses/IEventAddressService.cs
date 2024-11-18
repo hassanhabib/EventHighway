@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.EventAddresses;
 
@@ -11,6 +12,7 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses
     public partial interface IEventAddressService
     {
         ValueTask<EventAddress> AddEventAddressAsync(EventAddress eventAddress);
+        ValueTask<IQueryable<EventAddress>> RetrieveAllEventAddressesAsync();
         ValueTask<EventAddress> RetrieveEventAddressByIdAsync(Guid eventAddressId);
     }
 }
