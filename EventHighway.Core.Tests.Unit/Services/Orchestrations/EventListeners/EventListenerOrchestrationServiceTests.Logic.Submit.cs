@@ -193,6 +193,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners
                     {
                         Endpoint = retrievedEventListener.Endpoint,
                         Content = inputEvent.Content,
+                        Secret = retrievedEventListener.HeaderSecret,
                         Response = null
                     }).ToList();
 
