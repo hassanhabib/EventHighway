@@ -9,11 +9,12 @@
       "EventHighway.App/1.0.0": {
         "dependencies": {
           "EFxceptions": "0.4.5",
-          "EventHighway.Core": "1.0.0",
+          "EventHighway": "0.5.0",
           "Microsoft.EntityFrameworkCore": "8.0.10",
           "Microsoft.EntityFrameworkCore.Design": "8.0.10",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.10",
-          "Microsoft.EntityFrameworkCore.Tools": "8.0.10"
+          "Microsoft.EntityFrameworkCore.Tools": "8.0.10",
+          "EventHighway.Core": "0.5.0.0"
         },
         "runtime": {
           "EventHighway.App.dll": {}
@@ -1859,7 +1860,7 @@
           }
         }
       },
-      "EventHighway.Core/1.0.0": {
+      "EventHighway/0.5.0": {
         "dependencies": {
           "EFxceptions": "0.4.5",
           "Microsoft.EntityFrameworkCore": "8.0.10",
@@ -1868,8 +1869,16 @@
         },
         "runtime": {
           "EventHighway.Core.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
+            "assemblyVersion": "0.5.0",
+            "fileVersion": "0.5.0.0"
+          }
+        }
+      },
+      "EventHighway.Core/0.5.0.0": {
+        "runtime": {
+          "EventHighway.Core.dll": {
+            "assemblyVersion": "0.5.0.0",
+            "fileVersion": "0.5.0.0"
           }
         }
       }
@@ -3057,8 +3066,13 @@
       "path": "xeption/2.5.0",
       "hashPath": "xeption.2.5.0.nupkg.sha512"
     },
-    "EventHighway.Core/1.0.0": {
+    "EventHighway/0.5.0": {
       "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "EventHighway.Core/0.5.0.0": {
+      "type": "reference",
       "serviceable": false,
       "sha512": ""
     }
