@@ -17,7 +17,7 @@ namespace EventHighway.Core.Brokers.Storages
         public async ValueTask<EventAddress> InsertEventAddressAsync(EventAddress eventAddress) =>
             await this.InsertAsync(eventAddress);
 
-        public async ValueTask<IQueryable<EventAddress>> SelectAllEventsAsync() =>
+        public async ValueTask<IQueryable<EventAddress>> SelectAllEventAddressesAsync() =>
             SelectAll<EventAddress>();
 
         public async ValueTask<EventAddress> SelectEventAddressByIdAsync(Guid eventAddressId) =>
