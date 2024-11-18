@@ -20,10 +20,8 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses
         public async ValueTask<EventAddress> AddEventAddressAsync(EventAddress eventAddress) =>
             await storageBroker.InsertEventAddressAsync(eventAddress);
 
-        public ValueTask<IQueryable<EventAddress>> RetrieveAllEventAddressesAsync()
-        {
-            throw new NotImplementedException();
-        }
+        public async ValueTask<IQueryable<EventAddress>> RetrieveAllEventAddressesAsync() =>
+            await this.storageBroker.SelectAllEventAddressesAsync();
 
         public async ValueTask<EventAddress> RetrieveEventAddressByIdAsync(Guid eventAddressId) =>
             await storageBroker.SelectEventAddressByIdAsync(eventAddressId);
