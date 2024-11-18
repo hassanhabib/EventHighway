@@ -20,7 +20,8 @@ namespace EventHighway.Core.Services.Foundations.EventCalls
             string response =
                 await apiBroker.PostAsync(
                     content: eventCall.Content,
-                    url: eventCall.Endpoint);
+                    url: eventCall.Endpoint,
+                    secret: eventCall.Secret);
 
             eventCall.Response = response;
 

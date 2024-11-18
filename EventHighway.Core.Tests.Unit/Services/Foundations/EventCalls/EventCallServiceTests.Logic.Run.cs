@@ -34,7 +34,8 @@ namespace EventHighway.Core.Tests.Unit.Services.EventCalls
             this.apiBrokerMock
                 .Setup(broker => broker.PostAsync(
                     inputEventCall.Content,
-                    inputEventCall.Endpoint))
+                    inputEventCall.Endpoint,
+                    inputEventCall.Secret))
                         .ReturnsAsync(postCallResponse);
 
             // Act
@@ -49,7 +50,8 @@ namespace EventHighway.Core.Tests.Unit.Services.EventCalls
             this.apiBrokerMock.Verify(broker =>
                 broker.PostAsync(
                     inputEventCall.Content,
-                    inputEventCall.Endpoint),
+                    inputEventCall.Endpoint,
+                    inputEventCall.Secret),
                         Times.Once());
 
             this.apiBrokerMock.VerifyNoOtherCalls();

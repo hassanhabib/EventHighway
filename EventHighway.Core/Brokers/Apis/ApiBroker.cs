@@ -15,13 +15,15 @@ namespace EventHighway.Core.Brokers.Apis
         public ApiBroker() =>
             this.httpClient = new HttpClient();
 
-        public async ValueTask<string> PostAsync(string content, string url)
+        public async ValueTask<string> PostAsync(string content, string url, string secret)
         {
             var stringContent =
                new StringContent(
                    content,
                    encoding: Encoding.UTF8,
                    mediaType: "application/json");
+
+            this.httpClient.DefaultRequestHeaders.Add("X-Highway", secret);
 
             HttpResponseMessage httpResponseMessage =
                 await this.httpClient.PostAsync(

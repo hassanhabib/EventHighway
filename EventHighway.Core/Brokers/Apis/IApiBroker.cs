@@ -8,6 +8,6 @@ namespace EventHighway.Core.Brokers.Apis
 {
     internal interface IApiBroker
     {
-        ValueTask<string> PostAsync(string content, string url);
+        ValueTask<string> PostAsync(string content, string url, string secret);
     }
 }
