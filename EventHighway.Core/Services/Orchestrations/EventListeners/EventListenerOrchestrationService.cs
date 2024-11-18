@@ -65,6 +65,7 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners
             {
                 Content = @event.Content,
                 Endpoint = listener.Endpoint,
+                Secret = listener.HeaderSecret,
                 Response = null
             };
 
