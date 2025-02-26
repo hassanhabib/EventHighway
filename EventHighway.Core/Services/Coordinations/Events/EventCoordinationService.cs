@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Events;
 using EventHighway.Core.Services.Orchestrations.EventListeners;
@@ -23,28 +24,33 @@ namespace EventHighway.Core.Services.Coordinations.Events
             this.eventListenerOrchestrationService = eventListenerOrchestrationService;
         }
 
-        public async ValueTask<Event> SubmitEventAsync(Event @event)
+        public ValueTask<Event> SubmitEventAsync(Event @event)
         {
-            Console.WriteLine($"Start time: {DateTimeOffset.UtcNow}");
-
-            if (@event.PublishedDate is not null)
-            {
-                TimeSpan delayTime =
-                    @event.PublishedDate.Value - 
-                        DateTimeOffset.UtcNow;
-
-                _ = DelayEventAsync(@event, delayTime);
-
-                return @event; 
-            }
-
-            return await ProcessEventAsync(@event);
+            return @event.PublishedDate is not null
+                ? HandleDelayedEvent(@event)
+                : ProcessEventAsync(@event);
         }
 
-        private async Task DelayEventAsync(Event @event, TimeSpan delay)
+        private ValueTask<Event> HandleDelayedEvent(Event @event)
         {
-            await Task.Delay(delay);
-            await ProcessEventAsync(@event);
+            TimeSpan delayTime =
+                @event.PublishedDate.Value - DateTimeOffset.UtcNow;
+
+            ScheduleEvent(@event, delayTime);
+
+            return new ValueTask<Event>(@event); 
+        }
+
+        private void ScheduleEvent(Event @event, TimeSpan delay)
+        {
+            var timer = new Timer(async _ =>
+            {
+                await ProcessEventAsync(@event);
+            });
+
+            timer.Change(
+                dueTime: delay, 
+                period: Timeout.InfiniteTimeSpan);
         }
 
         private async ValueTask<Event> ProcessEventAsync(Event @event)
