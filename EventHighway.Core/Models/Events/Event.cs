@@ -19,6 +19,7 @@ namespace EventHighway.Core.Models.Events
 
         public DateTimeOffset CreatedDate { get; set; }
         public DateTimeOffset UpdatedDate { get; set; }
+        public DateTimeOffset? PublishedDate { get; set; }
 
         public IEnumerable<ListenerEvent> ListenerEvents { get; set; }
     }

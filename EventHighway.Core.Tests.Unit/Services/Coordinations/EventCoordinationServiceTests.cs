@@ -34,6 +34,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations
         private static Event CreateRandomEvent() =>
             CreateEventFiller().Create();
 
+        private static int GetRandomNumber() =>
+            new IntRange(min: 2, max: 9).GetValue();
+
         private static DateTimeOffset CreateRandomDateTime() =>
             new DateTimeRange(earliestDate: new DateTime()).GetValue();
 
@@ -42,7 +45,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations
             var filler = new Filler<Event>();
 
             filler.Setup()
-                .OnType<DateTimeOffset>().Use(CreateRandomDateTime);
+                .OnType<DateTimeOffset>().Use(CreateRandomDateTime)
+                .OnType<DateTimeOffset?>().IgnoreIt();
 
             return filler;
         }

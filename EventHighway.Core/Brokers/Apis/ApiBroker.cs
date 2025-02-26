@@ -20,7 +20,7 @@ namespace EventHighway.Core.Brokers.Apis
                    encoding: Encoding.UTF8,
                    mediaType: "application/json");
 
-            httpClient.DefaultRequestHeaders.Add("X-Highway", secret);
+            //httpClient.DefaultRequestHeaders.Add("X-Highway", secret);
 
             HttpResponseMessage httpResponseMessage =
                 await httpClient.PostAsync(
