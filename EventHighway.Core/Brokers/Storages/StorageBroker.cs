@@ -25,6 +25,7 @@ namespace EventHighway.Core.Brokers.Storages
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             ConfigureEvents(modelBuilder);
+            ConfigureEventV2s(modelBuilder);
             ConfigureEventListeners(modelBuilder);
             ConfigureListenerEvent(modelBuilder);
         }
