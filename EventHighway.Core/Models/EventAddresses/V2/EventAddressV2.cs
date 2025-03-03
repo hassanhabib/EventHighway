@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using EventHighway.Core.Models.EventListeners.V2;
 using EventHighway.Core.Models.Events.V2;
+using EventHighway.Core.Models.ListenerEvents.V2;
 
 namespace EventHighway.Core.Models.EventAddresses.V2
 {
@@ -19,5 +20,6 @@ namespace EventHighway.Core.Models.EventAddresses.V2
 
         public IEnumerable<EventV2> Events { get; set; }
         public IEnumerable<EventListenerV2> EventListeners { get; set; }
+        public IEnumerable<ListenerEventV2> ListenerEvents { get; set; }
     }
 }
