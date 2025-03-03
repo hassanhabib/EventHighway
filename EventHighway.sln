@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventHighway.Core.Tests.Uni
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventHighway.App", "EventHighway.App\EventHighway.App.csproj", "{4717718D-8736-4221-A7F9-175F7A304AAB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EventHighway.Designs", "EventHighway.Designs", "{24113A50-3D3D-4B94-9D16-D7B69A9EB51F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
