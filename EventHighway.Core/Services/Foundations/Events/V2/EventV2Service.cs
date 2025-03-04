@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Storages;
@@ -33,5 +34,8 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
 
             return await storageBroker.InsertEventV2Async(eventV2);
         });
+
+        public async ValueTask<IQueryable<EventV2>> RetrieveAllEventV2sAsync() =>
+            await this.storageBroker.SelectAllEventV2sAsync();
     }
 }
