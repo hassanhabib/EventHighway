@@ -71,7 +71,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
 
             var invalidEventV2Exception =
                 new InvalidEventV2Exception(
-                    message: "EventV2 is invalid, fix the errors and try again.");
+                    message: "Event is invalid, fix the errors and try again.");
 
             invalidEventV2Exception.AddData(
                 key: nameof(EventV2.Id),
