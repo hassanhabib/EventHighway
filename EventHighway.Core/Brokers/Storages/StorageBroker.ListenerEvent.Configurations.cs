@@ -9,7 +9,7 @@ namespace EventHighway.Core.Brokers.Storages
 {
     internal partial class StorageBroker
     {
-        private void ConfigureListenerEvent(ModelBuilder modelBuilder)
+        private void ConfigureListenerEvents(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ListenerEvent>()
                 .HasOne(listenerEvent => listenerEvent.Event)
