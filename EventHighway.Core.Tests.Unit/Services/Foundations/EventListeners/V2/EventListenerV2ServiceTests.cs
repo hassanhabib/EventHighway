@@ -42,9 +42,6 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
                 .GetUninitializedObject(type: typeof(SqlException));
         }
 
-        private static EventListenerV2 CreateRandomEventListenerV2() =>
-            CreateEventListenerV2Filler().Create();
-
         private static IQueryable<EventListenerV2> CreateRandomEventListenerV2s() =>
             CreateEventListenerV2Filler().Create(count: GetRandomNumber()).AsQueryable();
 
