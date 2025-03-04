@@ -15,12 +15,12 @@ namespace EventHighway.Core.Brokers.Storages
         public DbSet<EventAddress> EventAddresses { get; set; }
 
         public async ValueTask<EventAddress> InsertEventAddressAsync(EventAddress eventAddress) =>
-            await this.InsertAsync(eventAddress);
+            await InsertAsync(eventAddress);
 
         public async ValueTask<IQueryable<EventAddress>> SelectAllEventAddressesAsync() =>
             SelectAll<EventAddress>();
 
         public async ValueTask<EventAddress> SelectEventAddressByIdAsync(Guid eventAddressId) =>
-            await this.SelectAsync<EventAddress>(eventAddressId);
+            await SelectAsync<EventAddress>(eventAddressId);
     }
 }

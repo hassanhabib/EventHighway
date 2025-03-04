@@ -14,9 +14,9 @@ namespace EventHighway.Core.Brokers.Storages
         public DbSet<EventListener> EventListeners { get; set; }
 
         public async ValueTask<EventListener> InsertEventListenerAsync(EventListener eventListener) =>
-            await this.InsertAsync(eventListener);
+            await InsertAsync(eventListener);
 
         public async ValueTask<IQueryable<EventListener>> SelectAllEventListenersAsync() =>
-            this.SelectAll<EventListener>();
+            SelectAll<EventListener>();
     }
 }
