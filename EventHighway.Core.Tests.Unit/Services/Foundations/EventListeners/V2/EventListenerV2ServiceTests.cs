@@ -4,14 +4,18 @@
 
 using System;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Storages;
 using EventHighway.Core.Models.EventListeners.V2;
 using EventHighway.Core.Services.Foundations.EventListeners.V2;
+using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
-namespace EventHighway.Core.Tests.Unit.Services.EventListeners.V2
+namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
 {
     public partial class EventListenerV2ServiceTests
     {
@@ -27,6 +31,15 @@ namespace EventHighway.Core.Tests.Unit.Services.EventListeners.V2
             this.eventListenerV2Service = new EventListenerV2Service(
                 storageBroker: this.storageBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
+        }
+
+        private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
+
+        private static SqlException GetSqlException()
+        {
+            return (SqlException)RuntimeHelpers
+                .GetUninitializedObject(type: typeof(SqlException));
         }
 
         private static EventListenerV2 CreateRandomEventListenerV2() =>

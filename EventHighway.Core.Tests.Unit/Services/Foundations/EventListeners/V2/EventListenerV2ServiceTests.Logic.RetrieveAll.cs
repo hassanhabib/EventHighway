@@ -9,7 +9,7 @@ using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
 
-namespace EventHighway.Core.Tests.Unit.Services.EventListeners.V2
+namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
 {
     public partial class EventListenerV2ServiceTests
     {
