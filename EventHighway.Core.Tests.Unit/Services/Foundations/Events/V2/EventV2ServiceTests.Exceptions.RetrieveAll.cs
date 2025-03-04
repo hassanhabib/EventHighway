@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Events.V2;
@@ -53,6 +54,52 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCriticalAsync(It.Is(SameExceptionAs(
                     expectedEventV2DependencyException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRetrieveAllIfExceptionOccursAndLogItAsync()
+        {
+            // given
+            var serviceException = new Exception();
+
+            var failedEventV2ServiceException =
+                new FailedEventV2ServiceException(
+                    message: "Failed event service error occurred, contact support.",
+                    innerException: serviceException);
+
+            var expectedEventV2ServiceException =
+                new EventV2ServiceException(
+                    message: "Event service error occurred, contact support.",
+                    innerException: failedEventV2ServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectAllEventV2sAsync())
+                    .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<IQueryable<EventV2>> retrieveAllEventV2sTask =
+                this.eventV2Service.RetrieveAllEventV2sAsync();
+
+            EventV2ServiceException actualEventV2ServiceException =
+                await Assert.ThrowsAsync<EventV2ServiceException>(
+                    retrieveAllEventV2sTask.AsTask);
+
+            // then
+            actualEventV2ServiceException.Should()
+                .BeEquivalentTo(expectedEventV2ServiceException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectAllEventV2sAsync(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventV2ServiceException))),
                         Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
