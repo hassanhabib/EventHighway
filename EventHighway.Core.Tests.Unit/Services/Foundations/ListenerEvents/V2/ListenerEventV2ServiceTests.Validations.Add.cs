@@ -64,7 +64,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
         private async Task ShouldThrowValidationExceptionOnAddIfListenerEventV2IsInvalidAndLogItAsync(
             string invalidText)
         {
-            ListenerEventV2Status invalidListenerEventV2Status = 
+            ListenerEventV2Status invalidListenerEventV2Status =
                 GetInvalidEnum<ListenerEventV2Status>();
 
             var invalidListenerEventV2 = new ListenerEventV2
@@ -117,6 +117,63 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                 new ListenerEventV2ValidationException(
                     message: "Listener event validation error occurred, fix the errors and try again.",
                     innerException: invalidListenerEventV2Exception);
+
+            // when
+            ValueTask<ListenerEventV2> addListenerEventV2Task =
+                this.listenerEventV2Service.AddListenerEventV2Async(invalidListenerEventV2);
+
+            ListenerEventV2ValidationException actualListenerEventV2ValidationException =
+                await Assert.ThrowsAsync<ListenerEventV2ValidationException>(
+                    addListenerEventV2Task.AsTask);
+
+            // then
+            actualListenerEventV2ValidationException.Should().BeEquivalentTo(
+                expectedListenerEventV2ValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetDateTimeOffsetAsync(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedListenerEventV2ValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertListenerEventV2Async(It.IsAny<ListenerEventV2>()),
+                    Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnAddIfCreatedDateIsNotSameAsUpdatedDateAndLogItAsync()
+        {
+            // given
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
+            DateTimeOffset anotherRandomDateTimeOffset = GetRandomDateTimeOffset();
+            ListenerEventV2 randomListenerEventV2 = CreateRandomListenerEventV2(dates: randomDateTimeOffset);
+            ListenerEventV2 invalidListenerEventV2 = randomListenerEventV2;
+            invalidListenerEventV2.UpdatedDate = anotherRandomDateTimeOffset;
+
+            var invalidListenerEventV2Exception =
+                new InvalidListenerEventV2Exception(
+                    message: "Listener event is invalid, fix the errors and try again.");
+
+            invalidListenerEventV2Exception.AddData(
+                key: nameof(ListenerEventV2.CreatedDate),
+                values: $"Date is not the same as {nameof(ListenerEventV2.UpdatedDate)}");
+
+            var expectedListenerEventV2ValidationException =
+                new ListenerEventV2ValidationException(
+                    message: "Listener event validation error occurred, fix the errors and try again.",
+                    innerException: invalidListenerEventV2Exception);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetDateTimeOffsetAsync())
+                    .ReturnsAsync(randomDateTimeOffset);
 
             // when
             ValueTask<ListenerEventV2> addListenerEventV2Task =
