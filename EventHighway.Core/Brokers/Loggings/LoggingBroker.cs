@@ -1,6 +1,6 @@
-﻿// ---------------------------------------------------------------
-// Copyright (c) Aspen Publishing. All rights reserved.
-// ---------------------------------------------------------------
+﻿// ---------------------------------------------------------------------------------- 
+// Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
+// ----------------------------------------------------------------------------------
 
 using System;
 using System.Threading.Tasks;
@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace EventHighway.Core.Brokers.Loggings
 {
-    public class LoggingBroker : ILoggingBroker
+    internal class LoggingBroker : ILoggingBroker
     {
         private readonly ILogger<LoggingBroker> logger;
 
