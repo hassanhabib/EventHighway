@@ -10,5 +10,6 @@ namespace EventHighway.Core.Brokers.Loggings
     public interface ILoggingBroker
     {
         ValueTask LogErrorAsync(Exception exception);
+        ValueTask LogCriticalAsync(Exception exception);
     }
 }

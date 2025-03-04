@@ -21,5 +21,12 @@ namespace EventHighway.Core.Brokers.Loggings
                 message: exception.Message,
                 args: exception);
         }
+
+        public async ValueTask LogCriticalAsync(Exception exception)
+        {
+            this.logger.LogCritical(
+                exception,
+                exception.Message);
+        }
     }
 }
