@@ -116,5 +116,59 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowDependencyValidationExceptionOnAddIfReferenceErrorOccursAndLogItAsync()
+        {
+            // given
+            ListenerEventV2 someListenerEventV2 = CreateRandomListenerEventV2();
+            string someMessage = GetRandomString();
+
+            var foreignKeyConstraintConflictException =
+                new ForeignKeyConstraintConflictException(someMessage);
+
+            var invalidListenerEventV2ReferenceException =
+                new InvalidListenerEventV2ReferenceException(
+                    message: "Invalid listener event reference error occurred.",
+                    innerException: foreignKeyConstraintConflictException);
+
+            var expectedListenerEventV2DependencyValidationException =
+                new ListenerEventV2DependencyValidationException(
+                    message: "Listener event validation error occurred, fix the errors and try again.",
+                    innerException: invalidListenerEventV2ReferenceException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetDateTimeOffsetAsync())
+                    .ThrowsAsync(foreignKeyConstraintConflictException);
+
+            // when
+            ValueTask<ListenerEventV2> addListenerEventV2Task =
+                this.listenerEventV2Service.AddListenerEventV2Async(someListenerEventV2);
+
+            ListenerEventV2DependencyValidationException actualListenerEventV2DependencyValidationException =
+                await Assert.ThrowsAsync<ListenerEventV2DependencyValidationException>(
+                    addListenerEventV2Task.AsTask);
+
+            // then
+            actualListenerEventV2DependencyValidationException.Should()
+                .BeEquivalentTo(expectedListenerEventV2DependencyValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetDateTimeOffsetAsync(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedListenerEventV2DependencyValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertListenerEventV2Async(It.IsAny<ListenerEventV2>()),
+                    Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
