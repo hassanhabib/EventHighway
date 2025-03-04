@@ -29,7 +29,7 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
         public ValueTask<ListenerEventV2> AddListenerEventV2Async(ListenerEventV2 listenerEventV2) =>
         TryCatch(async () =>
         {
-            ValidateListenerEventV2IsNotNull(listenerEventV2);
+            await ValidateListenerEventV2OnAddAsync(listenerEventV2);
 
             return await storageBroker.InsertListenerEventV2Async(listenerEventV2);
         });

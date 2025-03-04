@@ -30,6 +30,12 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     nullListenerEventV2Exception);
             }
+            catch (InvalidListenerEventV2Exception
+                invalidListenerEventV2Exception)
+            {
+                throw await CreateAndLogValidationExceptionAsync(
+                    invalidListenerEventV2Exception);
+            }
         }
 
         private async ValueTask<ListenerEventV2ValidationException> CreateAndLogValidationExceptionAsync(
