@@ -42,6 +42,27 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
+        public static TheoryData<int> MinutesBeforeAndAfterNow()
+        {
+            int randomMoreThanOneMinuteAhead =
+                GetRandomNumber();
+
+            int randomMoreThanOneMinuteAgo =
+                GetRandomNegativeNumber();
+
+            return new TheoryData<int>
+            {
+                randomMoreThanOneMinuteAhead,
+                randomMoreThanOneMinuteAgo
+            };
+        }
+
+        private static int GetRandomNegativeNumber() =>
+            -1 * GetRandomNumber();
+
+        private static int GetRandomNumber() =>
+            new IntRange(min: 2, max: 9).GetValue();
+
         private static T GetInvalidEnum<T>()
         {
             int randomNumber =

@@ -160,6 +160,70 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     message: "Event validation error occurred, fix the errors and try again.",
                     innerException: invalidEventV2Exception);
 
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetDateTimeOffsetAsync())
+                    .ReturnsAsync(randomDateTimeOffset);
+
+            // when
+            ValueTask<EventV2> addEventV2Task =
+                this.eventV2Service.AddEventV2Async(invalidEventV2);
+
+            EventV2ValidationException actualEventV2ValidationException =
+                await Assert.ThrowsAsync<EventV2ValidationException>(
+                    addEventV2Task.AsTask);
+
+            // then
+            actualEventV2ValidationException.Should().BeEquivalentTo(
+                expectedEventV2ValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetDateTimeOffsetAsync(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventV2ValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertEventV2Async(It.IsAny<EventV2>()),
+                    Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Theory]
+        [MemberData(nameof(MinutesBeforeAndAfterNow))]
+        public async Task ShouldThrowValidationExceptionOnAddIfCreatedDateIsNotRecentAndLogItAsync(
+            int minutesBeforeAndAfter)
+        {
+            // given
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
+
+            EventV2 randomEventV2 =
+                CreateRandomEventV2(randomDateTimeOffset.AddMinutes(minutesBeforeAndAfter));
+
+            EventV2 invalidEventV2 = randomEventV2;
+
+            var invalidEventV2Exception =
+                new InvalidEventV2Exception(
+                    message: "Event is invalid, fix the errors and try again.");
+
+            invalidEventV2Exception.AddData(
+                key: nameof(EventV2.CreatedDate),
+                values: "Date is not recent.");
+
+            var expectedEventV2ValidationException =
+                new EventV2ValidationException(
+                    message: "Event validation error occurred, fix the errors and try again.",
+                    innerException: invalidEventV2Exception);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetDateTimeOffsetAsync())
+                    .ReturnsAsync(randomDateTimeOffset);
+
             // when
             ValueTask<EventV2> addEventV2Task =
                 this.eventV2Service.AddEventV2Async(invalidEventV2);
