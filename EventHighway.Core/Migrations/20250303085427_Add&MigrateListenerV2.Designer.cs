@@ -4,6 +4,7 @@ using EventHighway.Core.Brokers.Storages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventHighway.Core.Migrations
 {
     [DbContext(typeof(StorageBroker))]
-    partial class StorageBrokerModelSnapshot : ModelSnapshot
+    [Migration("20250303085427_Add&MigrateListenerV2")]
+    partial class AddMigrateListenerV2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -230,44 +233,6 @@ namespace EventHighway.Core.Migrations
                     b.ToTable("ListenerEvents");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.ListenerEvents.V2.ListenerEventV2", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("CreatedDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid>("EventAddressId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("EventListenerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Response")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTimeOffset>("UpdatedDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventAddressId");
-
-                    b.HasIndex("EventId");
-
-                    b.HasIndex("EventListenerId");
-
-                    b.ToTable("ListenerEventV2s");
-                });
-
             modelBuilder.Entity("EventHighway.Core.Models.EventListeners.EventListener", b =>
                 {
                     b.HasOne("EventHighway.Core.Models.EventAddresses.EventAddress", "EventAddress")
@@ -339,33 +304,6 @@ namespace EventHighway.Core.Migrations
                     b.Navigation("EventListener");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.ListenerEvents.V2.ListenerEventV2", b =>
-                {
-                    b.HasOne("EventHighway.Core.Models.EventAddresses.V2.EventAddressV2", "EventAddress")
-                        .WithMany("ListenerEvents")
-                        .HasForeignKey("EventAddressId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("EventHighway.Core.Models.Events.V2.EventV2", "Event")
-                        .WithMany("ListenerEvents")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("EventHighway.Core.Models.EventListeners.V2.EventListenerV2", "EventListener")
-                        .WithMany("ListenerEvents")
-                        .HasForeignKey("EventListenerId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Event");
-
-                    b.Navigation("EventAddress");
-
-                    b.Navigation("EventListener");
-                });
-
             modelBuilder.Entity("EventHighway.Core.Models.EventAddresses.EventAddress", b =>
                 {
                     b.Navigation("EventListeners");
@@ -380,8 +318,6 @@ namespace EventHighway.Core.Migrations
                     b.Navigation("EventListeners");
 
                     b.Navigation("Events");
-
-                    b.Navigation("ListenerEvents");
                 });
 
             modelBuilder.Entity("EventHighway.Core.Models.EventListeners.EventListener", b =>
@@ -389,17 +325,7 @@ namespace EventHighway.Core.Migrations
                     b.Navigation("ListenerEvents");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.EventListeners.V2.EventListenerV2", b =>
-                {
-                    b.Navigation("ListenerEvents");
-                });
-
             modelBuilder.Entity("EventHighway.Core.Models.Events.Event", b =>
-                {
-                    b.Navigation("ListenerEvents");
-                });
-
-            modelBuilder.Entity("EventHighway.Core.Models.Events.V2.EventV2", b =>
                 {
                     b.Navigation("ListenerEvents");
                 });
