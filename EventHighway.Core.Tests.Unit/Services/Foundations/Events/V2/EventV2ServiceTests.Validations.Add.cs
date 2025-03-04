@@ -92,7 +92,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
 
             invalidEventV2Exception.AddData(
                 key: nameof(EventV2.Type),
-                values: "Value is not recognized.");
+                values: "Value is not recognized");
 
             invalidEventV2Exception.AddData(
                 key: nameof(EventV2.CreatedDate),
@@ -153,7 +153,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
 
             invalidEventV2Exception.AddData(
                 key: nameof(EventV2.CreatedDate),
-                values: $"Date is not the same as {nameof(EventV2.UpdatedDate)}.");
+                values: $"Date is not the same as {nameof(EventV2.UpdatedDate)}");
 
             var expectedEventV2ValidationException =
                 new EventV2ValidationException(
@@ -213,7 +213,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
 
             invalidEventV2Exception.AddData(
                 key: nameof(EventV2.CreatedDate),
-                values: "Date is not recent.");
+                values: "Date is not recent");
 
             var expectedEventV2ValidationException =
                 new EventV2ValidationException(

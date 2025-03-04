@@ -120,6 +120,60 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
         }
 
         [Fact]
+        public async Task ShouldThrowDependencyValidationExceptionOnAddIfReferenceErrorOccursAndLogItAsync()
+        {
+            // given
+            EventV2 someEventV2 = CreateRandomEventV2();
+            string someMessage = GetRandomString();
+
+            var foreignKeyConstraintConflictException =
+                new ForeignKeyConstraintConflictException(someMessage);
+
+            var invalidEventV2ReferenceException =
+                new InvalidEventV2ReferenceException(
+                    message: "Invalid event reference error occurred.",
+                    innerException: foreignKeyConstraintConflictException);
+
+            var expectedEventV2DependencyValidationException =
+                new EventV2DependencyValidationException(
+                    message: "Event validation error occurred, fix the errors and try again.",
+                    innerException: invalidEventV2ReferenceException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetDateTimeOffsetAsync())
+                    .ThrowsAsync(foreignKeyConstraintConflictException);
+
+            // when
+            ValueTask<EventV2> addEventV2Task =
+                this.eventV2Service.AddEventV2Async(someEventV2);
+
+            EventV2DependencyValidationException actualEventV2DependencyValidationException =
+                await Assert.ThrowsAsync<EventV2DependencyValidationException>(
+                    addEventV2Task.AsTask);
+
+            // then
+            actualEventV2DependencyValidationException.Should()
+                .BeEquivalentTo(expectedEventV2DependencyValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetDateTimeOffsetAsync(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventV2DependencyValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertEventV2Async(It.IsAny<EventV2>()),
+                    Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
         public async Task ShouldThrowDependencyExceptionOnAddIfDbUpdateExceptionOccursAndLogItAsync()
         {
             // given
