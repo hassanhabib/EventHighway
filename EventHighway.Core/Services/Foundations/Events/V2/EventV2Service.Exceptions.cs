@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using EFxceptions.Models.Exceptions;
 using EventHighway.Core.Models.Events.V2;
@@ -59,6 +60,15 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
 
                 throw await CreateAndLogDependencyExceptionAsync(failedEventV2StorageException);
             }
+            catch (Exception serviceException)
+            {
+                var failedEventV2ServiceException =
+                    new FailedEventV2ServiceException(
+                        message: "Failed event service error occurred, contact support.",
+                        innerException: serviceException);
+
+                throw await CreateAndLogServiceExceptionAsync(failedEventV2ServiceException);
+            }
         }
 
         private async ValueTask<EventV2ValidationException> CreateAndLogValidationExceptionAsync(Xeption exception)
@@ -109,6 +119,18 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
             await this.loggingBroker.LogErrorAsync(eventV2DependencyException);
 
             return eventV2DependencyException;
+        }
+
+        private async ValueTask<EventV2ServiceException> CreateAndLogServiceExceptionAsync(Xeption exception)
+        {
+            var eventV2ServiceException =
+                new EventV2ServiceException(
+                    message: "Event service error occurred, contact support.",
+                    innerException: exception);
+
+            await this.loggingBroker.LogErrorAsync(eventV2ServiceException);
+
+            return eventV2ServiceException;
         }
     }
 }
