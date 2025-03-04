@@ -2,17 +2,15 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System.Linq;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Events;
-using Microsoft.EntityFrameworkCore;
+using EventHighway.Core.Models.Events.V2;
 
 namespace EventHighway.Core.Brokers.Storages
 {
-    internal partial class StorageBroker
+    internal partial interface IStorageBroker
     {
-        public DbSet<Event> Events { get; set; }
-
-        public async ValueTask<Event> InsertEventAsync(Event @event) =>
-            await InsertAsync(@event);
+        ValueTask<EventV2> InsertEventV2Async(EventV2 eventV2);
+        ValueTask<IQueryable<EventV2>> SelectAllEventV2sAsync();
     }
 }
