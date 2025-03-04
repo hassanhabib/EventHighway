@@ -88,6 +88,15 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
 
                 throw await CreateAndLogCriticalDependencyExceptionAsync(failedEventV2StorageException);
             }
+            catch (Exception serviceException)
+            {
+                var failedEventV2ServiceException =
+                    new FailedEventV2ServiceException(
+                        message: "Failed event service error occurred, contact support.",
+                        innerException: serviceException);
+
+                throw await CreateAndLogServiceExceptionAsync(failedEventV2ServiceException);
+            }
         }
 
         private async ValueTask<EventV2ValidationException> CreateAndLogValidationExceptionAsync(Xeption exception)
