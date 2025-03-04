@@ -66,6 +66,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
             };
         }
 
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
+
         private static int GetRandomNegativeNumber() =>
             -1 * GetRandomNumber();
 
