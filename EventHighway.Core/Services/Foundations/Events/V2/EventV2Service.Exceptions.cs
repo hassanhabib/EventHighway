@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
+using EFxceptions.Models.Exceptions;
 using EventHighway.Core.Models.Events.V2;
 using EventHighway.Core.Models.Events.V2.Exceptions;
 using Microsoft.Data.SqlClient;
@@ -38,6 +39,16 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
                 throw await CreateAndLogCriticalDependencyExceptionAsync(
                     failedEventV2StorageException);
             }
+            catch (DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistsEventV2Exception =
+                    new AlreadyExistsEventV2Exception(
+                        message: "Event with the same id already exists.",
+                        innerException: duplicateKeyException);
+
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    alreadyExistsEventV2Exception);
+            }
         }
 
         private async ValueTask<EventV2ValidationException> CreateAndLogValidationExceptionAsync(Xeption exception)
@@ -63,6 +74,19 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
             await this.loggingBroker.LogCriticalAsync(eventV2DependencyException);
 
             return eventV2DependencyException;
+        }
+
+        private async ValueTask<EventV2DependencyValidationException> CreateAndLogDependencyValidationExceptionAsync(
+            Xeption exception)
+        {
+            var eventV2DependencyValidationException =
+                new EventV2DependencyValidationException(
+                    message: "Event validation error occurred, fix the errors and try again.",
+                    innerException: exception);
+
+            await this.loggingBroker.LogErrorAsync(eventV2DependencyValidationException);
+
+            return eventV2DependencyValidationException;
         }
     }
 }
