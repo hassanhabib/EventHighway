@@ -3,7 +3,9 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using EventHighway.Core.Models.EventAddresses.V2;
+using EventHighway.Core.Models.ListenerEvents.V2;
 
 namespace EventHighway.Core.Models.Events.V2
 {
@@ -18,5 +20,7 @@ namespace EventHighway.Core.Models.Events.V2
 
         public Guid EventAddressId { get; set; }
         public EventAddressV2 EventAddress { get; set; }
+
+        public IEnumerable<ListenerEventV2> ListenerEvents { get; set; }
     }
 }
