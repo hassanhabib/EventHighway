@@ -56,6 +56,17 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     alreadyExistsListenerEventV2Exception);
             }
+            catch (ForeignKeyConstraintConflictException
+                foreignKeyConstraintConflictException)
+            {
+                var invalidListenerEventV2ReferenceException =
+                    new InvalidListenerEventV2ReferenceException(
+                        message: "Invalid listener event reference error occurred.",
+                        innerException: foreignKeyConstraintConflictException);
+
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    invalidListenerEventV2ReferenceException);
+            }
         }
 
         private async ValueTask<ListenerEventV2ValidationException> CreateAndLogValidationExceptionAsync(
