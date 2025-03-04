@@ -160,10 +160,6 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     message: "Event validation error occurred, fix the errors and try again.",
                     innerException: invalidEventV2Exception);
 
-            this.dateTimeBrokerMock.Setup(broker =>
-                broker.GetDateTimeOffsetAsync())
-                    .ReturnsAsync(randomDateTimeOffset);
-
             // when
             ValueTask<EventV2> addEventV2Task =
                 this.eventV2Service.AddEventV2Async(invalidEventV2);

@@ -32,6 +32,13 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
                 Parameter: nameof(EventV2.CreatedDate)),
 
                 (Rule: IsInvalid(eventV2.UpdatedDate),
+                Parameter: nameof(EventV2.UpdatedDate)),
+
+                (Rule: IsNotSameAs(
+                    firstDate: eventV2.CreatedDate,
+                    secondDate: eventV2.UpdatedDate,
+                    secondDateName: nameof(EventV2.UpdatedDate)),
+
                 Parameter: nameof(EventV2.UpdatedDate)));
         }
 
@@ -67,6 +74,15 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
             Condition = IsInvalidEnum(value) is true,
             Message = "Value is not recognized."
         };
+
+        private static dynamic IsNotSameAs(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string secondDateName) => new
+            {
+                Condition = firstDate != secondDate,
+                Message = $"Date is not the same as {secondDateName}."
+            };
 
         private static bool IsInvalidEnum<T>(T enumValue)
         {
