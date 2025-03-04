@@ -96,6 +96,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
+        private static ListenerEventV2 CreateRandomListenerEventV2() =>
+            CreateListenerEventV2Filler(dates: GetRandomDateTimeOffset()).Create();
+        
         private static ListenerEventV2 CreateRandomListenerEventV2(DateTimeOffset dates) =>
             CreateListenerEventV2Filler(dates).Create();
 
