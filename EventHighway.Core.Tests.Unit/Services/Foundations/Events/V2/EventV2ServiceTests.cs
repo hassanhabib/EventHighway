@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using EventHighway.Core.Brokers.Loggings;
@@ -94,6 +95,13 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     max: int.MaxValue)
                         .GetValue();
             }
+        }
+
+        private static IQueryable<EventV2> CreateRandomEventV2s()
+        {
+            return CreateEventV2Filler(dates: GetRandomDateTimeOffset())
+                .Create(GetRandomNumber())
+                    .AsQueryable();
         }
 
         private static EventV2 CreateRandomEventV2()
