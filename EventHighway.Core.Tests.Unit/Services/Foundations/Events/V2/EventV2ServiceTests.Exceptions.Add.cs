@@ -50,10 +50,10 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                 broker.GetDateTimeOffsetAsync(),
                     Times.Once);
 
-            //this.loggingBrokerMock.Verify(broker =>
-            //    broker.LogCriticalAsync(It.Is(SameExceptionAs(
-            //        expectedEventV2DependencyException))),
-            //            Times.Once);
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogCriticalAsync(It.Is(SameExceptionAs(
+                    expectedEventV2DependencyException))),
+                        Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertEventV2Async(It.IsAny<EventV2>()),
