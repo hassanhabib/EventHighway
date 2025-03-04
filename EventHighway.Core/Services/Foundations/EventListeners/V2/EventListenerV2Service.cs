@@ -16,14 +16,14 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
         private readonly ILoggingBroker loggingBroker;
 
         public EventListenerV2Service(
-            IStorageBroker storageBroker, 
+            IStorageBroker storageBroker,
             ILoggingBroker loggingBroker)
         {
             this.storageBroker = storageBroker;
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<IQueryable<EventListenerV2>> RetrieveAllEventListenerV2sAsync() =>
-            await storageBroker.SelectAllEventListenerV2sAsync();
+        public ValueTask<IQueryable<EventListenerV2>> RetrieveAllEventListenerV2sAsync() =>
+        TryCatch(async () => await storageBroker.SelectAllEventListenerV2sAsync());
     }
 }
