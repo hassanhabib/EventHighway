@@ -13,6 +13,6 @@ namespace EventHighway.Core.Brokers.Storages
         public DbSet<Event> Events { get; set; }
 
         public async ValueTask<Event> InsertEventAsync(Event @event) =>
-            await this.InsertAsync(@event);
+            await InsertAsync(@event);
     }
 }
