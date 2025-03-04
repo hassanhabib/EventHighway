@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
+using EFxceptions.Models.Exceptions;
 using EventHighway.Core.Models.ListenerEvents.V2;
 using EventHighway.Core.Models.ListenerEvents.V2.Exceptions;
 using FluentAssertions;
@@ -53,6 +54,58 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCriticalAsync(It.Is(SameExceptionAs(
                     expectedListenerEventV2DependencyException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertListenerEventV2Async(It.IsAny<ListenerEventV2>()),
+                    Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyValidationExceptionOnAddIfListenerEventV2AlreadyExistsAndLogItAsync()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            ListenerEventV2 someListenerEventV2 = CreateRandomListenerEventV2();
+            var duplicateKeyException = new DuplicateKeyException(randomMessage);
+
+            var alreadyExistsListenerEventV2Exception =
+                new AlreadyExistsListenerEventV2Exception(
+                    message: "Listener event with the same id already exists.",
+                    innerException: duplicateKeyException);
+
+            var expectedListenerEventV2DependencyValidationException =
+                new ListenerEventV2DependencyValidationException(
+                    message: "Listener event validation error occurred, fix the errors and try again.",
+                    innerException: alreadyExistsListenerEventV2Exception);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetDateTimeOffsetAsync())
+                    .ThrowsAsync(duplicateKeyException);
+
+            // when
+            ValueTask<ListenerEventV2> addListenerEventV2Task =
+                this.listenerEventV2Service.AddListenerEventV2Async(someListenerEventV2);
+
+            ListenerEventV2DependencyValidationException actualListenerEventV2DependencyValidationException =
+                await Assert.ThrowsAsync<ListenerEventV2DependencyValidationException>(
+                    addListenerEventV2Task.AsTask);
+
+            // then
+            actualListenerEventV2DependencyValidationException.Should()
+                .BeEquivalentTo(expectedListenerEventV2DependencyValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetDateTimeOffsetAsync(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedListenerEventV2DependencyValidationException))),
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
