@@ -27,6 +27,7 @@ namespace EventHighway.Core.Brokers.Storages
             ConfigureEvents(modelBuilder);
             ConfigureEventV2s(modelBuilder);
             ConfigureEventListeners(modelBuilder);
+            ConfigureEventListenerV2s(modelBuilder);
             ConfigureListenerEvent(modelBuilder);
         }
 
