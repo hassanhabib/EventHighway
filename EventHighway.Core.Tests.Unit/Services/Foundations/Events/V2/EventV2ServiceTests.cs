@@ -100,7 +100,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
         private static IQueryable<EventV2> CreateRandomEventV2s()
         {
             return CreateEventV2Filler(dates: GetRandomDateTimeOffset())
-                .Create(GetRandomNumber())
+                .Create(count: GetRandomNumber())
                     .AsQueryable();
         }
 
