@@ -39,7 +39,10 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
                     secondDate: eventV2.UpdatedDate,
                     secondDateName: nameof(EventV2.UpdatedDate)),
 
-                Parameter: nameof(EventV2.UpdatedDate)));
+                Parameter: nameof(EventV2.CreatedDate)),
+
+                (Rule: await IsNotRecentAsync(eventV2.CreatedDate),
+                Parameter: nameof(EventV2.CreatedDate)));
         }
 
         private static void ValidateEventV2IsNotNull(EventV2 eventV2)
@@ -83,6 +86,22 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
                 Condition = firstDate != secondDate,
                 Message = $"Date is not the same as {secondDateName}."
             };
+
+        private async ValueTask<dynamic> IsNotRecentAsync(DateTimeOffset date) => new
+        {
+            Condition = await IsDateNotRecentAsync(date),
+            Message = "Date is not recent."
+        };
+
+        private async ValueTask<bool> IsDateNotRecentAsync(DateTimeOffset date)
+        {
+            DateTimeOffset currentDateTime =
+                await this.dateTimeBroker.GetDateTimeOffsetAsync();
+
+            TimeSpan timeDifference = currentDateTime.Subtract(value: date);
+
+            return timeDifference.TotalSeconds is > 60 or < 0;
+        }
 
         private static bool IsInvalidEnum<T>(T enumValue)
         {
