@@ -4,8 +4,6 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Events.V2.Exceptions;
-using EventHighway.Core.Models.Events.V2;
 using EventHighway.Core.Models.ListenerEvents.V2;
 using EventHighway.Core.Models.ListenerEvents.V2.Exceptions;
 using FluentAssertions;
