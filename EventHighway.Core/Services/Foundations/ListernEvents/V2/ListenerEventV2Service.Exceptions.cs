@@ -46,6 +46,16 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
                 throw await CreateAndLogCriticalDependencyExceptionAsync(
                     failedListenerEventV2StorageException);
             }
+            catch (DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistsListenerEventV2Exception =
+                    new AlreadyExistsListenerEventV2Exception(
+                        message: "Listener event with the same id already exists.",
+                        innerException: duplicateKeyException);
+
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    alreadyExistsListenerEventV2Exception);
+            }
         }
 
         private async ValueTask<ListenerEventV2ValidationException> CreateAndLogValidationExceptionAsync(
