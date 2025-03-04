@@ -25,7 +25,7 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
         public ValueTask<EventV2> AddEventV2Async(EventV2 eventV2) =>
         TryCatch(async () =>
         {
-            ValidateEventV2IsNotNull(eventV2);
+            await ValidateEventV2OnAddAsync(eventV2);
 
             return await storageBroker.InsertEventV2Async(eventV2);
         });
