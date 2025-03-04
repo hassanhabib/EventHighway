@@ -4,15 +4,11 @@
 
 using System.Threading.Tasks;
 using EventHighway.Core.Models.ListenerEvents.V2;
-using Microsoft.EntityFrameworkCore;
 
 namespace EventHighway.Core.Brokers.Storages
 {
-    internal partial class StorageBroker
+    internal partial interface IStorageBroker
     {
-        public DbSet<ListenerEventV2> ListenerEventV2s { get; set; }
-
-        public async ValueTask<ListenerEventV2> InsertListenerEventV2Async(ListenerEventV2 listenerEventV2) =>
-            await InsertAsync(listenerEventV2);
+        ValueTask<ListenerEventV2> InsertListenerEventV2Async(ListenerEventV2 listenerEventV2);
     }
 }

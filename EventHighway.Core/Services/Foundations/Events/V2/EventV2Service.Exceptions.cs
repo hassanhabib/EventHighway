@@ -53,6 +53,15 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     alreadyExistsEventV2Exception);
             }
+            catch (ForeignKeyConstraintConflictException foreignKeyConstraintConflictException)
+            {
+                var invalidEventV2ReferenceException =
+                    new InvalidEventV2ReferenceException(
+                        message: "Invalid event reference error occurred.",
+                        innerException: foreignKeyConstraintConflictException);
+
+                throw await CreateAndLogDependencyValidationExceptionAsync(invalidEventV2ReferenceException);
+            }
             catch (DbUpdateException dbUpdateException)
             {
                 var failedEventV2StorageException =
