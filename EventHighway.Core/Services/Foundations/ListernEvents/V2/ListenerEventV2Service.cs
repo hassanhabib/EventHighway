@@ -26,7 +26,12 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<ListenerEventV2> AddListenerEventV2Async(ListenerEventV2 listenerEventV2) =>
-            await storageBroker.InsertListenerEventV2Async(listenerEventV2);
+        public ValueTask<ListenerEventV2> AddListenerEventV2Async(ListenerEventV2 listenerEventV2) =>
+        TryCatch(async () =>
+        {
+            ValidateListenerEventV2IsNotNull(listenerEventV2);
+
+            return await storageBroker.InsertListenerEventV2Async(listenerEventV2);
+        });
     }
 }
