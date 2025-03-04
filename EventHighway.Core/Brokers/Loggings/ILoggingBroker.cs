@@ -2,8 +2,13 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
-namespace EventHighway.Core.Brokers.Storages
+using System;
+using System.Threading.Tasks;
+
+namespace EventHighway.Core.Brokers.Loggings
 {
-    internal partial interface IStorageBroker
-    { }
+    internal interface ILoggingBroker
+    {
+        ValueTask LogErrorAsync(Exception exception);
+    }
 }
