@@ -75,7 +75,7 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
         private static dynamic IsInvalid<T>(T value) => new
         {
             Condition = IsInvalidEnum(value) is true,
-            Message = "Value is not recognized."
+            Message = "Value is not recognized"
         };
 
         private static dynamic IsNotSameAs(
@@ -84,13 +84,13 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
             string secondDateName) => new
             {
                 Condition = firstDate != secondDate,
-                Message = $"Date is not the same as {secondDateName}."
+                Message = $"Date is not the same as {secondDateName}"
             };
 
         private async ValueTask<dynamic> IsNotRecentAsync(DateTimeOffset date) => new
         {
             Condition = await IsDateNotRecentAsync(date),
-            Message = "Date is not recent."
+            Message = "Date is not recent"
         };
 
         private async ValueTask<bool> IsDateNotRecentAsync(DateTimeOffset date)
