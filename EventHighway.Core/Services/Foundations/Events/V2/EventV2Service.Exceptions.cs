@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using EFxceptions.Models.Exceptions;
 using EventHighway.Core.Models.Events.V2;
@@ -16,6 +17,7 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
     internal partial class EventV2Service
     {
         private delegate ValueTask<EventV2> ReturningEventV2Function();
+        private delegate ValueTask<IQueryable<EventV2>> ReturningEventV2sFunction();
 
         private async ValueTask<EventV2> TryCatch(ReturningEventV2Function returningEventV2Function)
         {
@@ -68,6 +70,32 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
                         innerException: dbUpdateException);
 
                 throw await CreateAndLogDependencyExceptionAsync(failedEventV2StorageException);
+            }
+            catch (Exception serviceException)
+            {
+                var failedEventV2ServiceException =
+                    new FailedEventV2ServiceException(
+                        message: "Failed event service error occurred, contact support.",
+                        innerException: serviceException);
+
+                throw await CreateAndLogServiceExceptionAsync(failedEventV2ServiceException);
+            }
+        }
+
+        private async ValueTask<IQueryable<EventV2>> TryCatch(ReturningEventV2sFunction returningEventV2sFunction)
+        {
+            try
+            {
+                return await returningEventV2sFunction();
+            }
+            catch (SqlException sqlException)
+            {
+                var failedEventV2StorageException =
+                    new FailedEventV2StorageException(
+                        message: "Failed event storage error occurred, contact support.",
+                        innerException: sqlException);
+
+                throw await CreateAndLogCriticalDependencyExceptionAsync(failedEventV2StorageException);
             }
             catch (Exception serviceException)
             {
