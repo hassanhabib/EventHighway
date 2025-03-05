@@ -3,7 +3,6 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.ListenerEvents.V2;
 using EventHighway.Core.Models.ListenerEvents.V2.Exceptions;
@@ -161,6 +160,58 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogErrorAsync(It.Is(SameExceptionAs(
                     expectedListenerEventV2DependencyValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectListenerEventV2ByIdAsync(
+                    It.IsAny<Guid>()),
+                        Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnModifyIfExceptionOccursAndLogItAsync()
+        {
+            // given
+            ListenerEventV2 someListenerEventV2 = CreateRandomListenerEventV2();
+            var serviceException = new Exception();
+
+            var failedListenerEventV2ServiceException =
+                new FailedListenerEventV2ServiceException(
+                    message: "Failed listener event service error occurred, contact support.",
+                    innerException: serviceException);
+
+            var expectedListenerEventV2ServiceException =
+                new ListenerEventV2ServiceException(
+                    message: "Listener event service error occurred, contact support.",
+                    innerException: failedListenerEventV2ServiceException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetDateTimeOffsetAsync())
+                    .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<ListenerEventV2> modifyListenerEventV2Task =
+                this.listenerEventV2Service.ModifyListenerEventV2Async(someListenerEventV2);
+
+            ListenerEventV2ServiceException actualListenerEventV2ServiceException =
+                await Assert.ThrowsAsync<ListenerEventV2ServiceException>(
+                    modifyListenerEventV2Task.AsTask);
+
+            // then
+            actualListenerEventV2ServiceException.Should().BeEquivalentTo(
+                expectedListenerEventV2ServiceException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetDateTimeOffsetAsync(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedListenerEventV2ServiceException))),
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>

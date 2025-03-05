@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.ListenerEvents.V2;
 using EventHighway.Core.Models.ListenerEvents.V2.Exceptions;
@@ -116,7 +117,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
 
             invalidListenerEventV2Exception.AddData(
                 key: nameof(ListenerEventV2.UpdatedDate),
-                values: "Required");
+                "Required",
+                $"Date is the same as {nameof(ListenerEventV2.CreatedDate)}");
 
             var expectedListenerEventV2ValidationException =
                 new ListenerEventV2ValidationException(
@@ -297,7 +299,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
 
             var notFoundListenerEventV2Exception =
                 new NotFoundListenerEventV2Exception(
-                    message: $"Could not find listener event with id: {nonExistListenerEventV2.Id}.");
+                    message: $"Could not find listener event with id: {nonExistListenerEventV2Id}.");
 
             var expectedListenerEventV2ValidationException =
                 new ListenerEventV2ValidationException(
@@ -354,6 +356,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
             DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
             ListenerEventV2 randomListenerEventV2 = CreateRandomListenerEventV2(dates: randomDateTimeOffset);
             ListenerEventV2 invalidListenerEventV2 = randomListenerEventV2;
+            Guid invalidListenerEventV2Id = invalidListenerEventV2.Id;
             invalidListenerEventV2.CreatedDate = randomDateTimeOffset.AddDays(randomDaysAgo);
             DateTimeOffset randomOtherDateTime = GetRandomDateTimeOffset();
             ListenerEventV2 storageListenerEventV2 = invalidListenerEventV2.DeepClone();
@@ -377,7 +380,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                     .ReturnsAsync(randomDateTimeOffset);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectListenerEventV2ByIdAsync(invalidListenerEventV2.Id))
+                broker.SelectListenerEventV2ByIdAsync(invalidListenerEventV2Id))
                     .ReturnsAsync(storageListenerEventV2);
 
             // when
@@ -397,7 +400,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                     Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectListenerEventV2ByIdAsync(invalidListenerEventV2.Id),
+                broker.SelectListenerEventV2ByIdAsync(invalidListenerEventV2Id),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -416,13 +419,13 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
             // given
             int randomTimeAgo = GetRandomNegativeNumber();
             DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
-            DateTimeOffset earlierDateTime = randomDateTimeOffset.AddDays(randomTimeAgo);
+            DateTimeOffset earlierDateTime = randomDateTimeOffset.AddDays(days: randomTimeAgo);
             ListenerEventV2 randomListenerEventV2 = CreateRandomListenerEventV2(dates: randomDateTimeOffset);
             ListenerEventV2 invalidListenerEventV2 = randomListenerEventV2;
             Guid invalidListenerEventV2Id = invalidListenerEventV2.Id;
             invalidListenerEventV2.CreatedDate = earlierDateTime;
             ListenerEventV2 storageListenerEventV2 = invalidListenerEventV2.DeepClone();
-            DateTimeOffset earlierSeconds = randomDateTimeOffset.AddSeconds(randomTimeAgo);
+            DateTimeOffset earlierSeconds = randomDateTimeOffset.AddSeconds(seconds: randomTimeAgo);
             invalidListenerEventV2.UpdatedDate = earlierSeconds;
 
             var invalidListenerEventV2Exception =
