@@ -9,21 +9,24 @@ using EventHighway.Core.Models.EventCall.V2;
 
 namespace EventHighway.Core.Services.Foundations.EventCalls.V2
 {
-    internal class EventCallV2Service : IEventCallV2Service
+    internal partial class EventCallV2Service : IEventCallV2Service
     {
         private readonly IApiBroker apiBroker;
         private readonly ILoggingBroker loggingBroker;
 
         public EventCallV2Service(
-            IApiBroker apiBroker, 
+            IApiBroker apiBroker,
             ILoggingBroker loggingBroker)
         {
             this.apiBroker = apiBroker;
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<EventCallV2> RunEventCallV2Async(EventCallV2 eventCallV2)
+        public ValueTask<EventCallV2> RunEventCallV2Async(EventCallV2 eventCallV2) =>
+        TryCatch(async () =>
         {
+            ValidateEventCallV2IsNotNull(eventCallV2);
+
             string response =
                 await apiBroker.PostAsync(
                     content: eventCallV2.Content,
@@ -33,6 +36,6 @@ namespace EventHighway.Core.Services.Foundations.EventCalls.V2
             eventCallV2.Response = response;
 
             return eventCallV2;
-        }
+        });
     }
 }
