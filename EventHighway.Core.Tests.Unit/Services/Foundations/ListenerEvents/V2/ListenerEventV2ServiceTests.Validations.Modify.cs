@@ -3,7 +3,6 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.ListenerEvents.V2;
 using EventHighway.Core.Models.ListenerEvents.V2.Exceptions;
@@ -399,6 +398,72 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectListenerEventV2ByIdAsync(invalidListenerEventV2.Id),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedListenerEventV2ValidationException))),
+                        Times.Once);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnModifyIfUpdatedDateIsEarlierThanStorageAndLogItAsync()
+        {
+            // given
+            int randomTimeAgo = GetRandomNegativeNumber();
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
+            DateTimeOffset earlierDateTime = randomDateTimeOffset.AddDays(randomTimeAgo);
+            ListenerEventV2 randomListenerEventV2 = CreateRandomListenerEventV2(dates: randomDateTimeOffset);
+            ListenerEventV2 invalidListenerEventV2 = randomListenerEventV2;
+            Guid invalidListenerEventV2Id = invalidListenerEventV2.Id;
+            invalidListenerEventV2.CreatedDate = earlierDateTime;
+            ListenerEventV2 storageListenerEventV2 = invalidListenerEventV2.DeepClone();
+            DateTimeOffset earlierSeconds = randomDateTimeOffset.AddSeconds(randomTimeAgo);
+            invalidListenerEventV2.UpdatedDate = earlierSeconds;
+
+            var invalidListenerEventV2Exception =
+                new InvalidListenerEventV2Exception(
+                    message: "Listener event is invalid, fix the errors and try again.");
+
+            invalidListenerEventV2Exception.AddData(
+                key: nameof(ListenerEventV2.UpdatedDate),
+                values: $"Date is earlier than storage");
+
+            var expectedListenerEventV2ValidationException =
+                new ListenerEventV2ValidationException(
+                    message: "Listener event validation error occurred, fix the errors and try again.",
+                    innerException: invalidListenerEventV2Exception);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetDateTimeOffsetAsync())
+                    .ReturnsAsync(randomDateTimeOffset);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectListenerEventV2ByIdAsync(invalidListenerEventV2Id))
+                    .ReturnsAsync(storageListenerEventV2);
+
+            // when
+            ValueTask<ListenerEventV2> modifyListenerEventV2Task =
+                this.listenerEventV2Service.ModifyListenerEventV2Async(invalidListenerEventV2);
+
+            ListenerEventV2ValidationException actualListenerEventV2ValidationException =
+                await Assert.ThrowsAsync<ListenerEventV2ValidationException>(
+                    modifyListenerEventV2Task.AsTask);
+
+            // then
+            actualListenerEventV2ValidationException.Should()
+                .BeEquivalentTo(expectedListenerEventV2ValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetDateTimeOffsetAsync(),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectListenerEventV2ByIdAsync(invalidListenerEventV2Id),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
