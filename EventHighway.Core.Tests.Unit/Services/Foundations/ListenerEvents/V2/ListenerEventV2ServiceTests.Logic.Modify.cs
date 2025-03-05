@@ -17,6 +17,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
         public async Task ShouldModifyListenerEventV2Async()
         {
             // given
+            var mockSequence = new MockSequence();
+
             DateTimeOffset randomDateTimeOffset =
                 GetRandomDateTimeOffset();
 
@@ -51,23 +53,26 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
             ListenerEventV2 expectedListenerEventV2 =
                 persistedListenerEventV2.DeepClone();
 
-            Guid inputListenerEventV2Id = 
+            Guid inputListenerEventV2Id =
                 inputListenerEventV2.Id;
 
-            this.dateTimeBrokerMock.Setup(broker =>
-                broker.GetDateTimeOffsetAsync())
-                    .ReturnsAsync(randomDateTimeOffset);
+            this.dateTimeBrokerMock
+                .InSequence(mockSequence).Setup(broker =>
+                    broker.GetDateTimeOffsetAsync())
+                        .ReturnsAsync(randomDateTimeOffset);
 
-            this.storageBrokerMock.Setup(broker =>
-                broker.SelectListenerEventV2ByIdAsync(
-                    inputListenerEventV2Id))
-                        .ReturnsAsync(
-                            storageListenerEventV2);
+            this.storageBrokerMock
+                .InSequence(mockSequence).Setup(broker =>
+                    broker.SelectListenerEventV2ByIdAsync(
+                        inputListenerEventV2Id))
+                            .ReturnsAsync(
+                                storageListenerEventV2);
 
-            this.storageBrokerMock.Setup(broker =>
-                broker.UpdateListenerEventV2Async(
-                    inputListenerEventV2))
-                        .ReturnsAsync(persistedListenerEventV2);
+            this.storageBrokerMock
+                .InSequence(mockSequence).Setup(broker =>
+                    broker.UpdateListenerEventV2Async(
+                        inputListenerEventV2))
+                            .ReturnsAsync(persistedListenerEventV2);
 
             // when
             ListenerEventV2 actualListenerEventV2 =

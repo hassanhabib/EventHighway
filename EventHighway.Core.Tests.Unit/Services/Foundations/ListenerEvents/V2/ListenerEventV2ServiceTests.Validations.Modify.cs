@@ -3,7 +3,6 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.ListenerEvents.V2;
 using EventHighway.Core.Models.ListenerEvents.V2.Exceptions;
@@ -117,8 +116,12 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
 
             invalidListenerEventV2Exception.AddData(
                 key: nameof(ListenerEventV2.UpdatedDate),
-                "Required",
-                $"Date is the same as {nameof(ListenerEventV2.CreatedDate)}");
+
+                values:
+                    [
+                        "Required",
+                        $"Date is the same as {nameof(ListenerEventV2.CreatedDate)}"
+                    ]);
 
             var expectedListenerEventV2ValidationException =
                 new ListenerEventV2ValidationException(
