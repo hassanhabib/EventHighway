@@ -68,6 +68,17 @@ namespace EventHighway.Core.Services.Foundations.EventCalls.V2
                 throw await CreateAndLogCriticalDependencyExceptionAsync(
                     failedEventCallV2ConfigurationException);
             }
+            catch (HttpResponseBadRequestException httpResponseBadRequestException)
+            {
+                var invalidEventCallV2Exception =
+                    new InvalidEventCallV2Exception(
+                        message: "Event call is invalid, fix the errors and try again.",
+                        innerException: httpResponseBadRequestException,
+                        data: httpResponseBadRequestException.Data);
+
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    invalidEventCallV2Exception);
+            }
         }
 
         private async ValueTask<EventCallV2ValidationException> CreateAndLogValidationExceptionAsync(Xeption exception)
