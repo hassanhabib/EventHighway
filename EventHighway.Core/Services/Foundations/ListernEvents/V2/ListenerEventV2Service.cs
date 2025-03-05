@@ -37,7 +37,6 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
         public ValueTask<ListenerEventV2> ModifyListenerEventV2Async(ListenerEventV2 listenerEventV2) =>
         TryCatch(async () =>
         {
-            await this.dateTimeBroker.GetDateTimeOffsetAsync();
             await ValidateListenerEventV2OnModifyAsync(listenerEventV2);
 
             ListenerEventV2 maybeListenerEventV2 =

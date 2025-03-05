@@ -85,6 +85,9 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
                     secondDate: listenerEventV2.CreatedDate,
                     secondDateName: nameof(ListenerEventV2.CreatedDate)),
 
+                Parameter: nameof(ListenerEventV2.UpdatedDate)),
+
+                (Rule: await IsNotRecentAsync(listenerEventV2.UpdatedDate),
                 Parameter: nameof(ListenerEventV2.UpdatedDate)));
         }
 
