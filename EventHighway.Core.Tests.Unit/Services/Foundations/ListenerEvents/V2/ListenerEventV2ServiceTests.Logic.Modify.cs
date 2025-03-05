@@ -17,20 +17,20 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
         public async Task ShouldModifyListenerEventV2Async()
         {
             // given
-            DateTimeOffset randomDateTime =
+            DateTimeOffset randomDateTimeOffset =
                 GetRandomDateTimeOffset();
 
             int randomDaysAgo =
                 GetRandomNegativeNumber();
 
             ListenerEventV2 randomListenerEventV2 =
-                CreateRandomListenerEventV2(randomDateTime);
+                CreateRandomListenerEventV2(dates: randomDateTimeOffset);
 
             ListenerEventV2 inputListenerEventV2 =
                 randomListenerEventV2;
 
             inputListenerEventV2.CreatedDate =
-                randomDateTime.AddDays(randomDaysAgo);
+                randomDateTimeOffset.AddDays(randomDaysAgo);
 
             ListenerEventV2 storageListenerEventV2 =
                 inputListenerEventV2.DeepClone();
@@ -39,7 +39,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                 GetRandomNegativeNumber();
 
             DateTimeOffset storageUpdatedDate =
-                randomDateTime.AddSeconds(
+                randomDateTimeOffset.AddSeconds(
                     randomSecondsAgo);
 
             storageListenerEventV2.UpdatedDate =
@@ -56,7 +56,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
 
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetDateTimeOffsetAsync())
-                    .ReturnsAsync(randomDateTime);
+                    .ReturnsAsync(randomDateTimeOffset);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectListenerEventV2ByIdAsync(
