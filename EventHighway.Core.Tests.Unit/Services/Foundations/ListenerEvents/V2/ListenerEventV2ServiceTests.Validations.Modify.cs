@@ -352,7 +352,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
         }
 
         [Fact]
-        public async Task ShouldThrowValidationErrorOnModifyIfStorageCreatedDateNotSameAsCreatedDateAndLogItAsync()
+        public async Task ShouldThrowValidationExceptionOnModifyIfStorageCreatedDateNotSameAsCreatedDateAndLogItAsync()
         {
             // given
             int randomDaysAgo = GetRandomNegativeNumber();
