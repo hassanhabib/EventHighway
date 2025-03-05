@@ -43,7 +43,7 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
                 await this.storageBroker.SelectListenerEventV2ByIdAsync(
                     listenerEventV2.Id);
 
-            ValidateListenerEventV2Exists(maybeListenerEventV2, listenerEventV2.Id);
+            ValidateListenerEventV2AgainstStorage(listenerEventV2, maybeListenerEventV2);
 
             return await storageBroker.UpdateListenerEventV2Async(listenerEventV2);
         });
