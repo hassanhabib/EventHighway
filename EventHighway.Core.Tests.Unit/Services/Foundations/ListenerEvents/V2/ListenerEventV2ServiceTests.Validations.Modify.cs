@@ -45,6 +45,10 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                     expectedListenerEventV2ValidationException))),
                         Times.Once);
 
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectListenerEventV2ByIdAsync(It.IsAny<Guid>()),
+                    Times.Never);
+
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetDateTimeOffsetAsync(),
                     Times.Never);
@@ -54,8 +58,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                     Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
-            this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
 
         [Theory]
@@ -139,6 +143,10 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                 broker.LogErrorAsync(It.Is(SameExceptionAs(
                     expectedListenerEventV2ValidationException))),
                         Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectListenerEventV2ByIdAsync(It.IsAny<Guid>()),
+                    Times.Never);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.UpdateListenerEventV2Async(It.IsAny<ListenerEventV2>()),

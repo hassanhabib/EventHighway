@@ -17,30 +17,57 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
         public async Task ShouldModifyListenerEventV2Async()
         {
             // given
-            DateTimeOffset randomDateTimeOffset =
+            DateTimeOffset randomDateTime =
                 GetRandomDateTimeOffset();
 
+            int randomDaysAgo =
+                GetRandomNegativeNumber();
+
             ListenerEventV2 randomListenerEventV2 =
-                CreateRandomListenerEventV2(
-                    randomDateTimeOffset);
+                CreateRandomListenerEventV2(randomDateTime);
 
             ListenerEventV2 inputListenerEventV2 =
                 randomListenerEventV2;
 
+            inputListenerEventV2.CreatedDate =
+                randomDateTime.AddDays(randomDaysAgo);
+
             ListenerEventV2 storageListenerEventV2 =
+                inputListenerEventV2.DeepClone();
+
+            int randomSecondsAgo =
+                GetRandomNegativeNumber();
+
+            DateTimeOffset storageUpdatedDate =
+                randomDateTime.AddSeconds(
+                    randomSecondsAgo);
+
+            storageListenerEventV2.UpdatedDate =
+                storageUpdatedDate;
+
+            ListenerEventV2 persistedListenerEventV2 =
                 inputListenerEventV2;
 
             ListenerEventV2 expectedListenerEventV2 =
-                storageListenerEventV2.DeepClone();
+                persistedListenerEventV2.DeepClone();
+
+            Guid inputListenerEventV2Id = 
+                inputListenerEventV2.Id;
 
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetDateTimeOffsetAsync())
-                    .ReturnsAsync(randomDateTimeOffset);
+                    .ReturnsAsync(randomDateTime);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectListenerEventV2ByIdAsync(
+                    inputListenerEventV2Id))
+                        .ReturnsAsync(
+                            storageListenerEventV2);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.UpdateListenerEventV2Async(
                     inputListenerEventV2))
-                        .ReturnsAsync(storageListenerEventV2);
+                        .ReturnsAsync(persistedListenerEventV2);
 
             // when
             ListenerEventV2 actualListenerEventV2 =
@@ -55,6 +82,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetDateTimeOffsetAsync(),
                     Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectListenerEventV2ByIdAsync(
+                    inputListenerEventV2Id),
+                        Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.UpdateListenerEventV2Async(
