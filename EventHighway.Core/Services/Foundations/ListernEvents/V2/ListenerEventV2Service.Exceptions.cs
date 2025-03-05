@@ -36,6 +36,12 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     invalidListenerEventV2Exception);
             }
+            catch (NotFoundListenerEventV2Exception
+                notFoundListenerEventV2Exception)
+            {
+                throw await CreateAndLogValidationExceptionAsync(
+                    notFoundListenerEventV2Exception);
+            }
             catch (SqlException sqlException)
             {
                 var failedListenerEventV2StorageException =
@@ -66,6 +72,16 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
 
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     invalidListenerEventV2ReferenceException);
+            }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                var lockedListenerEventV2Exception =
+                    new LockedListenerEventV2Exception(
+                        message: "Listener event is locked, try again.",
+                        innerException: dbUpdateConcurrencyException);
+
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    lockedListenerEventV2Exception);
             }
             catch (DbUpdateException dbUpdateException)
             {
