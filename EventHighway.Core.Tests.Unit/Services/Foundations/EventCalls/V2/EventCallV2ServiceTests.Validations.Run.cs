@@ -27,12 +27,12 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
                     innerException: nullEventCallV2Exception);
 
             // when
-            ValueTask<EventCallV2> addEventCallV2Task =
+            ValueTask<EventCallV2> runEventCallV2Task =
                 this.eventCallV2Service.RunEventCallV2Async(nullEventCallV2);
 
             EventCallV2ValidationException actualEventCallV2ValidationException =
                 await Assert.ThrowsAsync<EventCallV2ValidationException>(
-                    addEventCallV2Task.AsTask);
+                    runEventCallV2Task.AsTask);
 
             // then
             actualEventCallV2ValidationException.Should().BeEquivalentTo(
@@ -85,12 +85,12 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
                     innerException: invalidEventCallV2Exception);
 
             // when
-            ValueTask<EventCallV2> addEventCallV2Task =
+            ValueTask<EventCallV2> runEventCallV2Task =
                 this.eventCallV2Service.RunEventCallV2Async(invalidEventCallV2);
 
             EventCallV2ValidationException actualEventCallV2ValidationException =
                 await Assert.ThrowsAsync<EventCallV2ValidationException>(
-                    addEventCallV2Task.AsTask);
+                    runEventCallV2Task.AsTask);
 
             // then
             actualEventCallV2ValidationException.Should().BeEquivalentTo(
