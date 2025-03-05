@@ -100,6 +100,16 @@ namespace EventHighway.Core.Services.Foundations.EventCalls.V2
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     failedEventCallV2RequestException);
             }
+            catch (HttpResponseFailedDependencyException httpResponseFailedDependencyException)
+            {
+                var invalidEventCallV2ReferenceException =
+                    new InvalidEventCallV2ReferenceException(
+                        message: "Invalid event call reference error occurred, fix the errors and try again.",
+                        innerException: httpResponseFailedDependencyException);
+
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    invalidEventCallV2ReferenceException);
+            }
             catch (HttpResponseException httpResponseException)
             {
                 var failedEventCallV2DependencyException =
