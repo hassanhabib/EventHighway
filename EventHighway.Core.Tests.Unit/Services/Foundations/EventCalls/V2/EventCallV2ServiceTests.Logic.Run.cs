@@ -8,7 +8,7 @@ using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
 
-namespace EventHighway.Core.Tests.Unit.Services.EventCalls.V2
+namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
 {
     public partial class EventCallV2ServiceTests
     {
