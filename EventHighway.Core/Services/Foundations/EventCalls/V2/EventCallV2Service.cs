@@ -25,7 +25,7 @@ namespace EventHighway.Core.Services.Foundations.EventCalls.V2
         public ValueTask<EventCallV2> RunEventCallV2Async(EventCallV2 eventCallV2) =>
         TryCatch(async () =>
         {
-            ValidateEventCallV2IsNotNull(eventCallV2);
+            ValidateEventCallV2OnRun(eventCallV2);
 
             string response =
                 await apiBroker.PostAsync(
