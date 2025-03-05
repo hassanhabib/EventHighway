@@ -40,6 +40,9 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
             await this.dateTimeBroker.GetDateTimeOffsetAsync();
             await ValidateListenerEventV2OnModifyAsync(listenerEventV2);
 
+            ListenerEventV2 maybeListenerEventV2 =
+                await this.storageBroker.SelectListenerEventV2ByIdAsync(
+                    listenerEventV2.Id);
 
             return await storageBroker.UpdateListenerEventV2Async(listenerEventV2);
         });
