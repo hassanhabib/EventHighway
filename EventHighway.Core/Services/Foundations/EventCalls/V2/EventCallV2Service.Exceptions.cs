@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.EventCall.V2;
 using EventHighway.Core.Models.EventCall.V2.Exceptions;
@@ -78,6 +79,46 @@ namespace EventHighway.Core.Services.Foundations.EventCalls.V2
 
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     invalidEventCallV2Exception);
+            }
+            catch (HttpResponseConflictException httpResponseConflictException)
+            {
+                var alreadyExistsEventCallV2Exception =
+                    new AlreadyExistsEventCallV2Exception(
+                        message: "Event call with same id already exists, try again.",
+                        innerException: httpResponseConflictException);
+
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    alreadyExistsEventCallV2Exception);
+            }
+            catch (HttpResponseUnprocessableEntityException httpResponseUnprocessableEntityException)
+            {
+                var failedEventCallV2RequestException =
+                    new FailedEventCallV2RequestException(
+                        message: "Failed event call request error occurred, fix the errors and try again.",
+                        innerException: httpResponseUnprocessableEntityException);
+
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    failedEventCallV2RequestException);
+            }
+            catch (HttpResponseException httpResponseException)
+            {
+                var failedEventCallV2DependencyException =
+                    new FailedEventCallV2DependencyException(
+                        message: "Failed event call dependency error occurred, contact support.",
+                        innerException: httpResponseException);
+
+                throw await CreateAndLogDependencyExceptionAsync(
+                    failedEventCallV2DependencyException);
+            }
+            catch (Exception serviceException)
+            {
+                var failedEventCallV2ServiceException =
+                    new FailedEventCallV2ServiceException(
+                        message: "Failed event call service error occurred, contact support.",
+                        innerException: serviceException);
+
+                throw await CreateAndLogServiceExceptionAsync(
+                    failedEventCallV2ServiceException);
             }
         }
 
