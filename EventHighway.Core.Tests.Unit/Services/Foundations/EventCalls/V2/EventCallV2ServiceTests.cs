@@ -9,6 +9,7 @@ using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.EventCall.V2;
 using EventHighway.Core.Services.Foundations.EventCalls.V2;
 using Moq;
+using RESTFulSense.Exceptions;
 using Tynamix.ObjectFiller;
 using Xeptions;
 
@@ -29,6 +30,20 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
                 apiBroker: this.apiBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
+
+        public static TheoryData<Xeption> CriticalDependencyExceptions()
+        {
+            return new TheoryData<Xeption>
+            {
+                new HttpResponseUrlNotFoundException(),
+                new HttpResponseUnauthorizedException(),
+                new HttpResponseForbiddenException(),
+                new HttpResponseMethodNotAllowedException()
+            };
+        }
+
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
 
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
