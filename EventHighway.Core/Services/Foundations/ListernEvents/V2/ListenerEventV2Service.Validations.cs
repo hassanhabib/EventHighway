@@ -50,7 +50,7 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
                 (Rule: await IsNotRecentAsync(listenerEventV2.CreatedDate),
                 Parameter: nameof(ListenerEventV2.CreatedDate)));
         }
-        
+
         private async ValueTask ValidateListenerEventV2OnModifyAsync(ListenerEventV2 listenerEventV2)
         {
             ValidateListenerEventV2IsNotNull(listenerEventV2);
@@ -78,6 +78,13 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
                 Parameter: nameof(ListenerEventV2.CreatedDate)),
 
                 (Rule: IsInvalid(listenerEventV2.UpdatedDate),
+                Parameter: nameof(ListenerEventV2.UpdatedDate)),
+
+                (Rule: IsSameAs(
+                    firstDate: listenerEventV2.UpdatedDate,
+                    secondDate: listenerEventV2.CreatedDate,
+                    secondDateName: nameof(ListenerEventV2.CreatedDate)),
+
                 Parameter: nameof(ListenerEventV2.UpdatedDate)));
         }
 
@@ -121,6 +128,15 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
             {
                 Condition = firstDate != secondDate,
                 Message = $"Date is not the same as {secondDateName}"
+            };
+
+        private static dynamic IsSameAs(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string secondDateName) => new
+            {
+                Condition = firstDate == secondDate,
+                Message = $"Date is the same as {secondDateName}."
             };
 
         private async ValueTask<dynamic> IsNotRecentAsync(DateTimeOffset date) => new
