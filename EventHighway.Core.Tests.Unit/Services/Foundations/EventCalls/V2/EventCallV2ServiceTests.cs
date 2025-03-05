@@ -67,7 +67,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
             int randomCount = GetRandomNumber();
 
             Enumerable.Range(start: 0, count: randomCount)
-                .Select(item => randomDictionary.TryAdd(
+                .ToList().ForEach(item => randomDictionary.TryAdd(
                     key: GetRandomString(),
                     value: GetRandomStrings()));
 

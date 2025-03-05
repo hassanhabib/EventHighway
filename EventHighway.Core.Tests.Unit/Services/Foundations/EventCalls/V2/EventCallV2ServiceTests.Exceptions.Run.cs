@@ -69,6 +69,58 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
         }
 
         [Fact]
+        public async Task ShouldThrowDependencyValidationExceptionOnAddIfHttpUnprocessableErrorOccursAndLogItAsync()
+        {
+            // given
+            EventCallV2 someEventCallV2 = CreateRandomEventCallV2();
+            var httpUnprocessableEntityException = new HttpResponseUnprocessableEntityException();
+
+            var failedEventCallV2RequestException =
+                new FailedEventCallV2RequestException(
+                    message: "Failed event call request error occurred, fix the errors and try again.",
+                    innerException: httpUnprocessableEntityException);
+
+            var expectedEventCallV2DependencyValidationException =
+                new EventCallV2DependencyValidationException(
+                    message: "Event call validation error occurred, fix the errors and try again.",
+                    innerException: failedEventCallV2RequestException);
+
+            this.apiBrokerMock.Setup(broker =>
+                broker.PostAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>()))
+                        .ThrowsAsync(httpUnprocessableEntityException);
+
+            // when
+            ValueTask<EventCallV2> runEventCallV2Task =
+                this.eventCallV2Service.RunEventCallV2Async(someEventCallV2);
+
+            EventCallV2DependencyValidationException actualEventCallV2DependencyValidationException =
+                await Assert.ThrowsAsync<EventCallV2DependencyValidationException>(
+                    runEventCallV2Task.AsTask);
+
+            // then
+            actualEventCallV2DependencyValidationException.Should()
+                .BeEquivalentTo(expectedEventCallV2DependencyValidationException);
+
+            this.apiBrokerMock.Verify(broker =>
+                broker.PostAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>()),
+                        Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventCallV2DependencyValidationException))),
+                        Times.Once);
+
+            this.apiBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
         public async Task ShouldThrowDependencyValidationExceptionOnAddIfBadRequestErrorOccursAndLogItAsync()
         {
             // given
@@ -93,7 +145,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
                     It.IsAny<string>(),
                     It.IsAny<string>(),
                     It.IsAny<string>()))
-                    .ThrowsAsync(httpBadRequestException);
+                        .ThrowsAsync(httpBadRequestException);
 
             // when
             ValueTask<EventCallV2> runEventCallV2Task =
@@ -146,58 +198,6 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
                     It.IsAny<string>(),
                     It.IsAny<string>()))
                         .ThrowsAsync(httpConflictException);
-
-            // when
-            ValueTask<EventCallV2> runEventCallV2Task =
-                this.eventCallV2Service.RunEventCallV2Async(someEventCallV2);
-
-            EventCallV2DependencyValidationException actualEventCallV2DependencyValidationException =
-                await Assert.ThrowsAsync<EventCallV2DependencyValidationException>(
-                    runEventCallV2Task.AsTask);
-
-            // then
-            actualEventCallV2DependencyValidationException.Should()
-                .BeEquivalentTo(expectedEventCallV2DependencyValidationException);
-
-            this.apiBrokerMock.Verify(broker =>
-                broker.PostAsync(
-                    It.IsAny<string>(),
-                    It.IsAny<string>(),
-                    It.IsAny<string>()),
-                        Times.Once);
-
-            this.loggingBrokerMock.Verify(broker =>
-                broker.LogErrorAsync(It.Is(SameExceptionAs(
-                    expectedEventCallV2DependencyValidationException))),
-                        Times.Once);
-
-            this.apiBrokerMock.VerifyNoOtherCalls();
-            this.loggingBrokerMock.VerifyNoOtherCalls();
-        }
-
-        [Fact]
-        public async Task ShouldThrowDependencyValidationExceptionOnAddIfHttpUnprocessableErrorOccursAndLogItAsync()
-        {
-            // given
-            EventCallV2 someEventCallV2 = CreateRandomEventCallV2();
-            var httpUnprocessableEntityException = new HttpResponseUnprocessableEntityException();
-
-            var failedEventCallV2RequestException =
-                new FailedEventCallV2RequestException(
-                    message: "Failed event call request error occurred, fix the errors and try again.",
-                    innerException: httpUnprocessableEntityException);
-
-            var expectedEventCallV2DependencyValidationException =
-                new EventCallV2DependencyValidationException(
-                    message: "Event call validation error occurred, fix the errors and try again.",
-                    innerException: failedEventCallV2RequestException);
-
-            this.apiBrokerMock.Setup(broker =>
-                broker.PostAsync(
-                    It.IsAny<string>(),
-                    It.IsAny<string>(),
-                    It.IsAny<string>()))
-                        .ThrowsAsync(httpUnprocessableEntityException);
 
             // when
             ValueTask<EventCallV2> runEventCallV2Task =

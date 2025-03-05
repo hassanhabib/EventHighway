@@ -69,6 +69,16 @@ namespace EventHighway.Core.Services.Foundations.EventCalls.V2
                 throw await CreateAndLogCriticalDependencyExceptionAsync(
                     failedEventCallV2ConfigurationException);
             }
+            catch (HttpResponseUnprocessableEntityException httpResponseUnprocessableEntityException)
+            {
+                var failedEventCallV2RequestException =
+                    new FailedEventCallV2RequestException(
+                        message: "Failed event call request error occurred, fix the errors and try again.",
+                        innerException: httpResponseUnprocessableEntityException);
+
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    failedEventCallV2RequestException);
+            }
             catch (HttpResponseBadRequestException httpResponseBadRequestException)
             {
                 var invalidEventCallV2Exception =
@@ -89,16 +99,6 @@ namespace EventHighway.Core.Services.Foundations.EventCalls.V2
 
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     alreadyExistsEventCallV2Exception);
-            }
-            catch (HttpResponseUnprocessableEntityException httpResponseUnprocessableEntityException)
-            {
-                var failedEventCallV2RequestException =
-                    new FailedEventCallV2RequestException(
-                        message: "Failed event call request error occurred, fix the errors and try again.",
-                        innerException: httpResponseUnprocessableEntityException);
-
-                throw await CreateAndLogDependencyValidationExceptionAsync(
-                    failedEventCallV2RequestException);
             }
             catch (HttpResponseFailedDependencyException httpResponseFailedDependencyException)
             {

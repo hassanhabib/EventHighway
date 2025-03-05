@@ -52,7 +52,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
                     inputEventCallV2.Content,
                     inputEventCallV2.Endpoint,
                     inputEventCallV2.Secret),
-                        Times.Once());
+                        Times.Once);
 
             this.apiBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
