@@ -36,6 +36,12 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     invalidListenerEventV2Exception);
             }
+            catch (NotFoundListenerEventV2Exception
+                notFoundListenerEventV2Exception)
+            {
+                throw await CreateAndLogValidationExceptionAsync(
+                    notFoundListenerEventV2Exception);
+            }
             catch (SqlException sqlException)
             {
                 var failedListenerEventV2StorageException =
