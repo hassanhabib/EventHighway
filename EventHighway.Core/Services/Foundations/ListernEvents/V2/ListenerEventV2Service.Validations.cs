@@ -50,6 +50,36 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
                 (Rule: await IsNotRecentAsync(listenerEventV2.CreatedDate),
                 Parameter: nameof(ListenerEventV2.CreatedDate)));
         }
+        
+        private async ValueTask ValidateListenerEventV2OnModifyAsync(ListenerEventV2 listenerEventV2)
+        {
+            ValidateListenerEventV2IsNotNull(listenerEventV2);
+
+            Validate(
+                (Rule: IsInvalid(listenerEventV2.Id),
+                Parameter: nameof(ListenerEventV2.Id)),
+
+                (Rule: IsInvalid(listenerEventV2.Response),
+                Parameter: nameof(ListenerEventV2.Response)),
+
+                (Rule: IsInvalid(listenerEventV2.EventId),
+                Parameter: nameof(ListenerEventV2.EventId)),
+
+                (Rule: IsInvalid(listenerEventV2.EventAddressId),
+                Parameter: nameof(ListenerEventV2.EventAddressId)),
+
+                (Rule: IsInvalid(listenerEventV2.EventListenerId),
+                Parameter: nameof(ListenerEventV2.EventListenerId)),
+
+                (Rule: IsInvalid(listenerEventV2.Status),
+                Parameter: nameof(ListenerEventV2.Status)),
+
+                (Rule: IsInvalid(listenerEventV2.CreatedDate),
+                Parameter: nameof(ListenerEventV2.CreatedDate)),
+
+                (Rule: IsInvalid(listenerEventV2.UpdatedDate),
+                Parameter: nameof(ListenerEventV2.UpdatedDate)));
+        }
 
         private static void ValidateListenerEventV2IsNotNull(ListenerEventV2 listenerEventV2)
         {
