@@ -3,7 +3,10 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Http;
 using EventHighway.Core.Brokers.Apis;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.EventCall.V2;
@@ -41,6 +44,50 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
                 new HttpResponseMethodNotAllowedException()
             };
         }
+
+        private static HttpResponseBadRequestException CreateHttpBadRequestException()
+        {
+            string someExceptionMessage = GetRandomString();
+            var httpResponseMessage = new HttpResponseMessage();
+            Dictionary<string, List<string>> randomDictionary = CreateRandomDictionary();
+
+            var httpResponseBadRequestException =
+                new HttpResponseBadRequestException(
+                    httpResponseMessage,
+                    someExceptionMessage);
+
+            httpResponseBadRequestException.AddData(randomDictionary);
+
+            return httpResponseBadRequestException;
+        }
+
+        private static Dictionary<string, List<string>> CreateRandomDictionary()
+        {
+            var randomDictionary = new Dictionary<string, List<string>>();
+            int randomCount = GetRandomNumber();
+
+            Enumerable.Range(start: 0, count: randomCount)
+                .Select(item => randomDictionary.TryAdd(
+                    key: GetRandomString(),
+                    value: GetRandomStrings()));
+
+            return randomDictionary;
+        }
+
+        private static List<string> GetRandomStrings()
+        {
+            var randomList = new List<string>();
+            int randomCount = GetRandomNumber();
+
+            Enumerable.Range(start: 0, count: randomCount)
+                .ToList().ForEach(count => randomList.Add(
+                    item: GetRandomString()));
+
+            return randomList;
+        }
+
+        private static int GetRandomNumber() =>
+            new IntRange(min: 2, max: 9).GetValue();
 
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
