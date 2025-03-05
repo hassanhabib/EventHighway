@@ -22,21 +22,24 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
             EventCallV2 inputEventCallV2 =
                 randomEventCallV2;
 
-            string postCallResponse =
+            string randomCallResponse =
                 CreateRandomResponse();
+
+            string postedCallResponse =
+                randomCallResponse;
 
             EventCallV2 expectedEventCallV2 =
                 inputEventCallV2.DeepClone();
 
             expectedEventCallV2.Response =
-                postCallResponse;
+                postedCallResponse;
 
             this.apiBrokerMock.Setup(broker =>
                 broker.PostAsync(
                     inputEventCallV2.Content,
                     inputEventCallV2.Endpoint,
                     inputEventCallV2.Secret))
-                        .ReturnsAsync(postCallResponse);
+                        .ReturnsAsync(postedCallResponse);
 
             // when
             EventCallV2 actualEventCallV2 =
