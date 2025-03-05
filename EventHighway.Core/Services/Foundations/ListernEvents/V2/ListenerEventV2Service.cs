@@ -37,6 +37,10 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
         public ValueTask<ListenerEventV2> ModifyListenerEventV2Async(ListenerEventV2 listenerEventV2) =>
         TryCatch(async () =>
         {
+            ValidateListenerEventV2IsNotNull(listenerEventV2);
+
+            await this.dateTimeBroker.GetDateTimeOffsetAsync();
+
             return await storageBroker.InsertListenerEventV2Async(listenerEventV2);
         });
     }
