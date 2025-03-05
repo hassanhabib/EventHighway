@@ -3,7 +3,6 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.ListenerEvents.V2;
 using EventHighway.Core.Models.ListenerEvents.V2.Exceptions;
@@ -171,7 +170,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
 
             invalidListenerEventV2Exception.AddData(
                 key: nameof(ListenerEventV2.UpdatedDate),
-                values: $"Date is the same as {nameof(ListenerEventV2.CreatedDate)}.");
+                values: $"Date is the same as {nameof(ListenerEventV2.CreatedDate)}");
 
             var expectedListenerEventV2ValidationException =
                 new ListenerEventV2ValidationException(
@@ -224,7 +223,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
             // given
             DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
 
-            ListenerEventV2 randomListenerEventV2 = 
+            ListenerEventV2 randomListenerEventV2 =
                 CreateRandomListenerEventV2(dates: randomDateTimeOffset);
 
             ListenerEventV2 invalidListenerEventV2 = randomListenerEventV2;
@@ -281,6 +280,69 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnModifyIfListenerEventV2DoesNotExistAndLogItAsync()
+        {
+            // given
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
+            int randomDaysAgo = GetRandomNegativeNumber();
+            ListenerEventV2 randomListenerEventV2 = CreateRandomListenerEventV2(dates: randomDateTimeOffset);
+            ListenerEventV2 nonExistListenerEventV2 = randomListenerEventV2;
+            Guid nonExistListenerEventV2Id = nonExistListenerEventV2.Id;
+            nonExistListenerEventV2.CreatedDate = randomDateTimeOffset.AddDays(randomDaysAgo);
+            ListenerEventV2 nullListenerEventV2 = null;
+
+            var notFoundListenerEventV2Exception =
+                new NotFoundListenerEventV2Exception(
+                    message: $"Could not find listener event with id: {nonExistListenerEventV2.Id}.");
+
+            var expectedListenerEventV2ValidationException =
+                new ListenerEventV2ValidationException(
+                    message: "Listener event validation error occurred, fix the errors and try again.",
+                    innerException: notFoundListenerEventV2Exception);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetDateTimeOffsetAsync())
+                    .ReturnsAsync(randomDateTimeOffset);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectListenerEventV2ByIdAsync(nonExistListenerEventV2Id))
+                    .ReturnsAsync(nullListenerEventV2);
+
+            // when
+            ValueTask<ListenerEventV2> modifyListenerEventV2Task =
+                this.listenerEventV2Service.ModifyListenerEventV2Async(nonExistListenerEventV2);
+
+            ListenerEventV2ValidationException actualListenerEventV2ValidationException =
+                await Assert.ThrowsAsync<ListenerEventV2ValidationException>(
+                    modifyListenerEventV2Task.AsTask);
+
+            // then
+            actualListenerEventV2ValidationException.Should()
+                .BeEquivalentTo(expectedListenerEventV2ValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetDateTimeOffsetAsync(),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectListenerEventV2ByIdAsync(nonExistListenerEventV2Id),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedListenerEventV2ValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateListenerEventV2Async(It.IsAny<ListenerEventV2>()),
+                    Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
