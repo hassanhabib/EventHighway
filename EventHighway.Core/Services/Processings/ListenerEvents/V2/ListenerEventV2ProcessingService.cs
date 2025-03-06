@@ -22,7 +22,12 @@ namespace EventHighway.Core.Services.Processings.ListenerEvents.V2
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<ListenerEventV2> AddListenerEventV2Async(ListenerEventV2 listenerEventV2) =>
-            await this.listenerEventV2Service.AddListenerEventV2Async(listenerEventV2);
+        public ValueTask<ListenerEventV2> AddListenerEventV2Async(ListenerEventV2 listenerEventV2) =>
+        TryCatch(async () =>
+        {
+            ValidateListenerEventV2IsNotNull(listenerEventV2);
+
+            return await this.listenerEventV2Service.AddListenerEventV2Async(listenerEventV2);
+        });
     }
 }
