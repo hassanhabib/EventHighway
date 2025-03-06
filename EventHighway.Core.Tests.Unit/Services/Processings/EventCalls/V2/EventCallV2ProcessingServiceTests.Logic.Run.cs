@@ -29,8 +29,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
                 inputEventCallV2.DeepClone();
 
             this.eventCallV2ServiceMock.Setup(service =>
-                service.RunEventCallV2Async(inputEventCallV2))
-                    .ReturnsAsync(ranEventCallV2);
+                service.RunEventCallV2Async(
+                    inputEventCallV2))
+                        .ReturnsAsync(ranEventCallV2);
 
             // when
             EventCallV2 actualEventCallV2 =
@@ -42,8 +43,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
                 expectedEventCallV2);
 
             this.eventCallV2ServiceMock.Verify(service =>
-                service.RunEventCallV2Async(inputEventCallV2),
-                    Times.Once());
+                service.RunEventCallV2Async(
+                    inputEventCallV2),
+                        Times.Once());
 
             this.eventCallV2ServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
