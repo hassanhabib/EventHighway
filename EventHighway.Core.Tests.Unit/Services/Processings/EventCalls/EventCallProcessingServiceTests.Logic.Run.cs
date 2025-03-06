@@ -43,7 +43,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls
 
             this.eventCallServiceMock.Verify(service =>
                 service.RunAsync(inputEventCall),
-                    Times.Once());
+                    Times.Once);
 
             this.eventCallServiceMock.VerifyNoOtherCalls();
         }
