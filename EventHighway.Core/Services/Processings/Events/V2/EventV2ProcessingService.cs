@@ -19,8 +19,8 @@ namespace EventHighway.Core.Services.Processings.Events.V2
         private readonly ILoggingBroker loggingBroker;
 
         public EventV2ProcessingService(
-            IEventV2Service eventV2Service, 
-            IDateTimeBroker dateTimeBroker, 
+            IEventV2Service eventV2Service,
+            IDateTimeBroker dateTimeBroker,
             ILoggingBroker loggingBroker)
         {
             this.eventV2Service = eventV2Service;
@@ -28,9 +28,10 @@ namespace EventHighway.Core.Services.Processings.Events.V2
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<IQueryable<EventV2>> RetrieveScheduledPendingEventV2sAsync()
+        public ValueTask<IQueryable<EventV2>> RetrieveScheduledPendingEventV2sAsync() =>
+        TryCatch(async () =>
         {
-            IQueryable<EventV2> eventV2s = 
+            IQueryable<EventV2> eventV2s =
                 await this.eventV2Service.RetrieveAllEventV2sAsync();
 
             DateTimeOffset now =
@@ -39,6 +40,6 @@ namespace EventHighway.Core.Services.Processings.Events.V2
             return eventV2s.Where(eventV2 =>
                 eventV2.Type == EventV2Type.Scheduled &&
                 eventV2.ScheduledDate > now);
-        }
+        });
     }
 }

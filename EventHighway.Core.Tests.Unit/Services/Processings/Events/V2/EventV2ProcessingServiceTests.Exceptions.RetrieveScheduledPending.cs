@@ -50,8 +50,13 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                     expectedEventV2ProcessingDependencyException))),
                         Times.Once);
 
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetDateTimeOffsetAsync(),
+                    Times.Never);
+
             this.eventV2ServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
