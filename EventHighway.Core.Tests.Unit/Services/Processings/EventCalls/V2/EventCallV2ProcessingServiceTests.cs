@@ -2,12 +2,15 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System.Linq.Expressions;
+using System;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.EventCall.V2;
 using EventHighway.Core.Services.Foundations.EventCalls.V2;
 using EventHighway.Core.Services.Processings.EventCalls.V2;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
 {
@@ -26,6 +29,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
                 eventCallV2Service: this.eventCallV2ServiceMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
+
+        private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
 
         private static EventCallV2 CreateRandomEventCallV2() =>
             CreateEventCallV2Filler().Create();

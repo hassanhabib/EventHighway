@@ -35,7 +35,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
             // when
             EventCallV2 actualEventCallV2 =
                 await this.eventCallV2ProcessingService
-                    .RunAsync(inputEventCallV2);
+                    .RunEventCallV2Async(inputEventCallV2);
 
             // then
             actualEventCallV2.Should().BeEquivalentTo(
