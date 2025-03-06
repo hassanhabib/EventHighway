@@ -33,6 +33,23 @@ namespace EventHighway.Core.Services.Processings.EventCalls.V2
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(eventCallV2DependencyValidationException);
             }
+            catch (EventCallV2DependencyException eventCallV2DependencyException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(eventCallV2DependencyException);
+            }
+            catch (EventCallV2ServiceException eventCallV2ServiceException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(eventCallV2ServiceException);
+            }
+            catch (Exception exception)
+            {
+                var failedEventCallV2ProcessingServiceException =
+                    new FailedEventCallV2ProcessingServiceException(
+                        message: "Failed event call service error occurred, contact support.",
+                        innerException: exception);
+
+                throw await CreateAndLogServiceExceptionAsync(failedEventCallV2ProcessingServiceException);
+            }
         }
 
         private async ValueTask<EventCallV2ProcessingValidationException> CreateAndLogValidationExceptionAsync(
