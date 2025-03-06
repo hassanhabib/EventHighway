@@ -65,9 +65,22 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
 
         private static IQueryable<EventV2> CreateRandomEventV2s()
         {
-            return CreateEventV2Filler(dates: GetRandomDateTimeOffset())
-                .Create(count: GetRandomNumber())
-                    .AsQueryable();
+            return CreateEventV2Filler(
+                dates: GetRandomDateTimeOffset(),
+                eventV2Type: EventV2Type.Immediate)
+                    .Create(count: GetRandomNumber())
+                        .AsQueryable();
+        }
+
+        private static IQueryable<EventV2> CreateRandomEventV2s(
+            DateTimeOffset dates,
+            EventV2Type eventV2Type)
+        {
+            return CreateEventV2Filler(
+                dates,
+                eventV2Type)
+                    .Create(count: GetRandomNumber())
+                        .AsQueryable();
         }
 
         private static DateTimeOffset GetRandomDateTimeOffset()
@@ -77,7 +90,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                     .GetValue();
         }
 
-        private static Filler<EventV2> CreateEventV2Filler(DateTimeOffset dates)
+        private static Filler<EventV2> CreateEventV2Filler(
+            DateTimeOffset dates,
+            EventV2Type eventV2Type)
         {
             var filler = new Filler<EventV2>();
 
@@ -85,7 +100,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                 .OnType<DateTimeOffset>().Use(dates)
 
                 .OnType<DateTimeOffset?>()
-                    .Use(GetRandomDateTimeOffset());
+                    .Use(GetRandomDateTimeOffset())
+
+                .OnType<EventV2Type>().Use(eventV2Type);
 
             return filler;
         }

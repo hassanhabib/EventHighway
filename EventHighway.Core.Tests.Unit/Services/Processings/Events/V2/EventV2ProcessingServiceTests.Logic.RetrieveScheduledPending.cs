@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Events.V2;
@@ -24,14 +25,21 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
             DateTimeOffset retrievedDateTimeOffset =
                 randomDateTimeOffset;
 
-            IQueryable<EventV2> randomEventV2s = CreateRandomEventV2s();
-            IQueryable<EventV2> retrievedEventV2s = randomEventV2s;
+            List<EventV2> randomEventV2s =
+                CreateRandomEventV2s(
+                    dates: retrievedDateTimeOffset,
+                    eventV2Type: EventV2Type.Scheduled)
+                        .ToList();
+
+            List<EventV2> randomOtherEventV2s =
+                CreateRandomEventV2s().ToList();
+
+            IQueryable<EventV2> retrievedEventV2s =
+                randomEventV2s.Union(randomOtherEventV2s)
+                    .AsQueryable();
 
             IQueryable<EventV2> expectedEventV2s =
-                retrievedEventV2s.Where(eventV2 =>
-                    eventV2.Type == EventV2Type.Scheduled &&
-                    eventV2.ScheduledDate > retrievedDateTimeOffset)
-                        .DeepClone();
+                randomEventV2s.AsQueryable();
 
             this.eventV2ServiceMock.Setup(service =>
                 service.RetrieveAllEventV2sAsync())
