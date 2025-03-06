@@ -3,12 +3,14 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.ListenerEvents.V2;
 using EventHighway.Core.Services.Foundations.ListernEvents.V2;
 using EventHighway.Core.Services.Processings.ListenerEvents.V2;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace EventHighway.Core.Tests.Unit.Services.Processings.ListenerEvents.V2
 {
@@ -27,6 +29,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.ListenerEvents.V2
                 listenerEventV2Service: this.listenerEventV2ServiceMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
+
+        private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
 
         private static ListenerEventV2 CreateRandomListenerEventV2() =>
             CreateListenerEventV2Filler().Create();
