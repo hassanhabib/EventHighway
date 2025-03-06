@@ -16,7 +16,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
     {
         [Theory]
         [MemberData(nameof(EventCallV2ValidationExceptions))]
-        public async Task ShouldThrowDependencyValidationExceptionOnRunIfDependencyValidationErrornOccursAndLogItAsync(
+        public async Task ShouldThrowDependencyValidationExceptionOnRunIfDependencyValidationErrorOccursAndLogItAsync(
             Xeption eventCallV2ValidationException)
         {
             // given
