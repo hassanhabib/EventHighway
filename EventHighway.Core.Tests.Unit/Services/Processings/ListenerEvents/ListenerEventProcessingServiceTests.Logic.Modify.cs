@@ -43,7 +43,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.ListenerEvents
 
             this.listenerEventServiceMock.Verify(service =>
                 service.ModifyListenerEventAsync(inputListenerEvent),
-                    Times.Once());
+                    Times.Once);
 
             this.listenerEventServiceMock.VerifyNoOtherCalls();
         }
