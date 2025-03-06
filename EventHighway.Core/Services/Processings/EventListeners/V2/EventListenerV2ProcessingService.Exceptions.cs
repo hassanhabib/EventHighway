@@ -2,9 +2,11 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.EventListeners.V2;
+using EventHighway.Core.Models.EventListeners.V2.Exceptions;
 using EventHighway.Core.Models.Processings.EventListeners.V2.Exceptions;
 using Xeptions;
 
@@ -26,6 +28,18 @@ namespace EventHighway.Core.Services.Processings.EventListeners.V2
             {
                 throw await CreateAndLogValidationExceptionAsync(
                     invalidEventListenerV2ProcessingException);
+            }
+            catch (EventListenerV2DependencyException
+                eventListenerV2DependencyException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(
+                    eventListenerV2DependencyException);
+            }
+            catch (EventListenerV2ServiceException
+                eventListenerV2ServiceException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(
+                    eventListenerV2ServiceException);
             }
         }
 
