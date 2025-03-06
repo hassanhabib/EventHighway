@@ -4,28 +4,39 @@
 
 using System;
 using System.Linq;
+using System.Linq.Expressions;
+using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.EventListeners.V2;
 using EventHighway.Core.Services.Foundations.EventListeners.V2;
 using EventHighway.Core.Services.Processings.EventListeners.V2;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace EventHighway.Core.Tests.Unit.Services.Processings.EventListeners.V2
 {
     public partial class EventListenerV2ProcessingServiceTests
     {
         private readonly Mock<IEventListenerV2Service> eventListenerV2ServiceMock;
+        private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly IEventListenerV2ProcessingService eventListenerV2ProcessingService;
 
         public EventListenerV2ProcessingServiceTests()
         {
             this.eventListenerV2ServiceMock =
                 new Mock<IEventListenerV2Service>();
+            
+            this.loggingBrokerMock =
+                new Mock<ILoggingBroker>();
 
             this.eventListenerV2ProcessingService =
                 new EventListenerV2ProcessingService(
-                    eventListenerV2Service: eventListenerV2ServiceMock.Object);
+                    eventListenerV2Service: eventListenerV2ServiceMock.Object,
+                    loggingBroker: this.loggingBrokerMock.Object);
         }
+
+        private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
 
         private static IQueryable<EventListenerV2> CreateRandomEventListenerV2s() =>
             CreateEventListenerV2Filler().Create(count: GetRandomNumber()).AsQueryable();
