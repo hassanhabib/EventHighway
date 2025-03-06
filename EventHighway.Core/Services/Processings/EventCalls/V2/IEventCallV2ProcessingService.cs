@@ -9,6 +9,6 @@ namespace EventHighway.Core.Services.Processings.EventCalls.V2
 {
     internal interface IEventCallV2ProcessingService
     {
-        ValueTask<EventCallV2> RunAsync(EventCallV2 eventCallV2);
+        ValueTask<EventCallV2> RunEventCallV2Async(EventCallV2 eventCallV2);
     }
 }
