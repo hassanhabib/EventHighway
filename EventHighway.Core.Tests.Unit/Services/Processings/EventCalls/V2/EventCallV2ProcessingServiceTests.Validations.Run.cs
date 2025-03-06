@@ -13,7 +13,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
     public partial class EventCallV2ProcessingServiceTests
     {
         [Fact]
-        public async Task ShouldThrowValidationExceptionOnAddIfEventCallV2IsNullAndLogItAsync()
+        public async Task ShouldThrowValidationExceptionOnRunIfEventCallV2IsNullAndLogItAsync()
         {
             // given
             EventCallV2 nullEventCallV2 = null;
