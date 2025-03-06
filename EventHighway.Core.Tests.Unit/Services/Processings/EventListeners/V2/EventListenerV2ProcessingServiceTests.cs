@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.EventListeners.V2;
+using EventHighway.Core.Models.EventListeners.V2.Exceptions;
 using EventHighway.Core.Services.Foundations.EventListeners.V2;
 using EventHighway.Core.Services.Processings.EventListeners.V2;
 using Moq;
@@ -25,7 +26,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventListeners.V2
         {
             this.eventListenerV2ServiceMock =
                 new Mock<IEventListenerV2Service>();
-            
+
             this.loggingBrokerMock =
                 new Mock<ILoggingBroker>();
 
@@ -34,6 +35,26 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventListeners.V2
                     eventListenerV2Service: eventListenerV2ServiceMock.Object,
                     loggingBroker: this.loggingBrokerMock.Object);
         }
+
+        public static TheoryData<Xeption> EventListenerV2DependencyExceptions()
+        {
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            return new TheoryData<Xeption>
+            {
+                new EventListenerV2DependencyException(
+                    someMessage,
+                    someInnerException),
+
+                new EventListenerV2ServiceException(
+                    someMessage,
+                    someInnerException),
+            };
+        }
+
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
 
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
