@@ -8,7 +8,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Events.V2;
 using FluentAssertions;
-using Force.DeepCloner;
 using Moq;
 
 namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
@@ -19,15 +18,20 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
         public async Task ShouldRetrieveScheduledPendingEventV2sAsync()
         {
             // given
+            int randomDaysAgo = GetNegativeRandomNumber();
+
             DateTimeOffset randomDateTimeOffset =
                 GetRandomDateTimeOffset();
 
             DateTimeOffset retrievedDateTimeOffset =
                 randomDateTimeOffset;
 
+            DateTimeOffset scheduledDateTimeOffset =
+                retrievedDateTimeOffset.AddDays(randomDaysAgo);
+
             List<EventV2> randomEventV2s =
                 CreateRandomEventV2s(
-                    dates: retrievedDateTimeOffset,
+                    dates: scheduledDateTimeOffset,
                     eventV2Type: EventV2Type.Scheduled)
                         .ToList();
 
