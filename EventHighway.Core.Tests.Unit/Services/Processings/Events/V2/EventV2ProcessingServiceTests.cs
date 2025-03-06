@@ -45,12 +45,12 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
             return new TheoryData<Xeption>
             {
                 new EventV2DependencyException(
-                    message: someMessage,
-                    innerException: someInnerException),
+                    someMessage,
+                    someInnerException),
 
                 new EventV2ServiceException(
-                    message: someMessage,
-                    innerException: someInnerException),
+                    someMessage,
+                    someInnerException),
             };
         }
 
