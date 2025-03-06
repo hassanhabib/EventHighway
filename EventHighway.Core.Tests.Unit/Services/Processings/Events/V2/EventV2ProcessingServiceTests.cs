@@ -4,13 +4,16 @@
 
 using System;
 using System.Linq;
+using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Times;
 using EventHighway.Core.Models.Events.V2;
+using EventHighway.Core.Models.Events.V2.Exceptions;
 using EventHighway.Core.Services.Foundations.Events.V2;
 using EventHighway.Core.Services.Processings.Events.V2;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
 {
@@ -33,6 +36,29 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                     dateTimeBroker: this.dateTimeBrokerMock.Object,
                     loggingBroker: this.loggingBrokerMock.Object);
         }
+
+        public static TheoryData<Xeption> EventV2DependencyExceptions()
+        {
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            return new TheoryData<Xeption>
+            {
+                new EventV2DependencyException(
+                    message: someMessage,
+                    innerException: someInnerException),
+
+                new EventV2ServiceException(
+                    message: someMessage,
+                    innerException: someInnerException),
+            };
+        }
+
+        private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
+
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
 
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
