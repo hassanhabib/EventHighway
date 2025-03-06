@@ -25,6 +25,14 @@ namespace EventHighway.Core.Services.Processings.EventCalls.V2
             {
                 throw await CreateAndLogValidationExceptionAsync(nullEventCallV2ProcessingException);
             }
+            catch (EventCallV2ValidationException eventCallV2ValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(eventCallV2ValidationException);
+            }
+            catch (EventCallV2DependencyValidationException eventCallV2DependencyValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(eventCallV2DependencyValidationException);
+            }
         }
 
         private async ValueTask<EventCallV2ProcessingValidationException> CreateAndLogValidationExceptionAsync(
