@@ -109,12 +109,12 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.ListenerEvents.V2
 
             var failedListenerEventV2ProcessingServiceException =
                 new FailedListenerEventV2ProcessingServiceException(
-                    message: "Failed event call service error occurred, contact support.",
+                    message: "Failed listener event service error occurred, contact support.",
                     innerException: serviceException);
 
             var expectedListenerEventV2ProcessingExceptionException =
                 new ListenerEventV2ProcessingServiceException(
-                    message: "Event call service error occurred, contact support.",
+                    message: "Listener event service error occurred, contact support.",
                     innerException: failedListenerEventV2ProcessingServiceException);
 
             this.listenerEventV2ServiceMock.Setup(service =>
