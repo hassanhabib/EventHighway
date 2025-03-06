@@ -39,7 +39,7 @@ namespace EventHighway.Core.Services.Processings.Events.V2
 
             return eventV2s.Where(eventV2 =>
                 eventV2.Type == EventV2Type.Scheduled &&
-                eventV2.ScheduledDate > now);
+                eventV2.ScheduledDate < now);
         });
     }
 }

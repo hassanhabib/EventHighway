@@ -62,6 +62,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
 
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
+        
+        private static int GetNegativeRandomNumber() =>
+            -1 * GetRandomNumber();
 
         private static IQueryable<EventV2> CreateRandomEventV2s()
         {
@@ -100,7 +103,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                 .OnType<DateTimeOffset>().Use(dates)
 
                 .OnType<DateTimeOffset?>()
-                    .Use(GetRandomDateTimeOffset())
+                    .Use(dates)
 
                 .OnType<EventV2Type>().Use(eventV2Type);
 
