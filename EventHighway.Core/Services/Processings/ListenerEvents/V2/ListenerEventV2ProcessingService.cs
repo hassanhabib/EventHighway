@@ -33,6 +33,8 @@ namespace EventHighway.Core.Services.Processings.ListenerEvents.V2
         public ValueTask<ListenerEventV2> ModifyListenerEventV2Async(ListenerEventV2 listenerEventV2) =>
         TryCatch(async () =>
         {
+            ValidateListenerEventV2IsNotNull(listenerEventV2);
+
             return await this.listenerEventV2Service.ModifyListenerEventV2Async(listenerEventV2);
         });
     }
