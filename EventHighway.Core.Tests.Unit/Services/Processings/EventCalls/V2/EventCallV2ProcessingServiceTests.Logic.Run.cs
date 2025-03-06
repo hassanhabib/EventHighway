@@ -45,7 +45,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
             this.eventCallV2ServiceMock.Verify(service =>
                 service.RunEventCallV2Async(
                     inputEventCallV2),
-                        Times.Once());
+                        Times.Once);
 
             this.eventCallV2ServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
