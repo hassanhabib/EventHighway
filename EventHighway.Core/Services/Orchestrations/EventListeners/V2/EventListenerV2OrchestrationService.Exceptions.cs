@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.EventListeners.V2;
 using EventHighway.Core.Models.Orchestrations.EventListeners.V2.Exceptions;
+using EventHighway.Core.Models.Processings.EventListeners.V2.Exceptions;
 using Xeptions;
 
 namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
@@ -26,6 +27,18 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
             {
                 throw await CreateAndLogValidationExceptionAsync(
                     invalidEventListenerV2OrchestrationException);
+            }
+            catch (EventListenerV2ProcessingDependencyException 
+                eventListenerV2ProcessingDependencyException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(
+                    eventListenerV2ProcessingDependencyException);
+            }
+            catch (EventListenerV2ProcessingServiceException 
+                eventListenerV2ProcessingServiceException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(
+                    eventListenerV2ProcessingServiceException);
             }
         }
 
