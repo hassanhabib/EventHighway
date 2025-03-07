@@ -24,11 +24,13 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<IQueryable<EventListenerV2>> RetrieveEventListenerV2sByEventAddressIdAsync(
-            Guid eventAddressId)
+        public ValueTask<IQueryable<EventListenerV2>> RetrieveEventListenerV2sByEventAddressIdAsync(
+            Guid eventAddressId) => TryCatch(async () =>
         {
-            return await this.eventListenerV2ProcessingService.RetrieveEventListenerV2sByEventAddressIdAsync(
-                eventAddressId);
-        }
+            ValidateEventAddressId(eventAddressId);
+
+            return await this.eventListenerV2ProcessingService
+                .RetrieveEventListenerV2sByEventAddressIdAsync(eventAddressId);
+        });
     }
 }
