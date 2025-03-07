@@ -9,6 +9,7 @@ using EventHighway.Core.Models.EventListeners.V2;
 using EventHighway.Core.Models.ListenerEvents.V2;
 using EventHighway.Core.Models.Orchestrations.EventListeners.V2.Exceptions;
 using EventHighway.Core.Models.Processings.EventListeners.V2.Exceptions;
+using EventHighway.Core.Models.Processings.ListenerEvents.V2.Exceptions;
 using Xeptions;
 
 namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
@@ -73,6 +74,18 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
             {
                 throw await CreateAndLogValidationExceptionAsync(
                     nullListenerEventV2OrchestrationException);
+            }
+            catch (ListenerEventV2ProcessingValidationException
+                listenerEventV2ProcessingValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    listenerEventV2ProcessingValidationException);
+            }
+            catch (ListenerEventV2ProcessingDependencyValidationException
+                listenerEventV2ProcessingDependencyValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    listenerEventV2ProcessingDependencyValidationException);
             }
         }
 
