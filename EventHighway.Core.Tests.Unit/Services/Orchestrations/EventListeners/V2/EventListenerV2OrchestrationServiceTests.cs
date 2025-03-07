@@ -35,19 +35,6 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                     eventListenerV2ProcessingService: this.eventListenerV2ProcessingServiceMock.Object,
                     loggingBroker: this.loggingBrokerMock.Object);
         }
-
-        public static TheoryData<Xeption> EventV2ValidationExceptions()
-        {
-            string someMessage = GetRandomString();
-            var someInnerException = new Xeption();
-
-            return new TheoryData<Xeption>
-            {
-                new EventListenerV2ProcessingValidationException(
-                    someMessage,
-                    someInnerException)
-            };
-        }
         
         public static TheoryData<Xeption> EventListenerV2DependencyExceptions()
         {
