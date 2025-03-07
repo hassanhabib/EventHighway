@@ -1,0 +1,67 @@
+﻿// ---------------------------------------------------------------------------------- 
+// Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
+// ----------------------------------------------------------------------------------
+
+using System;
+using System.Linq;
+using EventHighway.Core.Brokers.Loggings;
+using EventHighway.Core.Models.Events.V2;
+using EventHighway.Core.Services.Orchestrations.Events.V2;
+using EventHighway.Core.Services.Processings.Events.V2;
+using Moq;
+using Tynamix.ObjectFiller;
+
+namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
+{
+    public partial class EventV2OrchestrationServiceTests
+    {
+        private readonly Mock<IEventV2ProcessingService> eventV2ProcessingServiceMock;
+        private readonly Mock<ILoggingBroker> loggingBrokerMock;
+        private readonly IEventV2OrchestrationService eventV2OrchestrationService;
+
+        public EventV2OrchestrationServiceTests()
+        {
+            this.eventV2ProcessingServiceMock =
+                new Mock<IEventV2ProcessingService>();
+
+            this.loggingBrokerMock =
+                new Mock<ILoggingBroker>();
+
+            this.eventV2OrchestrationService =
+                new EventV2OrchestrationService(
+                    eventV2ProcessingService: this.eventV2ProcessingServiceMock.Object,
+                    loggingBroker: loggingBrokerMock.Object);
+        }
+
+        private static int GetRandomNumber() =>
+            new IntRange(min: 2, max: 9).GetValue();
+
+        private static DateTimeOffset GetRandomDateTimeOffset()
+        {
+            return new DateTimeRange(
+                earliestDate: DateTime.UnixEpoch)
+                    .GetValue();
+        }
+
+        private static IQueryable<EventV2> CreateRandomEventV2s()
+        {
+            return CreateEventV2Filler()
+                .Create(count: GetRandomNumber())
+                    .AsQueryable();
+        }
+
+        private static Filler<EventV2> CreateEventV2Filler()
+        {
+            var filler = new Filler<EventV2>();
+
+            filler.Setup()
+                .OnType<DateTimeOffset>()
+                    .Use(GetRandomDateTimeOffset)
+
+                .OnType<DateTimeOffset?>()
+                    .Use(GetRandomDateTimeOffset());
+
+            return filler;
+        }
+    }
+}
