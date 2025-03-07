@@ -14,8 +14,53 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
     public partial class EventV2OrchestrationServiceTests
     {
         [Theory]
+        [MemberData(nameof(EventCallV2ValidationExceptions))]
+        public async Task ShouldThrowDependencyValidationExceptionOnRunIfEventCallV2ValidationErrorOccursAndLogItAsync(
+            Xeption eventCallV2ValidationException)
+        {
+            // given
+            EventCallV2 someEventCallV2 = CreateRandomEventCallV2();
+
+            var expectedEventV2OrchestrationDependencyValidationException =
+                new EventV2OrchestrationDependencyValidationException(
+                    message: "Event validation error occurred, fix the errors and try again.",
+                    innerException: eventCallV2ValidationException.InnerException as Xeption);
+
+            this.eventCallV2ProcessingServiceMock.Setup(service =>
+                service.RunEventCallV2Async(It.IsAny<EventCallV2>()))
+                    .ThrowsAsync(eventCallV2ValidationException);
+
+            // when
+            ValueTask<EventCallV2> runEventCallV2Task =
+                this.eventV2OrchestrationService.RunEventCallV2Async(
+                    someEventCallV2);
+
+            EventV2OrchestrationDependencyValidationException
+                actualEventV2OrchestrationDependencyValidationException =
+                    await Assert.ThrowsAsync<EventV2OrchestrationDependencyValidationException>(
+                        runEventCallV2Task.AsTask);
+
+            // then
+            actualEventV2OrchestrationDependencyValidationException.Should()
+                .BeEquivalentTo(expectedEventV2OrchestrationDependencyValidationException);
+
+            this.eventCallV2ProcessingServiceMock.Verify(service =>
+                service.RunEventCallV2Async(It.IsAny<EventCallV2>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventV2OrchestrationDependencyValidationException))),
+                        Times.Once);
+
+            this.eventCallV2ProcessingServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.eventV2ProcessingServiceMock.VerifyNoOtherCalls();
+        }
+
+        [Theory]
         [MemberData(nameof(EventCallV2DependencyExceptions))]
-        public async Task ShouldThrowDependencyExceptionOnRunIfEventCallV2DependencyExceptionOccursAndLogItAsync(
+        public async Task ShouldThrowDependencyExceptionOnRunIfEventCallV2DependencyErrorOccursAndLogItAsync(
             Xeption eventCallV2DependencyException)
         {
             // given
