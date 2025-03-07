@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.EventListeners.V2;
@@ -45,6 +46,16 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
             {
                 throw await CreateAndLogDependencyExceptionAsync(
                     eventListenerV2ProcessingServiceException);
+            }
+            catch (Exception exception)
+            {
+                var failedEventListenerV2OrchestrationServiceException =
+                    new FailedEventListenerV2OrchestrationServiceException(
+                        message: "Failed event listener service error occurred, contact support.",
+                        innerException: exception);
+
+                throw await CreateAndLogServiceExceptionAsync(
+                    failedEventListenerV2OrchestrationServiceException);
             }
         }
 
