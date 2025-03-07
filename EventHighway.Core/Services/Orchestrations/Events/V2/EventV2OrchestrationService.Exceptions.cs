@@ -5,6 +5,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using EventHighway.Core.Models.EventCall.V2;
 using EventHighway.Core.Models.Events.V2;
 using EventHighway.Core.Models.Orchestrations.Events.V2.Exceptions;
 using EventHighway.Core.Models.Processings.Events.V2.Exceptions;
@@ -15,6 +16,7 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
     internal partial class EventV2OrchestrationService
     {
         private delegate ValueTask<IQueryable<EventV2>> ReturningEventV2sFunction();
+        private delegate ValueTask<EventCallV2> ReturningEventCallV2Function();
 
         private async ValueTask<IQueryable<EventV2>> TryCatch(ReturningEventV2sFunction returningEventV2sFunction)
         {
@@ -39,6 +41,31 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
 
                 throw await CreateAndLogServiceExceptionAsync(failedEventV2OrchestrationServiceException);
             }
+        }
+
+        private async ValueTask<EventCallV2> TryCatch(ReturningEventCallV2Function returningEventCallV2Function)
+        {
+            try
+            {
+                return await returningEventCallV2Function();
+            }
+            catch (NullEventCallV2OrchestrationException nullEventCallV2OrchestrationException)
+            {
+                throw await CreateAndLogValidationExceptionAsync(nullEventCallV2OrchestrationException);
+            }
+        }
+
+        private async ValueTask<EventV2OrchestrationValidationException> CreateAndLogValidationExceptionAsync(
+            Xeption exception)
+        {
+            var eventV2OrchestrationValidationException =
+                new EventV2OrchestrationValidationException(
+                    message: "Event validation error occurred, fix the errors and try again.",
+                    innerException: exception);
+
+            await this.loggingBroker.LogErrorAsync(eventV2OrchestrationValidationException);
+
+            return eventV2OrchestrationValidationException;
         }
 
         private async ValueTask<EventV2OrchestrationDependencyException> CreateAndLogDependencyExceptionAsync(

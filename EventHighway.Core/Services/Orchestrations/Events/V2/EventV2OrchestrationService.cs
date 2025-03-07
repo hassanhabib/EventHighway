@@ -35,9 +35,13 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
                 .RetrieveScheduledPendingEventV2sAsync();
         });
 
-        public async ValueTask<EventCallV2> RunEventCallV2Async(EventCallV2 eventCallV2)
+        public ValueTask<EventCallV2> RunEventCallV2Async(EventCallV2 eventCallV2) =>
+        TryCatch(async () =>
         {
-            return await this.eventCallV2ProcessingService.RunEventCallV2Async(eventCallV2);
-        }
+            ValidateEventCallV2IsNotNull(eventCallV2);
+
+            return await this.eventCallV2ProcessingService.RunEventCallV2Async(
+                eventCallV2);
+        });
     }
 }
