@@ -44,23 +44,42 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
             }
         }
 
-        private async ValueTask<EventCallV2> TryCatch(ReturningEventCallV2Function returningEventCallV2Function)
+        private async ValueTask<EventCallV2> TryCatch(
+            ReturningEventCallV2Function returningEventCallV2Function)
         {
             try
             {
                 return await returningEventCallV2Function();
             }
-            catch (NullEventCallV2OrchestrationException nullEventCallV2OrchestrationException)
+            catch (NullEventCallV2OrchestrationException
+                nullEventCallV2OrchestrationException)
             {
-                throw await CreateAndLogValidationExceptionAsync(nullEventCallV2OrchestrationException);
+                throw await CreateAndLogValidationExceptionAsync(
+                    nullEventCallV2OrchestrationException);
             }
-            catch (EventCallV2ProcessingDependencyException eventCallV2ProcessingDependencyException)
+            catch (EventCallV2ProcessingValidationException
+                eventCallV2ProcessingValidationException)
             {
-                throw await CreateAndLogDependencyExceptionAsync(eventCallV2ProcessingDependencyException);
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventCallV2ProcessingValidationException);
             }
-            catch (EventCallV2ProcessingServiceException eventCallV2ProcessingServiceException)
+            catch (EventCallV2ProcessingDependencyValidationException
+                eventCallV2ProcessingDependencyValidationException)
             {
-                throw await CreateAndLogDependencyExceptionAsync(eventCallV2ProcessingServiceException);
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventCallV2ProcessingDependencyValidationException);
+            }
+            catch (EventCallV2ProcessingDependencyException
+                eventCallV2ProcessingDependencyException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(
+                    eventCallV2ProcessingDependencyException);
+            }
+            catch (EventCallV2ProcessingServiceException
+                eventCallV2ProcessingServiceException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(
+                    eventCallV2ProcessingServiceException);
             }
         }
 
@@ -75,6 +94,20 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
             await this.loggingBroker.LogErrorAsync(eventV2OrchestrationValidationException);
 
             return eventV2OrchestrationValidationException;
+        }
+
+        private async ValueTask<EventV2OrchestrationDependencyValidationException>
+            CreateAndLogDependencyValidationExceptionAsync(
+                Xeption exception)
+        {
+            var eventV2OrchestrationDependencyValidationException =
+                new EventV2OrchestrationDependencyValidationException(
+                    message: "Event validation error occurred, fix the errors and try again.",
+                    innerException: exception.InnerException as Xeption);
+
+            await this.loggingBroker.LogErrorAsync(eventV2OrchestrationDependencyValidationException);
+
+            return eventV2OrchestrationDependencyValidationException;
         }
 
         private async ValueTask<EventV2OrchestrationDependencyException> CreateAndLogDependencyExceptionAsync(
