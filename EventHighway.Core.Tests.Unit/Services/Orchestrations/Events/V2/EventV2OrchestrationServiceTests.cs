@@ -6,9 +6,11 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
+using EventHighway.Core.Models.EventCall.V2;
 using EventHighway.Core.Models.Events.V2;
 using EventHighway.Core.Models.Processings.Events.V2.Exceptions;
 using EventHighway.Core.Services.Orchestrations.Events.V2;
+using EventHighway.Core.Services.Processings.EventCalls.V2;
 using EventHighway.Core.Services.Processings.Events.V2;
 using Moq;
 using Tynamix.ObjectFiller;
@@ -19,6 +21,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
     public partial class EventV2OrchestrationServiceTests
     {
         private readonly Mock<IEventV2ProcessingService> eventV2ProcessingServiceMock;
+        private readonly Mock<IEventCallV2ProcessingService> eventCallV2ProcessingServiceMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly IEventV2OrchestrationService eventV2OrchestrationService;
 
@@ -27,12 +30,16 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
             this.eventV2ProcessingServiceMock =
                 new Mock<IEventV2ProcessingService>();
 
+            this.eventCallV2ProcessingServiceMock =
+                new Mock<IEventCallV2ProcessingService>();
+
             this.loggingBrokerMock =
                 new Mock<ILoggingBroker>();
 
             this.eventV2OrchestrationService =
                 new EventV2OrchestrationService(
                     eventV2ProcessingService: this.eventV2ProcessingServiceMock.Object,
+                    eventCallV2ProcessingService: this.eventCallV2ProcessingServiceMock.Object,
                     loggingBroker: loggingBrokerMock.Object);
         }
 
@@ -69,12 +76,18 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                     .GetValue();
         }
 
+        private static EventCallV2 CreateRandomEventCallV2() =>
+            CreateEventCallV2Filler().Create();
+
         private static IQueryable<EventV2> CreateRandomEventV2s()
         {
             return CreateEventV2Filler()
                 .Create(count: GetRandomNumber())
                     .AsQueryable();
         }
+
+        private static Filler<EventCallV2> CreateEventCallV2Filler() =>
+            new Filler<EventCallV2>();
 
         private static Filler<EventV2> CreateEventV2Filler()
         {
