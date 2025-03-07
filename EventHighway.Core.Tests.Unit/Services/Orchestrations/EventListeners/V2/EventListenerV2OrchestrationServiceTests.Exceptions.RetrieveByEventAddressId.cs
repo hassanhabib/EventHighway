@@ -39,14 +39,14 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                     .ThrowsAsync(eventListenerV2ProcessingValidationException);
 
             // when
-            ValueTask<IQueryable<EventListenerV2>> retrieveScheduledPendingEventListenerV2sTask =
+            ValueTask<IQueryable<EventListenerV2>> retrieveEventListenerV2sByEventAddressIdTask =
                 this.eventListenerV2OrchestrationService.RetrieveEventListenerV2sByEventAddressIdAsync(
                     someEventAddressId);
 
             EventListenerV2OrchestrationDependencyValidationException
                 actualEventListenerV2OrchestrationDependencyValidationException =
                     await Assert.ThrowsAsync<EventListenerV2OrchestrationDependencyValidationException>(
-                        retrieveScheduledPendingEventListenerV2sTask.AsTask);
+                        retrieveEventListenerV2sByEventAddressIdTask.AsTask);
 
             // then
             actualEventListenerV2OrchestrationDependencyValidationException.Should()
@@ -83,13 +83,13 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                     .ThrowsAsync(eventListenerV2DependencyException);
 
             // when
-            ValueTask<IQueryable<EventListenerV2>> retrieveScheduledPendingEventListenerV2sTask =
+            ValueTask<IQueryable<EventListenerV2>> retrieveEventListenerV2sByEventAddressIdTask =
                 this.eventListenerV2OrchestrationService.RetrieveEventListenerV2sByEventAddressIdAsync(
                     someEventAddressId);
 
             EventListenerV2OrchestrationDependencyException actualEventListenerV2OrchestrationDependencyException =
                 await Assert.ThrowsAsync<EventListenerV2OrchestrationDependencyException>(
-                    retrieveScheduledPendingEventListenerV2sTask.AsTask);
+                    retrieveEventListenerV2sByEventAddressIdTask.AsTask);
 
             // then
             actualEventListenerV2OrchestrationDependencyException.Should()
@@ -102,6 +102,53 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogErrorAsync(It.Is(SameExceptionAs(
                     expectedEventListenerV2OrchestrationDependencyException))),
+                        Times.Once);
+
+            this.eventListenerV2ProcessingServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRetrieveByEventAddressIdIfExceptionOccursAndLogItAsync()
+        {
+            // given
+            Guid someEventAddressId = GetRandomId();
+            var serviceException = new Exception();
+
+            var failedEventListenerV2OrchestrationServiceException =
+                new FailedEventListenerV2OrchestrationServiceException(
+                    message: "Failed event listener service error occurred, contact support.",
+                    innerException: serviceException);
+
+            var expectedEventListenerV2OrchestrationServiceException =
+                new EventListenerV2OrchestrationServiceException(
+                    message: "Event listener service error occurred, contact support.",
+                    innerException: failedEventListenerV2OrchestrationServiceException);
+
+            this.eventListenerV2ProcessingServiceMock.Setup(service =>
+                service.RetrieveEventListenerV2sByEventAddressIdAsync(someEventAddressId))
+                    .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<IQueryable<EventListenerV2>> retrieveEventListenerV2sByEventAddressIdTask =
+                this.eventListenerV2OrchestrationService.RetrieveEventListenerV2sByEventAddressIdAsync(
+                    someEventAddressId);
+
+            EventListenerV2OrchestrationServiceException actualEventListenerV2OrchestrationServiceException =
+                await Assert.ThrowsAsync<EventListenerV2OrchestrationServiceException>(
+                    retrieveEventListenerV2sByEventAddressIdTask.AsTask);
+
+            // then
+            actualEventListenerV2OrchestrationServiceException.Should()
+                .BeEquivalentTo(expectedEventListenerV2OrchestrationServiceException);
+
+            this.eventListenerV2ProcessingServiceMock.Verify(service =>
+                service.RetrieveEventListenerV2sByEventAddressIdAsync(someEventAddressId),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventListenerV2OrchestrationServiceException))),
                         Times.Once);
 
             this.eventListenerV2ProcessingServiceMock.VerifyNoOtherCalls();
