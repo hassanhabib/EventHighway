@@ -74,9 +74,6 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
         private static EventCallV2 CreateRandomEventCallV2() =>
             CreateEventCallV2Filler().Create();
 
-        private static string CreateRandomResponse() =>
-            new MnemonicString().GetValue();
-
         private static Filler<EventCallV2> CreateEventCallV2Filler() =>
             new Filler<EventCallV2>();
     }
