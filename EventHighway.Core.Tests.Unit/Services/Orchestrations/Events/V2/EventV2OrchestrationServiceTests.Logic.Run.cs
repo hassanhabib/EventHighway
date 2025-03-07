@@ -47,8 +47,12 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                     inputEventCallV2),
                         Times.Once);
 
-            this.eventCallV2ProcessingServiceMock.VerifyNoOtherCalls();
-            this.eventV2ProcessingServiceMock.VerifyNoOtherCalls();
+            this.eventCallV2ProcessingServiceMock
+                .VerifyNoOtherCalls();
+
+            this.eventV2ProcessingServiceMock
+                .VerifyNoOtherCalls();
+
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
