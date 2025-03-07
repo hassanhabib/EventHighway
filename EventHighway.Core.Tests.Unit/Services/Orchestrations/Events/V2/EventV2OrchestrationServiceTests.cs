@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.EventCall.V2;
 using EventHighway.Core.Models.Events.V2;
+using EventHighway.Core.Models.Processings.EventCalls.V2.Exceptions;
 using EventHighway.Core.Models.Processings.Events.V2.Exceptions;
 using EventHighway.Core.Services.Orchestrations.Events.V2;
 using EventHighway.Core.Services.Processings.EventCalls.V2;
@@ -41,6 +42,40 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                     eventV2ProcessingService: this.eventV2ProcessingServiceMock.Object,
                     eventCallV2ProcessingService: this.eventCallV2ProcessingServiceMock.Object,
                     loggingBroker: loggingBrokerMock.Object);
+        }
+
+        public static TheoryData<Xeption> EventCallV2ValidationExceptions()
+        {
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            return new TheoryData<Xeption>
+            {
+                new EventCallV2ProcessingValidationException(
+                    someMessage,
+                    someInnerException),
+
+                new EventCallV2ProcessingDependencyValidationException(
+                    someMessage,
+                    someInnerException),
+            };
+        }
+
+        public static TheoryData<Xeption> EventCallV2DependencyExceptions()
+        {
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            return new TheoryData<Xeption>
+            {
+                new EventCallV2ProcessingDependencyException(
+                    someMessage,
+                    someInnerException),
+
+                new EventCallV2ProcessingServiceException(
+                    someMessage,
+                    someInnerException),
+            };
         }
 
         public static TheoryData<Xeption> EventV2DependencyExceptions()
