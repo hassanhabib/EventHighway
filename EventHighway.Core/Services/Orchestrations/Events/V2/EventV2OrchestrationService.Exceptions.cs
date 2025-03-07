@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using EventHighway.Core.Models.EventCall.V2;
 using EventHighway.Core.Models.Events.V2;
 using EventHighway.Core.Models.Orchestrations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Processings.EventCalls.V2.Exceptions;
 using EventHighway.Core.Models.Processings.Events.V2.Exceptions;
 using Xeptions;
 
@@ -52,6 +53,14 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
             catch (NullEventCallV2OrchestrationException nullEventCallV2OrchestrationException)
             {
                 throw await CreateAndLogValidationExceptionAsync(nullEventCallV2OrchestrationException);
+            }
+            catch (EventCallV2ProcessingDependencyException eventCallV2ProcessingDependencyException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(eventCallV2ProcessingDependencyException);
+            }
+            catch (EventCallV2ProcessingServiceException eventCallV2ProcessingServiceException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(eventCallV2ProcessingServiceException);
             }
         }
 
