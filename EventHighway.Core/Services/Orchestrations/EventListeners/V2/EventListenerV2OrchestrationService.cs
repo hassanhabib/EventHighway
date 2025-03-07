@@ -38,9 +38,13 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
                 .RetrieveEventListenerV2sByEventAddressIdAsync(eventAddressId);
         });
 
-        public async ValueTask<ListenerEventV2> AddListenerEventV2Async(ListenerEventV2 listenerEventV2)
+        public ValueTask<ListenerEventV2> AddListenerEventV2Async(ListenerEventV2 listenerEventV2) =>
+        TryCatch(async () =>
         {
-            return await this.listenerEventV2ProcessingService.AddListenerEventV2Async(listenerEventV2);
-        }
+            ValidateListenerEventV2IsNotNull(listenerEventV2);
+
+            return await this.listenerEventV2ProcessingService.AddListenerEventV2Async(
+                listenerEventV2);
+        });
     }
 }

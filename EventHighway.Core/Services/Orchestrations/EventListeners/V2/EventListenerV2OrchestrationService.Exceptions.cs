@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.EventListeners.V2;
+using EventHighway.Core.Models.ListenerEvents.V2;
 using EventHighway.Core.Models.Orchestrations.EventListeners.V2.Exceptions;
 using EventHighway.Core.Models.Processings.EventListeners.V2.Exceptions;
 using Xeptions;
@@ -15,6 +16,7 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
     internal partial class EventListenerV2OrchestrationService
     {
         private delegate ValueTask<IQueryable<EventListenerV2>> ReturningEventListenerV2sFunction();
+        private delegate ValueTask<ListenerEventV2> ReturningListenerEventV2Function();
 
         private async ValueTask<IQueryable<EventListenerV2>> TryCatch(
             ReturningEventListenerV2sFunction returningEventListenerV2sFunction)
@@ -56,6 +58,21 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
 
                 throw await CreateAndLogServiceExceptionAsync(
                     failedEventListenerV2OrchestrationServiceException);
+            }
+        }
+
+        private async ValueTask<ListenerEventV2> TryCatch(
+            ReturningListenerEventV2Function returningListenerEventV2Function)
+        {
+            try
+            {
+                return await returningListenerEventV2Function();
+            }
+            catch (NullListenerEventV2OrchestrationException
+                nullListenerEventV2OrchestrationException)
+            {
+                throw await CreateAndLogValidationExceptionAsync(
+                    nullListenerEventV2OrchestrationException);
             }
         }
 
