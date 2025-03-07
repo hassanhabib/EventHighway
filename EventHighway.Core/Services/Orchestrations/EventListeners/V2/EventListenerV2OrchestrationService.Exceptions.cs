@@ -28,13 +28,19 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     invalidEventListenerV2OrchestrationException);
             }
-            catch (EventListenerV2ProcessingDependencyException 
+            catch (EventListenerV2ProcessingValidationException
+                eventListenerV2ProcessingValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventListenerV2ProcessingValidationException);
+            }
+            catch (EventListenerV2ProcessingDependencyException
                 eventListenerV2ProcessingDependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
                     eventListenerV2ProcessingDependencyException);
             }
-            catch (EventListenerV2ProcessingServiceException 
+            catch (EventListenerV2ProcessingServiceException
                 eventListenerV2ProcessingServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
@@ -53,6 +59,20 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
             await this.loggingBroker.LogErrorAsync(eventListenerV2OrchestrationValidationException);
 
             return eventListenerV2OrchestrationValidationException;
+        }
+
+        private async ValueTask<EventListenerV2OrchestrationDependencyValidationException>
+            CreateAndLogDependencyValidationExceptionAsync(
+                Xeption exception)
+        {
+            var eventListenerV2OrchestrationDependencyValidationException =
+                new EventListenerV2OrchestrationDependencyValidationException(
+                    message: "Event listener validation error occurred, fix the errors and try again.",
+                    innerException: exception.InnerException as Xeption);
+
+            await this.loggingBroker.LogErrorAsync(eventListenerV2OrchestrationDependencyValidationException);
+
+            return eventListenerV2OrchestrationDependencyValidationException;
         }
 
         private async ValueTask<EventListenerV2OrchestrationDependencyException> CreateAndLogDependencyExceptionAsync(
