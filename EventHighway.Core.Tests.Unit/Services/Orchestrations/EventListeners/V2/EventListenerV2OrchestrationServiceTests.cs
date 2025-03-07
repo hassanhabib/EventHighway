@@ -9,6 +9,7 @@ using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.EventListeners.V2;
 using EventHighway.Core.Models.ListenerEvents.V2;
 using EventHighway.Core.Models.Processings.EventListeners.V2.Exceptions;
+using EventHighway.Core.Models.Processings.ListenerEvents.V2.Exceptions;
 using EventHighway.Core.Services.Orchestrations.EventListeners.V2;
 using EventHighway.Core.Services.Processings.EventListeners.V2;
 using EventHighway.Core.Services.Processings.ListenerEvents.V2;
@@ -54,6 +55,40 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                     someInnerException),
 
                 new EventListenerV2ProcessingServiceException(
+                    someMessage,
+                    someInnerException),
+            };
+        }
+
+        public static TheoryData<Xeption> ListenerEventV2ValidationExceptions()
+        {
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            return new TheoryData<Xeption>
+            {
+                new ListenerEventV2ProcessingValidationException(
+                    someMessage,
+                    someInnerException),
+
+                new ListenerEventV2ProcessingDependencyValidationException(
+                    someMessage,
+                    someInnerException),
+            };
+        }
+
+        public static TheoryData<Xeption> ListenerEventV2DependencyExceptions()
+        {
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            return new TheoryData<Xeption>
+            {
+                new ListenerEventV2ProcessingDependencyException(
+                    someMessage,
+                    someInnerException),
+
+                new ListenerEventV2ProcessingServiceException(
                     someMessage,
                     someInnerException),
             };
