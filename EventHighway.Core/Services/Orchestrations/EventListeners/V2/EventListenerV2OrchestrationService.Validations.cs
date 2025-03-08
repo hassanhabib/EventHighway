@@ -4,6 +4,7 @@
 
 using System;
 using EventHighway.Core.Models.EventListeners.V2;
+using EventHighway.Core.Models.ListenerEvents.V2;
 using EventHighway.Core.Models.Orchestrations.EventListeners.V2.Exceptions;
 
 namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
@@ -15,6 +16,15 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
             Validate(
                 (Rule: IsInvalid(eventAddressId),
                 Parameter: nameof(EventListenerV2.EventAddressId)));
+        }
+
+        private static void ValidateListenerEventV2IsNotNull(ListenerEventV2 listenerEventV2)
+        {
+            if (listenerEventV2 is null)
+            {
+                throw new NullListenerEventV2OrchestrationException(
+                    message: "Listener event is null.");
+            }
         }
 
         private static dynamic IsInvalid(Guid id) => new
