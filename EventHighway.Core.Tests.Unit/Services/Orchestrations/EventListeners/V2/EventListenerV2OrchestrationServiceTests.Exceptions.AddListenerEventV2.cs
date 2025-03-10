@@ -16,7 +16,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
     {
         [Theory]
         [MemberData(nameof(ListenerEventV2ValidationExceptions))]
-        public async Task ShouldThrowDependencyValidationExceptionOnAddIfDependencyValidationErrorOccursAndLogItAsync(
+        public async Task ShouldThrowDependencyValidationOnAddListenerEventV2IfDependencyValidationErrorAndLogItAsync(
             Xeption listenerEventV2ValidationException)
         {
             // given
@@ -60,7 +60,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
 
         [Theory]
         [MemberData(nameof(ListenerEventV2DependencyExceptions))]
-        public async Task ShouldThrowDependencyExceptionOnAddIfDependencyErrorOccursAndLogItAsync(
+        public async Task ShouldThrowDependencyExceptionOnAddListenerEventV2IfDependencyErrorOccursAndLogItAsync(
             Xeption listenerEventV2DependencyException)
         {
             // given
@@ -103,7 +103,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
         }
 
         [Fact]
-        public async Task ShouldThrowServiceExceptionOnAddIfExceptionOccursAndLogItAsync()
+        public async Task ShouldThrowServiceExceptionOnAddListenerEventV2IfExceptionOccursAndLogItAsync()
         {
             // given
             ListenerEventV2 someListenerEventV2 = CreateRandomListenerEventV2();
