@@ -3,7 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using EventHighway.Core.Models.EventCall.V2;
-using EventHighway.Core.Models.Orchestrations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Orchestrations.Events.V2.Exceptions;
 
 namespace EventHighway.Core.Services.Orchestrations.Events.V2
 {

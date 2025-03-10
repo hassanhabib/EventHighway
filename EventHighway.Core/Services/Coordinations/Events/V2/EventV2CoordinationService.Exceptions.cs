@@ -4,9 +4,9 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Coordinations.Events.V2.Exceptions;
-using EventHighway.Core.Models.Orchestrations.EventListeners.V2.Exceptions;
-using EventHighway.Core.Models.Orchestrations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
+using EventHighway.Core.Models.Services.Orchestrations.Events.V2.Exceptions;
 using Xeptions;
 
 namespace EventHighway.Core.Services.Coordinations.Events.V2

@@ -5,7 +5,7 @@
 using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.ListenerEvents.V2;
-using EventHighway.Core.Models.Processings.ListenerEvents.V2.Exceptions;
+using EventHighway.Core.Models.Services.Processings.ListenerEvents.V2.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xeptions;
