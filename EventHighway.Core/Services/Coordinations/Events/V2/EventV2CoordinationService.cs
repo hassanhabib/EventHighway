@@ -35,7 +35,8 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask FireScheduledPendingEventV2sAsync()
+        public ValueTask FireScheduledPendingEventV2sAsync() =>
+        TryCatch(async () =>
         {
             IQueryable<EventV2> eventV2s =
                 await this.eventV2OrchestrationService
@@ -57,13 +58,15 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
                         await this.eventListenerV2OrchestrationService
                             .AddListenerEventV2Async(listenerEventV2);
 
+                    ValidateListenerEventV2IsNotNull(addedListenerEventV2);
+
                     await RunEventCallAsync(
                         eventV2,
                         eventListenerV2,
                         addedListenerEventV2);
                 }
             }
-        }
+        });
 
         private async Task RunEventCallAsync(
             EventV2 eventV2,
