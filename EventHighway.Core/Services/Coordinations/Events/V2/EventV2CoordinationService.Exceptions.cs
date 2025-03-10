@@ -5,7 +5,6 @@
 using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Coordinations.Events.V2.Exceptions;
-using EventHighway.Core.Models.EventCall.V2;
 using EventHighway.Core.Models.Orchestrations.EventListeners.V2.Exceptions;
 using EventHighway.Core.Models.Orchestrations.Events.V2.Exceptions;
 using Xeptions;
@@ -15,7 +14,6 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
     internal partial class EventV2CoordinationService
     {
         private delegate ValueTask ReturningNothingFunction();
-        private delegate ValueTask<EventCallV2> ReturningEventCallV2Function();
 
         private async ValueTask TryCatch(ReturningNothingFunction returningNothingFunction)
         {

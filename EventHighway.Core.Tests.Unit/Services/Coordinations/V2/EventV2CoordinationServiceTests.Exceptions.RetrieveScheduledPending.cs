@@ -149,5 +149,76 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.eventListenerV2OrchestrationServiceMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnFireScheduledPendingIfExceptionOccursAndLogItAsync()
+        {
+            // given
+            var serviceException = new Exception();
+
+            var failedEventV2CoordinationServiceException =
+                new FailedEventV2CoordinationServiceException(
+                    message: "Failed event service error occurred, contact support.",
+                    innerException: serviceException);
+
+            var expectedEventV2CoordinationServiceException =
+                new EventV2CoordinationServiceException(
+                    message: "Event service error occurred, contact support.",
+                    innerException: failedEventV2CoordinationServiceException);
+
+            this.eventV2OrchestrationServiceMock.Setup(service =>
+                service.RetrieveScheduledPendingEventV2sAsync())
+                    .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask fireScheduledPendingEventV2sTask =
+                this.eventV2CoordinationService.FireScheduledPendingEventV2sAsync();
+
+            EventV2CoordinationServiceException actualEventV2CoordinationServiceException =
+                await Assert.ThrowsAsync<EventV2CoordinationServiceException>(
+                    fireScheduledPendingEventV2sTask.AsTask);
+
+            // then
+            actualEventV2CoordinationServiceException.Should()
+                .BeEquivalentTo(expectedEventV2CoordinationServiceException);
+
+            this.eventV2OrchestrationServiceMock.Verify(service =>
+                service.RetrieveScheduledPendingEventV2sAsync(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventV2CoordinationServiceException))),
+                        Times.Once);
+
+            this.eventListenerV2OrchestrationServiceMock.Verify(service =>
+                service.RetrieveEventListenerV2sByEventAddressIdAsync(
+                    It.IsAny<Guid>()),
+                        Times.Never);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetDateTimeOffsetAsync(),
+                    Times.Never);
+
+            this.eventListenerV2OrchestrationServiceMock.Verify(service =>
+                service.AddListenerEventV2Async(
+                    It.IsAny<ListenerEventV2>()),
+                        Times.Never);
+
+            this.eventV2OrchestrationServiceMock.Verify(service =>
+                service.RunEventCallV2Async(
+                    It.IsAny<EventCallV2>()),
+                        Times.Never);
+
+            this.eventListenerV2OrchestrationServiceMock.Verify(service =>
+                service.ModifyListenerEventV2Async(
+                    It.IsAny<ListenerEventV2>()),
+                        Times.Never);
+
+            this.eventV2OrchestrationServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.eventListenerV2OrchestrationServiceMock.VerifyNoOtherCalls();
+        }
     }
 }
