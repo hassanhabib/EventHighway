@@ -14,8 +14,8 @@ namespace EventHighway.App
         static async Task Main(string[] args)
         {
             string inputConnectionString = String.Concat(
-                "Server=(localdb)\\MSSQLLocalDB;Database=EventHighwayDB",
-                ";Trusted_Connection=True;MultipleActiveResultSets=true");
+                "Server=(localdb)\\MSSQLLocalDB;Database=EventHighwayDB;",
+                "Trusted_Connection=True;MultipleActiveResultSets=true");
 
             var eventHighwayClient = new EventHighwayClient(inputConnectionString);
 
