@@ -3,7 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
-using EventHighway.Core.Models.EventCall;
+using EventHighway.Core.Models.Services.Foundations.EventCall;
 using EventHighway.Core.Services.Foundations.EventCalls;
 
 namespace EventHighway.Core.Services.Processings.EventCalls

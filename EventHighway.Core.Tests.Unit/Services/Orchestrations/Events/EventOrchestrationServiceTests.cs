@@ -3,7 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using EventHighway.Core.Models.Events;
+using EventHighway.Core.Models.Services.Foundations.Events;
 using EventHighway.Core.Services.Foundations.EventAddresses;
 using EventHighway.Core.Services.Foundations.Events;
 using EventHighway.Core.Services.Orchestrations.Events;

@@ -5,8 +5,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.EventListeners.V2;
-using EventHighway.Core.Models.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 
 namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
 {

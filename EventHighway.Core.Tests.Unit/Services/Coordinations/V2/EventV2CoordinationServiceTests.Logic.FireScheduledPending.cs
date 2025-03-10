@@ -6,10 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.EventCall.V2;
-using EventHighway.Core.Models.EventListeners.V2;
-using EventHighway.Core.Models.Events.V2;
-using EventHighway.Core.Models.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 using Force.DeepCloner;
 using Moq;
 

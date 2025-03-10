@@ -1,4 +1,4 @@
-﻿using EventHighway.Core.Models.EventListeners;
+﻿using EventHighway.Core.Models.Services.Foundations.EventListeners;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventHighway.Core.Brokers.Storages

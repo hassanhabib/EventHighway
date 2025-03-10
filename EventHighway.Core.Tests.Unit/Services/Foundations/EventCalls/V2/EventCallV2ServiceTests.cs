@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 using System.Net.Http;
 using EventHighway.Core.Brokers.Apis;
 using EventHighway.Core.Brokers.Loggings;
-using EventHighway.Core.Models.EventCall.V2;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
 using EventHighway.Core.Services.Foundations.EventCalls.V2;
 using Moq;
 using RESTFulSense.Exceptions;

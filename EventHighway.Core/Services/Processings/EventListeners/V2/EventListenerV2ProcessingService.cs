@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Loggings;
-using EventHighway.Core.Models.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
 using EventHighway.Core.Services.Foundations.EventListeners.V2;
 
 namespace EventHighway.Core.Services.Processings.EventListeners.V2

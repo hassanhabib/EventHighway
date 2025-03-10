@@ -2,7 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
-using EventHighway.Core.Models.Events;
+using EventHighway.Core.Models.Services.Foundations.Events;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventHighway.Core.Brokers.Storages

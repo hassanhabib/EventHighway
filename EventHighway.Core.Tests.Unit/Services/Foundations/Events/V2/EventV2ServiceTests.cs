@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Storages;
 using EventHighway.Core.Brokers.Times;
-using EventHighway.Core.Models.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V2;
 using EventHighway.Core.Services.Foundations.Events.V2;
 using Microsoft.Data.SqlClient;
 using Moq;

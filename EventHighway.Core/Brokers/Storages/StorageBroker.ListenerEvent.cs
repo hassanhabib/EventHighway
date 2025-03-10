@@ -3,7 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
-using EventHighway.Core.Models.ListenerEvents;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventHighway.Core.Brokers.Storages

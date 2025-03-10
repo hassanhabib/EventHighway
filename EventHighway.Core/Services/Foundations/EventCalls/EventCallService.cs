@@ -4,7 +4,7 @@
 
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Apis;
-using EventHighway.Core.Models.EventCall;
+using EventHighway.Core.Models.Services.Foundations.EventCall;
 
 namespace EventHighway.Core.Services.Foundations.EventCalls
 {

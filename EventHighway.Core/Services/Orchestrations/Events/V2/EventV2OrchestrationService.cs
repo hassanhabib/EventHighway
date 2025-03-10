@@ -5,8 +5,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Loggings;
-using EventHighway.Core.Models.EventCall.V2;
-using EventHighway.Core.Models.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V2;
 using EventHighway.Core.Services.Processings.EventCalls.V2;
 using EventHighway.Core.Services.Processings.Events.V2;
 
