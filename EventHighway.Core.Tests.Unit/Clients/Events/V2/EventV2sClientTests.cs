@@ -5,6 +5,7 @@
 using EventHighway.Core.Clients.Events.V2;
 using EventHighway.Core.Services.Coordinations.Events.V2;
 using Moq;
+using Tynamix.ObjectFiller;
 
 namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
 {
@@ -23,5 +24,8 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                     eventV2CoordinationService:
                         this.eventV2CoordinationServiceMock.Object);
         }
+
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
     }
 }
