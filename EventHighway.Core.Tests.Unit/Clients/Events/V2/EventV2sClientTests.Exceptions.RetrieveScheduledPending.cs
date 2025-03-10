@@ -54,5 +54,47 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
 
             this.eventV2CoordinationServiceMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowDependencyExceptionOnFireIfDependencyErrorOccursAsync()
+        {
+            // given
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            var eventV2CoordinationDependencyException =
+                new EventV2CoordinationDependencyException(
+                    someMessage,
+                    someInnerException);
+
+            var expectedEventV2ClientDependencyException =
+                new EventV2ClientDependencyException(
+                    message: "Event client dependency error occurred, contact support.",
+
+                    innerException: eventV2CoordinationDependencyException
+                        .InnerException as Xeption);
+
+            this.eventV2CoordinationServiceMock.Setup(service =>
+                service.FireScheduledPendingEventV2sAsync())
+                    .ThrowsAsync(eventV2CoordinationDependencyException);
+
+            // when
+            ValueTask fireScheduledPendingEventV2sTask =
+                this.eventV2SClient.FireScheduledPendingEventV2sAsync();
+
+            EventV2ClientDependencyException actualEventV2ClientDependencyException =
+                await Assert.ThrowsAsync<EventV2ClientDependencyException>(
+                    fireScheduledPendingEventV2sTask.AsTask);
+
+            // then
+            actualEventV2ClientDependencyException.Should()
+                .BeEquivalentTo(expectedEventV2ClientDependencyException);
+
+            this.eventV2CoordinationServiceMock.Verify(service =>
+                service.FireScheduledPendingEventV2sAsync(),
+                    Times.Once);
+
+            this.eventV2CoordinationServiceMock.VerifyNoOtherCalls();
+        }
     }
 }
