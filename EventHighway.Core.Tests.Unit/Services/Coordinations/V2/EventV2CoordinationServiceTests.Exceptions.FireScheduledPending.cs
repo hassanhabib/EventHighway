@@ -4,9 +4,9 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Coordinations.Events.V2.Exceptions;
 using EventHighway.Core.Models.EventCall.V2;
 using EventHighway.Core.Models.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xeptions;

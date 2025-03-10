@@ -5,7 +5,7 @@
 using System;
 using EventHighway.Core.Models.EventListeners.V2;
 using EventHighway.Core.Models.ListenerEvents.V2;
-using EventHighway.Core.Models.Orchestrations.EventListeners.V2.Exceptions;
+using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 
 namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
 {

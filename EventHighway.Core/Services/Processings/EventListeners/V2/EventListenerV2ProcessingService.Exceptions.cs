@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.EventListeners.V2;
 using EventHighway.Core.Models.EventListeners.V2.Exceptions;
-using EventHighway.Core.Models.Processings.EventListeners.V2.Exceptions;
+using EventHighway.Core.Models.Services.Processings.EventListeners.V2.Exceptions;
 using Xeptions;
 
 namespace EventHighway.Core.Services.Processings.EventListeners.V2
