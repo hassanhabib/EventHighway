@@ -3,7 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
-using EventHighway.Core.Models.ListenerEvents;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;

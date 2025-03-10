@@ -2,7 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
-using EventHighway.Core.Models.EventCall;
+using EventHighway.Core.Models.Services.Foundations.EventCall;
 using EventHighway.Core.Services.Foundations.EventCalls;
 using EventHighway.Core.Services.Processings.EventCalls;
 using Moq;

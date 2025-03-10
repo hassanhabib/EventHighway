@@ -6,8 +6,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Loggings;
-using EventHighway.Core.Models.EventListeners.V2;
-using EventHighway.Core.Models.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 using EventHighway.Core.Services.Processings.EventListeners.V2;
 using EventHighway.Core.Services.Processings.ListenerEvents.V2;
 
@@ -44,6 +44,15 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
             ValidateListenerEventV2IsNotNull(listenerEventV2);
 
             return await this.listenerEventV2ProcessingService.AddListenerEventV2Async(
+                listenerEventV2);
+        });
+
+        public ValueTask<ListenerEventV2> ModifyListenerEventV2Async(ListenerEventV2 listenerEventV2) =>
+        TryCatch(async () =>
+        {
+            ValidateListenerEventV2IsNotNull(listenerEventV2);
+
+            return await this.listenerEventV2ProcessingService.ModifyListenerEventV2Async(
                 listenerEventV2);
         });
     }

@@ -3,8 +3,8 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using EventHighway.Core.Models.EventListeners.V2;
-using EventHighway.Core.Models.Processings.EventListeners.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Processings.EventListeners.V2.Exceptions;
 
 namespace EventHighway.Core.Services.Processings.EventListeners.V2
 {

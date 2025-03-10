@@ -1,4 +1,11 @@
-﻿using EventHighway.Core.Clients.EventHighways;
+﻿// ---------------------------------------------------------------------------------- 
+// Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
+// ----------------------------------------------------------------------------------
+
+using EventHighway.Core.Clients.EventHighways;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses;
+using EventHighway.Core.Models.Services.Foundations.EventListeners;
+using EventHighway.Core.Models.Services.Foundations.Events;
 
 namespace EventHighway.App
 {
@@ -6,45 +13,51 @@ namespace EventHighway.App
     {
         static async Task Main(string[] args)
         {
-            var eventHighwayClient = new EventHighwayClient(
-                "Server=(localdb)\\MSSQLLocalDB;Database=EventHighwayDB;Trusted_Connection=True;MultipleActiveResultSets=true");
+            string inputConnectionString = String.Concat(
+                "Server=(localdb)\\MSSQLLocalDB;Database=EventHighwayDB;",
+                "Trusted_Connection=True;MultipleActiveResultSets=true");
 
-            await eventHighwayClient.EventAddresses.RegisterEventAddressAsync(new Core.Models.EventAddresses.EventAddress
-            {
-                Id = Guid.Parse("d3b3b3b3-0b3b-4b3b-8b3b-0b3b3b3b3b32"),
-                CreatedDate = DateTimeOffset.UtcNow,
-                UpdatedDate = DateTimeOffset.UtcNow,
-                Name = "Test",
-                Description = "Some Desc."
-            });
+            var eventHighwayClient = new EventHighwayClient(inputConnectionString);
 
-            await eventHighwayClient.EventListeners.RegisterEventListenerAsync(new Core.Models.EventListeners.EventListener
-            {
-                Id = Guid.NewGuid(),
-                CreatedDate = DateTimeOffset.UtcNow,
-                UpdatedDate = DateTimeOffset.UtcNow,
-                Endpoint = "https://localhost:7056/api/tests",
-                EventAddressId = Guid.Parse("d3b3b3b3-0b3b-4b3b-8b3b-0b3b3b3b3b32"),
-            });
+            await eventHighwayClient.EventAddresses.RegisterEventAddressAsync(
+                eventAddress: new EventAddress
+                {
+                    Id = Guid.Parse(input: "d3b3b3b3-0b3b-4b3b-8b3b-0b3b3b3b3b32"),
+                    CreatedDate = DateTimeOffset.UtcNow,
+                    UpdatedDate = DateTimeOffset.UtcNow,
+                    Name = "Test",
+                    Description = "Some Desc."
+                });
 
-            await eventHighwayClient.EventListeners.RegisterEventListenerAsync(new Core.Models.EventListeners.EventListener
-            {
-                Id = Guid.NewGuid(),
-                CreatedDate = DateTimeOffset.UtcNow,
-                UpdatedDate = DateTimeOffset.UtcNow,
-                Endpoint = "https://localhost:7104/api/tests",
-                EventAddressId = Guid.Parse("d3b3b3b3-0b3b-4b3b-8b3b-0b3b3b3b3b32"),
-            });
+            await eventHighwayClient.EventListeners.RegisterEventListenerAsync(
+                eventListener: new EventListener
+                {
+                    Id = Guid.NewGuid(),
+                    CreatedDate = DateTimeOffset.UtcNow,
+                    UpdatedDate = DateTimeOffset.UtcNow,
+                    Endpoint = "https://localhost:7056/api/tests",
+                    EventAddressId = Guid.Parse(input: "d3b3b3b3-0b3b-4b3b-8b3b-0b3b3b3b3b32")
+                });
 
-            await eventHighwayClient.Events.SubmitEventAsync(new Core.Models.Events.Event
-            { 
-                Content = "{ \"name\": \"Test\" }",
-                EventAddressId = Guid.Parse("d3b3b3b3-0b3b-4b3b-8b3b-0b3b3b3b3b32"),
-                Id = Guid.NewGuid(),
-                CreatedDate = DateTimeOffset.UtcNow,
-                UpdatedDate = DateTimeOffset.UtcNow
-            });
+            await eventHighwayClient.EventListeners.RegisterEventListenerAsync(
+                eventListener: new EventListener
+                {
+                    Id = Guid.NewGuid(),
+                    CreatedDate = DateTimeOffset.UtcNow,
+                    UpdatedDate = DateTimeOffset.UtcNow,
+                    Endpoint = "https://localhost:7104/api/tests",
+                    EventAddressId = Guid.Parse(input: "d3b3b3b3-0b3b-4b3b-8b3b-0b3b3b3b3b32")
+                });
 
+            await eventHighwayClient.Events.SubmitEventAsync(
+                @event: new Event
+                {
+                    Content = "{ \"name\": \"Test\" }",
+                    EventAddressId = Guid.Parse(input: "d3b3b3b3-0b3b-4b3b-8b3b-0b3b3b3b3b32"),
+                    Id = Guid.NewGuid(),
+                    CreatedDate = DateTimeOffset.UtcNow,
+                    UpdatedDate = DateTimeOffset.UtcNow
+                });
         }
     }
 }

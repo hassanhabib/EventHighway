@@ -5,8 +5,8 @@
 using System;
 using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
-using EventHighway.Core.Models.EventCall.V2;
-using EventHighway.Core.Models.EventCall.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V2.Exceptions;
 using EventHighway.Core.Services.Foundations.EventCalls.V2;
 using EventHighway.Core.Services.Processings.EventCalls.V2;
 using Moq;

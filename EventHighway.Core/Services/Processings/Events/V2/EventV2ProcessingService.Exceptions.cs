@@ -5,9 +5,9 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Events.V2;
-using EventHighway.Core.Models.Events.V2.Exceptions;
-using EventHighway.Core.Models.Processings.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Processings.Events.V2.Exceptions;
 using Xeptions;
 
 namespace EventHighway.Core.Services.Processings.Events.V2

@@ -4,7 +4,7 @@
 
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Storages;
-using EventHighway.Core.Models.ListenerEvents;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents;
 
 namespace EventHighway.Core.Services.Foundations.ListernEvents
 {
