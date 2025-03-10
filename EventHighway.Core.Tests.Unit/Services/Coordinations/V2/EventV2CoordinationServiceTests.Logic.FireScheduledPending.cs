@@ -100,7 +100,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                         It.Is(SameEventCallAs(expectedCallEventV2))))
                             .ReturnsAsync(ranEventCall);
 
-                ranEventCallV2s.Add(ranEventCall);
+                ranEventCallV2s.Add(item: ranEventCall);
             }
 
             for (int index = 0; index < inputListenerEventV2s.Count; index++)
@@ -255,7 +255,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                         It.Is(SameEventCallAs(expectedCallEventV2s[index]))))
                             .ThrowsAsync(eventCallExceptions[index]);
 
-                ranEventCallV2s.Add(ranEventCall);
+                ranEventCallV2s.Add(item: ranEventCall);
             }
 
             for (int index = 0; index < expectedListenerEventV2s.Count; index++)
