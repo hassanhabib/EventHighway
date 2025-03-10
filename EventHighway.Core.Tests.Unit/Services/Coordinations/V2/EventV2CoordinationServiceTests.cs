@@ -17,6 +17,7 @@ using EventHighway.Core.Services.Orchestrations.Events.V2;
 using KellermanSoftware.CompareNetObjects;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 {
@@ -53,6 +54,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                     dateTimeBroker: this.dateTimeBrokerMock.Object,
                     loggingBroker: this.loggingBrokerMock.Object);
         }
+
+        private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
 
         private static IQueryable<EventV2> CreateRandomEventV2s()
         {
