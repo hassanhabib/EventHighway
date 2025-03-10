@@ -1,0 +1,85 @@
+﻿// ---------------------------------------------------------------------------------- 
+// Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
+// ----------------------------------------------------------------------------------
+
+using System;
+using System.Threading.Tasks;
+using EventHighway.Core.Models.Coordinations.Events.V2.Exceptions;
+using EventHighway.Core.Models.EventCall.V2;
+using EventHighway.Core.Models.ListenerEvents.V2;
+using FluentAssertions;
+using Moq;
+using Xeptions;
+
+namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
+{
+    public partial class EventV2CoordinationServiceTests
+    {
+        [Theory]
+        [MemberData(nameof(EventV2DependencyExceptions))]
+        [MemberData(nameof(EventListenerV2DependencyExceptions))]
+        public async Task ShouldThrowDependencyExceptionOnFireScheduledPendingIfDependencyErrorOccursAndLogItAsync(
+            Xeption dependencyException)
+        {
+            // given
+            var expectedEventV2CoordinationDependencyException =
+                new EventV2CoordinationDependencyException(
+                    message: "Event dependency error occurred, contact support.",
+                    innerException: dependencyException.InnerException as Xeption);
+
+            this.eventV2OrchestrationServiceMock.Setup(service =>
+                service.RetrieveScheduledPendingEventV2sAsync())
+                    .ThrowsAsync(dependencyException);
+
+            // when
+            ValueTask fireScheduledPendingEventV2sTask =
+                this.eventV2CoordinationService.FireScheduledPendingEventV2sAsync();
+
+            EventV2CoordinationDependencyException actualEventV2CoordinationDependencyException =
+                await Assert.ThrowsAsync<EventV2CoordinationDependencyException>(
+                    fireScheduledPendingEventV2sTask.AsTask);
+
+            // then
+            actualEventV2CoordinationDependencyException.Should()
+                .BeEquivalentTo(expectedEventV2CoordinationDependencyException);
+
+            this.eventV2OrchestrationServiceMock.Verify(service =>
+                service.RetrieveScheduledPendingEventV2sAsync(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventV2CoordinationDependencyException))),
+                        Times.Once);
+
+            this.eventListenerV2OrchestrationServiceMock.Verify(service =>
+                service.RetrieveEventListenerV2sByEventAddressIdAsync(
+                    It.IsAny<Guid>()),
+                        Times.Never);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetDateTimeOffsetAsync(),
+                    Times.Never);
+
+            this.eventListenerV2OrchestrationServiceMock.Verify(service =>
+                service.AddListenerEventV2Async(
+                    It.IsAny<ListenerEventV2>()),
+                        Times.Never);
+
+            this.eventV2OrchestrationServiceMock.Verify(service =>
+                service.RunEventCallV2Async(
+                    It.IsAny<EventCallV2>()),
+                        Times.Never);
+
+            this.eventListenerV2OrchestrationServiceMock.Verify(service =>
+                service.ModifyListenerEventV2Async(
+                    It.IsAny<ListenerEventV2>()),
+                        Times.Never);
+
+            this.eventV2OrchestrationServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.eventListenerV2OrchestrationServiceMock.VerifyNoOtherCalls();
+        }
+    }
+}

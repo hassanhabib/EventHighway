@@ -33,7 +33,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
             DateTimeOffset retrievedDateTimeOffset = randomDateTimeOffset;
 
-            List<ListenerEventV2> expectedListenerEventV2s =
+            List<ListenerEventV2> inputListenerEventV2s =
                 retrievedEventV2s.SelectMany(eventV2 =>
                     retrievedEventListenerV2s.Select(eventListenerV2 =>
                         new ListenerEventV2
@@ -46,9 +46,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                             UpdatedDate = eventV2.UpdatedDate
                         })).ToList();
 
-
-            List<ListenerEventV2> expectedListenerEventV2sOnModify =
-                expectedListenerEventV2s.DeepClone();
+            List<ListenerEventV2> expectedListenerEventV2s =
+                inputListenerEventV2s.DeepClone();
 
             List<EventCallV2> expectedCallEventV2s =
                 retrievedEventV2s.SelectMany(eventV2 =>
@@ -79,7 +78,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                 broker.GetDateTimeOffsetAsync())
                     .ReturnsAsync(retrievedDateTimeOffset);
 
-            foreach (ListenerEventV2 expectedListenerEventV2 in expectedListenerEventV2s)
+            foreach (ListenerEventV2 expectedListenerEventV2 in inputListenerEventV2s)
             {
                 this.eventListenerV2OrchestrationServiceMock.Setup(service =>
                     service.AddListenerEventV2Async(
@@ -104,16 +103,16 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                 ranEventCallV2s.Add(ranEventCall);
             }
 
-            for (int i = 0; i < expectedListenerEventV2s.Count(); i++)
+            for (int index = 0; index < inputListenerEventV2s.Count; index++)
             {
-                expectedListenerEventV2sOnModify[i].UpdatedDate = retrievedDateTimeOffset;
-                expectedListenerEventV2sOnModify[i].Status = ListenerEventV2Status.Success;
-                expectedListenerEventV2sOnModify[i].Response = ranEventCallV2s[i].Response;
+                expectedListenerEventV2s[index].UpdatedDate = retrievedDateTimeOffset;
+                expectedListenerEventV2s[index].Status = ListenerEventV2Status.Success;
+                expectedListenerEventV2s[index].Response = ranEventCallV2s[index].Response;
 
                 this.eventListenerV2OrchestrationServiceMock.Setup(service =>
                     service.ModifyListenerEventV2Async(
-                        It.Is(SameListenerEventAs(expectedListenerEventV2sOnModify[i]))))
-                            .ReturnsAsync(expectedListenerEventV2sOnModify[i]);
+                        It.Is(SameListenerEventAs(expectedListenerEventV2s[index]))))
+                            .ReturnsAsync(expectedListenerEventV2s[index]);
             }
 
             // when
@@ -135,9 +134,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetDateTimeOffsetAsync(),
-                    Times.Exactly(callCount: expectedListenerEventV2s.Count()));
+                    Times.Exactly(callCount: inputListenerEventV2s.Count));
 
-            foreach (ListenerEventV2 expectedListenerEventV2 in expectedListenerEventV2s)
+            foreach (ListenerEventV2 expectedListenerEventV2 in inputListenerEventV2s)
             {
                 this.eventListenerV2OrchestrationServiceMock.Verify(service =>
                     service.AddListenerEventV2Async(
@@ -153,7 +152,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                             Times.Once);
             }
 
-            foreach (ListenerEventV2 expectedListenerEventV2 in expectedListenerEventV2sOnModify)
+            foreach (ListenerEventV2 expectedListenerEventV2 in expectedListenerEventV2s)
             {
                 this.eventListenerV2OrchestrationServiceMock.Verify(service =>
                     service.ModifyListenerEventV2Async(
@@ -259,7 +258,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                 ranEventCallV2s.Add(ranEventCall);
             }
 
-            for (int i = 0; i < expectedListenerEventV2s.Count(); i++)
+            for (int i = 0; i < expectedListenerEventV2s.Count; i++)
             {
                 expectedListenerEventV2sOnModify[i].UpdatedDate = retrievedDateTimeOffset;
                 expectedListenerEventV2sOnModify[i].Status = ListenerEventV2Status.Error;
@@ -290,7 +289,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetDateTimeOffsetAsync(),
-                    Times.Exactly(callCount: expectedListenerEventV2s.Count()));
+                    Times.Exactly(callCount: expectedListenerEventV2s.Count));
 
             foreach (ListenerEventV2 expectedListenerEventV2 in expectedListenerEventV2s)
             {
