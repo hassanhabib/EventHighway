@@ -38,6 +38,13 @@ namespace EventHighway.Core.Clients.Events.V2
                     eventV2CoordinationDependencyException.InnerException
                         as Xeption);
             }
+            catch (EventV2CoordinationServiceException
+                eventV2CoordinationServiceException)
+            {
+                throw CreateEventV2ClientServiceException(
+                    eventV2CoordinationServiceException.InnerException
+                        as Xeption);
+            }
         }
 
         private static EventV2ClientDependencyValidationException CreateEventV2ClientValidationException(
@@ -45,7 +52,7 @@ namespace EventHighway.Core.Clients.Events.V2
         {
             return new EventV2ClientDependencyValidationException(
                 message: "Event client validation error occurred, fix the errors and try again.",
-                innerException);
+                innerException: innerException);
         }
 
         private static EventV2ClientDependencyException CreateEventV2ClientDependencyException(
@@ -53,7 +60,7 @@ namespace EventHighway.Core.Clients.Events.V2
         {
             return new EventV2ClientDependencyException(
                 message: "Event client dependency error occurred, contact support.",
-                innerException);
+                innerException: innerException);
         }
 
         private static EventV2ClientServiceException CreateEventV2ClientServiceException(
@@ -61,7 +68,7 @@ namespace EventHighway.Core.Clients.Events.V2
         {
             return new EventV2ClientServiceException(
                 message: "Event client service error occurred, contact support.",
-                innerException);
+                innerException: innerException);
         }
     }
 }
