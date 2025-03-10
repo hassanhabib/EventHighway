@@ -16,6 +16,74 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
     public partial class EventV2CoordinationServiceTests
     {
         [Theory]
+        [MemberData(nameof(EventV2ValidationExceptions))]
+        [MemberData(nameof(EventListenerV2ValidationExceptions))]
+        public async Task ShouldThrowDependencyValidationOnFireScheduledPendingIfDependencyValidationAndLogItAsync(
+            Xeption validationException)
+        {
+            // given
+            var expectedEventV2CoordinationDependencyValidationException =
+                new EventV2CoordinationDependencyValidationException(
+                    message: "Event validation error occurred, fix the errors and try again.",
+                    innerException: validationException.InnerException as Xeption);
+
+            this.eventV2OrchestrationServiceMock.Setup(service =>
+                service.RetrieveScheduledPendingEventV2sAsync())
+                    .ThrowsAsync(validationException);
+
+            // when
+            ValueTask fireScheduledPendingEventV2sTask =
+                this.eventV2CoordinationService.FireScheduledPendingEventV2sAsync();
+
+            EventV2CoordinationDependencyValidationException
+                actualEventV2CoordinationDependencyValidationException =
+                    await Assert.ThrowsAsync<EventV2CoordinationDependencyValidationException>(
+                        fireScheduledPendingEventV2sTask.AsTask);
+
+            // then
+            expectedEventV2CoordinationDependencyValidationException.Should()
+                .BeEquivalentTo(expectedEventV2CoordinationDependencyValidationException);
+
+            this.eventV2OrchestrationServiceMock.Verify(service =>
+                service.RetrieveScheduledPendingEventV2sAsync(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventV2CoordinationDependencyValidationException))),
+                        Times.Once);
+
+            this.eventListenerV2OrchestrationServiceMock.Verify(service =>
+                service.RetrieveEventListenerV2sByEventAddressIdAsync(
+                    It.IsAny<Guid>()),
+                        Times.Never);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetDateTimeOffsetAsync(),
+                    Times.Never);
+
+            this.eventListenerV2OrchestrationServiceMock.Verify(service =>
+                service.AddListenerEventV2Async(
+                    It.IsAny<ListenerEventV2>()),
+                        Times.Never);
+
+            this.eventV2OrchestrationServiceMock.Verify(service =>
+                service.RunEventCallV2Async(
+                    It.IsAny<EventCallV2>()),
+                        Times.Never);
+
+            this.eventListenerV2OrchestrationServiceMock.Verify(service =>
+                service.ModifyListenerEventV2Async(
+                    It.IsAny<ListenerEventV2>()),
+                        Times.Never);
+
+            this.eventV2OrchestrationServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.eventListenerV2OrchestrationServiceMock.VerifyNoOtherCalls();
+        }
+
+        [Theory]
         [MemberData(nameof(EventV2DependencyExceptions))]
         [MemberData(nameof(EventListenerV2DependencyExceptions))]
         public async Task ShouldThrowDependencyExceptionOnFireScheduledPendingIfDependencyErrorOccursAndLogItAsync(
