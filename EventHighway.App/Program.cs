@@ -36,7 +36,7 @@ namespace EventHighway.App
                     CreatedDate = DateTimeOffset.UtcNow,
                     UpdatedDate = DateTimeOffset.UtcNow,
                     Endpoint = "https://localhost:7056/api/tests",
-                    EventAddressId = Guid.Parse(input: "d3b3b3b3-0b3b-4b3b-8b3b-0b3b3b3b3b32"),
+                    EventAddressId = Guid.Parse(input: "d3b3b3b3-0b3b-4b3b-8b3b-0b3b3b3b3b32")
                 });
 
             await eventHighwayClient.EventListeners.RegisterEventListenerAsync(
