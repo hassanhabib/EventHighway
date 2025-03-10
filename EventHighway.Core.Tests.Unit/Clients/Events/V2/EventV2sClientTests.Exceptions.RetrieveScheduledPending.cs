@@ -96,5 +96,47 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
 
             this.eventV2CoordinationServiceMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnFireIfServiceErrorOccursAsync()
+        {
+            // given
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            var eventV2CoordinationServiceException =
+                new EventV2CoordinationServiceException(
+                    someMessage,
+                    someInnerException);
+
+            var expectedEventV2ClientServiceException =
+                new EventV2ClientServiceException(
+                    message: "Event client service error occurred, contact support.",
+
+                    innerException: eventV2CoordinationServiceException
+                        .InnerException as Xeption);
+
+            this.eventV2CoordinationServiceMock.Setup(service =>
+                service.FireScheduledPendingEventV2sAsync())
+                    .ThrowsAsync(eventV2CoordinationServiceException);
+
+            // when
+            ValueTask fireScheduledPendingEventV2sTask =
+                this.eventV2SClient.FireScheduledPendingEventV2sAsync();
+
+            EventV2ClientServiceException actualEventV2ClientServiceException =
+                await Assert.ThrowsAsync<EventV2ClientServiceException>(
+                    fireScheduledPendingEventV2sTask.AsTask);
+
+            // then
+            actualEventV2ClientServiceException.Should()
+                .BeEquivalentTo(expectedEventV2ClientServiceException);
+
+            this.eventV2CoordinationServiceMock.Verify(service =>
+                service.FireScheduledPendingEventV2sAsync(),
+                    Times.Once);
+
+            this.eventV2CoordinationServiceMock.VerifyNoOtherCalls();
+        }
     }
 }
