@@ -5,7 +5,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Storages;
-using EventHighway.Core.Models.EventListeners;
+using EventHighway.Core.Models.Services.Foundations.EventListeners;
 
 namespace EventHighway.Core.Services.Foundations.EventListeners
 {

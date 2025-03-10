@@ -7,8 +7,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Times;
-using EventHighway.Core.Models.Events.V2;
-using EventHighway.Core.Models.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V2.Exceptions;
 using EventHighway.Core.Services.Foundations.Events.V2;
 using EventHighway.Core.Services.Processings.Events.V2;
 using Moq;
@@ -62,7 +62,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
 
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
-        
+
         private static int GetNegativeRandomNumber() =>
             -1 * GetRandomNumber();
 

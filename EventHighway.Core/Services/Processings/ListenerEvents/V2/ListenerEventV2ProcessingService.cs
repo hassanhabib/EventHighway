@@ -4,7 +4,7 @@
 
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Loggings;
-using EventHighway.Core.Models.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 using EventHighway.Core.Services.Foundations.ListernEvents.V2;
 
 namespace EventHighway.Core.Services.Processings.ListenerEvents.V2

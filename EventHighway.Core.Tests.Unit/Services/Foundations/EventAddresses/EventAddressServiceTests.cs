@@ -5,7 +5,7 @@
 using System;
 using System.Linq;
 using EventHighway.Core.Brokers.Storages;
-using EventHighway.Core.Models.EventAddresses;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses;
 using EventHighway.Core.Services.Foundations.EventAddresses;
 using Moq;
 using Tynamix.ObjectFiller;

@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Storages;
-using EventHighway.Core.Models.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
 using EventHighway.Core.Services.Foundations.EventListeners.V2;
 using Microsoft.Data.SqlClient;
 using Moq;
