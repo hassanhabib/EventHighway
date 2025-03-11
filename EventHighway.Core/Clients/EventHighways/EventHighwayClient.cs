@@ -4,22 +4,35 @@
 
 using System;
 using EventHighway.Core.Brokers.Apis;
+using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Storages;
 using EventHighway.Core.Brokers.Times;
 using EventHighway.Core.Clients.EventAddresses;
 using EventHighway.Core.Clients.EventListeners;
 using EventHighway.Core.Clients.Events;
+using EventHighway.Core.Clients.Events.V2;
 using EventHighway.Core.Services.Coordinations.Events;
+using EventHighway.Core.Services.Coordinations.Events.V2;
 using EventHighway.Core.Services.Foundations.EventAddresses;
 using EventHighway.Core.Services.Foundations.EventCalls;
+using EventHighway.Core.Services.Foundations.EventCalls.V2;
 using EventHighway.Core.Services.Foundations.EventListeners;
+using EventHighway.Core.Services.Foundations.EventListeners.V2;
 using EventHighway.Core.Services.Foundations.Events;
+using EventHighway.Core.Services.Foundations.Events.V2;
 using EventHighway.Core.Services.Foundations.ListernEvents;
+using EventHighway.Core.Services.Foundations.ListernEvents.V2;
 using EventHighway.Core.Services.Orchestrations.EventListeners;
+using EventHighway.Core.Services.Orchestrations.EventListeners.V2;
 using EventHighway.Core.Services.Orchestrations.Events;
+using EventHighway.Core.Services.Orchestrations.Events.V2;
 using EventHighway.Core.Services.Processings.EventCalls;
+using EventHighway.Core.Services.Processings.EventCalls.V2;
 using EventHighway.Core.Services.Processings.EventListeners;
+using EventHighway.Core.Services.Processings.EventListeners.V2;
+using EventHighway.Core.Services.Processings.Events.V2;
 using EventHighway.Core.Services.Processings.ListenerEvents;
+using EventHighway.Core.Services.Processings.ListenerEvents.V2;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventHighway.Core.Clients.EventHighways
@@ -31,13 +44,14 @@ namespace EventHighway.Core.Clients.EventHighways
         public EventHighwayClient(string dataConnectionString)
         {
             this.dataConnectionString = dataConnectionString;
-            IServiceProvider serviceProvider = RegisterServices();
+            IServiceProvider serviceProvider = ConfigureDependencies();
             InitializeClients(serviceProvider);
         }
 
         public IEventAddressesClient EventAddresses { get; set; }
         public IEventListenersClient EventListeners { get; set; }
         public IEventsClient Events { get; set; }
+        public IEventV2sClient EventV2s { get; set; }
 
         private void InitializeClients(IServiceProvider serviceProvider)
         {
@@ -49,68 +63,136 @@ namespace EventHighway.Core.Clients.EventHighways
 
             this.Events =
                 serviceProvider.GetRequiredService<IEventsClient>();
+
+            this.EventV2s =
+                serviceProvider.GetRequiredService<IEventV2sClient>();
         }
 
-        private IServiceProvider RegisterServices()
+        private IServiceProvider ConfigureDependencies()
         {
-            var serviceCollection = new ServiceCollection()
-                .AddTransient<IDateTimeBroker, DateTimeBroker>()
+            var serviceCollection =
+                new ServiceCollection();
 
-                .AddDbContext<StorageBroker>()
+            RegisterBrokers(serviceCollection);
+            RegisterFoundationServices(serviceCollection);
+            RegisterProcessingServices(serviceCollection);
+            RegisterOrchestrationServices(serviceCollection);
+            RegisterCoordinationServices(serviceCollection);
+            RegisterClients(serviceCollection);
 
-                .AddTransient<IStorageBroker, StorageBroker>(broker =>
-                    new StorageBroker(this.dataConnectionString))
+            return serviceCollection.BuildServiceProvider();
+        }
 
-                .AddTransient<IApiBroker, ApiBroker>()
-                .AddTransient<IEventService, EventService>()
+        private void RegisterBrokers(IServiceCollection services)
+        {
+            services.AddLogging();
+            services.AddTransient<ILoggingBroker, LoggingBroker>();
+            services.AddTransient<IDateTimeBroker, DateTimeBroker>();
+            services.AddDbContext<StorageBroker>();
 
-                .AddTransient<
-                    IEventAddressService,
-                    EventAddressService>()
+            services.AddTransient<
+                IStorageBroker,
+                StorageBroker>(broker =>
+                    new StorageBroker(this.dataConnectionString));
 
-                .AddTransient<
-                    IEventListenerService,
-                    EventListenerService>()
+            services.AddTransient<IApiBroker, ApiBroker>();
+        }
 
-                .AddTransient<
-                    IListenerEventService,
-                    ListenerEventService>()
+        private void RegisterFoundationServices(IServiceCollection services)
+        {
+            services.AddTransient<IEventService, EventService>();
+            services.AddTransient<IEventAddressService, EventAddressService>();
+            services.AddTransient<IEventListenerService, EventListenerService>();
+            services.AddTransient<IListenerEventService, ListenerEventService>();
+            services.AddTransient<IEventCallService, EventCallService>();
+            services.AddTransient<IEventV2Service, EventV2Service>();
+            services.AddTransient<IEventListenerV2Service, EventListenerV2Service>();
+            services.AddTransient<IListenerEventV2Service, ListenerEventV2Service>();
+            services.AddTransient<IEventCallV2Service, EventCallV2Service>();
+        }
 
-                .AddTransient<IEventCallService, EventCallService>()
+        private void RegisterProcessingServices(IServiceCollection services)
+        {
+            services.AddTransient<
+                IEventListenerProcessingService,
+                EventListenerProcessingService>();
 
-                .AddTransient<
-                    IEventListenerProcessingService,
-                    EventListenerProcessingService>()
+            services.AddTransient<
+                IEventCallProcessingService,
+                EventCallProcessingService>();
 
-                .AddTransient<
-                    IEventCallProcessingService,
-                    EventCallProcessingService>()
+            services.AddTransient<
+                IListenerEventProcessingService,
+                ListenerEventProcessingService>();
 
-                .AddTransient<
-                    IListenerEventProcessingService,
-                    ListenerEventProcessingService>()
+            services.AddTransient<
+                IEventCallV2ProcessingService,
+                EventCallV2ProcessingService>();
 
-                .AddTransient<
-                    IEventListenerOrchestrationService,
-                    EventListenerOrchestrationService>()
+            services.AddTransient<
+                IEventListenerV2ProcessingService,
+                EventListenerV2ProcessingService>();
 
-                .AddTransient<
-                    IEventOrchestrationService,
-                    EventOrchestrationService>()
+            services.AddTransient<
+                IEventV2ProcessingService,
+                EventV2ProcessingService>();
 
-                .AddTransient<
-                    IEventCoordinationService,
-                    EventCoordinationService>()
+            services.AddTransient<
+                IListenerEventV2ProcessingService,
+                ListenerEventV2ProcessingService>();
+        }
 
-                .AddTransient<IEventsClient, EventsClient>()
-                .AddTransient<IEventListenersClient, EventListenersClient>()
-                .AddTransient<IEventAddressesClient, EventAddressesClient>()
-                .AddTransient<IEventHighwayClient, EventHighwayClient>();
+        private void RegisterOrchestrationServices(IServiceCollection services)
+        {
+            services.AddTransient<
+                IEventListenerOrchestrationService,
+                EventListenerOrchestrationService>();
 
-            IServiceProvider serviceProvider =
-                serviceCollection.BuildServiceProvider();
+            services.AddTransient<
+                IEventOrchestrationService,
+                EventOrchestrationService>();
 
-            return serviceProvider;
+            services.AddTransient<
+                IEventListenerV2OrchestrationService,
+                EventListenerV2OrchestrationService>();
+
+            services.AddTransient<
+                IEventV2OrchestrationService,
+                EventV2OrchestrationService>();
+        }
+
+        private void RegisterCoordinationServices(IServiceCollection services)
+        {
+            services.AddTransient<
+                IEventCoordinationService,
+                EventCoordinationService>();
+
+            services.AddTransient<
+                IEventV2CoordinationService,
+                EventV2CoordinationService>();
+        }
+
+        private void RegisterClients(IServiceCollection services)
+        {
+            services.AddTransient<
+                IEventsClient,
+                EventsClient>();
+
+            services.AddTransient<
+                IEventV2sClient,
+                EventV2sClient>();
+
+            services.AddTransient<
+                IEventListenersClient,
+                EventListenersClient>();
+
+            services.AddTransient<
+                IEventAddressesClient,
+                EventAddressesClient>();
+
+            services.AddTransient<
+                IEventHighwayClient,
+                EventHighwayClient>();
         }
     }
 }
