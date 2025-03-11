@@ -27,7 +27,7 @@ namespace EventHighway.Core.Clients.Events.V2
             catch (EventV2CoordinationDependencyValidationException
                 eventV2CoordinationDependencyValidationException)
             {
-                throw CreateEventV2ClientValidationException(
+                throw CreateEventV2ClientDependencyValidationException(
                     eventV2CoordinationDependencyValidationException.InnerException
                         as Xeption);
             }
@@ -47,7 +47,7 @@ namespace EventHighway.Core.Clients.Events.V2
             }
         }
 
-        private static EventV2ClientDependencyValidationException CreateEventV2ClientValidationException(
+        private static EventV2ClientDependencyValidationException CreateEventV2ClientDependencyValidationException(
             Xeption innerException)
         {
             return new EventV2ClientDependencyValidationException(
