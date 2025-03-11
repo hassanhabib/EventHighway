@@ -98,7 +98,7 @@ namespace EventHighway.Core.Clients.EventHighways
             services.AddTransient<IApiBroker, ApiBroker>();
         }
 
-        private void RegisterFoundationServices(IServiceCollection services)
+        private static void RegisterFoundationServices(IServiceCollection services)
         {
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<IEventAddressService, EventAddressService>();
@@ -111,7 +111,7 @@ namespace EventHighway.Core.Clients.EventHighways
             services.AddTransient<IEventCallV2Service, EventCallV2Service>();
         }
 
-        private void RegisterProcessingServices(IServiceCollection services)
+        private static void RegisterProcessingServices(IServiceCollection services)
         {
             services.AddTransient<
                 IEventListenerProcessingService,
@@ -142,7 +142,7 @@ namespace EventHighway.Core.Clients.EventHighways
                 ListenerEventV2ProcessingService>();
         }
 
-        private void RegisterOrchestrationServices(IServiceCollection services)
+        private static void RegisterOrchestrationServices(IServiceCollection services)
         {
             services.AddTransient<
                 IEventListenerOrchestrationService,
@@ -161,7 +161,7 @@ namespace EventHighway.Core.Clients.EventHighways
                 EventV2OrchestrationService>();
         }
 
-        private void RegisterCoordinationServices(IServiceCollection services)
+        private static void RegisterCoordinationServices(IServiceCollection services)
         {
             services.AddTransient<
                 IEventCoordinationService,
@@ -172,7 +172,7 @@ namespace EventHighway.Core.Clients.EventHighways
                 EventV2CoordinationService>();
         }
 
-        private void RegisterClients(IServiceCollection services)
+        private static void RegisterClients(IServiceCollection services)
         {
             services.AddTransient<
                 IEventsClient,
