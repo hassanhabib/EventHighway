@@ -12,5 +12,6 @@ namespace EventHighway.Core.Brokers.Storages
     {
         ValueTask<EventV2> InsertEventV2Async(EventV2 eventV2);
         ValueTask<IQueryable<EventV2>> SelectAllEventV2sAsync();
+        ValueTask<EventV2> DeleteEventV2Async(EventV2 eventV2);
     }
 }
