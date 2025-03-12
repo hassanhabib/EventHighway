@@ -13,6 +13,9 @@ namespace EventHighway.Core.Brokers.Storages
     {
         public DbSet<EventAddressV2> EventAddressV2s { get; set; }
 
+        public async ValueTask<EventAddressV2> InsertEventAddressV2Async(EventAddressV2 eventAddressV2) =>
+            await InsertAsync(eventAddressV2);
+
         public async ValueTask<EventAddressV2> SelectEventAddressV2ByIdAsync(Guid eventAddressV2Id) =>
             await SelectAsync<EventAddressV2>(eventAddressV2Id);
     }
