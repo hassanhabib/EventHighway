@@ -5,15 +5,11 @@
 using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
-using Microsoft.EntityFrameworkCore;
 
 namespace EventHighway.Core.Brokers.Storages
 {
-    internal partial class StorageBroker
+    internal partial interface IStorageBroker
     {
-        public DbSet<EventAddressV2> EventAddressV2s { get; set; }
-
-        public async ValueTask<EventAddressV2> SelectEventAddressV2ByIdAsync(Guid eventAddressV2Id) =>
-            await SelectAsync<EventAddressV2>(eventAddressV2Id);
+        ValueTask<EventAddressV2> SelectEventAddressV2ByIdAsync(Guid eventAddressV2Id);
     }
 }
