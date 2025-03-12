@@ -18,5 +18,8 @@ namespace EventHighway.Core.Brokers.Storages
 
         public async ValueTask<IQueryable<EventListenerV2>> SelectAllEventListenerV2sAsync() =>
             SelectAll<EventListenerV2>();
+
+        public async ValueTask<EventListenerV2> DeleteEventListenerV2Async(EventListenerV2 eventListenerV2) =>
+            await DeleteAsync(eventListenerV2);
     }
 }
