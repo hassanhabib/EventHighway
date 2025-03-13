@@ -45,6 +45,13 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
                 Parameter: nameof(EventV2.CreatedDate)));
         }
 
+        private static void ValidateEventV2Id(Guid eventV2Id)
+        {
+            Validate(
+                (Rule: IsInvalid(eventV2Id),
+                Parameter: nameof(EventV2.Id)));
+        }
+
         private static void ValidateEventV2IsNotNull(EventV2 eventV2)
         {
             if (eventV2 is null)

@@ -39,12 +39,15 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
         public ValueTask<IQueryable<EventV2>> RetrieveAllEventV2sAsync() =>
         TryCatch(async () => await this.storageBroker.SelectAllEventV2sAsync());
 
-        public async ValueTask<EventV2> RemoveEventV2ByIdAsync(Guid eventV2Id)
+        public ValueTask<EventV2> RemoveEventV2ByIdAsync(Guid eventV2Id) =>
+        TryCatch(async () =>
         {
+            ValidateEventV2Id(eventV2Id);
+
             EventV2 maybeEventV2 =
                 await this.storageBroker.SelectEventV2ByIdAsync(eventV2Id);
 
             return await this.storageBroker.DeleteEventV2Async(maybeEventV2);
-        }
+        });
     }
 }
