@@ -37,6 +37,16 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
                 throw await CreateAndLogCriticalDependencyExceptionAsync(
                     failedEventAddressV2StorageException);
             }
+            catch (Exception serviceException)
+            {
+                var failedEventAddressV2ServiceException =
+                    new FailedEventAddressV2ServiceException(
+                        message: "Failed event address service error occurred, contact support.",
+                        innerException: serviceException);
+
+                throw await CreateAndLogServiceExceptionAsync(
+                    failedEventAddressV2ServiceException);
+            }
         }
 
         private async ValueTask<EventAddressV2ValidationException> CreateAndLogValidationExceptionAsync(
@@ -61,19 +71,6 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
                     innerException: exception);
 
             await this.loggingBroker.LogCriticalAsync(eventAddressV2DependencyException);
-
-            return eventAddressV2DependencyException;
-        }
-
-        private async ValueTask<EventAddressV2DependencyException> CreateAndLogDependencyExceptionAsync(
-            Xeption exception)
-        {
-            var eventAddressV2DependencyException =
-                new EventAddressV2DependencyException(
-                    message: "Event address dependency error occurred, contact support.",
-                    innerException: exception);
-
-            await this.loggingBroker.LogErrorAsync(eventAddressV2DependencyException);
 
             return eventAddressV2DependencyException;
         }
