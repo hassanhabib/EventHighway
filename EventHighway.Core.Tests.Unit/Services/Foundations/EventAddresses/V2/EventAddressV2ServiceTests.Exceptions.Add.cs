@@ -71,9 +71,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
         public async Task ShouldThrowDependencyValidationExceptionOnAddIfEventAddressV2AlreadyExistsAndLogItAsync()
         {
             // given
-            string randomMessage = GetRandomString();
+            string someMessage = GetRandomString();
             EventAddressV2 someEventAddressV2 = CreateRandomEventAddressV2();
-            var duplicateKeyException = new DuplicateKeyException(randomMessage);
+            var duplicateKeyException = new DuplicateKeyException(someMessage);
 
             var alreadyExistsEventAddressV2Exception =
                 new AlreadyExistsEventAddressV2Exception(
