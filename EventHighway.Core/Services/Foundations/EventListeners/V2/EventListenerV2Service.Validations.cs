@@ -5,6 +5,8 @@
 using System;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.Events.V2;
 
 namespace EventHighway.Core.Services.Foundations.EventListeners.V2
 {
@@ -15,6 +17,19 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
             Validate(
                 (Rule: IsInvalid(eventListenerV2Id),
                 Parameter: nameof(EventListenerV2.Id)));
+        }
+
+        private static void ValidateEventListenerV2Exists(
+            EventListenerV2 eventListenerV2,
+            Guid eventListenerV2Id)
+        {
+            if (eventListenerV2 is null)
+            {
+                throw new NotFoundEventListenerV2Exception(
+
+                    message: $"Could not find event listener " +
+                        $"with id: {eventListenerV2Id}.");
+            }
         }
 
         private static dynamic IsInvalid(Guid id) => new
