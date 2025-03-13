@@ -46,6 +46,8 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
         public ValueTask<EventAddressV2> RemoveEventAddressV2ByIdAsync(Guid eventAddressV2Id) =>
         TryCatch(async () =>
         {
+            ValidateEventAddressV2Id(eventAddressV2Id);
+
             EventAddressV2 maybeEventAddressV2 =
                 await this.storageBroker.SelectEventAddressV2ByIdAsync(eventAddressV2Id);
 
