@@ -4,10 +4,12 @@
 
 using System;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Storages;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
 using EventHighway.Core.Services.Foundations.EventAddresses.V2;
+using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
@@ -32,6 +34,12 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
 
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
+
+        private static SqlException CreateSqlException() =>
+            (SqlException)RuntimeHelpers.GetUninitializedObject(type: typeof(SqlException));
+
+        private static Guid GetRandomId() =>
+            Guid.NewGuid();
 
         private static EventAddressV2 CreateRandomEventAddressV2() =>
             CreateEventAddressV2Filler().Create();
