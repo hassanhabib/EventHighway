@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Storages;
+using EventHighway.Core.Brokers.Times;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
 using EventHighway.Core.Services.Foundations.EventAddresses.V2;
 using Microsoft.Data.SqlClient;
@@ -19,16 +20,19 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
     public partial class EventAddressV2ServiceTests
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
+        private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly IEventAddressV2Service eventAddressV2Service;
 
         public EventAddressV2ServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
+            this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
             this.eventAddressV2Service = new EventAddressV2Service(
                 storageBroker: this.storageBrokerMock.Object,
+                dateTimeBroker: this.dateTimeBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
 
@@ -41,18 +45,21 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
         private static Guid GetRandomId() =>
             Guid.NewGuid();
 
-        private static EventAddressV2 CreateRandomEventAddressV2() =>
-            CreateEventAddressV2Filler().Create();
+        private static EventAddressV2 CreateRandomEventAddressV2(DateTimeOffset dates) =>
+            CreateEventAddressV2Filler(dates).Create();
 
-        private static DateTimeOffset CreateRandomDateTime() =>
+        private static EventAddressV2 CreateRandomEventAddressV2() =>
+            CreateEventAddressV2Filler(dates: GetRandomDateTimeOffset()).Create();
+
+        private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
-        private static Filler<EventAddressV2> CreateEventAddressV2Filler()
+        private static Filler<EventAddressV2> CreateEventAddressV2Filler(DateTimeOffset dates)
         {
             var filler = new Filler<EventAddressV2>();
 
             filler.Setup()
-                .OnType<DateTimeOffset>().Use(CreateRandomDateTime)
+                .OnType<DateTimeOffset>().Use(dates)
 
                 .OnProperty(eventAddressV2 => eventAddressV2.Events)
                     .IgnoreIt()

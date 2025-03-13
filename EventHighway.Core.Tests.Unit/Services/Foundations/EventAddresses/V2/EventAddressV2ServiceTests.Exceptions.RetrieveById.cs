@@ -59,6 +59,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -106,6 +107,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
