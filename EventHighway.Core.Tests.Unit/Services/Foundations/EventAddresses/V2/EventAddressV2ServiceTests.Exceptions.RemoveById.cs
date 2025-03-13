@@ -113,6 +113,54 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
         }
 
         [Fact]
+        public async Task ShouldThrowDependencyValidationExceptionOnRemoveByIdDatabaseUpdateErrorOccursAndLogItAsync()
+        {
+            // given
+            Guid someEventAddressV2Id = GetRandomId();
+            var dbUpdateException = new DbUpdateException();
+
+            var failedEventAddressV2StorageException =
+                new FailedEventAddressV2StorageException(
+                    message: "Failed event address storage error occurred, contact support.",
+                    innerException: dbUpdateException);
+
+            var expectedEventAddressV2DependencyException =
+                new EventAddressV2DependencyException(
+                    message: "Event address dependency error occurred, contact support.",
+                    innerException: failedEventAddressV2StorageException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectEventAddressV2ByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(dbUpdateException);
+
+            // when
+            ValueTask<EventAddressV2> removeEventAddressV2ByIdTask =
+                this.eventAddressV2Service.RemoveEventAddressV2ByIdAsync(someEventAddressV2Id);
+
+            EventAddressV2DependencyException actualEventAddressV2DependencyException =
+                await Assert.ThrowsAsync<EventAddressV2DependencyException>(
+                    removeEventAddressV2ByIdTask.AsTask);
+
+            // then
+            actualEventAddressV2DependencyException.Should()
+                .BeEquivalentTo(expectedEventAddressV2DependencyException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectEventAddressV2ByIdAsync(
+                    It.IsAny<Guid>()),
+                        Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventAddressV2DependencyException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
         public async Task ShouldThrowServiceExceptionOnRemoveByIdIfExceptionOccursAndLogItAsync()
         {
             // given
