@@ -50,6 +50,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                         Times.Once());
 
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
