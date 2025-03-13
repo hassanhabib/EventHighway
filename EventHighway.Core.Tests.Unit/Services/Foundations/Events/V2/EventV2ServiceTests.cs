@@ -67,6 +67,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
             };
         }
 
+        private static Guid GetRandomId() => 
+            Guid.NewGuid();
+
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
