@@ -65,7 +65,9 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
             if (eventAddressV2 is null)
             {
                 throw new NotFoundEventAddressV2Exception(
-                    message: $"Could not find event address with id: {eventAddressV2Id}.");
+
+                    message: $"Could not find event address " +
+                        $"with id: {eventAddressV2Id}.");
             }
         }
 
