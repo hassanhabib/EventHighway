@@ -66,6 +66,15 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
 
                 throw await CreateAndLogDependencyValidationExceptionAsync(invalidEventV2ReferenceException);
             }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                var lockedEventV2Exception =
+                    new LockedEventV2Exception(
+                        message: "Event is locked, try again.",
+                        innerException: dbUpdateConcurrencyException);
+
+                throw await CreateAndLogDependencyValidationExceptionAsync(lockedEventV2Exception);
+            }
             catch (DbUpdateException dbUpdateException)
             {
                 var failedEventV2StorageException =
