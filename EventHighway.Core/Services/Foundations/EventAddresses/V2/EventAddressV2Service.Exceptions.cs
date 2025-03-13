@@ -4,9 +4,11 @@
 
 using System;
 using System.Threading.Tasks;
+using EFxceptions.Models.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.Exceptions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Xeptions;
 
 namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
@@ -22,6 +24,11 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
             {
                 return await returningEventAddressV2Function();
             }
+            catch (NullEventAddressV2Exception nullEventAddressV2Exception)
+            {
+                throw await CreateAndLogValidationExceptionAsync(
+                    nullEventAddressV2Exception);
+            }
             catch (InvalidEventAddressV2Exception invalidEventAddressV2Exception)
             {
                 throw await CreateAndLogValidationExceptionAsync(
@@ -36,6 +43,25 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
 
                 throw await CreateAndLogCriticalDependencyExceptionAsync(
                     failedEventAddressV2StorageException);
+            }
+            catch (DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistsEventAddressV2Exception =
+                    new AlreadyExistsEventAddressV2Exception(
+                        message: "Event address with the same id already exists.",
+                        innerException: duplicateKeyException);
+
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    alreadyExistsEventAddressV2Exception);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                var failedEventAddressV2StorageException =
+                    new FailedEventAddressV2StorageException(
+                        message: "Failed event address storage error occurred, contact support.",
+                        innerException: dbUpdateException);
+
+                throw await CreateAndLogDependencyExceptionAsync(failedEventAddressV2StorageException);
             }
             catch (Exception serviceException)
             {
@@ -62,6 +88,20 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
             return eventAddressV2ValidationException;
         }
 
+        private async ValueTask<EventAddressV2DependencyValidationException>
+            CreateAndLogDependencyValidationExceptionAsync(
+                Xeption exception)
+        {
+            var eventAddressV2DependencyValidationException =
+                new EventAddressV2DependencyValidationException(
+                    message: "Event address validation error occurred, fix the errors and try again.",
+                    innerException: exception);
+
+            await this.loggingBroker.LogErrorAsync(eventAddressV2DependencyValidationException);
+
+            return eventAddressV2DependencyValidationException;
+        }
+
         private async ValueTask<EventAddressV2DependencyException> CreateAndLogCriticalDependencyExceptionAsync(
             Xeption exception)
         {
@@ -71,6 +111,19 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
                     innerException: exception);
 
             await this.loggingBroker.LogCriticalAsync(eventAddressV2DependencyException);
+
+            return eventAddressV2DependencyException;
+        }
+
+        private async ValueTask<EventAddressV2DependencyException> CreateAndLogDependencyExceptionAsync(
+            Xeption exception)
+        {
+            var eventAddressV2DependencyException =
+                new EventAddressV2DependencyException(
+                    message: "Event address dependency error occurred, contact support.",
+                    innerException: exception);
+
+            await this.loggingBroker.LogErrorAsync(eventAddressV2DependencyException);
 
             return eventAddressV2DependencyException;
         }
