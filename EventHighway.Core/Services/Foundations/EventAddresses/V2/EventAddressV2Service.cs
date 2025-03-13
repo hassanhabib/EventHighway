@@ -30,7 +30,6 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
         public ValueTask<EventAddressV2> AddEventAddressV2Async(EventAddressV2 eventAddressV2) =>
         TryCatch(async () =>
         {
-            await this.dateTimeBroker.GetDateTimeOffsetAsync();
             await ValidateEventAddressV2OnAddAsync(eventAddressV2);
 
             return await this.storageBroker.InsertEventAddressV2Async(eventAddressV2);

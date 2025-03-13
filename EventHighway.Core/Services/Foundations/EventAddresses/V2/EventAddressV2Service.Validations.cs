@@ -36,6 +36,9 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
                     secondDate: eventAddressV2.UpdatedDate,
                     secondDateName: nameof(EventAddressV2.UpdatedDate)),
 
+                Parameter: nameof(EventAddressV2.CreatedDate)),
+
+                (Rule: await IsNotRecentAsync(eventAddressV2.CreatedDate),
                 Parameter: nameof(EventAddressV2.CreatedDate)));
         }
 
@@ -81,6 +84,23 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
                 Condition = firstDate != secondDate,
                 Message = $"Date is not the same as {secondDateName}"
             };
+
+        private async ValueTask<dynamic> IsNotRecentAsync(DateTimeOffset date) => new
+        {
+            Condition = await IsDateNotRecentAsync(date),
+            Message = "Date is not recent"
+        };
+
+        private async ValueTask<bool> IsDateNotRecentAsync(DateTimeOffset date)
+        {
+            DateTimeOffset currentDateTime =
+                await this.dateTimeBroker.GetDateTimeOffsetAsync();
+
+            TimeSpan timeDifference = currentDateTime.Subtract(value: date);
+
+            return timeDifference.TotalSeconds is > 60 or < 0;
+        }
+
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
