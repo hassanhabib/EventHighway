@@ -87,6 +87,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
             };
         }
 
+        private static Guid GetRandomId() =>
+            Guid.NewGuid();
+
         private static int GetRandomNegativeNumber() =>
             -1 * GetRandomNumber();
 
@@ -98,7 +101,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
 
         private static ListenerEventV2 CreateRandomListenerEventV2() =>
             CreateListenerEventV2Filler(dates: GetRandomDateTimeOffset()).Create();
-        
+
         private static ListenerEventV2 CreateRandomListenerEventV2(DateTimeOffset dates) =>
             CreateListenerEventV2Filler(dates).Create();
 

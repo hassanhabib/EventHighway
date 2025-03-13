@@ -33,6 +33,10 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
             {
                 throw await CreateAndLogValidationExceptionAsync(invalidEventV2Exception);
             }
+            catch (NotFoundEventV2Exception notFoundEventV2Exception)
+            {
+                throw await CreateAndLogValidationExceptionAsync(notFoundEventV2Exception);
+            }
             catch (SqlException sqlException)
             {
                 var failedEventV2StorageException =
@@ -61,6 +65,15 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
                         innerException: foreignKeyConstraintConflictException);
 
                 throw await CreateAndLogDependencyValidationExceptionAsync(invalidEventV2ReferenceException);
+            }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                var lockedEventV2Exception =
+                    new LockedEventV2Exception(
+                        message: "Event is locked, try again.",
+                        innerException: dbUpdateConcurrencyException);
+
+                throw await CreateAndLogDependencyValidationExceptionAsync(lockedEventV2Exception);
             }
             catch (DbUpdateException dbUpdateException)
             {
