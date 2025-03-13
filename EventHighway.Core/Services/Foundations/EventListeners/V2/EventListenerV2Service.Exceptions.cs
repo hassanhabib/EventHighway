@@ -63,6 +63,16 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     notFoundEventListenerV2Exception);
             }
+            catch (SqlException sqlException)
+            {
+                var failedEventListenerV2StorageException =
+                    new FailedEventListenerV2StorageException(
+                        message: "Failed event listener storage error occurred, contact support.",
+                        innerException: sqlException);
+
+                throw await CreateAndLogCriticalDependencyExceptionAsync(
+                    failedEventListenerV2StorageException);
+            }
         }
 
         private async ValueTask<EventListenerV2ValidationException> CreateAndLogValidationExceptionAsync(
