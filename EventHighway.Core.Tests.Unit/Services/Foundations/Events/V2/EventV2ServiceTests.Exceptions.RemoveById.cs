@@ -159,5 +159,53 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRemoveByIdIfExceptionOccursAndLogItAsync()
+        {
+            // given
+            Guid someEventV2Id = GetRandomId();
+            var serviceException = new Exception();
+
+            var failedEventV2ServiceException =
+                new FailedEventV2ServiceException(
+                    message: "Failed event service error occurred, contact support.",
+                    innerException: serviceException);
+
+            var expectedEventV2ServiceException =
+                new EventV2ServiceException(
+                    message: "Event service error occurred, contact support.",
+                    innerException: failedEventV2ServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectEventV2ByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<EventV2> removeEventV2ByIdTask =
+                this.eventV2Service.RemoveEventV2ByIdAsync(
+                    someEventV2Id);
+
+            EventV2ServiceException actualEventV2ServiceException =
+                await Assert.ThrowsAsync<EventV2ServiceException>(
+                    removeEventV2ByIdTask.AsTask);
+
+            // then
+            actualEventV2ServiceException.Should()
+                .BeEquivalentTo(expectedEventV2ServiceException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectEventV2ByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventV2ServiceException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
