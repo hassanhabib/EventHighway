@@ -60,6 +60,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
         private static Guid GetRandomId() =>
             Guid.NewGuid();
 
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
+
         private static int GetRandomNegativeNumber() =>
             -1 * GetRandomNumber();
 
