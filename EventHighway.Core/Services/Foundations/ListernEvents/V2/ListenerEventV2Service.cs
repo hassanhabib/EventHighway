@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Storages;
@@ -47,5 +48,13 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
 
             return await storageBroker.UpdateListenerEventV2Async(listenerEventV2);
         });
+
+        public async ValueTask<ListenerEventV2> RemoveListenerEventV2ByIdAsync(Guid listenerEventV2Id)
+        {
+            ListenerEventV2 maybeListenerEventV2 =
+                await this.storageBroker.SelectListenerEventV2ByIdAsync(listenerEventV2Id);
+
+            return await this.storageBroker.DeleteListenerEventV2Async(maybeListenerEventV2);
+        }
     }
 }
