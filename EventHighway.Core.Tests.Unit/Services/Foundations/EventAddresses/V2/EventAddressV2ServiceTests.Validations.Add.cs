@@ -190,14 +190,14 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
         [Theory]
         [MemberData(nameof(MinutesBeforeAndAfterNow))]
         public async Task ShouldThrowValidationExceptionOnAddIfCreatedDateIsNotRecentAndLogItAsync(
-            int minutesBeforeAndAfter)
+            int minutesBeforeAndAfterNow)
         {
             // given
             DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
 
             EventAddressV2 randomEventAddressV2 =
                 CreateRandomEventAddressV2(
-                    dates: randomDateTimeOffset.AddMinutes(minutesBeforeAndAfter));
+                    dates: randomDateTimeOffset.AddMinutes(minutesBeforeAndAfterNow));
 
             EventAddressV2 invalidEventAddressV2 = randomEventAddressV2;
 
