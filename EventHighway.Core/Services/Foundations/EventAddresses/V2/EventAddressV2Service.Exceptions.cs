@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.Exceptions;
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using Xeptions;
 
 namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
@@ -27,6 +26,16 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
             {
                 throw await CreateAndLogValidationExceptionAsync(
                     invalidEventAddressV2Exception);
+            }
+            catch (SqlException sqlException)
+            {
+                var failedEventAddressV2StorageException =
+                    new FailedEventAddressV2StorageException(
+                        message: "Failed event address storage error occurred, contact support.",
+                        innerException: sqlException);
+
+                throw await CreateAndLogCriticalDependencyExceptionAsync(
+                    failedEventAddressV2StorageException);
             }
         }
 
@@ -54,20 +63,6 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
             await this.loggingBroker.LogCriticalAsync(eventAddressV2DependencyException);
 
             return eventAddressV2DependencyException;
-        }
-
-        private async ValueTask<EventAddressV2DependencyValidationException>
-            CreateAndLogDependencyValidationExceptionAsync(
-                Xeption exception)
-        {
-            var eventAddressV2DependencyValidationException =
-                new EventAddressV2DependencyValidationException(
-                    message: "Event address validation error occurred, fix the errors and try again.",
-                    innerException: exception);
-
-            await this.loggingBroker.LogErrorAsync(eventAddressV2DependencyValidationException);
-
-            return eventAddressV2DependencyValidationException;
         }
 
         private async ValueTask<EventAddressV2DependencyException> CreateAndLogDependencyExceptionAsync(
