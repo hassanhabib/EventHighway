@@ -49,12 +49,15 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
             return await storageBroker.UpdateListenerEventV2Async(listenerEventV2);
         });
 
-        public async ValueTask<ListenerEventV2> RemoveListenerEventV2ByIdAsync(Guid listenerEventV2Id)
+        public ValueTask<ListenerEventV2> RemoveListenerEventV2ByIdAsync(Guid listenerEventV2Id) =>
+        TryCatch(async () =>
         {
+            ValidateListenerEventV2Id(listenerEventV2Id);
+
             ListenerEventV2 maybeListenerEventV2 =
                 await this.storageBroker.SelectListenerEventV2ByIdAsync(listenerEventV2Id);
 
             return await this.storageBroker.DeleteListenerEventV2Async(maybeListenerEventV2);
-        }
+        });
     }
 }

@@ -113,6 +113,13 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
                 Parameter: nameof(ListenerEventV2.UpdatedDate)));
         }
 
+        private static void ValidateListenerEventV2Id(Guid listenerEventV2Id)
+        {
+            Validate(
+                (Rule: IsInvalid(listenerEventV2Id),
+                Parameter: nameof(ListenerEventV2.Id)));
+        }
+
         private static void ValidateListenerEventV2Exists(ListenerEventV2 listenerEventV2, Guid listenerEventV2Id)
         {
             if (listenerEventV2 is null)
