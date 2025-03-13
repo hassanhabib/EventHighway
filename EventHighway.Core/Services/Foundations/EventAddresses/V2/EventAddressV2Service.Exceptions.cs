@@ -34,6 +34,11 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     invalidEventAddressV2Exception);
             }
+            catch (NotFoundEventAddressV2Exception notFoundEventAddressV2Exception)
+            {
+                throw await CreateAndLogValidationExceptionAsync(
+                    notFoundEventAddressV2Exception);
+            }
             catch (SqlException sqlException)
             {
                 var failedEventAddressV2StorageException =
@@ -53,6 +58,15 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
 
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     alreadyExistsEventAddressV2Exception);
+            }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                var lockedEventAddressV2Exception =
+                    new LockedEventAddressV2Exception(
+                        message: "Event address is locked, try again.",
+                        innerException: dbUpdateConcurrencyException);
+
+                throw await CreateAndLogDependencyValidationExceptionAsync(lockedEventAddressV2Exception);
             }
             catch (DbUpdateException dbUpdateException)
             {

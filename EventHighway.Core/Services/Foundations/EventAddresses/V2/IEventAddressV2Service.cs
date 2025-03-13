@@ -12,5 +12,6 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
     {
         ValueTask<EventAddressV2> AddEventAddressV2Async(EventAddressV2 eventAddressV2);
         ValueTask<EventAddressV2> RetrieveEventAddressV2ByIdAsync(Guid eventAddressV2Id);
+        ValueTask<EventAddressV2> RemoveEventAddressV2ByIdAsync(Guid eventAddressV2Id);
     }
 }
