@@ -44,7 +44,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
         private static EventAddressV2 CreateRandomEventAddressV2() =>
             CreateEventAddressV2Filler().Create();
 
-        private static DateTimeOffset CreateRandomDateTime() =>
+        private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
         private static Filler<EventAddressV2> CreateEventAddressV2Filler()
@@ -52,7 +52,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
             var filler = new Filler<EventAddressV2>();
 
             filler.Setup()
-                .OnType<DateTimeOffset>().Use(CreateRandomDateTime)
+                .OnType<DateTimeOffset>().Use(GetRandomDateTimeOffset)
 
                 .OnProperty(eventAddressV2 => eventAddressV2.Events)
                     .IgnoreIt()
