@@ -33,6 +33,10 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
             {
                 throw await CreateAndLogValidationExceptionAsync(invalidEventV2Exception);
             }
+            catch (NotFoundEventV2Exception notFoundEventV2Exception)
+            {
+                throw await CreateAndLogValidationExceptionAsync(notFoundEventV2Exception);
+            }
             catch (SqlException sqlException)
             {
                 var failedEventV2StorageException =

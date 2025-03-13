@@ -61,6 +61,19 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
             }
         }
 
+        private static void ValidateEventV2Exists(
+            EventV2 eventV2,
+            Guid eventV2Id)
+        {
+            if (eventV2 is null)
+            {
+                throw new NotFoundEventV2Exception(
+
+                    message: $"Could not find event " +
+                        $"with id: {eventV2Id}.");
+            }
+        }
+
         private static dynamic IsInvalid(Guid id) => new
         {
             Condition = id == default,

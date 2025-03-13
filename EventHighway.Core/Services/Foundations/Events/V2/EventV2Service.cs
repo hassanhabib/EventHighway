@@ -47,6 +47,8 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
             EventV2 maybeEventV2 =
                 await this.storageBroker.SelectEventV2ByIdAsync(eventV2Id);
 
+            ValidateEventV2Exists(maybeEventV2, eventV2Id);
+
             return await this.storageBroker.DeleteEventV2Async(maybeEventV2);
         });
     }
