@@ -57,6 +57,8 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
             ListenerEventV2 maybeListenerEventV2 =
                 await this.storageBroker.SelectListenerEventV2ByIdAsync(listenerEventV2Id);
 
+            ValidateListenerEventV2Exists(maybeListenerEventV2, listenerEventV2Id);
+
             return await this.storageBroker.DeleteListenerEventV2Async(maybeListenerEventV2);
         });
     }
