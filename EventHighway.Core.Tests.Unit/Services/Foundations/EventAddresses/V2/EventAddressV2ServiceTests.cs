@@ -42,8 +42,29 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
         private static SqlException CreateSqlException() =>
             (SqlException)RuntimeHelpers.GetUninitializedObject(type: typeof(SqlException));
 
+        public static TheoryData<int> MinutesBeforeAndAfterNow()
+        {
+            int randomMoreThanOneMinuteAhead =
+                GetRandomNumber();
+
+            int randomMoreThanOneMinuteAgo =
+                GetRandomNegativeNumber();
+
+            return new TheoryData<int>
+            {
+                randomMoreThanOneMinuteAhead,
+                randomMoreThanOneMinuteAgo
+            };
+        }
+
         private static Guid GetRandomId() =>
             Guid.NewGuid();
+
+        private static int GetRandomNegativeNumber() =>
+            -1 * GetRandomNumber();
+
+        private static int GetRandomNumber() =>
+            new IntRange(min: 2, max: 9).GetValue();
 
         private static EventAddressV2 CreateRandomEventAddressV2(DateTimeOffset dates) =>
             CreateEventAddressV2Filler(dates).Create();
