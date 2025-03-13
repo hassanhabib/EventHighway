@@ -29,7 +29,14 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
                 Parameter: nameof(EventAddressV2.CreatedDate)),
 
                 (Rule: IsInvalid(eventAddressV2.UpdatedDate),
-                Parameter: nameof(EventAddressV2.UpdatedDate)));
+                Parameter: nameof(EventAddressV2.UpdatedDate)),
+
+                (Rule: IsNotSameAs(
+                    firstDate: eventAddressV2.CreatedDate,
+                    secondDate: eventAddressV2.UpdatedDate,
+                    secondDateName: nameof(EventAddressV2.UpdatedDate)),
+
+                Parameter: nameof(EventAddressV2.CreatedDate)));
         }
 
         private static void ValidateEventAddressV2Id(Guid eventAddressV2Id)
@@ -65,6 +72,15 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
             Condition = date == default,
             Message = "Required"
         };
+
+        private static dynamic IsNotSameAs(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string secondDateName) => new
+            {
+                Condition = firstDate != secondDate,
+                Message = $"Date is not the same as {secondDateName}"
+            };
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
