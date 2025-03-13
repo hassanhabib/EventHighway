@@ -8,6 +8,7 @@ using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 
 namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
@@ -55,6 +56,55 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCriticalAsync(It.Is(SameExceptionAs(
                     expectedListenerEventV2DependencyException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyValidationErrorOnRemoveByIdIfDbUpdateConcurrencyErrorAndLogItAsync()
+        {
+            // given
+            Guid someListenerEventV2Id = GetRandomId();
+            var dbUpdateConcurrencyException = new DbUpdateConcurrencyException();
+
+            var lockedListenerEventV2Exception =
+                new LockedListenerEventV2Exception(
+                    message: "Listener event is locked, try again.",
+                    innerException: dbUpdateConcurrencyException);
+
+            var expectedListenerEventV2DependencyValidationException =
+                new ListenerEventV2DependencyValidationException(
+                    message: "Listener event validation error occurred, fix the errors and try again.",
+                    innerException: lockedListenerEventV2Exception);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectListenerEventV2ByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(dbUpdateConcurrencyException);
+
+            // when
+            ValueTask<ListenerEventV2> removeListenerEventV2ByIdTask =
+                this.listenerEventV2Service.RemoveListenerEventV2ByIdAsync(
+                    someListenerEventV2Id);
+
+            ListenerEventV2DependencyValidationException actualListenerEventV2DependencyValidationException =
+                await Assert.ThrowsAsync<ListenerEventV2DependencyValidationException>(
+                    removeListenerEventV2ByIdTask.AsTask);
+
+            // then
+            actualListenerEventV2DependencyValidationException.Should()
+                .BeEquivalentTo(expectedListenerEventV2DependencyValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectListenerEventV2ByIdAsync(
+                    It.IsAny<Guid>()),
+                        Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedListenerEventV2DependencyValidationException))),
                         Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
