@@ -61,5 +61,53 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRemoveByIdIfExceptionOccursAndLogItAsync()
+        {
+            // given
+            Guid someEventAddressV2Id = GetRandomId();
+            var serviceException = new Exception();
+
+            var failedEventAddressV2ServiceException =
+                new FailedEventAddressV2ServiceException(
+                    message: "Failed event address service error occurred, contact support.",
+                    innerException: serviceException);
+
+            var expectedEventAddressV2ServiceException =
+                new EventAddressV2ServiceException(
+                    message: "Event address service error occurred, contact support.",
+                    innerException: failedEventAddressV2ServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectEventAddressV2ByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<EventAddressV2> removeEventAddressV2ByIdTask =
+                this.eventAddressV2Service.RemoveEventAddressV2ByIdAsync(
+                    someEventAddressV2Id);
+
+            EventAddressV2ServiceException actualEventAddressV2ServiceException =
+                await Assert.ThrowsAsync<EventAddressV2ServiceException>(
+                    removeEventAddressV2ByIdTask.AsTask);
+
+            // then
+            actualEventAddressV2ServiceException.Should()
+                .BeEquivalentTo(expectedEventAddressV2ServiceException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectEventAddressV2ByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventAddressV2ServiceException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
