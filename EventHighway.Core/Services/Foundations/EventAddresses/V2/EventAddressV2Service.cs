@@ -42,5 +42,14 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
 
             return await this.storageBroker.SelectEventAddressV2ByIdAsync(eventAddressV2Id);
         });
+
+        public ValueTask<EventAddressV2> RemoveEventAddressV2ByIdAsync(Guid eventAddressV2Id) =>
+        TryCatch(async () =>
+        {
+            EventAddressV2 maybeEventAddressV2 =
+                await this.storageBroker.SelectEventAddressV2ByIdAsync(eventAddressV2Id);
+
+            return await this.storageBroker.DeleteEventAddressV2Async(maybeEventAddressV2);
+        });
     }
 }
