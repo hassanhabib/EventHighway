@@ -17,7 +17,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
         public async Task ShouldRetrieveEventAddressV2ByIdAsync()
         {
             // given
-            Guid randomEventAddressV2Id = Guid.NewGuid();
+            Guid randomEventAddressV2Id = GetRandomId();
             Guid inputEventAddressV2Id = randomEventAddressV2Id;
 
             EventAddressV2 randomEventAddressV2 =
