@@ -124,6 +124,16 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
                 throw await CreateAndLogCriticalDependencyExceptionAsync(
                     failedListenerEventV2StorageException);
             }
+            catch (Exception serviceException)
+            {
+                var failedListenerEventV2ServiceException =
+                    new FailedListenerEventV2ServiceException(
+                        message: "Failed listener event service error occurred, contact support.",
+                        innerException: serviceException);
+
+                throw await CreateAndLogServiceExceptionAsync(
+                    failedListenerEventV2ServiceException);
+            }
         }
 
         private async ValueTask<ListenerEventV2ValidationException> CreateAndLogValidationExceptionAsync(
