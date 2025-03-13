@@ -27,12 +27,14 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<EventAddressV2> AddEventAddressV2Async(EventAddressV2 eventAddressV2)
+        public ValueTask<EventAddressV2> AddEventAddressV2Async(EventAddressV2 eventAddressV2) =>
+        TryCatch(async () =>
         {
+            ValidateEventAddressV2IsNotNull(eventAddressV2);
             await this.dateTimeBroker.GetDateTimeOffsetAsync();
 
             return await this.storageBroker.InsertEventAddressV2Async(eventAddressV2);
-        }
+        });
 
         public ValueTask<EventAddressV2> RetrieveEventAddressV2ByIdAsync(Guid eventAddressV2Id) =>
         TryCatch(async () =>

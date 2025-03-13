@@ -17,6 +17,15 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
                 Parameter: nameof(EventAddressV2.Id)));
         }
 
+        private static void ValidateEventAddressV2IsNotNull(EventAddressV2 eventV2)
+        {
+            if (eventV2 is null)
+            {
+                throw new NullEventAddressV2Exception(
+                    message: "Event address is null.");
+            }
+        }
+
         private static dynamic IsInvalid(Guid id) => new
         {
             Condition = id == Guid.Empty,

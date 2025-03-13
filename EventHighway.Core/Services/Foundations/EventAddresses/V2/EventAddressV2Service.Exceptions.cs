@@ -22,6 +22,11 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
             {
                 return await returningEventAddressV2Function();
             }
+            catch (NullEventAddressV2Exception nullEventAddressV2Exception)
+            {
+                throw await CreateAndLogValidationExceptionAsync(
+                    nullEventAddressV2Exception);
+            }
             catch (InvalidEventAddressV2Exception invalidEventAddressV2Exception)
             {
                 throw await CreateAndLogValidationExceptionAsync(
