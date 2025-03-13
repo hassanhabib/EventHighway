@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using EFxceptions.Models.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
@@ -16,6 +17,7 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
     internal partial class ListenerEventV2Service
     {
         private delegate ValueTask<ListenerEventV2> ReturningListenerEventV2Function();
+        private delegate ValueTask<IQueryable<ListenerEventV2>> ReturningListenerEventV2sFunction();
 
         private async ValueTask<ListenerEventV2> TryCatch(
             ReturningListenerEventV2Function returningListenerEventV2Function)
@@ -102,6 +104,25 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
 
                 throw await CreateAndLogServiceExceptionAsync(
                     failedListenerEventV2ServiceException);
+            }
+        }
+
+        private async ValueTask<IQueryable<ListenerEventV2>> TryCatch(
+            ReturningListenerEventV2sFunction returningListenerEventV2sFunction)
+        {
+            try
+            {
+                return await returningListenerEventV2sFunction();
+            }
+            catch (SqlException sqlException)
+            {
+                var failedListenerEventV2StorageException =
+                    new FailedListenerEventV2StorageException(
+                        message: "Failed listener event storage error occurred, contact support.",
+                        innerException: sqlException);
+
+                throw await CreateAndLogCriticalDependencyExceptionAsync(
+                    failedListenerEventV2StorageException);
             }
         }
 
