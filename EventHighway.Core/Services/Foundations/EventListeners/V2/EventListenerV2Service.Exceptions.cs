@@ -7,7 +7,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.Events.V2.Exceptions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Xeptions;
 
 namespace EventHighway.Core.Services.Foundations.EventListeners.V2
@@ -72,6 +74,15 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
 
                 throw await CreateAndLogCriticalDependencyExceptionAsync(
                     failedEventListenerV2StorageException);
+            }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                var lockedEventListenerV2Exception =
+                    new LockedEventListenerV2Exception(
+                        message: "Event listener is locked, try again.",
+                        innerException: dbUpdateConcurrencyException);
+
+                throw await CreateAndLogDependencyValidationExceptionAsync(lockedEventListenerV2Exception);
             }
         }
 
