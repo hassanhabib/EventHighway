@@ -59,5 +59,57 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnRemoveByIdIfEventAddressV2IsNotFoundAndLogItAsync()
+        {
+            // given
+            Guid nonExistingEventAddressV2Id = Guid.NewGuid();
+            EventAddressV2 nullEventAddressV2 = null;
+
+            var notFoundEventAddressV2Exception =
+                new NotFoundEventAddressV2Exception(
+                    message: $"Could not find event address with id: {nonExistingEventAddressV2Id}.");
+
+            var expectedEventAddressV2ValidationException =
+                new EventAddressV2ValidationException(
+                    message: "Event address validation error occurred, fix the errors and try again.",
+                    innerException: notFoundEventAddressV2Exception);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectEventAddressV2ByIdAsync(It.IsAny<Guid>()))
+                    .ReturnsAsync(nullEventAddressV2);
+
+            // when
+            ValueTask<EventAddressV2> removeEventAddressV2ByIdTask =
+                this.eventAddressV2Service.RemoveEventAddressV2ByIdAsync(nonExistingEventAddressV2Id);
+
+            EventAddressV2ValidationException actualEventAddressV2ValidationException =
+                await Assert.ThrowsAsync<EventAddressV2ValidationException>(
+                    removeEventAddressV2ByIdTask.AsTask);
+
+            // then
+            actualEventAddressV2ValidationException.Should()
+                .BeEquivalentTo(expectedEventAddressV2ValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectEventAddressV2ByIdAsync(
+                    It.IsAny<Guid>()),
+                        Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventAddressV2ValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.DeleteEventAddressV2Async(
+                    It.IsAny<EventAddressV2>()),
+                        Times.Never);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
