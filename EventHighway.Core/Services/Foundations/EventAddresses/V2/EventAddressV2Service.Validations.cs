@@ -58,6 +58,17 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
             }
         }
 
+        private static void ValidateEventAddressV2Exists(
+            EventAddressV2 eventAddressV2,
+            Guid eventAddressV2Id)
+        {
+            if (eventAddressV2 is null)
+            {
+                throw new NotFoundEventAddressV2Exception(
+                    message: $"Could not find event address with id: {eventAddressV2Id}.");
+            }
+        }
+
         private static dynamic IsInvalid(Guid id) => new
         {
             Condition = id == Guid.Empty,

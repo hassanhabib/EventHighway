@@ -51,6 +51,8 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
             EventAddressV2 maybeEventAddressV2 =
                 await this.storageBroker.SelectEventAddressV2ByIdAsync(eventAddressV2Id);
 
+            ValidateEventAddressV2Exists(maybeEventAddressV2, eventAddressV2Id);
+
             return await this.storageBroker.DeleteEventAddressV2Async(maybeEventAddressV2);
         });
     }

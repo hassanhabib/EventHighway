@@ -64,7 +64,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
         public async Task ShouldThrowValidationExceptionOnRemoveByIdIfEventAddressV2IsNotFoundAndLogItAsync()
         {
             // given
-            Guid nonExistingEventAddressV2Id = Guid.NewGuid();
+            Guid nonExistingEventAddressV2Id = GetRandomId();
             EventAddressV2 nullEventAddressV2 = null;
 
             var notFoundEventAddressV2Exception =

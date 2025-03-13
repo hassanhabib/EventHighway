@@ -34,6 +34,11 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     invalidEventAddressV2Exception);
             }
+            catch (NotFoundEventAddressV2Exception notFoundEventAddressV2Exception)
+            {
+                throw await CreateAndLogValidationExceptionAsync(
+                    notFoundEventAddressV2Exception);
+            }
             catch (SqlException sqlException)
             {
                 var failedEventAddressV2StorageException =
