@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.Exceptions;
 
@@ -10,6 +11,27 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
 {
     internal partial class EventAddressV2Service
     {
+        private async ValueTask ValidateEventAddressV2OnAddAsync(EventAddressV2 eventAddressV2)
+        {
+            ValidateEventAddressV2IsNotNull(eventAddressV2);
+
+            Validate(
+                (Rule: IsInvalid(eventAddressV2.Id),
+                Parameter: nameof(EventAddressV2.Id)),
+
+                (Rule: IsInvalid(eventAddressV2.Name),
+                Parameter: nameof(EventAddressV2.Name)),
+
+                (Rule: IsInvalid(eventAddressV2.Description),
+                Parameter: nameof(EventAddressV2.Description)),
+
+                (Rule: IsInvalid(eventAddressV2.CreatedDate),
+                Parameter: nameof(EventAddressV2.CreatedDate)),
+
+                (Rule: IsInvalid(eventAddressV2.UpdatedDate),
+                Parameter: nameof(EventAddressV2.UpdatedDate)));
+        }
+
         private static void ValidateEventAddressV2Id(Guid eventAddressV2Id)
         {
             Validate(
@@ -17,9 +39,9 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
                 Parameter: nameof(EventAddressV2.Id)));
         }
 
-        private static void ValidateEventAddressV2IsNotNull(EventAddressV2 eventV2)
+        private static void ValidateEventAddressV2IsNotNull(EventAddressV2 eventAddressV2)
         {
-            if (eventV2 is null)
+            if (eventAddressV2 is null)
             {
                 throw new NullEventAddressV2Exception(
                     message: "Event address is null.");
@@ -29,6 +51,18 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
         private static dynamic IsInvalid(Guid id) => new
         {
             Condition = id == Guid.Empty,
+            Message = "Required"
+        };
+
+        private static dynamic IsInvalid(string text) => new
+        {
+            Condition = String.IsNullOrWhiteSpace(text),
+            Message = "Required"
+        };
+
+        private static dynamic IsInvalid(DateTimeOffset date) => new
+        {
+            Condition = date == default,
             Message = "Required"
         };
 
