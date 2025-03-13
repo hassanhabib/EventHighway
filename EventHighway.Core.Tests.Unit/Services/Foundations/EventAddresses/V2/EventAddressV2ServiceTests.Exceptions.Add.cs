@@ -77,12 +77,12 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
 
             var alreadyExistsEventAddressV2Exception =
                 new AlreadyExistsEventAddressV2Exception(
-                    message: "Event with the same id already exists.",
+                    message: "Event address with the same id already exists.",
                     innerException: duplicateKeyException);
 
             var expectedEventAddressV2DependencyValidationException =
                 new EventAddressV2DependencyValidationException(
-                    message: "Event validation error occurred, fix the errors and try again.",
+                    message: "Event address validation error occurred, fix the errors and try again.",
                     innerException: alreadyExistsEventAddressV2Exception);
 
             this.dateTimeBrokerMock.Setup(broker =>
