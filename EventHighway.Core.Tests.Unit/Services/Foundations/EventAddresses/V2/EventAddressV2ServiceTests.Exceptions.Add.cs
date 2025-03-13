@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using EFxceptions.Models.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
@@ -158,6 +159,57 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogErrorAsync(It.Is(SameExceptionAs(
                     expectedEventAddressV2DependencyException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertEventAddressV2Async(It.IsAny<EventAddressV2>()),
+                    Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnAddIfExceptionOccursAndLogItAsync()
+        {
+            // given
+            EventAddressV2 someEventAddressV2 = CreateRandomEventAddressV2();
+            var serviceException = new Exception();
+
+            var failedEventAddressV2ServiceException =
+                new FailedEventAddressV2ServiceException(
+                    message: "Failed event address service error occurred, contact support.",
+                    innerException: serviceException);
+
+            var expectedEventAddressV2ServiceException =
+                new EventAddressV2ServiceException(
+                    message: "Event address service error occurred, contact support.",
+                    innerException: failedEventAddressV2ServiceException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetDateTimeOffsetAsync())
+                    .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<EventAddressV2> addEventAddressV2Task =
+                this.eventAddressV2Service.AddEventAddressV2Async(someEventAddressV2);
+
+            EventAddressV2ServiceException actualEventAddressV2ServiceException =
+                await Assert.ThrowsAsync<EventAddressV2ServiceException>(
+                    addEventAddressV2Task.AsTask);
+
+            // then
+            actualEventAddressV2ServiceException.Should()
+                .BeEquivalentTo(expectedEventAddressV2ServiceException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetDateTimeOffsetAsync(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventAddressV2ServiceException))),
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
