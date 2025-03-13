@@ -3,30 +3,35 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Storages;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
 using EventHighway.Core.Services.Foundations.EventAddresses.V2;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
-namespace EventHighway.Core.Tests.Unit.Services.EventAddresses.V2
+namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
 {
     public partial class EventAddressV2ServiceTests
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
-        private readonly IEventAddressV2Service eventAddressV2V2Service;
+        private readonly IEventAddressV2Service eventAddressV2Service;
 
         public EventAddressV2ServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
-            this.eventAddressV2V2Service = new EventAddressV2Service(
+            this.eventAddressV2Service = new EventAddressV2Service(
                 storageBroker: this.storageBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
+
+        private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
 
         private static EventAddressV2 CreateRandomEventAddressV2() =>
             CreateEventAddressV2Filler().Create();

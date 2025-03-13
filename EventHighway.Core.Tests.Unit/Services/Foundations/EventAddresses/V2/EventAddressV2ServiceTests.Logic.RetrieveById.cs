@@ -9,7 +9,7 @@ using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
 
-namespace EventHighway.Core.Tests.Unit.Services.EventAddresses.V2
+namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
 {
     public partial class EventAddressV2ServiceTests
     {
@@ -36,7 +36,7 @@ namespace EventHighway.Core.Tests.Unit.Services.EventAddresses.V2
 
             // when
             EventAddressV2 actualEventAddressV2 =
-                await this.eventAddressV2V2Service
+                await this.eventAddressV2Service
                     .RetrieveEventAddressV2ByIdAsync(
                         inputEventAddressV2Id);
 
