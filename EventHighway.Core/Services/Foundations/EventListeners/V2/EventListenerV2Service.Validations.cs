@@ -5,8 +5,6 @@
 using System;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.Events.V2.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
 
 namespace EventHighway.Core.Services.Foundations.EventListeners.V2
 {
@@ -34,7 +32,7 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
 
         private static dynamic IsInvalid(Guid id) => new
         {
-            Condition = id == default,
+            Condition = id == Guid.Empty,
             Message = "Required"
         };
 

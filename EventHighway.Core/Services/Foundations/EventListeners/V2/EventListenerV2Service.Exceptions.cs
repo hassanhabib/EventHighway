@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.Events.V2.Exceptions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Xeptions;
@@ -92,6 +91,16 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
                         innerException: dbUpdateException);
 
                 throw await CreateAndLogDependencyExceptionAsync(failedEventListenerV2StorageException);
+            }
+            catch (Exception serviceException)
+            {
+                var failedEventListenerV2ServiceException =
+                    new FailedEventListenerV2ServiceException(
+                        message: "Failed event listener service error occurred, contact support.",
+                        innerException: serviceException);
+
+                throw await CreateAndLogServiceExceptionAsync(
+                    failedEventListenerV2ServiceException);
             }
         }
 
