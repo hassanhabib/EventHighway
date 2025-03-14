@@ -109,5 +109,52 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowDependencyValidationExceptionOnRemoveByIdDatabaseUpdateErrorOccursAndLogItAsync()
+        {
+            // given
+            Guid someEventListenerV2Id = GetRandomId();
+            var dbUpdateException = new DbUpdateException();
+
+            var failedEventListenerV2StorageException =
+                new FailedEventListenerV2StorageException(
+                    message: "Failed event listener storage error occurred, contact support.",
+                    innerException: dbUpdateException);
+
+            var expectedEventListenerV2DependencyException =
+                new EventListenerV2DependencyException(
+                    message: "Event listener dependency error occurred, contact support.",
+                    innerException: failedEventListenerV2StorageException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectEventListenerV2ByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(dbUpdateException);
+
+            // when
+            ValueTask<EventListenerV2> removeEventListenerV2ByIdTask =
+                this.eventListenerV2Service.RemoveEventListenerV2ByIdAsync(someEventListenerV2Id);
+
+            EventListenerV2DependencyException actualEventListenerV2DependencyException =
+                await Assert.ThrowsAsync<EventListenerV2DependencyException>(
+                    removeEventListenerV2ByIdTask.AsTask);
+
+            // then
+            actualEventListenerV2DependencyException.Should()
+                .BeEquivalentTo(expectedEventListenerV2DependencyException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectEventListenerV2ByIdAsync(
+                    It.IsAny<Guid>()),
+                        Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventListenerV2DependencyException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
