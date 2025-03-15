@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
@@ -68,8 +69,14 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.ListenerEvents.V2
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
+        private static int GetRandomNumber() =>
+            new IntRange(min: 2, max: 9).GetValue();
+
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
+
+        private static IQueryable<ListenerEventV2> CreateRandomListenerEventV2s() =>
+            CreateListenerEventV2Filler().Create(count: GetRandomNumber()).AsQueryable();
 
         private static ListenerEventV2 CreateRandomListenerEventV2() =>
             CreateListenerEventV2Filler().Create();
