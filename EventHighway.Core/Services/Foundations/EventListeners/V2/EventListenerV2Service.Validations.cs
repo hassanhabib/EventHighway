@@ -38,7 +38,14 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
                 Parameter: nameof(EventListenerV2.CreatedDate)),
 
                 (Rule: IsInvalid(eventListenerV2.UpdatedDate),
-                Parameter: nameof(EventListenerV2.UpdatedDate)));
+                Parameter: nameof(EventListenerV2.UpdatedDate)),
+
+                (Rule: IsNotSameAs(
+                    firstDate: eventListenerV2.CreatedDate,
+                    secondDate: eventListenerV2.UpdatedDate,
+                    secondDateName: nameof(EventListenerV2.UpdatedDate)),
+
+                Parameter: nameof(EventListenerV2.CreatedDate)));
         }
 
         private static void ValidateEventListenerV2Id(Guid eventListenerV2Id)
@@ -87,6 +94,15 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
             Condition = date == default,
             Message = "Required"
         };
+
+        private static dynamic IsNotSameAs(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string secondDateName) => new
+            {
+                Condition = firstDate != secondDate,
+                Message = $"Date is not the same as {secondDateName}"
+            };
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
