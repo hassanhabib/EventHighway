@@ -66,6 +66,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.ListenerEvents.V2
             };
         }
 
+        private static Guid GetRandomId() =>
+            Guid.NewGuid();
+
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
