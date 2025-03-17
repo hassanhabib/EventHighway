@@ -17,6 +17,13 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
                 (Rule: IsInvalid(eventAddressId),
                 Parameter: nameof(EventListenerV2.EventAddressId)));
         }
+        
+        private static void ValidateListenerEventV2Id(Guid listenerEventV2Id)
+        {
+            Validate(
+                (Rule: IsInvalid(listenerEventV2Id),
+                Parameter: nameof(ListenerEventV2.Id)));
+        }
 
         private static void ValidateListenerEventV2IsNotNull(ListenerEventV2 listenerEventV2)
         {
