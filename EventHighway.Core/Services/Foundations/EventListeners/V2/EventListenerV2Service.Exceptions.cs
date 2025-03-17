@@ -5,6 +5,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using EFxceptions.Models.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2.Exceptions;
 using Microsoft.Data.SqlClient;
@@ -78,6 +79,16 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
 
                 throw await CreateAndLogCriticalDependencyExceptionAsync(
                     failedEventListenerV2StorageException);
+            }
+            catch (DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistsEventListenerV2Exception =
+                    new AlreadyExistsEventListenerV2Exception(
+                        message: "Event listener with the same id already exists.",
+                        innerException: duplicateKeyException);
+
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    alreadyExistsEventListenerV2Exception);
             }
             catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {
