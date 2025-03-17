@@ -42,8 +42,14 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
                 .GetUninitializedObject(type: typeof(SqlException));
         }
 
+        private static Guid GetRandomId() =>
+            Guid.NewGuid();
+
         private static IQueryable<EventListenerV2> CreateRandomEventListenerV2s() =>
             CreateEventListenerV2Filler().Create(count: GetRandomNumber()).AsQueryable();
+
+        private static EventListenerV2 CreateRandomEventListenerV2() =>
+            CreateEventListenerV2Filler().Create();
 
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
