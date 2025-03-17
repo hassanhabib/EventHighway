@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 using EFxceptions.Models.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 
 namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
@@ -162,6 +161,57 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogErrorAsync(It.Is(SameExceptionAs(
                     expectedEventListenerV2DependencyValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertEventListenerV2Async(It.IsAny<EventListenerV2>()),
+                    Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyExceptionOnAddIfDbUpdateExceptionOccursAndLogItAsync()
+        {
+            // given
+            EventListenerV2 someEventListenerV2 = CreateRandomEventListenerV2();
+            var dbUpdateException = new DbUpdateException();
+
+            var failedEventListenerV2StorageException =
+                new FailedEventListenerV2StorageException(
+                    message: "Failed event listener storage error occurred, contact support.",
+                    innerException: dbUpdateException);
+
+            var expectedEventListenerV2DependencyException =
+                new EventListenerV2DependencyException(
+                    message: "Event listener dependency error occurred, contact support.",
+                    innerException: failedEventListenerV2StorageException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetDateTimeOffsetAsync())
+                    .ThrowsAsync(dbUpdateException);
+
+            // when
+            ValueTask<EventListenerV2> addEventListenerV2Task =
+                this.eventListenerV2Service.AddEventListenerV2Async(someEventListenerV2);
+
+            EventListenerV2DependencyException actualEventListenerV2DependencyException =
+                await Assert.ThrowsAsync<EventListenerV2DependencyException>(
+                    addEventListenerV2Task.AsTask);
+
+            // then
+            actualEventListenerV2DependencyException.Should()
+                .BeEquivalentTo(expectedEventListenerV2DependencyException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetDateTimeOffsetAsync(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventListenerV2DependencyException))),
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
