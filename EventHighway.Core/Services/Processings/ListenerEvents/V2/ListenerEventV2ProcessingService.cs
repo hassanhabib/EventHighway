@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Loggings;
@@ -41,5 +42,8 @@ namespace EventHighway.Core.Services.Processings.ListenerEvents.V2
 
             return await this.listenerEventV2Service.ModifyListenerEventV2Async(listenerEventV2);
         });
+
+        public async ValueTask<ListenerEventV2> RemoveListenerEventV2ByIdAsync(Guid listenerEventV2Id) =>
+            await this.listenerEventV2Service.RemoveListenerEventV2ByIdAsync(listenerEventV2Id);
     }
 }
