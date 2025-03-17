@@ -18,6 +18,7 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
     {
         private delegate ValueTask<IQueryable<EventListenerV2>> ReturningEventListenerV2sFunction();
         private delegate ValueTask<ListenerEventV2> ReturningListenerEventV2Function();
+        private delegate ValueTask<IQueryable<ListenerEventV2>> ReturningListenerEventV2sFunction();
 
         private async ValueTask<IQueryable<EventListenerV2>> TryCatch(
             ReturningEventListenerV2sFunction returningEventListenerV2sFunction)
@@ -86,6 +87,37 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     listenerEventV2ProcessingDependencyValidationException);
+            }
+            catch (ListenerEventV2ProcessingDependencyException
+                listenerEventV2ProcessingDependencyException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(
+                    listenerEventV2ProcessingDependencyException);
+            }
+            catch (ListenerEventV2ProcessingServiceException
+                listenerEventV2ProcessingServiceException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(
+                    listenerEventV2ProcessingServiceException);
+            }
+            catch (Exception exception)
+            {
+                var failedEventListenerV2OrchestrationServiceException =
+                    new FailedEventListenerV2OrchestrationServiceException(
+                        message: "Failed event listener service error occurred, contact support.",
+                        innerException: exception);
+
+                throw await CreateAndLogServiceExceptionAsync(
+                    failedEventListenerV2OrchestrationServiceException);
+            }
+        }
+
+        private async ValueTask<IQueryable<ListenerEventV2>> TryCatch(
+            ReturningListenerEventV2sFunction returningListenerEventV2sFunction)
+        {
+            try
+            {
+                return await returningListenerEventV2sFunction();
             }
             catch (ListenerEventV2ProcessingDependencyException
                 listenerEventV2ProcessingDependencyException)
