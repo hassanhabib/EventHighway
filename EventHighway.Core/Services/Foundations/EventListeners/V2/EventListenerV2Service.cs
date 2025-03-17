@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Storages;
+using EventHighway.Core.Brokers.Times;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
 
 namespace EventHighway.Core.Services.Foundations.EventListeners.V2
@@ -14,14 +15,24 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
     internal partial class EventListenerV2Service : IEventListenerV2Service
     {
         private readonly IStorageBroker storageBroker;
+        private readonly IDateTimeBroker dateTimeBroker;
         private readonly ILoggingBroker loggingBroker;
 
         public EventListenerV2Service(
             IStorageBroker storageBroker,
+            IDateTimeBroker dateTimeBroker,
             ILoggingBroker loggingBroker)
         {
             this.storageBroker = storageBroker;
+            this.dateTimeBroker = dateTimeBroker;
             this.loggingBroker = loggingBroker;
+        }
+
+        public async ValueTask<EventListenerV2> AddEventListenerV2Async(EventListenerV2 eventListenerV2)
+        {
+            await this.dateTimeBroker.GetDateTimeOffsetAsync();
+
+            return await this.storageBroker.InsertEventListenerV2Async(eventListenerV2);
         }
 
         public ValueTask<IQueryable<EventListenerV2>> RetrieveAllEventListenerV2sAsync() =>
