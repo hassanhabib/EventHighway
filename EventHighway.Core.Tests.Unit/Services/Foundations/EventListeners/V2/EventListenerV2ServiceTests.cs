@@ -52,13 +52,13 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
         private static IQueryable<EventListenerV2> CreateRandomEventListenerV2s()
         {
             return CreateEventListenerV2Filler(
-                dates: GetRandomDateTime())
+                dates: GetRandomDateTimeOffset())
                     .Create(count: GetRandomNumber())
                         .AsQueryable();
         }
 
         private static EventListenerV2 CreateRandomEventListenerV2() =>
-            CreateEventListenerV2Filler(dates: GetRandomDateTime()).Create();
+            CreateEventListenerV2Filler(dates: GetRandomDateTimeOffset()).Create();
 
         private static EventListenerV2 CreateRandomEventListenerV2(DateTimeOffset dates) =>
             CreateEventListenerV2Filler(dates).Create();
@@ -66,7 +66,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
 
-        private static DateTimeOffset GetRandomDateTime() =>
+        private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
         private static Filler<EventListenerV2> CreateEventListenerV2Filler(DateTimeOffset dates)

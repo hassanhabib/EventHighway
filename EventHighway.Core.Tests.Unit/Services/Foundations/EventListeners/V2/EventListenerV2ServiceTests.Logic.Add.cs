@@ -19,7 +19,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
         {
             // given
             DateTimeOffset randomDateTimeOffset =
-                GetRandomDateTime();
+                GetRandomDateTimeOffset();
 
             EventListenerV2 randomEventListenerV2 =
                 CreateRandomEventListenerV2(
