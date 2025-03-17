@@ -78,6 +78,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
         private static EventListenerV2 CreateRandomEventListenerV2(DateTimeOffset dates) =>
             CreateEventListenerV2Filler(dates).Create();
 
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
+
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
 
