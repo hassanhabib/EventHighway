@@ -103,5 +103,54 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.eventListenerV2ProcessingServiceMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRemoveListenerEventV2ByIdIfExceptionOccursAndLogItAsync()
+        {
+            // given
+            Guid someListenerEventV2Id = GetRandomId();
+            var serviceException = new Exception();
+
+            var failedEventListenerV2OrchestrationServiceException =
+                new FailedEventListenerV2OrchestrationServiceException(
+                    message: "Failed event listener service error occurred, contact support.",
+                    innerException: serviceException);
+
+            var expectedEventListenerV2OrchestrationServiceException =
+                new EventListenerV2OrchestrationServiceException(
+                    message: "Event listener service error occurred, contact support.",
+                    innerException: failedEventListenerV2OrchestrationServiceException);
+
+            this.listenerEventV2ProcessingServiceMock.Setup(service =>
+                service.RemoveListenerEventV2ByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<ListenerEventV2> removeListenerEventV2Task =
+                this.eventListenerV2OrchestrationService.RemoveListenerEventV2ByIdAsync(
+                    someListenerEventV2Id);
+
+            EventListenerV2OrchestrationServiceException
+                actualEventListenerV2OrchestrationServiceException =
+                    await Assert.ThrowsAsync<EventListenerV2OrchestrationServiceException>(
+                        removeListenerEventV2Task.AsTask);
+
+            // then
+            actualEventListenerV2OrchestrationServiceException.Should()
+                .BeEquivalentTo(expectedEventListenerV2OrchestrationServiceException);
+
+            this.listenerEventV2ProcessingServiceMock.Verify(service =>
+                service.RemoveListenerEventV2ByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventListenerV2OrchestrationServiceException))),
+                        Times.Once);
+
+            this.listenerEventV2ProcessingServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.eventListenerV2ProcessingServiceMock.VerifyNoOtherCalls();
+        }
     }
 }
