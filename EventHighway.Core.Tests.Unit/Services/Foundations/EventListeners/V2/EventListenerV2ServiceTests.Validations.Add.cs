@@ -212,7 +212,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
 
             EventListenerV2 randomEventListenerV2 =
                 CreateRandomEventListenerV2(randomDateTimeOffset
-                    .AddMinutes(minutes: minutesBeforeAndAfter));
+                    .AddMinutes(minutesBeforeAndAfter));
 
             EventListenerV2 invalidEventListenerV2 = randomEventListenerV2;
 
