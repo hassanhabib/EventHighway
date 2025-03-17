@@ -62,5 +62,11 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
             return await this.listenerEventV2ProcessingService.ModifyListenerEventV2Async(
                 listenerEventV2);
         });
+
+        public async ValueTask<ListenerEventV2> RemoveListenerEventV2ByIdAsync(Guid listenerEventV2Id)
+        {
+            return await this.listenerEventV2ProcessingService
+                .RemoveListenerEventV2ByIdAsync(listenerEventV2Id);
+        }
     }
 }
