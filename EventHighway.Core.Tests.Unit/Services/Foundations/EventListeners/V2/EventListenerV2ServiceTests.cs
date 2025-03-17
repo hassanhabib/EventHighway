@@ -40,6 +40,21 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
+        public static TheoryData<int> MinutesBeforeAndAfterNow()
+        {
+            int randomMoreThanOneMinuteAhead =
+                GetRandomNumber();
+
+            int randomMoreThanOneMinuteAgo =
+                GetRandomNegativeNumber();
+
+            return new TheoryData<int>
+            {
+                randomMoreThanOneMinuteAhead,
+                randomMoreThanOneMinuteAgo
+            };
+        }
+
         private static SqlException GetSqlException()
         {
             return (SqlException)RuntimeHelpers
@@ -65,6 +80,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
 
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
+
+        private static int GetRandomNegativeNumber() =>
+            -1 * GetRandomNumber();
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
