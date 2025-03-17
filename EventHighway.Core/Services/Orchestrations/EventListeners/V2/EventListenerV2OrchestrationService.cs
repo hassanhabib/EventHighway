@@ -47,8 +47,12 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
                 listenerEventV2);
         });
 
-        public async ValueTask<IQueryable<ListenerEventV2>> RetrieveAllListenerEventV2sAsync() =>
-            await this.listenerEventV2ProcessingService.RetrieveAllListenerEventV2sAsync();
+        public ValueTask<IQueryable<ListenerEventV2>> RetrieveAllListenerEventV2sAsync() =>
+        TryCatch(async () =>
+        {
+            return await this.listenerEventV2ProcessingService
+                .RetrieveAllListenerEventV2sAsync();
+        });
 
         public ValueTask<ListenerEventV2> ModifyListenerEventV2Async(ListenerEventV2 listenerEventV2) =>
         TryCatch(async () =>
