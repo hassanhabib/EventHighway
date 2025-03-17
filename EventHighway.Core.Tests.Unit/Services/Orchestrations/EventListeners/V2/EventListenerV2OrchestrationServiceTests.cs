@@ -109,6 +109,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
+        private static IQueryable<ListenerEventV2> CreateRandomListenerEventV2s() =>
+            CreateListenerEventV2Filler().Create(count: GetRandomNumber()).AsQueryable();
+
         private static ListenerEventV2 CreateRandomListenerEventV2() =>
             CreateListenerEventV2Filler().Create();
 
