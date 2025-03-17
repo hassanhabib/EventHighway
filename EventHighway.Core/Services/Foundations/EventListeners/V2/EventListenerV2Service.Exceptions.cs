@@ -90,6 +90,17 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     alreadyExistsEventListenerV2Exception);
             }
+            catch (ForeignKeyConstraintConflictException
+                foreignKeyConstraintConflictException)
+            {
+                var invalidEventListenerV2ReferenceException =
+                    new InvalidEventListenerV2ReferenceException(
+                        message: "Invalid event listener reference error occurred.",
+                        innerException: foreignKeyConstraintConflictException);
+
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    invalidEventListenerV2ReferenceException);
+            }
             catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {
                 var lockedEventListenerV2Exception =
