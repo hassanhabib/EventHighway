@@ -59,6 +59,11 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     invalidEventListenerV2Exception);
             }
+            catch (NullEventListenerV2Exception nullEventListenerV2Exception)
+            {
+                throw await CreateAndLogValidationExceptionAsync(
+                    nullEventListenerV2Exception);
+            }
             catch (NotFoundEventListenerV2Exception notFoundEventListenerV2Exception)
             {
                 throw await CreateAndLogValidationExceptionAsync(

@@ -28,12 +28,13 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<EventListenerV2> AddEventListenerV2Async(EventListenerV2 eventListenerV2)
+        public ValueTask<EventListenerV2> AddEventListenerV2Async(EventListenerV2 eventListenerV2) =>
+        TryCatch(async () =>
         {
-            await this.dateTimeBroker.GetDateTimeOffsetAsync();
+            ValidateEventListenerV2IsNotNull(eventListenerV2);
 
             return await this.storageBroker.InsertEventListenerV2Async(eventListenerV2);
-        }
+        });
 
         public ValueTask<IQueryable<EventListenerV2>> RetrieveAllEventListenerV2sAsync() =>
         TryCatch(async () => await storageBroker.SelectAllEventListenerV2sAsync());

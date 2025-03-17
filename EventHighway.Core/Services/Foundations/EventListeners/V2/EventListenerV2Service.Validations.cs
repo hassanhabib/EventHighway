@@ -30,6 +30,15 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
             }
         }
 
+        private static void ValidateEventListenerV2IsNotNull(EventListenerV2 eventListenerV2)
+        {
+            if (eventListenerV2 is null)
+            {
+                throw new NullEventListenerV2Exception(
+                    message: "Event listener is null.");
+            }
+        }
+
         private static dynamic IsInvalid(Guid id) => new
         {
             Condition = id == Guid.Empty,
