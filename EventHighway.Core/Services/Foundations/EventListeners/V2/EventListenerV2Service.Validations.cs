@@ -45,6 +45,9 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
                     secondDate: eventListenerV2.UpdatedDate,
                     secondDateName: nameof(EventListenerV2.UpdatedDate)),
 
+                Parameter: nameof(EventListenerV2.CreatedDate)),
+
+                (Rule: await IsNotRecentAsync(eventListenerV2.CreatedDate),
                 Parameter: nameof(EventListenerV2.CreatedDate)));
         }
 
@@ -85,7 +88,7 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
 
         private static dynamic IsInvalid(string text) => new
         {
-            Condition = string.IsNullOrWhiteSpace(text),
+            Condition = String.IsNullOrWhiteSpace(value: text),
             Message = "Required"
         };
 
@@ -103,6 +106,22 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
                 Condition = firstDate != secondDate,
                 Message = $"Date is not the same as {secondDateName}"
             };
+
+        private async ValueTask<dynamic> IsNotRecentAsync(DateTimeOffset date) => new
+        {
+            Condition = await IsDateNotRecentAsync(date),
+            Message = "Date is not recent"
+        };
+
+        private async ValueTask<bool> IsDateNotRecentAsync(DateTimeOffset date)
+        {
+            DateTimeOffset currentDateTime =
+                await this.dateTimeBroker.GetDateTimeOffsetAsync();
+
+            TimeSpan timeDifference = currentDateTime.Subtract(value: date);
+
+            return timeDifference.TotalSeconds is > 60 or < 0;
+        }
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
