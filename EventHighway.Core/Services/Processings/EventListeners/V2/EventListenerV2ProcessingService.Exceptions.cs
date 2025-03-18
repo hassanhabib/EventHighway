@@ -42,6 +42,18 @@ namespace EventHighway.Core.Services.Processings.EventListeners.V2
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventListenerV2DependencyValidationException);
             }
+            catch (EventListenerV2DependencyException
+                eventListenerV2DependencyException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(
+                    eventListenerV2DependencyException);
+            }
+            catch (EventListenerV2ServiceException
+                eventListenerV2ServiceException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(
+                    eventListenerV2ServiceException);
+            }
         }
 
         private async ValueTask<IQueryable<EventListenerV2>> TryCatch(
