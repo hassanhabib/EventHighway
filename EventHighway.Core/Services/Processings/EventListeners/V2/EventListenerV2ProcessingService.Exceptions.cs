@@ -30,6 +30,18 @@ namespace EventHighway.Core.Services.Processings.EventListeners.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     nullEventListenerV2ProcessingException);
             }
+            catch (EventListenerV2ValidationException
+                eventListenerV2ValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventListenerV2ValidationException);
+            }
+            catch (EventListenerV2DependencyValidationException
+                eventListenerV2DependencyValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventListenerV2DependencyValidationException);
+            }
         }
 
         private async ValueTask<IQueryable<EventListenerV2>> TryCatch(
@@ -80,6 +92,20 @@ namespace EventHighway.Core.Services.Processings.EventListeners.V2
             await this.loggingBroker.LogErrorAsync(eventListenerV2ProcessingValidationException);
 
             return eventListenerV2ProcessingValidationException;
+        }
+
+        private async ValueTask<EventListenerV2ProcessingDependencyValidationException>
+            CreateAndLogDependencyValidationExceptionAsync(
+                Xeption exception)
+        {
+            var eventListenerV2ProcessingDependencyValidationException =
+                new EventListenerV2ProcessingDependencyValidationException(
+                    message: "Event listener validation error occurred, fix the errors and try again.",
+                    innerException: exception.InnerException as Xeption);
+
+            await this.loggingBroker.LogErrorAsync(eventListenerV2ProcessingDependencyValidationException);
+
+            return eventListenerV2ProcessingDependencyValidationException;
         }
 
         private async ValueTask<EventListenerV2ProcessingDependencyException> CreateAndLogDependencyExceptionAsync(
