@@ -2,9 +2,9 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
-using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 using FluentAssertions;
 using Moq;
@@ -95,6 +95,55 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogErrorAsync(It.Is(SameExceptionAs(
                     expectedEventListenerV2OrchestrationDependencyException))),
+                        Times.Once);
+
+            this.eventListenerV2ProcessingServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.listenerEventV2ProcessingServiceMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnAddIfExceptionOccursAndLogItAsync()
+        {
+            // given
+            EventListenerV2 someEventListenerV2 = CreateRandomEventListenerV2();
+            var serviceException = new Exception();
+
+            var failedEventListenerV2OrchestrationServiceException =
+                new FailedEventListenerV2OrchestrationServiceException(
+                    message: "Failed event listener service error occurred, contact support.",
+                    innerException: serviceException);
+
+            var expectedEventListenerV2OrchestrationExceptionException =
+                new EventListenerV2OrchestrationServiceException(
+                    message: "Event listener service error occurred, contact support.",
+                    innerException: failedEventListenerV2OrchestrationServiceException);
+
+            this.eventListenerV2ProcessingServiceMock.Setup(service =>
+                service.AddEventListenerV2Async(It.IsAny<EventListenerV2>()))
+                    .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<EventListenerV2> addEventListenerV2Task =
+                this.eventListenerV2OrchestrationService.AddEventListenerV2Async(
+                    someEventListenerV2);
+
+            EventListenerV2OrchestrationServiceException
+                actualEventListenerV2OrchestrationServiceException =
+                    await Assert.ThrowsAsync<EventListenerV2OrchestrationServiceException>(
+                        addEventListenerV2Task.AsTask);
+
+            // then
+            actualEventListenerV2OrchestrationServiceException.Should()
+                .BeEquivalentTo(expectedEventListenerV2OrchestrationExceptionException);
+
+            this.eventListenerV2ProcessingServiceMock.Verify(service =>
+                service.AddEventListenerV2Async(It.IsAny<EventListenerV2>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventListenerV2OrchestrationExceptionException))),
                         Times.Once);
 
             this.eventListenerV2ProcessingServiceMock.VerifyNoOtherCalls();
