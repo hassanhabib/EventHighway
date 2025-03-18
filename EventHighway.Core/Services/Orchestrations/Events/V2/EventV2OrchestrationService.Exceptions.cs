@@ -17,6 +17,7 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
     internal partial class EventV2OrchestrationService
     {
         private delegate ValueTask<IQueryable<EventV2>> ReturningEventV2sFunction();
+        private delegate ValueTask<EventV2> ReturningEventV2Function();
         private delegate ValueTask<EventCallV2> ReturningEventCallV2Function();
 
         private async ValueTask<IQueryable<EventV2>> TryCatch(ReturningEventV2sFunction returningEventV2sFunction)
@@ -41,6 +42,18 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
                         innerException: exception);
 
                 throw await CreateAndLogServiceExceptionAsync(failedEventV2OrchestrationServiceException);
+            }
+        }
+        
+        private async ValueTask<EventV2> TryCatch(ReturningEventV2Function returningEventV2Function)
+        {
+            try
+            {
+                return await returningEventV2Function();
+            }
+            catch (InvalidEventV2OrchestrationException invalidEventV2OrchestrationException)
+            {
+                throw await CreateAndLogValidationExceptionAsync(invalidEventV2OrchestrationException);
             }
         }
 
