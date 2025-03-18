@@ -62,6 +62,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventListeners.V2
         private static IQueryable<EventListenerV2> CreateRandomEventListenerV2s() =>
             CreateEventListenerV2Filler().Create(count: GetRandomNumber()).AsQueryable();
 
+        private static EventListenerV2 CreateRandomEventListenerV2() =>
+            CreateEventListenerV2Filler().Create();
+
         private static IQueryable<EventListenerV2> CreateRandomEventListenerV2s(
             Guid eventAddressId)
         {
