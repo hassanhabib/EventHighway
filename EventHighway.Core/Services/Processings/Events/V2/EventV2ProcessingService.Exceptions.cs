@@ -50,7 +50,18 @@ namespace EventHighway.Core.Services.Processings.Events.V2
             }
             catch (InvalidEventV2ProcessingException invalidEventV2ProcessingException)
             {
-                throw await CreateAndLogValidationExceptionAsync(invalidEventV2ProcessingException);
+                throw await CreateAndLogValidationExceptionAsync(
+                    invalidEventV2ProcessingException);
+            }
+            catch (EventV2ValidationException eventV2ValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventV2ValidationException);
+            }
+            catch (EventV2DependencyValidationException eventV2DependencyValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventV2DependencyValidationException);
             }
         }
 
@@ -65,6 +76,20 @@ namespace EventHighway.Core.Services.Processings.Events.V2
             await this.loggingBroker.LogErrorAsync(eventV2ProcessingValidationException);
 
             return eventV2ProcessingValidationException;
+        }
+
+        private async ValueTask<EventV2ProcessingDependencyValidationException>
+            CreateAndLogDependencyValidationExceptionAsync(
+                Xeption exception)
+        {
+            var eventV2ProcessingDependencyValidationException =
+                new EventV2ProcessingDependencyValidationException(
+                    message: "Event validation error occurred, fix the errors and try again.",
+                    innerException: exception.InnerException as Xeption);
+
+            await this.loggingBroker.LogErrorAsync(eventV2ProcessingDependencyValidationException);
+
+            return eventV2ProcessingDependencyValidationException;
         }
 
         private async ValueTask<EventV2ProcessingDependencyException> CreateAndLogDependencyExceptionAsync(
