@@ -44,7 +44,7 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
                 throw await CreateAndLogServiceExceptionAsync(failedEventV2OrchestrationServiceException);
             }
         }
-        
+
         private async ValueTask<EventV2> TryCatch(ReturningEventV2Function returningEventV2Function)
         {
             try
@@ -54,6 +54,17 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
             catch (InvalidEventV2OrchestrationException invalidEventV2OrchestrationException)
             {
                 throw await CreateAndLogValidationExceptionAsync(invalidEventV2OrchestrationException);
+            }
+            catch (EventV2ProcessingValidationException eventV2ProcessingValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventV2ProcessingValidationException);
+            }
+            catch (EventV2ProcessingDependencyValidationException
+                eventV2ProcessingDependencyValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventV2ProcessingDependencyValidationException);
             }
         }
 
