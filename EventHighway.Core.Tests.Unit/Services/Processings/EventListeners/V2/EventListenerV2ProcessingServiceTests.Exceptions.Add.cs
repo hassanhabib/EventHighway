@@ -55,5 +55,48 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventListeners.V2
             this.eventListenerV2ServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Theory]
+        [MemberData(nameof(DependencyExceptions))]
+        public async Task ShouldThrowDependencyExceptionOnAddIfDependencyExceptionOccursAndLogItAsync(
+            Xeption dependencyException)
+        {
+            // given
+            EventListenerV2 someEventListenerV2 = CreateRandomEventListenerV2();
+
+            var expectedEventListenerV2ProcessingDependencyException =
+                new EventListenerV2ProcessingDependencyException(
+                    message: "Event listener dependency error occurred, contact support.",
+                    innerException: dependencyException.InnerException as Xeption);
+
+            this.eventListenerV2ServiceMock.Setup(service =>
+                service.AddEventListenerV2Async(It.IsAny<EventListenerV2>()))
+                    .ThrowsAsync(dependencyException);
+
+            // when
+            ValueTask<EventListenerV2> addEventListenerV2Task =
+                this.eventListenerV2ProcessingService.AddEventListenerV2Async(someEventListenerV2);
+
+            EventListenerV2ProcessingDependencyException
+                actualEventListenerV2ProcessingDependencyException =
+                    await Assert.ThrowsAsync<EventListenerV2ProcessingDependencyException>(
+                        addEventListenerV2Task.AsTask);
+
+            // then
+            actualEventListenerV2ProcessingDependencyException.Should()
+                .BeEquivalentTo(expectedEventListenerV2ProcessingDependencyException);
+
+            this.eventListenerV2ServiceMock.Verify(service =>
+                service.AddEventListenerV2Async(It.IsAny<EventListenerV2>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventListenerV2ProcessingDependencyException))),
+                        Times.Once);
+
+            this.eventListenerV2ServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
