@@ -78,6 +78,23 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
             };
         }
 
+        public static TheoryData<Xeption> EventV2ValidationExceptions()
+        {
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            return new TheoryData<Xeption>
+            {
+                new EventV2ProcessingValidationException(
+                    someMessage,
+                    someInnerException),
+
+                new EventV2ProcessingDependencyValidationException(
+                    someMessage,
+                    someInnerException),
+            };
+        }
+        
         public static TheoryData<Xeption> EventV2DependencyExceptions()
         {
             string someMessage = GetRandomString();
