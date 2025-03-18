@@ -54,6 +54,16 @@ namespace EventHighway.Core.Services.Processings.EventListeners.V2
                 throw await CreateAndLogDependencyExceptionAsync(
                     eventListenerV2ServiceException);
             }
+            catch (Exception exception)
+            {
+                var failedEventListenerV2ProcessingServiceException =
+                    new FailedEventListenerV2ProcessingServiceException(
+                        message: "Failed event listener service error occurred, contact support.",
+                        innerException: exception);
+
+                throw await CreateAndLogServiceExceptionAsync(
+                    failedEventListenerV2ProcessingServiceException);
+            }
         }
 
         private async ValueTask<IQueryable<EventListenerV2>> TryCatch(
