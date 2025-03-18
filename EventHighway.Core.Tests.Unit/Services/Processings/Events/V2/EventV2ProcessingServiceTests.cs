@@ -57,6 +57,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
+        private static Guid GetRandomId() =>
+            Guid.NewGuid();
+
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
@@ -65,6 +68,14 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
 
         private static int GetNegativeRandomNumber() =>
             -1 * GetRandomNumber();
+
+        private static EventV2 CreateRandomEventV2()
+        {
+            return CreateEventV2Filler(
+                dates: GetRandomDateTimeOffset(),
+                eventV2Type: EventV2Type.Immediate)
+                    .Create();
+        }
 
         private static IQueryable<EventV2> CreateRandomEventV2s()
         {
