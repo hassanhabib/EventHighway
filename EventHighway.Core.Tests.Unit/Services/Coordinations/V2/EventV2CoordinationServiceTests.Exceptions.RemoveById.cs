@@ -103,5 +103,54 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.eventListenerV2OrchestrationServiceMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRemoveByIdIfExceptionOccursAndLogItAsync()
+        {
+            // given
+            Guid someEventV2Id = GetRandomId();
+            var serviceException = new Exception();
+
+            var failedEventV2CoordinationServiceException =
+                new FailedEventV2CoordinationServiceException(
+                    message: "Failed event service error occurred, contact support.",
+                    innerException: serviceException);
+
+            var expectedEventV2CoordinationExceptionException =
+                new EventV2CoordinationServiceException(
+                    message: "Event service error occurred, contact support.",
+                    innerException: failedEventV2CoordinationServiceException);
+
+            this.eventV2OrchestrationServiceMock.Setup(service =>
+                service.RemoveEventV2ByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<EventV2> addEventV2Task =
+                this.eventV2CoordinationService.RemoveEventV2ByIdAsync(
+                    someEventV2Id);
+
+            EventV2CoordinationServiceException
+                actualEventV2CoordinationServiceException =
+                    await Assert.ThrowsAsync<EventV2CoordinationServiceException>(
+                        addEventV2Task.AsTask);
+
+            // then
+            actualEventV2CoordinationServiceException.Should()
+                .BeEquivalentTo(expectedEventV2CoordinationExceptionException);
+
+            this.eventV2OrchestrationServiceMock.Verify(service =>
+                service.RemoveEventV2ByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventV2CoordinationExceptionException))),
+                        Times.Once);
+
+            this.eventV2OrchestrationServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.eventListenerV2OrchestrationServiceMock.VerifyNoOtherCalls();
+        }
     }
 }

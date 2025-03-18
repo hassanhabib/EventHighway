@@ -2,12 +2,12 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
-using Moq;
-using System.Threading.Tasks;
 using System;
+using System.Threading.Tasks;
+using EventHighway.Core.Models.Services.Foundations.Events.V2;
 using FluentAssertions;
 using Force.DeepCloner;
+using Moq;
 
 namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 {
