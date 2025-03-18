@@ -34,8 +34,20 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     nullEventListenerV2OrchestrationException);
             }
+            catch (EventListenerV2ProcessingValidationException
+                eventListenerV2ProcessingValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventListenerV2ProcessingValidationException);
+            }
+            catch (EventListenerV2ProcessingDependencyValidationException
+                eventListenerV2ProcessingDependencyValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventListenerV2ProcessingDependencyValidationException);
+            }
         }
-        
+
         private async ValueTask<IQueryable<EventListenerV2>> TryCatch(
             ReturningEventListenerV2sFunction returningEventListenerV2sFunction)
         {
