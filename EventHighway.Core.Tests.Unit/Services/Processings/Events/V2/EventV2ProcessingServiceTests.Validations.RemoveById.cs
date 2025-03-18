@@ -2,14 +2,12 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
-using EventHighway.Core.Models.Services.Processings.ListenerEvents.V2.Exceptions;
-using Moq;
-using System.Threading.Tasks;
 using System;
+using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.Events.V2;
 using EventHighway.Core.Models.Services.Processings.Events.V2.Exceptions;
 using FluentAssertions;
+using Moq;
 
 namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
 {
