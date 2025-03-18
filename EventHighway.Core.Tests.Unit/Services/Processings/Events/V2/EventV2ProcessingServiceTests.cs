@@ -37,7 +37,24 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                     loggingBroker: this.loggingBrokerMock.Object);
         }
 
-        public static TheoryData<Xeption> EventV2DependencyExceptions()
+        public static TheoryData<Xeption> ValidationExceptions()
+        {
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            return new TheoryData<Xeption>
+            {
+                new EventV2ValidationException(
+                    someMessage,
+                    someInnerException),
+
+                new EventV2DependencyValidationException(
+                    someMessage,
+                    someInnerException),
+            };
+        }
+        
+        public static TheoryData<Xeption> DependencyExceptions()
         {
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();

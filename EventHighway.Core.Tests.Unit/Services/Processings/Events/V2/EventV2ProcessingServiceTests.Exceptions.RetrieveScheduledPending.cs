@@ -16,7 +16,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
     public partial class EventV2ProcessingServiceTests
     {
         [Theory]
-        [MemberData(nameof(EventV2DependencyExceptions))]
+        [MemberData(nameof(DependencyExceptions))]
         public async Task ShouldThrowDependencyExceptionOnRetrieveScheduledPendingIfEventV2DependencyAndLogItAsync(
             Xeption eventV2DependencyException)
         {
