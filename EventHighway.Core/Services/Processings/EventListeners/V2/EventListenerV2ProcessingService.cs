@@ -43,5 +43,14 @@ namespace EventHighway.Core.Services.Processings.EventListeners.V2
             return eventListenerV2s.Where(eventListenerV2 =>
                 eventListenerV2.EventAddressId == eventAddressId);
         });
+
+        public ValueTask<EventListenerV2> RemoveEventListenerV2ByIdAsync(Guid eventListenerV2Id) =>
+        TryCatch(async () =>
+        {
+            ValidateEventListenerV2Id(eventListenerV2Id);
+
+            return await this.eventListenerV2Service.RemoveEventListenerV2ByIdAsync(
+                eventListenerV2Id);
+        });
     }
 }
