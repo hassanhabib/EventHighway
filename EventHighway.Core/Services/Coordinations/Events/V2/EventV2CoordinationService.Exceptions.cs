@@ -104,6 +104,14 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventV2OrchestrationDependencyValidationException);
             }
+            catch (EventV2OrchestrationDependencyException eventV2OrchestrationDependencyException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(eventV2OrchestrationDependencyException);
+            }
+            catch (EventV2OrchestrationServiceException eventV2OrchestrationServiceException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(eventV2OrchestrationServiceException);
+            }
         }
 
         private async ValueTask<EventV2CoordinationValidationException> CreateAndLogValidationExceptionAsync(
