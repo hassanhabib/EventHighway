@@ -32,6 +32,8 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
         public ValueTask<EventListenerV2> AddEventListenerV2Async(EventListenerV2 eventListenerV2) =>
         TryCatch(async () =>
         {
+            ValidateEventListenerV2IsNotNull(eventListenerV2);
+
             return await this.eventListenerV2ProcessingService.AddEventListenerV2Async(
                 eventListenerV2);
         });
