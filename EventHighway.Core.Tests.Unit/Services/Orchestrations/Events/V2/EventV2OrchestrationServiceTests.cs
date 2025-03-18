@@ -98,6 +98,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
+        private static Guid GetRandomId() =>
+            Guid.NewGuid();
+
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
@@ -119,6 +122,12 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
             return CreateEventV2Filler()
                 .Create(count: GetRandomNumber())
                     .AsQueryable();
+        }
+        
+        private static EventV2 CreateRandomEventV2()
+        {
+            return CreateEventV2Filler()
+                .Create();
         }
 
         private static Filler<EventCallV2> CreateEventCallV2Filler() =>
