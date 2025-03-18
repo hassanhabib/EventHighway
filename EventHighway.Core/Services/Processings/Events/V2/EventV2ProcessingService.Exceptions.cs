@@ -15,6 +15,7 @@ namespace EventHighway.Core.Services.Processings.Events.V2
     internal partial class EventV2ProcessingService
     {
         private delegate ValueTask<IQueryable<EventV2>> ReturningEventV2sFunction();
+        private delegate ValueTask<EventV2> ReturningEventV2Function();
 
         private async ValueTask<IQueryable<EventV2>> TryCatch(ReturningEventV2sFunction returningEventV2sFunction)
         {
@@ -39,6 +40,31 @@ namespace EventHighway.Core.Services.Processings.Events.V2
 
                 throw await CreateAndLogServiceExceptionAsync(failedEventV2ProcessingServiceException);
             }
+        }
+
+        private async ValueTask<EventV2> TryCatch(ReturningEventV2Function returningEventV2Function)
+        {
+            try
+            {
+                return await returningEventV2Function();
+            }
+            catch (InvalidEventV2ProcessingException invalidEventV2ProcessingException)
+            {
+                throw await CreateAndLogValidationExceptionAsync(invalidEventV2ProcessingException);
+            }
+        }
+
+        private async ValueTask<EventV2ProcessingValidationException> CreateAndLogValidationExceptionAsync(
+            Xeption exception)
+        {
+            var eventV2ProcessingValidationException =
+                new EventV2ProcessingValidationException(
+                    message: "Event validation error occurred, fix the errors and try again.",
+                    innerException: exception);
+
+            await this.loggingBroker.LogErrorAsync(eventV2ProcessingValidationException);
+
+            return eventV2ProcessingValidationException;
         }
 
         private async ValueTask<EventV2ProcessingDependencyException> CreateAndLogDependencyExceptionAsync(
