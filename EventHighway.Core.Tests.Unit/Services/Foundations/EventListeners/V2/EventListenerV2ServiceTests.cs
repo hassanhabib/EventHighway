@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Storages;
+using EventHighway.Core.Brokers.Times;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
 using EventHighway.Core.Services.Foundations.EventListeners.V2;
 using Microsoft.Data.SqlClient;
@@ -21,20 +22,38 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
+        private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly IEventListenerV2Service eventListenerV2Service;
 
         public EventListenerV2ServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
+            this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
 
             this.eventListenerV2Service = new EventListenerV2Service(
                 storageBroker: this.storageBrokerMock.Object,
+                dateTimeBroker: this.dateTimeBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
 
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
+
+        public static TheoryData<int> MinutesBeforeAndAfterNow()
+        {
+            int randomMoreThanOneMinuteAhead =
+                GetRandomNumber();
+
+            int randomMoreThanOneMinuteAgo =
+                GetRandomNegativeNumber();
+
+            return new TheoryData<int>
+            {
+                randomMoreThanOneMinuteAhead,
+                randomMoreThanOneMinuteAgo
+            };
+        }
 
         private static SqlException GetSqlException()
         {
@@ -45,24 +64,38 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
         private static Guid GetRandomId() =>
             Guid.NewGuid();
 
-        private static IQueryable<EventListenerV2> CreateRandomEventListenerV2s() =>
-            CreateEventListenerV2Filler().Create(count: GetRandomNumber()).AsQueryable();
+        private static IQueryable<EventListenerV2> CreateRandomEventListenerV2s()
+        {
+            return CreateEventListenerV2Filler(
+                dates: GetRandomDateTimeOffset())
+                    .Create(count: GetRandomNumber())
+                        .AsQueryable();
+        }
 
         private static EventListenerV2 CreateRandomEventListenerV2() =>
-            CreateEventListenerV2Filler().Create();
+            CreateEventListenerV2Filler(dates: GetRandomDateTimeOffset()).Create();
+
+        private static EventListenerV2 CreateRandomEventListenerV2(DateTimeOffset dates) =>
+            CreateEventListenerV2Filler(dates).Create();
+
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
 
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
 
-        private static DateTimeOffset CreateRandomDateTime() =>
+        private static int GetRandomNegativeNumber() =>
+            -1 * GetRandomNumber();
+
+        private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
-        private static Filler<EventListenerV2> CreateEventListenerV2Filler()
+        private static Filler<EventListenerV2> CreateEventListenerV2Filler(DateTimeOffset dates)
         {
             var filler = new Filler<EventListenerV2>();
 
             filler.Setup()
-                .OnType<DateTimeOffset>().Use(CreateRandomDateTime)
+                .OnType<DateTimeOffset>().Use(dates)
 
                 .OnProperty(eventListenerV2 =>
                     eventListenerV2.EventAddress).IgnoreIt()
