@@ -46,11 +46,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                     inputListenerEventId),
                         Times.Once);
 
-            this.eventV2ServiceMock
-                .VerifyNoOtherCalls();
-
-            this.loggingBrokerMock
-                .VerifyNoOtherCalls();
+            this.eventV2ServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }

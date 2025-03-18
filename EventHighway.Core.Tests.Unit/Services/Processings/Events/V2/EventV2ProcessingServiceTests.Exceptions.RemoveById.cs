@@ -101,5 +101,53 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
             this.eventV2ServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRemoveByIdIfExceptionOccursAndLogItAsync()
+        {
+            // given
+            Guid someEventV2Id = GetRandomId();
+            var serviceException = new Exception();
+
+            var failedEventV2ProcessingServiceException =
+                new FailedEventV2ProcessingServiceException(
+                    message: "Failed event service error occurred, contact support.",
+                    innerException: serviceException);
+
+            var expectedEventV2ProcessingExceptionException =
+                new EventV2ProcessingServiceException(
+                    message: "Event service error occurred, contact support.",
+                    innerException: failedEventV2ProcessingServiceException);
+
+            this.eventV2ServiceMock.Setup(service =>
+                service.RemoveEventV2ByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<EventV2> addEventV2Task =
+                this.eventV2ProcessingService.RemoveEventV2ByIdAsync(
+                    someEventV2Id);
+
+            EventV2ProcessingServiceException
+                actualEventV2ProcessingServiceException =
+                    await Assert.ThrowsAsync<EventV2ProcessingServiceException>(
+                        addEventV2Task.AsTask);
+
+            // then
+            actualEventV2ProcessingServiceException.Should()
+                .BeEquivalentTo(expectedEventV2ProcessingExceptionException);
+
+            this.eventV2ServiceMock.Verify(service =>
+                service.RemoveEventV2ByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventV2ProcessingExceptionException))),
+                        Times.Once);
+
+            this.eventV2ServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
