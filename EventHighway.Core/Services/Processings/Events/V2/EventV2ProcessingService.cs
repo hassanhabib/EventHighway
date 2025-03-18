@@ -41,5 +41,14 @@ namespace EventHighway.Core.Services.Processings.Events.V2
                 eventV2.Type == EventV2Type.Scheduled &&
                 eventV2.ScheduledDate < now);
         });
+
+        public ValueTask<EventV2> RemoveEventV2ByIdAsync(Guid eventV2Id) =>
+        TryCatch(async () =>
+        {
+            ValidateEventV2Id(eventV2Id);
+
+            return await this.eventV2Service.RemoveEventV2ByIdAsync(
+                eventV2Id);
+        });
     }
 }
