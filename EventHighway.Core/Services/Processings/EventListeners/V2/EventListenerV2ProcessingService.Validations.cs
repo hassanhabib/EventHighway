@@ -17,6 +17,15 @@ namespace EventHighway.Core.Services.Processings.EventListeners.V2
                 Parameter: nameof(EventListenerV2.EventAddressId)));
         }
 
+        private static void ValidateEventListenerV2IsNotNull(EventListenerV2 eventListenerV2)
+        {
+            if (eventListenerV2 is null)
+            {
+                throw new NullEventListenerV2ProcessingException(
+                    message: "Event listener is null.");
+            }
+        }
+
         private static dynamic IsInvalid(Guid id) => new
         {
             Condition = id == Guid.Empty,

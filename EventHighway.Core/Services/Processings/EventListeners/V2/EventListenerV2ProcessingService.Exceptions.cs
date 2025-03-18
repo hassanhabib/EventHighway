@@ -14,7 +14,23 @@ namespace EventHighway.Core.Services.Processings.EventListeners.V2
 {
     internal partial class EventListenerV2ProcessingService
     {
+        private delegate ValueTask<EventListenerV2> ReturningEventListenerV2Function();
         private delegate ValueTask<IQueryable<EventListenerV2>> ReturningEventListenerV2sFunction();
+
+        private async ValueTask<EventListenerV2> TryCatch(
+            ReturningEventListenerV2Function returningEventListenerV2Function)
+        {
+            try
+            {
+                return await returningEventListenerV2Function();
+            }
+            catch (NullEventListenerV2ProcessingException
+                nullEventListenerV2ProcessingException)
+            {
+                throw await CreateAndLogValidationExceptionAsync(
+                    nullEventListenerV2ProcessingException);
+            }
+        }
 
         private async ValueTask<IQueryable<EventListenerV2>> TryCatch(
             ReturningEventListenerV2sFunction returningEventListenerV2sFunction)
