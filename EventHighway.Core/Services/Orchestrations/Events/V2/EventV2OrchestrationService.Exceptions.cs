@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
 using EventHighway.Core.Models.Services.Foundations.Events.V2;
 using EventHighway.Core.Models.Services.Orchestrations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Processings.EventAddresses.V2.Exceptions;
 using EventHighway.Core.Models.Services.Processings.EventCalls.V2.Exceptions;
 using EventHighway.Core.Models.Services.Processings.Events.V2.Exceptions;
 using Xeptions;
@@ -16,8 +17,41 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
 {
     internal partial class EventV2OrchestrationService
     {
+        private delegate ValueTask<EventV2> ReturningEventV2Function();
         private delegate ValueTask<IQueryable<EventV2>> ReturningEventV2sFunction();
         private delegate ValueTask<EventCallV2> ReturningEventCallV2Function();
+
+        private async ValueTask<EventV2> TryCatch(ReturningEventV2Function returningEventV2Function)
+        {
+            try
+            {
+                return await returningEventV2Function();
+            }
+            catch (EventV2ProcessingValidationException
+                eventV2ProcessingValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventV2ProcessingValidationException);
+            }
+            catch (EventV2ProcessingDependencyValidationException
+                eventV2ProcessingDependencyValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventV2ProcessingDependencyValidationException);
+            }
+            catch (EventAddressV2ProcessingValidationException
+                eventAddressV2ProcessingValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventAddressV2ProcessingValidationException);
+            }
+            catch (EventAddressV2ProcessingDependencyValidationException
+                eventAddressV2ProcessingDependencyValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventAddressV2ProcessingDependencyValidationException);
+            }
+        }
 
         private async ValueTask<IQueryable<EventV2>> TryCatch(ReturningEventV2sFunction returningEventV2sFunction)
         {

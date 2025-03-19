@@ -32,14 +32,15 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<EventV2> SubmitEventV2Async(EventV2 eventV2)
+        public ValueTask<EventV2> SubmitEventV2Async(EventV2 eventV2) =>
+        TryCatch(async () =>
         {
             _ = await this.eventAddressV2ProcessingService
                 .RetrieveEventAddressV2ByIdAsync(eventV2.EventAddressId);
 
             return await this.eventV2ProcessingService
                 .AddEventV2Async(eventV2);
-        }
+        });
 
         public ValueTask<IQueryable<EventV2>> RetrieveScheduledPendingEventV2sAsync() =>
         TryCatch(async () =>
