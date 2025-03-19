@@ -21,12 +21,14 @@ namespace EventHighway.Core.Services.Processings.EventAddresses.V2
             {
                 return await returningEventAddressV2Function();
             }
-            catch (InvalidEventAddressV2ProcessingException invalidEventAddressV2ProcessingException)
+            catch (InvalidEventAddressV2ProcessingException
+                invalidEventAddressV2ProcessingException)
             {
                 throw await CreateAndLogValidationExceptionAsync(
                     invalidEventAddressV2ProcessingException);
             }
-            catch (EventAddressV2ValidationException eventAddressV2ValidationException)
+            catch (EventAddressV2ValidationException 
+                eventAddressV2ValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventAddressV2ValidationException);
@@ -36,6 +38,18 @@ namespace EventHighway.Core.Services.Processings.EventAddresses.V2
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventAddressV2DependencyValidationException);
+            }
+            catch (EventAddressV2DependencyException
+                eventAddressV2DependencyException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(
+                    eventAddressV2DependencyException);
+            }
+            catch (EventAddressV2ServiceException
+                eventAddressV2ServiceException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(
+                    eventAddressV2ServiceException);
             }
         }
 
