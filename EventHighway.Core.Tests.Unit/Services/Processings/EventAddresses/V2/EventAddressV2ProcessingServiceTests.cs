@@ -3,12 +3,14 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
 using EventHighway.Core.Services.Foundations.EventAddresses.V2;
 using EventHighway.Core.Services.Processings.EventAddresses.V2;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace EventHighway.Core.Tests.Unit.Services.Processings.EventAddresses.V2
 {
@@ -30,6 +32,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventAddresses.V2
                     eventAddressV2Service: this.eventAddressV2ServiceMock.Object,
                     loggingBroker: this.loggingBrokerMock.Object);
         }
+
+        private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
