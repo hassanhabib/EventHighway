@@ -28,6 +28,11 @@ namespace EventHighway.Core.Services.Processings.Events.V2
             this.loggingBroker = loggingBroker;
         }
 
+        public async ValueTask<EventV2> AddEventV2Async(EventV2 eventV2)
+        {
+            return await this.eventV2Service.AddEventV2Async(eventV2);
+        }
+
         public ValueTask<IQueryable<EventV2>> RetrieveScheduledPendingEventV2sAsync() =>
         TryCatch(async () =>
         {
