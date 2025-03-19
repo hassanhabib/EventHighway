@@ -53,6 +53,30 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventListenerV2OrchestrationDependencyValidationException);
             }
+            catch (EventV2OrchestrationDependencyException
+                eventV2OrchestrationDependencyException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(
+                    eventV2OrchestrationDependencyException);
+            }
+            catch (EventV2OrchestrationServiceException
+                eventV2OrchestrationServiceException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(
+                    eventV2OrchestrationServiceException);
+            }
+            catch (EventListenerV2OrchestrationDependencyException
+                eventListenerV2OrchestrationDependencyException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(
+                    eventListenerV2OrchestrationDependencyException);
+            }
+            catch (EventListenerV2OrchestrationServiceException
+                eventListenerV2OrchestrationServiceException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(
+                    eventListenerV2OrchestrationServiceException);
+            }
         }
 
         private async ValueTask TryCatch(ReturningNothingFunction returningNothingFunction)
