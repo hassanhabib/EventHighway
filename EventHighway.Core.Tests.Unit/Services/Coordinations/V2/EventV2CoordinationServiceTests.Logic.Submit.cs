@@ -189,27 +189,21 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                     inputImmediateEventV2.EventAddressId),
                         Times.Once);
 
-            foreach (ListenerEventV2 expectedListenerEventV2 in inputListenerEventV2s)
+            for (int index = 0; index < inputListenerEventV2s.Count; index++)
             {
                 this.eventListenerV2OrchestrationServiceMock.Verify(service =>
                     service.AddListenerEventV2Async(
-                        It.Is(SameListenerEventAs(expectedListenerEventV2))),
+                        It.Is(SameListenerEventAs(inputListenerEventV2s[index]))),
                             Times.Once);
-            }
 
-            foreach (EventCallV2 expectedCallEventV2 in expectedCallEventV2s)
-            {
                 this.eventV2OrchestrationServiceMock.Verify(service =>
                     service.RunEventCallV2Async(
-                        It.Is(SameEventCallAs(expectedCallEventV2))),
+                        It.Is(SameEventCallAs(expectedCallEventV2s[index]))),
                             Times.Once);
-            }
 
-            foreach (ListenerEventV2 expectedListenerEventV2 in expectedListenerEventV2s)
-            {
                 this.eventListenerV2OrchestrationServiceMock.Verify(service =>
                     service.ModifyListenerEventV2Async(
-                        It.Is(SameListenerEventAs(expectedListenerEventV2))),
+                        It.Is(SameListenerEventAs(expectedListenerEventV2s[index]))),
                             Times.Once);
             }
 
