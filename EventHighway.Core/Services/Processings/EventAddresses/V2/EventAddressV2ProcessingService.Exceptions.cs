@@ -4,6 +4,7 @@
 
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.Exceptions;
 using EventHighway.Core.Models.Services.Processings.EventAddresses.V2.Exceptions;
 using Xeptions;
 
@@ -24,6 +25,17 @@ namespace EventHighway.Core.Services.Processings.EventAddresses.V2
             {
                 throw await CreateAndLogValidationExceptionAsync(
                     invalidEventAddressV2ProcessingException);
+            }
+            catch (EventAddressV2ValidationException eventAddressV2ValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventAddressV2ValidationException);
+            }
+            catch (EventAddressV2DependencyValidationException
+                eventAddressV2DependencyValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventAddressV2DependencyValidationException);
             }
         }
 
@@ -47,7 +59,7 @@ namespace EventHighway.Core.Services.Processings.EventAddresses.V2
             var eventAddressV2ProcessingDependencyValidationException =
                 new EventAddressV2ProcessingDependencyValidationException(
                     message: "Event address validation error occurred, fix the errors and try again.",
-                    innerException: exception);
+                    innerException: exception.InnerException as Xeption);
 
             await this.loggingBroker.LogErrorAsync(eventAddressV2ProcessingDependencyValidationException);
 
@@ -60,7 +72,7 @@ namespace EventHighway.Core.Services.Processings.EventAddresses.V2
             var eventAddressV2ProcessingDependencyException =
                 new EventAddressV2ProcessingDependencyException(
                     message: "Event address dependency error occurred, contact support.",
-                    innerException: exception);
+                    innerException: exception.InnerException as Xeption);
 
             await this.loggingBroker.LogErrorAsync(eventAddressV2ProcessingDependencyException);
 
