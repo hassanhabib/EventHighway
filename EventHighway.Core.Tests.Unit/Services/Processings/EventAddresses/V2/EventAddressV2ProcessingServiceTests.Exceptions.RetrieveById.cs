@@ -57,5 +57,49 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventAddresses.V2
             this.eventAddressV2ServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Theory]
+        [MemberData(nameof(DependencyExceptions))]
+        public async Task ShouldThrowDependencyExceptionOnRetrieveByIdIfDependencyExceptionOccursAndLogItAsync(
+            Xeption dependencyException)
+        {
+            // given
+            Guid someEventAddressV2Id = GetRandomId();
+
+            var expectedEventAddressV2ProcessingDependencyException =
+                new EventAddressV2ProcessingDependencyException(
+                    message: "Event address dependency error occurred, contact support.",
+                    innerException: dependencyException.InnerException as Xeption);
+
+            this.eventAddressV2ServiceMock.Setup(service =>
+                service.RetrieveEventAddressV2ByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(dependencyException);
+
+            // when
+            ValueTask<EventAddressV2> retrieveEventAddressV2ByIdTask =
+                this.eventAddressV2ProcessingService.RetrieveEventAddressV2ByIdAsync(
+                    someEventAddressV2Id);
+
+            EventAddressV2ProcessingDependencyException
+                actualEventAddressV2ProcessingDependencyException =
+                    await Assert.ThrowsAsync<EventAddressV2ProcessingDependencyException>(
+                        retrieveEventAddressV2ByIdTask.AsTask);
+
+            // then
+            actualEventAddressV2ProcessingDependencyException.Should()
+                .BeEquivalentTo(expectedEventAddressV2ProcessingDependencyException);
+
+            this.eventAddressV2ServiceMock.Verify(service =>
+                service.RetrieveEventAddressV2ByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventAddressV2ProcessingDependencyException))),
+                        Times.Once);
+
+            this.eventAddressV2ServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
