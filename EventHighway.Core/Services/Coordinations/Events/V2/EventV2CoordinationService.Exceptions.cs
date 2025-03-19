@@ -77,6 +77,16 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
                 throw await CreateAndLogDependencyExceptionAsync(
                     eventListenerV2OrchestrationServiceException);
             }
+            catch (Exception exception)
+            {
+                var failedEventV2CoordinationServiceException =
+                    new FailedEventV2CoordinationServiceException(
+                        message: "Failed event service error occurred, contact support.",
+                        innerException: exception);
+
+                throw await CreateAndLogServiceExceptionAsync(
+                    failedEventV2CoordinationServiceException);
+            }
         }
 
         private async ValueTask TryCatch(ReturningNothingFunction returningNothingFunction)

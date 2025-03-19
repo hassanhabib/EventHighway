@@ -30,13 +30,13 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                     innerException: nullEventV2CoordinationException);
 
             // when
-            ValueTask<EventV2> addEventV2Task =
+            ValueTask<EventV2> submitEventV2Task =
                 this.eventV2CoordinationService.SubmitEventV2Async(nullEventV2);
 
             EventV2CoordinationValidationException
                 actualEventV2CoordinationValidationException =
                     await Assert.ThrowsAsync<EventV2CoordinationValidationException>(
-                        addEventV2Task.AsTask);
+                        submitEventV2Task.AsTask);
 
             // then
             actualEventV2CoordinationValidationException.Should().BeEquivalentTo(
