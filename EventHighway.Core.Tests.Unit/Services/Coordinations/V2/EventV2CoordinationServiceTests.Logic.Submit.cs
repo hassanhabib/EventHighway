@@ -19,7 +19,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
     public partial class EventV2CoordinationServiceTests
     {
         [Fact]
-        public async Task ShouldSubmitEventV2WhenScheduledDateIsInFutureAsync()
+        public async Task ShouldSubmitImmediateEventV2WhenScheduledDateIsNullOrInPastAsync()
         {
             // given
             int randomDays = GetRandomNumber();
@@ -68,7 +68,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
         [Theory]
         [MemberData(nameof(ScheduledDates))]
-        public async Task ShouldSubmitEventV2WhenScheduledDateIsNullOrInPastAsync(
+        public async Task ShouldSubmitScheduledEventV2WhenScheduledDateIsInFutureAsync(
             DateTimeOffset randomDateTimeOffset,
             DateTimeOffset? scheduledDate)
         {
@@ -115,7 +115,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
             var ranEventCallV2s = new List<EventCallV2>();
 
-            this.dateTimeBrokerMock.Setup(broker =>
+            this.dateTimeBrokerMock.InSequence(mockSequence).Setup(broker =>
                 broker.GetDateTimeOffsetAsync())
                     .ReturnsAsync(randomDateTimeOffset);
 
@@ -130,41 +130,42 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                         inputImmediateEventV2.EventAddressId))
                             .ReturnsAsync(retrievedEventListenerV2s);
 
-            foreach (ListenerEventV2 expectedListenerEventV2 in inputListenerEventV2s)
+            for (int index = 0; index < inputListenerEventV2s.Count; index++)
             {
-                this.eventListenerV2OrchestrationServiceMock.Setup(service =>
-                    service.AddListenerEventV2Async(
-                        It.Is(SameListenerEventAs(expectedListenerEventV2))))
-                            .ReturnsAsync(expectedListenerEventV2.DeepClone());
-            }
+                this.eventListenerV2OrchestrationServiceMock
+                    .InSequence(mockSequence).Setup(service =>
+                        service.AddListenerEventV2Async(
+                            It.Is(SameListenerEventAs(inputListenerEventV2s[index]))))
+                                .ReturnsAsync(inputListenerEventV2s[index].DeepClone());
 
-            foreach (EventCallV2 expectedCallEventV2 in expectedCallEventV2s)
-            {
                 var ranEventCall = new EventCallV2
                 {
-                    Endpoint = expectedCallEventV2.Endpoint,
-                    Content = expectedCallEventV2.Content,
+                    Endpoint = expectedCallEventV2s[index].Endpoint,
+                    Content = expectedCallEventV2s[index].Content,
                     Response = GetRandomString()
                 };
 
-                this.eventV2OrchestrationServiceMock.Setup(service =>
-                    service.RunEventCallV2Async(
-                        It.Is(SameEventCallAs(expectedCallEventV2))))
-                            .ReturnsAsync(ranEventCall);
+                this.eventV2OrchestrationServiceMock
+                    .InSequence(mockSequence).Setup(service =>
+                        service.RunEventCallV2Async(
+                            It.Is(SameEventCallAs(expectedCallEventV2s[index]))))
+                                .ReturnsAsync(ranEventCall);
 
                 ranEventCallV2s.Add(item: ranEventCall);
-            }
 
-            for (int index = 0; index < inputListenerEventV2s.Count; index++)
-            {
+                this.dateTimeBrokerMock.InSequence(mockSequence).Setup(broker =>
+                    broker.GetDateTimeOffsetAsync())
+                        .ReturnsAsync(randomDateTimeOffset);
+
                 expectedListenerEventV2s[index].UpdatedDate = randomDateTimeOffset;
                 expectedListenerEventV2s[index].Status = ListenerEventV2Status.Success;
                 expectedListenerEventV2s[index].Response = ranEventCallV2s[index].Response;
 
-                this.eventListenerV2OrchestrationServiceMock.Setup(service =>
-                    service.ModifyListenerEventV2Async(
-                        It.Is(SameListenerEventAs(expectedListenerEventV2s[index]))))
-                            .ReturnsAsync(expectedListenerEventV2s[index]);
+                this.eventListenerV2OrchestrationServiceMock
+                    .InSequence(mockSequence).Setup(service =>
+                        service.ModifyListenerEventV2Async(
+                            It.Is(SameListenerEventAs(expectedListenerEventV2s[index]))))
+                                .ReturnsAsync(expectedListenerEventV2s[index]);
             }
 
             // when
