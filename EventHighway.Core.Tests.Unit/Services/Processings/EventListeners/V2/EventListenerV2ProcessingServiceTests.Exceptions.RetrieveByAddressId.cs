@@ -16,9 +16,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventListeners.V2
     public partial class EventListenerV2ProcessingServiceTests
     {
         [Theory]
-        [MemberData(nameof(EventListenerV2DependencyExceptions))]
+        [MemberData(nameof(DependencyExceptions))]
         public async Task ShouldThrowDependencyExceptionOnRetrieveByEventAddressIdIfDependencyErrorOccursAndLogItAsync(
-            Xeption eventListenerV2DependencyException)
+            Xeption dependencyException)
         {
             // given
             Guid someEventAddressId = GetRandomId();
@@ -26,11 +26,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventListeners.V2
             var expectedEventListenerV2ProcessingDependencyException =
                 new EventListenerV2ProcessingDependencyException(
                     message: "Event listener dependency error occurred, contact support.",
-                    innerException: eventListenerV2DependencyException.InnerException as Xeption);
+                    innerException: dependencyException.InnerException as Xeption);
 
             this.eventListenerV2ServiceMock.Setup(service =>
                 service.RetrieveAllEventListenerV2sAsync())
-                    .ThrowsAsync(eventListenerV2DependencyException);
+                    .ThrowsAsync(dependencyException);
 
             // when
             ValueTask<IQueryable<EventListenerV2>> retrieveEventListenerV2sByEventAddressIdTask =

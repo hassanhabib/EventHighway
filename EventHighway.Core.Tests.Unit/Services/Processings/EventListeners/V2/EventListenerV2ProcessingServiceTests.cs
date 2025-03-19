@@ -36,7 +36,24 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventListeners.V2
                     loggingBroker: this.loggingBrokerMock.Object);
         }
 
-        public static TheoryData<Xeption> EventListenerV2DependencyExceptions()
+        public static TheoryData<Xeption> ValidationExceptions()
+        {
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            return new TheoryData<Xeption>
+            {
+                new EventListenerV2ValidationException(
+                    someMessage,
+                    someInnerException),
+
+                new EventListenerV2DependencyValidationException(
+                    someMessage,
+                    someInnerException),
+            };
+        }
+        
+        public static TheoryData<Xeption> DependencyExceptions()
         {
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();
@@ -61,6 +78,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventListeners.V2
 
         private static IQueryable<EventListenerV2> CreateRandomEventListenerV2s() =>
             CreateEventListenerV2Filler().Create(count: GetRandomNumber()).AsQueryable();
+
+        private static EventListenerV2 CreateRandomEventListenerV2() =>
+            CreateEventListenerV2Filler().Create();
 
         private static IQueryable<EventListenerV2> CreateRandomEventListenerV2s(
             Guid eventAddressId)
