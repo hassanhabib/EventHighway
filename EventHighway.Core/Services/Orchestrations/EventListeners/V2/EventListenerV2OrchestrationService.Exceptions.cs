@@ -16,9 +16,59 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
 {
     internal partial class EventListenerV2OrchestrationService
     {
+        private delegate ValueTask<EventListenerV2> ReturningEventListenerV2Function();
         private delegate ValueTask<IQueryable<EventListenerV2>> ReturningEventListenerV2sFunction();
         private delegate ValueTask<ListenerEventV2> ReturningListenerEventV2Function();
         private delegate ValueTask<IQueryable<ListenerEventV2>> ReturningListenerEventV2sFunction();
+
+        private async ValueTask<EventListenerV2> TryCatch(
+            ReturningEventListenerV2Function returningEventListenerV2Function)
+        {
+            try
+            {
+                return await returningEventListenerV2Function();
+            }
+            catch (NullEventListenerV2OrchestrationException
+                nullEventListenerV2OrchestrationException)
+            {
+                throw await CreateAndLogValidationExceptionAsync(
+                    nullEventListenerV2OrchestrationException);
+            }
+            catch (EventListenerV2ProcessingValidationException
+                eventListenerV2ProcessingValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventListenerV2ProcessingValidationException);
+            }
+            catch (EventListenerV2ProcessingDependencyValidationException
+                eventListenerV2ProcessingDependencyValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventListenerV2ProcessingDependencyValidationException);
+            }
+            catch (EventListenerV2ProcessingDependencyException
+                eventListenerV2ProcessingDependencyException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(
+                    eventListenerV2ProcessingDependencyException);
+            }
+            catch (EventListenerV2ProcessingServiceException
+                eventListenerV2ProcessingServiceException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(
+                    eventListenerV2ProcessingServiceException);
+            }
+            catch (Exception exception)
+            {
+                var failedEventListenerV2OrchestrationServiceException =
+                    new FailedEventListenerV2OrchestrationServiceException(
+                        message: "Failed event listener service error occurred, contact support.",
+                        innerException: exception);
+
+                throw await CreateAndLogServiceExceptionAsync(
+                    failedEventListenerV2OrchestrationServiceException);
+            }
+        }
 
         private async ValueTask<IQueryable<EventListenerV2>> TryCatch(
             ReturningEventListenerV2sFunction returningEventListenerV2sFunction)
