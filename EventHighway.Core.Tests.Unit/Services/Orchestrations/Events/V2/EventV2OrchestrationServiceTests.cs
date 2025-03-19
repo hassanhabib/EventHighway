@@ -156,6 +156,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
+        private static Guid GetRandomId() =>
+            Guid.NewGuid();
+
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 

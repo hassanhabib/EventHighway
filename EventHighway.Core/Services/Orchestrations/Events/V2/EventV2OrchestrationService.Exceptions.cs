@@ -27,6 +27,12 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
             {
                 return await returningEventV2Function();
             }
+            catch (InvalidEventV2OrchestrationException
+                invalidEventV2OrchestrationException)
+            {
+                throw await CreateAndLogValidationExceptionAsync(
+                    invalidEventV2OrchestrationException);
+            }
             catch (EventV2ProcessingValidationException
                 eventV2ProcessingValidationException)
             {
