@@ -101,5 +101,53 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventAddresses.V2
             this.eventAddressV2ServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRetrieveByIdIfExceptionOccursAndLogItAsync()
+        {
+            // given
+            Guid someEventAddressV2Id = GetRandomId();
+            var serviceException = new Exception();
+
+            var failedEventAddressV2ProcessingServiceException =
+                new FailedEventAddressV2ProcessingServiceException(
+                    message: "Failed event address service error occurred, contact support.",
+                    innerException: serviceException);
+
+            var expectedEventAddressV2ProcessingExceptionException =
+                new EventAddressV2ProcessingServiceException(
+                    message: "Event address service error occurred, contact support.",
+                    innerException: failedEventAddressV2ProcessingServiceException);
+
+            this.eventAddressV2ServiceMock.Setup(service =>
+                service.RetrieveEventAddressV2ByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<EventAddressV2> retrieveEventAddressV2ByIdTask =
+                this.eventAddressV2ProcessingService.RetrieveEventAddressV2ByIdAsync(
+                    someEventAddressV2Id);
+
+            EventAddressV2ProcessingServiceException
+                actualEventAddressV2ProcessingServiceException =
+                    await Assert.ThrowsAsync<EventAddressV2ProcessingServiceException>(
+                        retrieveEventAddressV2ByIdTask.AsTask);
+
+            // then
+            actualEventAddressV2ProcessingServiceException.Should()
+                .BeEquivalentTo(expectedEventAddressV2ProcessingExceptionException);
+
+            this.eventAddressV2ServiceMock.Verify(service =>
+                service.RetrieveEventAddressV2ByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventAddressV2ProcessingExceptionException))),
+                        Times.Once);
+
+            this.eventAddressV2ServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
