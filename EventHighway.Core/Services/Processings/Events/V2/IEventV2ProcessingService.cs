@@ -11,6 +11,7 @@ namespace EventHighway.Core.Services.Processings.Events.V2
 {
     internal interface IEventV2ProcessingService
     {
+        ValueTask<EventV2> AddEventV2Async(EventV2 eventV2);
         ValueTask<IQueryable<EventV2>> RetrieveScheduledPendingEventV2sAsync();
         ValueTask<EventV2> RemoveEventV2ByIdAsync(Guid eventV2Id);
     }
