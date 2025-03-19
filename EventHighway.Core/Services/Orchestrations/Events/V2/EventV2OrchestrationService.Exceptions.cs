@@ -33,6 +33,12 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     invalidEventV2OrchestrationException);
             }
+            catch (NullEventV2OrchestrationException
+                nullEventV2OrchestrationException)
+            {
+                throw await CreateAndLogValidationExceptionAsync(
+                    nullEventV2OrchestrationException);
+            }
             catch (EventV2ProcessingValidationException
                 eventV2ProcessingValidationException)
             {

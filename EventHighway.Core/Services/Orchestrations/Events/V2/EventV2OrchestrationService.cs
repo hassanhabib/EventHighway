@@ -36,6 +36,8 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
         public ValueTask<EventV2> SubmitEventV2Async(EventV2 eventV2) =>
         TryCatch(async () =>
         {
+            ValidateEventV2IsNotNull(eventV2);
+
             _ = await this.eventAddressV2ProcessingService
                 .RetrieveEventAddressV2ByIdAsync(eventV2.EventAddressId);
 

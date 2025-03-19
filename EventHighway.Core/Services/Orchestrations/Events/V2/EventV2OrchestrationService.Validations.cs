@@ -20,6 +20,15 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
             }
         }
 
+        private static void ValidateEventV2IsNotNull(EventV2 eventV2)
+        {
+            if (eventV2 is null)
+            {
+                throw new NullEventV2OrchestrationException(
+                    message: "Event is null.");
+            }
+        }
+
         private static void ValidateEventV2Id(Guid eventV2Id)
         {
             Validate(
