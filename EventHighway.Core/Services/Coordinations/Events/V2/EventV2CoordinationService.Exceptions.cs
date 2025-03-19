@@ -5,6 +5,7 @@
 using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.Events.V2;
 using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 using EventHighway.Core.Models.Services.Orchestrations.Events.V2.Exceptions;
 using Xeptions;
@@ -14,6 +15,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
     internal partial class EventV2CoordinationService
     {
         private delegate ValueTask ReturningNothingFunction();
+        private delegate ValueTask<EventV2> ReturningEventV2Function();
 
         private async ValueTask TryCatch(ReturningNothingFunction returningNothingFunction)
         {
@@ -79,6 +81,59 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
                 throw await CreateAndLogServiceExceptionAsync(
                     failedEventV2CoordinationServiceException);
             }
+        }
+
+        private async ValueTask<EventV2> TryCatch(ReturningEventV2Function returningEventV2Function)
+        {
+            try
+            {
+                return await returningEventV2Function();
+            }
+            catch (InvalidEventV2CoordinationException invalidEventV2CoordinationException)
+            {
+                throw await CreateAndLogValidationExceptionAsync(invalidEventV2CoordinationException);
+            }
+            catch (EventV2OrchestrationValidationException eventV2OrchestrationValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventV2OrchestrationValidationException);
+            }
+            catch (EventV2OrchestrationDependencyValidationException
+                eventV2OrchestrationDependencyValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventV2OrchestrationDependencyValidationException);
+            }
+            catch (EventV2OrchestrationDependencyException eventV2OrchestrationDependencyException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(eventV2OrchestrationDependencyException);
+            }
+            catch (EventV2OrchestrationServiceException eventV2OrchestrationServiceException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(eventV2OrchestrationServiceException);
+            }
+            catch (Exception exception)
+            {
+                var failedEventV2CoordinationServiceException =
+                    new FailedEventV2CoordinationServiceException(
+                        message: "Failed event service error occurred, contact support.",
+                        innerException: exception);
+
+                throw await CreateAndLogServiceExceptionAsync(failedEventV2CoordinationServiceException);
+            }
+        }
+
+        private async ValueTask<EventV2CoordinationValidationException> CreateAndLogValidationExceptionAsync(
+            Xeption exception)
+        {
+            var eventV2CoordinationValidationException =
+                new EventV2CoordinationValidationException(
+                    message: "Event validation error occurred, fix the errors and try again.",
+                    innerException: exception);
+
+            await this.loggingBroker.LogErrorAsync(eventV2CoordinationValidationException);
+
+            return eventV2CoordinationValidationException;
         }
 
         private async ValueTask<EventV2CoordinationDependencyValidationException>
