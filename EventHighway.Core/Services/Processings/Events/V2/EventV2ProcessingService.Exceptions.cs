@@ -15,6 +15,7 @@ namespace EventHighway.Core.Services.Processings.Events.V2
     internal partial class EventV2ProcessingService
     {
         private delegate ValueTask<IQueryable<EventV2>> ReturningEventV2sFunction();
+        private delegate ValueTask<EventV2> ReturningEventV2Function();
 
         private async ValueTask<IQueryable<EventV2>> TryCatch(ReturningEventV2sFunction returningEventV2sFunction)
         {
@@ -39,6 +40,78 @@ namespace EventHighway.Core.Services.Processings.Events.V2
 
                 throw await CreateAndLogServiceExceptionAsync(failedEventV2ProcessingServiceException);
             }
+        }
+
+        private async ValueTask<EventV2> TryCatch(ReturningEventV2Function returningEventV2Function)
+        {
+            try
+            {
+                return await returningEventV2Function();
+            }
+            catch (NullEventV2ProcessingException nullEventV2ProcessingException)
+            {
+                throw await CreateAndLogValidationExceptionAsync(
+                    nullEventV2ProcessingException);
+            }
+            catch (InvalidEventV2ProcessingException invalidEventV2ProcessingException)
+            {
+                throw await CreateAndLogValidationExceptionAsync(
+                    invalidEventV2ProcessingException);
+            }
+            catch (EventV2ValidationException eventV2ValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventV2ValidationException);
+            }
+            catch (EventV2DependencyValidationException eventV2DependencyValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventV2DependencyValidationException);
+            }
+            catch (EventV2DependencyException eventV2DependencyException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(eventV2DependencyException);
+            }
+            catch (EventV2ServiceException eventV2ServiceException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(eventV2ServiceException);
+            }
+            catch (Exception exception)
+            {
+                var failedEventV2ProcessingServiceException =
+                    new FailedEventV2ProcessingServiceException(
+                        message: "Failed event service error occurred, contact support.",
+                        innerException: exception);
+
+                throw await CreateAndLogServiceExceptionAsync(failedEventV2ProcessingServiceException);
+            }
+        }
+
+        private async ValueTask<EventV2ProcessingValidationException> CreateAndLogValidationExceptionAsync(
+            Xeption exception)
+        {
+            var eventV2ProcessingValidationException =
+                new EventV2ProcessingValidationException(
+                    message: "Event validation error occurred, fix the errors and try again.",
+                    innerException: exception);
+
+            await this.loggingBroker.LogErrorAsync(eventV2ProcessingValidationException);
+
+            return eventV2ProcessingValidationException;
+        }
+
+        private async ValueTask<EventV2ProcessingDependencyValidationException>
+            CreateAndLogDependencyValidationExceptionAsync(
+                Xeption exception)
+        {
+            var eventV2ProcessingDependencyValidationException =
+                new EventV2ProcessingDependencyValidationException(
+                    message: "Event validation error occurred, fix the errors and try again.",
+                    innerException: exception.InnerException as Xeption);
+
+            await this.loggingBroker.LogErrorAsync(eventV2ProcessingDependencyValidationException);
+
+            return eventV2ProcessingDependencyValidationException;
         }
 
         private async ValueTask<EventV2ProcessingDependencyException> CreateAndLogDependencyExceptionAsync(
