@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.Exceptions;
@@ -27,7 +28,7 @@ namespace EventHighway.Core.Services.Processings.EventAddresses.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     invalidEventAddressV2ProcessingException);
             }
-            catch (EventAddressV2ValidationException 
+            catch (EventAddressV2ValidationException
                 eventAddressV2ValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
@@ -50,6 +51,16 @@ namespace EventHighway.Core.Services.Processings.EventAddresses.V2
             {
                 throw await CreateAndLogDependencyExceptionAsync(
                     eventAddressV2ServiceException);
+            }
+            catch (Exception exception)
+            {
+                var failedEventAddressV2ProcessingServiceException =
+                    new FailedEventAddressV2ProcessingServiceException(
+                        message: "Failed event address service error occurred, contact support.",
+                        innerException: exception);
+
+                throw await CreateAndLogServiceExceptionAsync(
+                    failedEventAddressV2ProcessingServiceException);
             }
         }
 
