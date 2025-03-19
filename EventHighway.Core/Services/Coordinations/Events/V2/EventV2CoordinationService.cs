@@ -35,8 +35,11 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<EventV2> SubmitEventV2Async(EventV2 eventV2)
+        public ValueTask<EventV2> SubmitEventV2Async(EventV2 eventV2) =>
+        TryCatch(async () =>
         {
+            ValidateEventV2IsNotNull(eventV2);
+
             DateTimeOffset now =
                 await this.dateTimeBroker.GetDateTimeOffsetAsync();
 
@@ -58,7 +61,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
                 await ProcessEventListenersAsync(submittedEventV2);
 
             return submittedEventV2;
-        }
+        });
 
         public ValueTask FireScheduledPendingEventV2sAsync() =>
         TryCatch(async () =>
