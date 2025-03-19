@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
 using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Processings.EventAddresses.V2.Exceptions;
 using EventHighway.Core.Models.Services.Processings.EventCalls.V2.Exceptions;
 using EventHighway.Core.Models.Services.Processings.Events.V2.Exceptions;
 using EventHighway.Core.Services.Orchestrations.Events.V2;
@@ -79,6 +80,57 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                     someInnerException),
 
                 new EventCallV2ProcessingServiceException(
+                    someMessage,
+                    someInnerException),
+            };
+        }
+
+        public static TheoryData<Xeption> EventAddressV2ValidationExceptions()
+        {
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            return new TheoryData<Xeption>
+            {
+                new EventAddressV2ProcessingValidationException(
+                    someMessage,
+                    someInnerException),
+
+                new EventAddressV2ProcessingDependencyValidationException(
+                    someMessage,
+                    someInnerException),
+            };
+        }
+
+        public static TheoryData<Xeption> EventAddressV2DependencyExceptions()
+        {
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            return new TheoryData<Xeption>
+            {
+                new EventAddressV2ProcessingDependencyException(
+                    someMessage,
+                    someInnerException),
+
+                new EventAddressV2ProcessingServiceException(
+                    someMessage,
+                    someInnerException),
+            };
+        }
+
+        public static TheoryData<Xeption> EventV2ValidationExceptions()
+        {
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            return new TheoryData<Xeption>
+            {
+                new EventV2ProcessingValidationException(
+                    someMessage,
+                    someInnerException),
+
+                new EventV2ProcessingDependencyValidationException(
                     someMessage,
                     someInnerException),
             };
