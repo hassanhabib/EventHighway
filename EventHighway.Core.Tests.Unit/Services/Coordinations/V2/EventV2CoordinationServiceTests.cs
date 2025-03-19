@@ -135,11 +135,17 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                     .AsQueryable();
         }
 
+        private static EventV2 CreateRandomEventV2() =>
+            CreateEventV2Filler().Create();
+
         private static IQueryable<EventListenerV2> CreateRandomEventListenerV2s() =>
             CreateEventListenerV2Filler().Create(count: GetRandomNumber()).AsQueryable();
 
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
+
+        private static int GetRandomNegativeNumber() =>
+            -1 * GetRandomNumber();
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
