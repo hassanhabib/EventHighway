@@ -10,6 +10,15 @@ namespace EventHighway.Core.Services.Processings.Events.V2
 {
     internal partial class EventV2ProcessingService
     {
+        private static void ValidateEventV2IsNotNull(EventV2 listenerEventV2)
+        {
+            if (listenerEventV2 is null)
+            {
+                throw new NullEventV2ProcessingException(
+                    message: "Event is null.");
+            }
+        }
+
         private static void ValidateEventV2Id(Guid eventV2Id)
         {
             Validate(
