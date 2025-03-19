@@ -3,20 +3,19 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
 using EventHighway.Core.Models.Services.Foundations.Events.V2;
-using EventHighway.Core.Models.Services.Orchestrations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Processings.Events.V2.Exceptions;
 
-namespace EventHighway.Core.Services.Orchestrations.Events.V2
+namespace EventHighway.Core.Services.Processings.Events.V2
 {
-    internal partial class EventV2OrchestrationService
+    internal partial class EventV2ProcessingService
     {
-        private static void ValidateEventCallV2IsNotNull(EventCallV2 eventCallV2)
+        private static void ValidateEventV2IsNotNull(EventV2 listenerEventV2)
         {
-            if (eventCallV2 is null)
+            if (listenerEventV2 is null)
             {
-                throw new NullEventCallV2OrchestrationException(
-                    message: "Event call is null.");
+                throw new NullEventV2ProcessingException(
+                    message: "Event is null.");
             }
         }
 
@@ -35,21 +34,21 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
-            var invalidEventV2OrchestrationException =
-                new InvalidEventV2OrchestrationException(
+            var invalidEventV2ProcessingException =
+                new InvalidEventV2ProcessingException(
                     message: "Event is invalid, fix the errors and try again.");
 
             foreach ((dynamic rule, string parameter) in validations)
             {
                 if (rule.Condition)
                 {
-                    invalidEventV2OrchestrationException.UpsertDataList(
+                    invalidEventV2ProcessingException.UpsertDataList(
                         key: parameter,
                         value: rule.Message);
                 }
             }
 
-            invalidEventV2OrchestrationException.ThrowIfContainsErrors();
+            invalidEventV2ProcessingException.ThrowIfContainsErrors();
         }
     }
 }
