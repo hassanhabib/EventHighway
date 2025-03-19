@@ -55,5 +55,48 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
             this.eventV2ServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Theory]
+        [MemberData(nameof(DependencyExceptions))]
+        public async Task ShouldThrowDependencyExceptionOnAddIfDependencyExceptionOccursAndLogItAsync(
+            Xeption dependencyException)
+        {
+            // given
+            EventV2 someEventV2 = CreateRandomEventV2();
+
+            var expectedEventV2ProcessingDependencyException =
+                new EventV2ProcessingDependencyException(
+                    message: "Event dependency error occurred, contact support.",
+                    innerException: dependencyException.InnerException as Xeption);
+
+            this.eventV2ServiceMock.Setup(service =>
+                service.AddEventV2Async(It.IsAny<EventV2>()))
+                    .ThrowsAsync(dependencyException);
+
+            // when
+            ValueTask<EventV2> addEventV2Task =
+                this.eventV2ProcessingService.AddEventV2Async(someEventV2);
+
+            EventV2ProcessingDependencyException
+                actualEventV2ProcessingDependencyException =
+                    await Assert.ThrowsAsync<EventV2ProcessingDependencyException>(
+                        addEventV2Task.AsTask);
+
+            // then
+            actualEventV2ProcessingDependencyException.Should()
+                .BeEquivalentTo(expectedEventV2ProcessingDependencyException);
+
+            this.eventV2ServiceMock.Verify(service =>
+                service.AddEventV2Async(It.IsAny<EventV2>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventV2ProcessingDependencyException))),
+                        Times.Once);
+
+            this.eventV2ServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
