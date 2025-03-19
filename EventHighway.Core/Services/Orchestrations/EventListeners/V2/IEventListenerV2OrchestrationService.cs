@@ -12,6 +12,7 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
 {
     internal interface IEventListenerV2OrchestrationService
     {
+        ValueTask<EventListenerV2> AddEventListenerV2Async(EventListenerV2 eventListenerV2);
         ValueTask<IQueryable<EventListenerV2>> RetrieveEventListenerV2sByEventAddressIdAsync(Guid eventAddressId);
         ValueTask<ListenerEventV2> AddListenerEventV2Async(ListenerEventV2 listenerEventV2);
         ValueTask<IQueryable<ListenerEventV2>> RetrieveAllListenerEventV2sAsync();
