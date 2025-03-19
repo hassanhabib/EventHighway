@@ -28,6 +28,12 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
             {
                 return await returningEventListenerV2Function();
             }
+            catch (InvalidEventListenerV2OrchestrationException
+                invalidEventListenerV2OrchestrationException)
+            {
+                throw await CreateAndLogValidationExceptionAsync(
+                    invalidEventListenerV2OrchestrationException);
+            }
             catch (NullEventListenerV2OrchestrationException
                 nullEventListenerV2OrchestrationException)
             {
