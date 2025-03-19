@@ -23,9 +23,13 @@ namespace EventHighway.Core.Services.Processings.EventAddresses.V2
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<EventAddressV2> RetrieveEventAddressV2ByIdAsync(Guid eventAddressV2Id)
+        public ValueTask<EventAddressV2> RetrieveEventAddressV2ByIdAsync(Guid eventAddressV2Id) =>
+        TryCatch(async () =>
         {
-            return await this.eventAddressV2Service.RetrieveEventAddressV2ByIdAsync(eventAddressV2Id);
-        }
+            ValidateEventAddressV2Id(eventAddressV2Id);
+
+            return await this.eventAddressV2Service.RetrieveEventAddressV2ByIdAsync(
+                eventAddressV2Id);
+        });
     }
 }
