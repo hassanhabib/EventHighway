@@ -125,6 +125,27 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             };
         }
 
+        public static TheoryData<DateTimeOffset, DateTimeOffset?> ScheduledDates()
+        {
+            int randomNegativeDays = GetRandomNegativeNumber();
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
+
+            DateTimeOffset scheduledNegativeDate =
+                randomDateTimeOffset.AddDays(randomNegativeDays);
+
+            return new TheoryData<DateTimeOffset, DateTimeOffset?>
+            {
+                {
+                    randomDateTimeOffset,
+                    scheduledNegativeDate
+                },
+                {
+                    randomDateTimeOffset,
+                    null
+                }
+            };
+        }
+
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
@@ -182,7 +203,13 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                     .Use(GetRandomDateTimeOffset)
 
                 .OnType<DateTimeOffset?>()
-                    .Use(GetRandomDateTimeOffset());
+                    .Use(GetRandomDateTimeOffset())
+
+                .OnProperty(eventV2 =>
+                    eventV2.EventAddress).IgnoreIt()
+
+                .OnProperty(eventV2 =>
+                    eventV2.ListenerEvents).IgnoreIt();
 
             return filler;
         }
