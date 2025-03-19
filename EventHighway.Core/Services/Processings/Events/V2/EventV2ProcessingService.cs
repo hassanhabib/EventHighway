@@ -28,6 +28,14 @@ namespace EventHighway.Core.Services.Processings.Events.V2
             this.loggingBroker = loggingBroker;
         }
 
+        public ValueTask<EventV2> AddEventV2Async(EventV2 eventV2) =>
+        TryCatch(async () =>
+        {
+            ValidateEventV2IsNotNull(eventV2);
+
+            return await this.eventV2Service.AddEventV2Async(eventV2);
+        });
+
         public ValueTask<IQueryable<EventV2>> RetrieveScheduledPendingEventV2sAsync() =>
         TryCatch(async () =>
         {
@@ -40,6 +48,15 @@ namespace EventHighway.Core.Services.Processings.Events.V2
             return eventV2s.Where(eventV2 =>
                 eventV2.Type == EventV2Type.Scheduled &&
                 eventV2.ScheduledDate < now);
+        });
+
+        public ValueTask<EventV2> RemoveEventV2ByIdAsync(Guid eventV2Id) =>
+        TryCatch(async () =>
+        {
+            ValidateEventV2Id(eventV2Id);
+
+            return await this.eventV2Service.RemoveEventV2ByIdAsync(
+                eventV2Id);
         });
     }
 }
