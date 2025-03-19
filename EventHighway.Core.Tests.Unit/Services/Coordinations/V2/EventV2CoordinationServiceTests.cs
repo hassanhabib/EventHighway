@@ -35,12 +35,16 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
         public EventV2CoordinationServiceTests()
         {
             this.eventV2OrchestrationServiceMock =
-                new Mock<IEventV2OrchestrationService>();
+                new Mock<IEventV2OrchestrationService>(
+                    behavior: MockBehavior.Strict);
 
             this.eventListenerV2OrchestrationServiceMock =
-                new Mock<IEventListenerV2OrchestrationService>();
+                new Mock<IEventListenerV2OrchestrationService>(
+                    behavior: MockBehavior.Strict);
 
-            this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
+            this.dateTimeBrokerMock = new Mock<IDateTimeBroker>(
+                behavior: MockBehavior.Strict);
+
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
             var compareConfiguration = new ComparisonConfig();
 
@@ -129,7 +133,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
         {
             int randomNegativeDays = GetRandomNegativeNumber();
             DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
-
+             
             DateTimeOffset scheduledNegativeDate =
                 randomDateTimeOffset.AddDays(randomNegativeDays);
 
