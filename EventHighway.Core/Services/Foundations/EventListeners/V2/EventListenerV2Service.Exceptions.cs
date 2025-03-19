@@ -5,6 +5,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using EFxceptions.Models.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2.Exceptions;
 using Microsoft.Data.SqlClient;
@@ -59,6 +60,11 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     invalidEventListenerV2Exception);
             }
+            catch (NullEventListenerV2Exception nullEventListenerV2Exception)
+            {
+                throw await CreateAndLogValidationExceptionAsync(
+                    nullEventListenerV2Exception);
+            }
             catch (NotFoundEventListenerV2Exception notFoundEventListenerV2Exception)
             {
                 throw await CreateAndLogValidationExceptionAsync(
@@ -73,6 +79,27 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
 
                 throw await CreateAndLogCriticalDependencyExceptionAsync(
                     failedEventListenerV2StorageException);
+            }
+            catch (DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistsEventListenerV2Exception =
+                    new AlreadyExistsEventListenerV2Exception(
+                        message: "Event listener with the same id already exists.",
+                        innerException: duplicateKeyException);
+
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    alreadyExistsEventListenerV2Exception);
+            }
+            catch (ForeignKeyConstraintConflictException
+                foreignKeyConstraintConflictException)
+            {
+                var invalidEventListenerV2ReferenceException =
+                    new InvalidEventListenerV2ReferenceException(
+                        message: "Invalid event listener reference error occurred.",
+                        innerException: foreignKeyConstraintConflictException);
+
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    invalidEventListenerV2ReferenceException);
             }
             catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {

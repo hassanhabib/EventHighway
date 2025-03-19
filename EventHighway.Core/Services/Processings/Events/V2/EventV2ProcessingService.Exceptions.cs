@@ -48,6 +48,11 @@ namespace EventHighway.Core.Services.Processings.Events.V2
             {
                 return await returningEventV2Function();
             }
+            catch (NullEventV2ProcessingException nullEventV2ProcessingException)
+            {
+                throw await CreateAndLogValidationExceptionAsync(
+                    nullEventV2ProcessingException);
+            }
             catch (InvalidEventV2ProcessingException invalidEventV2ProcessingException)
             {
                 throw await CreateAndLogValidationExceptionAsync(

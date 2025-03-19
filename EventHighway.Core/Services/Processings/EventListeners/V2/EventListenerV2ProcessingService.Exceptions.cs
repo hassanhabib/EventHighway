@@ -14,7 +14,63 @@ namespace EventHighway.Core.Services.Processings.EventListeners.V2
 {
     internal partial class EventListenerV2ProcessingService
     {
+        private delegate ValueTask<EventListenerV2> ReturningEventListenerV2Function();
         private delegate ValueTask<IQueryable<EventListenerV2>> ReturningEventListenerV2sFunction();
+
+        private async ValueTask<EventListenerV2> TryCatch(
+            ReturningEventListenerV2Function returningEventListenerV2Function)
+        {
+            try
+            {
+                return await returningEventListenerV2Function();
+            }
+            catch (NullEventListenerV2ProcessingException
+                nullEventListenerV2ProcessingException)
+            {
+                throw await CreateAndLogValidationExceptionAsync(
+                    nullEventListenerV2ProcessingException);
+            }
+            catch (InvalidEventListenerV2ProcessingException
+                invalidEventListenerV2ProcessingException)
+            {
+                throw await CreateAndLogValidationExceptionAsync(
+                    invalidEventListenerV2ProcessingException);
+            }
+            catch (EventListenerV2ValidationException
+                eventListenerV2ValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventListenerV2ValidationException);
+            }
+            catch (EventListenerV2DependencyValidationException
+                eventListenerV2DependencyValidationException)
+            {
+                throw await CreateAndLogDependencyValidationExceptionAsync(
+                    eventListenerV2DependencyValidationException);
+            }
+            catch (EventListenerV2DependencyException
+                eventListenerV2DependencyException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(
+                    eventListenerV2DependencyException);
+            }
+            catch (EventListenerV2ServiceException
+                eventListenerV2ServiceException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(
+                    eventListenerV2ServiceException);
+            }
+            catch (Exception exception)
+            {
+                var failedEventListenerV2ProcessingServiceException =
+                    new FailedEventListenerV2ProcessingServiceException(
+                        message: "Failed event listener service error occurred, contact support.",
+                        innerException: exception);
+
+                throw await CreateAndLogServiceExceptionAsync(
+                    failedEventListenerV2ProcessingServiceException);
+            }
+        }
 
         private async ValueTask<IQueryable<EventListenerV2>> TryCatch(
             ReturningEventListenerV2sFunction returningEventListenerV2sFunction)
@@ -64,6 +120,20 @@ namespace EventHighway.Core.Services.Processings.EventListeners.V2
             await this.loggingBroker.LogErrorAsync(eventListenerV2ProcessingValidationException);
 
             return eventListenerV2ProcessingValidationException;
+        }
+
+        private async ValueTask<EventListenerV2ProcessingDependencyValidationException>
+            CreateAndLogDependencyValidationExceptionAsync(
+                Xeption exception)
+        {
+            var eventListenerV2ProcessingDependencyValidationException =
+                new EventListenerV2ProcessingDependencyValidationException(
+                    message: "Event listener validation error occurred, fix the errors and try again.",
+                    innerException: exception.InnerException as Xeption);
+
+            await this.loggingBroker.LogErrorAsync(eventListenerV2ProcessingDependencyValidationException);
+
+            return eventListenerV2ProcessingDependencyValidationException;
         }
 
         private async ValueTask<EventListenerV2ProcessingDependencyException> CreateAndLogDependencyExceptionAsync(

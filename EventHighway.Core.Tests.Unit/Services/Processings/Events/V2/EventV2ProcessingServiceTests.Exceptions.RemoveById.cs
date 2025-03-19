@@ -124,14 +124,14 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                     .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<EventV2> addEventV2Task =
+            ValueTask<EventV2> removeEventV2ByIdTask =
                 this.eventV2ProcessingService.RemoveEventV2ByIdAsync(
                     someEventV2Id);
 
             EventV2ProcessingServiceException
                 actualEventV2ProcessingServiceException =
                     await Assert.ThrowsAsync<EventV2ProcessingServiceException>(
-                        addEventV2Task.AsTask);
+                        removeEventV2ByIdTask.AsTask);
 
             // then
             actualEventV2ProcessingServiceException.Should()
