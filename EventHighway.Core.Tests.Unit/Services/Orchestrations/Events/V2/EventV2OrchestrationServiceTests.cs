@@ -11,6 +11,7 @@ using EventHighway.Core.Models.Services.Foundations.Events.V2;
 using EventHighway.Core.Models.Services.Processings.EventCalls.V2.Exceptions;
 using EventHighway.Core.Models.Services.Processings.Events.V2.Exceptions;
 using EventHighway.Core.Services.Orchestrations.Events.V2;
+using EventHighway.Core.Services.Processings.EventAddresses.V2;
 using EventHighway.Core.Services.Processings.EventCalls.V2;
 using EventHighway.Core.Services.Processings.Events.V2;
 using Moq;
@@ -22,6 +23,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
     public partial class EventV2OrchestrationServiceTests
     {
         private readonly Mock<IEventV2ProcessingService> eventV2ProcessingServiceMock;
+        private readonly Mock<IEventAddressV2ProcessingService> eventAddressV2ProcessingServiceMock;
         private readonly Mock<IEventCallV2ProcessingService> eventCallV2ProcessingServiceMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly IEventV2OrchestrationService eventV2OrchestrationService;
@@ -30,6 +32,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
         {
             this.eventV2ProcessingServiceMock =
                 new Mock<IEventV2ProcessingService>();
+
+            this.eventAddressV2ProcessingServiceMock =
+                new Mock<IEventAddressV2ProcessingService>();
 
             this.eventCallV2ProcessingServiceMock =
                 new Mock<IEventCallV2ProcessingService>();
@@ -40,6 +45,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
             this.eventV2OrchestrationService =
                 new EventV2OrchestrationService(
                     eventV2ProcessingService: this.eventV2ProcessingServiceMock.Object,
+                    eventAddressV2ProcessingService: this.eventAddressV2ProcessingServiceMock.Object,
                     eventCallV2ProcessingService: this.eventCallV2ProcessingServiceMock.Object,
                     loggingBroker: loggingBrokerMock.Object);
         }
@@ -120,6 +126,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                 .Create(count: GetRandomNumber())
                     .AsQueryable();
         }
+
+        private static EventV2 CreateRandomEventV2() =>
+            CreateEventV2Filler().Create();
 
         private static Filler<EventCallV2> CreateEventCallV2Filler() =>
             new Filler<EventCallV2>();
