@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.Events.V2.Exceptions;
 using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
@@ -16,11 +17,11 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
     {
         [Theory]
         [MemberData(nameof(ValidationExceptions))]
-        public async Task ShouldThrowDependencyValidationExceptionOnSubmitIfDependencyValidationErrorOccursAsync(
+        public async Task ShouldThrowDependencyValidationExceptionOnRemoveByIdIfDependencyValidationErrorOccursAsync(
             Xeption validationException)
         {
             // given
-            EventV2 someEventV2 = CreateRandomEventV2();
+            Guid someEventV2Id = GetRandomId();
 
             var expectedEventV2ClientDependencyValidationException =
                 new EventV2ClientDependencyValidationException(
@@ -28,33 +29,33 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                     innerException: validationException.InnerException as Xeption);
 
             this.eventV2CoordinationServiceMock.Setup(service =>
-                service.SubmitEventV2Async(It.IsAny<EventV2>()))
+                service.RemoveEventV2ByIdAsync(It.IsAny<Guid>()))
                     .ThrowsAsync(validationException);
 
             // when
-            ValueTask<EventV2> submitEventV2Task =
-                this.eventV2SClient.SubmitEventV2Async(someEventV2);
+            ValueTask<EventV2> removeEventV2ByIdTask =
+                this.eventV2SClient.RemoveEventV2ByIdAsync(someEventV2Id);
 
             EventV2ClientDependencyValidationException actualEventV2ClientDependencyValidationException =
                 await Assert.ThrowsAsync<EventV2ClientDependencyValidationException>(
-                    submitEventV2Task.AsTask);
+                    removeEventV2ByIdTask.AsTask);
 
             // then
             actualEventV2ClientDependencyValidationException.Should()
                 .BeEquivalentTo(expectedEventV2ClientDependencyValidationException);
 
             this.eventV2CoordinationServiceMock.Verify(service =>
-                service.SubmitEventV2Async(It.IsAny<EventV2>()),
+                service.RemoveEventV2ByIdAsync(It.IsAny<Guid>()),
                     Times.Once);
 
             this.eventV2CoordinationServiceMock.VerifyNoOtherCalls();
         }
 
         [Fact]
-        public async Task ShouldThrowDependencyExceptionOnSubmitIfDependencyErrorOccursAsync()
+        public async Task ShouldThrowDependencyExceptionOnRemoveByIdIfDependencyErrorOccursAsync()
         {
             // given
-            EventV2 someEventV2 = CreateRandomEventV2();
+            Guid someEventV2Id = GetRandomId();
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();
 
@@ -71,33 +72,33 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                         .InnerException as Xeption);
 
             this.eventV2CoordinationServiceMock.Setup(service =>
-                service.SubmitEventV2Async(It.IsAny<EventV2>()))
+                service.RemoveEventV2ByIdAsync(It.IsAny<Guid>()))
                     .ThrowsAsync(eventV2CoordinationDependencyException);
 
             // when
-            ValueTask<EventV2> submitEventV2Task =
-                this.eventV2SClient.SubmitEventV2Async(someEventV2);
+            ValueTask<EventV2> removeEventV2ByIdTask =
+                this.eventV2SClient.RemoveEventV2ByIdAsync(someEventV2Id);
 
             EventV2ClientDependencyException actualEventV2ClientDependencyException =
                 await Assert.ThrowsAsync<EventV2ClientDependencyException>(
-                    submitEventV2Task.AsTask);
+                    removeEventV2ByIdTask.AsTask);
 
             // then
             actualEventV2ClientDependencyException.Should()
                 .BeEquivalentTo(expectedEventV2ClientDependencyException);
 
             this.eventV2CoordinationServiceMock.Verify(service =>
-                service.SubmitEventV2Async(It.IsAny<EventV2>()),
+                service.RemoveEventV2ByIdAsync(It.IsAny<Guid>()),
                     Times.Once);
 
             this.eventV2CoordinationServiceMock.VerifyNoOtherCalls();
         }
 
         [Fact]
-        public async Task ShouldThrowServiceExceptionOnSubmitIfServiceErrorOccursAsync()
+        public async Task ShouldThrowServiceExceptionOnRemoveByIdIfServiceErrorOccursAsync()
         {
             // given
-            EventV2 someEventV2 = CreateRandomEventV2();
+            Guid someEventV2Id = GetRandomId();
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();
 
@@ -114,12 +115,12 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                         .InnerException as Xeption);
 
             this.eventV2CoordinationServiceMock.Setup(service =>
-                service.SubmitEventV2Async(It.IsAny<EventV2>()))
+                service.RemoveEventV2ByIdAsync(It.IsAny<Guid>()))
                     .ThrowsAsync(eventV2CoordinationServiceException);
 
             // when
             ValueTask<EventV2> submitEventV2Task =
-                this.eventV2SClient.SubmitEventV2Async(someEventV2);
+                this.eventV2SClient.RemoveEventV2ByIdAsync(someEventV2Id);
 
             EventV2ClientServiceException actualEventV2ClientServiceException =
                 await Assert.ThrowsAsync<EventV2ClientServiceException>(
@@ -130,7 +131,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                 .BeEquivalentTo(expectedEventV2ClientServiceException);
 
             this.eventV2CoordinationServiceMock.Verify(service =>
-                service.SubmitEventV2Async(It.IsAny<EventV2>()),
+                service.RemoveEventV2ByIdAsync(It.IsAny<Guid>()),
                     Times.Once);
 
             this.eventV2CoordinationServiceMock.VerifyNoOtherCalls();
