@@ -60,8 +60,25 @@ namespace EventHighway.Core.Clients.EventListeners.V2
         public async ValueTask<EventListenerV2> RemoveEventListenerV2ByIdAsync(
             Guid eventListenerV2Id)
         {
-            return await this.eventListenerV2OrchestrationService
-                .RemoveEventListenerV2ByIdAsync(eventListenerV2Id);
+            try
+            {
+                return await this.eventListenerV2OrchestrationService
+                    .RemoveEventListenerV2ByIdAsync(eventListenerV2Id);
+            }
+            catch (EventListenerV2OrchestrationValidationException
+                eventListenerV2OrchestrationValidationException)
+            {
+                throw CreateEventListenerV2ClientDependencyValidationException(
+                    eventListenerV2OrchestrationValidationException.InnerException
+                        as Xeption);
+            }
+            catch (EventListenerV2OrchestrationDependencyValidationException
+                eventListenerV2OrchestrationDependencyValidationException)
+            {
+                throw CreateEventListenerV2ClientDependencyValidationException(
+                    eventListenerV2OrchestrationDependencyValidationException.InnerException
+                        as Xeption);
+            }
         }
 
         private static EventListenerV2ClientDependencyValidationException
