@@ -24,25 +24,28 @@ namespace EventHighway.Core.Clients.EventAddresses.V2
             {
                 return await this.eventAddressV2Service.AddEventAddressV2Async(eventAddressV2);
             }
-            catch (EventAddressV2ValidationException
-                eventAddressV2ValidationException)
+            catch (EventAddressV2ValidationException eventAddressV2ValidationException)
             {
                 throw CreateEventAddressV2ClientDependencyValidationException(
                     eventAddressV2ValidationException.InnerException
                         as Xeption);
             }
-            catch (EventAddressV2DependencyValidationException
-                eventAddressV2DependencyValidationException)
+            catch (EventAddressV2DependencyValidationException eventAddressV2DependencyValidationException)
             {
                 throw CreateEventAddressV2ClientDependencyValidationException(
                     eventAddressV2DependencyValidationException.InnerException
                         as Xeption);
             }
-            catch (EventAddressV2DependencyException
-                eventV2DependencyException)
+            catch (EventAddressV2DependencyException eventV2DependencyException)
             {
                 throw CreateEventAddressV2ClientDependencyException(
                     eventV2DependencyException.InnerException
+                        as Xeption);
+            }
+            catch (EventAddressV2ServiceException eventV2ServiceException)
+            {
+                throw CreateEventAddressV2ClientServiceException(
+                    eventV2ServiceException.InnerException
                         as Xeption);
             }
         }

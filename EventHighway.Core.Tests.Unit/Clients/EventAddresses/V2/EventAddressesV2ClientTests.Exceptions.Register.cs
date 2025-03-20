@@ -108,7 +108,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
 
             var expectedEventAddressV2ClientServiceException =
                 new EventAddressV2ClientServiceException(
-                    message: "Event client service error occurred, contact support.",
+                    message: "Event address client service error occurred, contact support.",
                     innerException: eventV2ServiceException.InnerException as Xeption);
 
             this.eventAddressV2ServiceMock.Setup(service =>
