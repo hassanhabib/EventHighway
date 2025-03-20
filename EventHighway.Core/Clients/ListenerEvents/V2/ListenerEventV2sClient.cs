@@ -33,6 +33,13 @@ namespace EventHighway.Core.Clients.ListenerEvents.V2
                     eventListenerV2OrchestrationDependencyValidationException.InnerException
                         as Xeption);
             }
+            catch (EventListenerV2OrchestrationDependencyException
+                eventListenerV2OrchestrationDependencyException)
+            {
+                throw CreateListenerEventV2ClientDependencyException(
+                    eventListenerV2OrchestrationDependencyException.InnerException
+                        as Xeption);
+            }
         }
 
         private static ListenerEventV2ClientDependencyValidationException
