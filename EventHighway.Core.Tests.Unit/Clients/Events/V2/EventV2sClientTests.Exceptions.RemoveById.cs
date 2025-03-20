@@ -40,16 +40,59 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                     .ThrowsAsync(eventV2CoordinationDependencyValidationException);
 
             // when
-            ValueTask<EventV2> submitEventV2Task =
+            ValueTask<EventV2> removeEventV2ByIdTask =
                 this.eventV2SClient.RemoveEventV2ByIdAsync(someEventV2Id);
 
             EventV2ClientDependencyValidationException actualEventV2ClientDependencyValidationException =
                 await Assert.ThrowsAsync<EventV2ClientDependencyValidationException>(
-                    submitEventV2Task.AsTask);
+                    removeEventV2ByIdTask.AsTask);
 
             // then
             actualEventV2ClientDependencyValidationException.Should()
                 .BeEquivalentTo(expectedEventV2ClientDependencyValidationException);
+
+            this.eventV2CoordinationServiceMock.Verify(service =>
+                service.RemoveEventV2ByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.eventV2CoordinationServiceMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyExceptionOnRemoveByIdIfDependencyErrorOccursAsync()
+        {
+            // given
+            Guid someEventV2Id = GetRandomId();
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            var eventV2CoordinationDependencyException =
+                new EventV2CoordinationDependencyException(
+                    someMessage,
+                    someInnerException);
+
+            var expectedEventV2ClientDependencyException =
+                new EventV2ClientDependencyException(
+                    message: "Event client dependency error occurred, contact support.",
+
+                    innerException: eventV2CoordinationDependencyException
+                        .InnerException as Xeption);
+
+            this.eventV2CoordinationServiceMock.Setup(service =>
+                service.RemoveEventV2ByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(eventV2CoordinationDependencyException);
+
+            // when
+            ValueTask<EventV2> removeEventV2ByIdTask =
+                this.eventV2SClient.RemoveEventV2ByIdAsync(someEventV2Id);
+
+            EventV2ClientDependencyException actualEventV2ClientDependencyException =
+                await Assert.ThrowsAsync<EventV2ClientDependencyException>(
+                    removeEventV2ByIdTask.AsTask);
+
+            // then
+            actualEventV2ClientDependencyException.Should()
+                .BeEquivalentTo(expectedEventV2ClientDependencyException);
 
             this.eventV2CoordinationServiceMock.Verify(service =>
                 service.RemoveEventV2ByIdAsync(It.IsAny<Guid>()),
