@@ -57,7 +57,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
                 await this.eventV2OrchestrationService
                     .SubmitEventV2Async(eventV2);
 
-            if (submittedEventV2.Type == EventV2Type.Immediate)
+            if (submittedEventV2.Type is EventV2Type.Immediate)
                 await ProcessEventListenersAsync(submittedEventV2);
 
             return submittedEventV2;
