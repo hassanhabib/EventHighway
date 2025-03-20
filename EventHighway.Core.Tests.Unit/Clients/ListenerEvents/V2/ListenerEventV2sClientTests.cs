@@ -31,6 +31,9 @@ namespace EventHighway.Core.Tests.Unit.Clients.ListenerEvents.V2
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
 
+        private static Guid GetRandomId() =>
+            Guid.NewGuid();
+
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
@@ -39,6 +42,9 @@ namespace EventHighway.Core.Tests.Unit.Clients.ListenerEvents.V2
 
         private static IQueryable<ListenerEventV2> CreateRandomListenerEventV2s() =>
             CreateListenerEventV2Filler().Create(count: GetRandomNumber()).AsQueryable();
+
+        private static ListenerEventV2 CreateRandomListenerEventV2() =>
+            CreateListenerEventV2Filler().Create();
 
         private static Filler<ListenerEventV2> CreateListenerEventV2Filler()
         {
