@@ -10,6 +10,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
 {
     internal interface IEventV2CoordinationService
     {
+        ValueTask<EventV2> SubmitEventV2Async(EventV2 eventV2);
         ValueTask FireScheduledPendingEventV2sAsync();
         ValueTask<EventV2> RemoveEventV2ByIdAsync(Guid eventV2Id);
     }

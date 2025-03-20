@@ -17,6 +17,15 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
                 Parameter: nameof(EventV2.Id)));
         }
 
+        private static void ValidateEventV2IsNotNull(EventV2 eventV2)
+        {
+            if (eventV2 is null)
+            {
+                throw new NullEventV2CoordinationException(
+                    message: "Event is null.");
+            }
+        }
+
         private static dynamic IsInvalid(Guid id) => new
         {
             Condition = id == Guid.Empty,

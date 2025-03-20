@@ -35,12 +35,16 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
         public EventV2CoordinationServiceTests()
         {
             this.eventV2OrchestrationServiceMock =
-                new Mock<IEventV2OrchestrationService>();
+                new Mock<IEventV2OrchestrationService>(
+                    behavior: MockBehavior.Strict);
 
             this.eventListenerV2OrchestrationServiceMock =
-                new Mock<IEventListenerV2OrchestrationService>();
+                new Mock<IEventListenerV2OrchestrationService>(
+                    behavior: MockBehavior.Strict);
 
-            this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
+            this.dateTimeBrokerMock = new Mock<IDateTimeBroker>(
+                behavior: MockBehavior.Strict);
+
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
             var compareConfiguration = new ComparisonConfig();
 
@@ -125,6 +129,27 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             };
         }
 
+        public static TheoryData<DateTimeOffset, DateTimeOffset?> ScheduledDates()
+        {
+            int randomNegativeDays = GetRandomNegativeNumber();
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
+             
+            DateTimeOffset scheduledNegativeDate =
+                randomDateTimeOffset.AddDays(randomNegativeDays);
+
+            return new TheoryData<DateTimeOffset, DateTimeOffset?>
+            {
+                {
+                    randomDateTimeOffset,
+                    scheduledNegativeDate
+                },
+                {
+                    randomDateTimeOffset,
+                    null
+                }
+            };
+        }
+
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
@@ -146,6 +171,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
+
+        private static int GetRandomNegativeNumber() =>
+            -1 * GetRandomNumber();
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
@@ -182,7 +210,13 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                     .Use(GetRandomDateTimeOffset)
 
                 .OnType<DateTimeOffset?>()
-                    .Use(GetRandomDateTimeOffset());
+                    .Use(GetRandomDateTimeOffset())
+
+                .OnProperty(eventV2 =>
+                    eventV2.EventAddress).IgnoreIt()
+
+                .OnProperty(eventV2 =>
+                    eventV2.ListenerEvents).IgnoreIt();
 
             return filler;
         }

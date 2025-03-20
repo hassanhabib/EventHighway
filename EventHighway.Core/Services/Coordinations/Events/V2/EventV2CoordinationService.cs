@@ -35,6 +35,34 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
             this.loggingBroker = loggingBroker;
         }
 
+        public ValueTask<EventV2> SubmitEventV2Async(EventV2 eventV2) =>
+        TryCatch(async () =>
+        {
+            ValidateEventV2IsNotNull(eventV2);
+
+            DateTimeOffset now =
+                await this.dateTimeBroker.GetDateTimeOffsetAsync();
+
+            eventV2.Type = eventV2.ScheduledDate switch
+            {
+                null => EventV2Type.Immediate,
+
+                DateTimeOffset scheduledDate
+                    when scheduledDate < now => EventV2Type.Immediate,
+
+                _ => EventV2Type.Scheduled,
+            };
+
+            EventV2 submittedEventV2 =
+                await this.eventV2OrchestrationService
+                    .SubmitEventV2Async(eventV2);
+
+            if (submittedEventV2.Type is EventV2Type.Immediate)
+                await ProcessEventListenersAsync(submittedEventV2);
+
+            return submittedEventV2;
+        });
+
         public ValueTask FireScheduledPendingEventV2sAsync() =>
         TryCatch(async () =>
         {
@@ -44,27 +72,32 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
 
             foreach (EventV2 eventV2 in eventV2s)
             {
-                IQueryable<EventListenerV2> eventListenerV2s =
-                    await this.eventListenerV2OrchestrationService
-                        .RetrieveEventListenerV2sByEventAddressIdAsync(
-                            eventV2.EventAddressId);
-
-                foreach (EventListenerV2 eventListenerV2 in eventListenerV2s)
-                {
-                    ListenerEventV2 listenerEventV2 =
-                        CreateEventListener(eventV2, eventListenerV2);
-
-                    ListenerEventV2 addedListenerEventV2 =
-                        await this.eventListenerV2OrchestrationService
-                            .AddListenerEventV2Async(listenerEventV2);
-
-                    await RunEventCallAsync(
-                        eventV2,
-                        eventListenerV2,
-                        addedListenerEventV2);
-                }
+                await ProcessEventListenersAsync(eventV2);
             }
         });
+
+        private async ValueTask ProcessEventListenersAsync(EventV2 eventV2)
+        {
+            IQueryable<EventListenerV2> eventListenerV2s =
+                await this.eventListenerV2OrchestrationService
+                    .RetrieveEventListenerV2sByEventAddressIdAsync(
+                        eventV2.EventAddressId);
+
+            foreach (EventListenerV2 eventListenerV2 in eventListenerV2s)
+            {
+                ListenerEventV2 listenerEventV2 =
+                    CreateEventListener(eventV2, eventListenerV2);
+
+                ListenerEventV2 addedListenerEventV2 =
+                    await this.eventListenerV2OrchestrationService
+                        .AddListenerEventV2Async(listenerEventV2);
+
+                await RunEventCallAsync(
+                    eventV2,
+                    eventListenerV2,
+                    addedListenerEventV2);
+            }
+        }
 
         public ValueTask<EventV2> RemoveEventV2ByIdAsync(Guid eventV2Id) =>
         TryCatch(async () =>
