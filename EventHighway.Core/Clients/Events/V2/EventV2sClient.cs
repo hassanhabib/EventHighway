@@ -39,6 +39,13 @@ namespace EventHighway.Core.Clients.Events.V2
                     eventV2CoordinationDependencyException.InnerException
                         as Xeption);
             }
+            catch (EventV2CoordinationServiceException
+                eventV2CoordinationServiceException)
+            {
+                throw CreateEventV2ClientServiceException(
+                    eventV2CoordinationServiceException.InnerException
+                        as Xeption);
+            }
         }
 
         public async ValueTask FireScheduledPendingEventV2sAsync()
