@@ -78,6 +78,13 @@ namespace EventHighway.Core.Clients.ListenerEvents.V2
                     eventListenerV2OrchestrationDependencyException.InnerException
                         as Xeption);
             }
+            catch (EventListenerV2OrchestrationServiceException
+                eventListenerV2OrchestrationServiceException)
+            {
+                throw CreateListenerEventV2ClientServiceException(
+                    eventListenerV2OrchestrationServiceException.InnerException
+                        as Xeption);
+            }
         }
 
         private static ListenerEventV2ClientDependencyValidationException
