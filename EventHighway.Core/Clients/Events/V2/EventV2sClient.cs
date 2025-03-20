@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.Events.V2.Exceptions;
 using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
@@ -24,6 +25,13 @@ namespace EventHighway.Core.Clients.Events.V2
             {
                 return await this.eventV2CoordinationService
                     .SubmitEventV2Async(eventV2);
+            }
+            catch (EventV2CoordinationValidationException
+                eventV2CoordinationValidationException)
+            {
+                throw CreateEventV2ClientDependencyValidationException(
+                    eventV2CoordinationValidationException.InnerException
+                        as Xeption);
             }
             catch (EventV2CoordinationDependencyValidationException
                 eventV2CoordinationDependencyValidationException)
@@ -54,6 +62,43 @@ namespace EventHighway.Core.Clients.Events.V2
             {
                 await this.eventV2CoordinationService
                     .FireScheduledPendingEventV2sAsync();
+            }
+            catch (EventV2CoordinationDependencyValidationException
+                eventV2CoordinationDependencyValidationException)
+            {
+                throw CreateEventV2ClientDependencyValidationException(
+                    eventV2CoordinationDependencyValidationException.InnerException
+                        as Xeption);
+            }
+            catch (EventV2CoordinationDependencyException
+                eventV2CoordinationDependencyException)
+            {
+                throw CreateEventV2ClientDependencyException(
+                    eventV2CoordinationDependencyException.InnerException
+                        as Xeption);
+            }
+            catch (EventV2CoordinationServiceException
+                eventV2CoordinationServiceException)
+            {
+                throw CreateEventV2ClientServiceException(
+                    eventV2CoordinationServiceException.InnerException
+                        as Xeption);
+            }
+        }
+
+        public async ValueTask<EventV2> RemoveEventV2ByIdAsync(Guid eventV2Id)
+        {
+            try
+            {
+                return await this.eventV2CoordinationService
+                    .RemoveEventV2ByIdAsync(eventV2Id);
+            }
+            catch (EventV2CoordinationValidationException
+                eventV2CoordinationValidationException)
+            {
+                throw CreateEventV2ClientDependencyValidationException(
+                    eventV2CoordinationValidationException.InnerException
+                        as Xeption);
             }
             catch (EventV2CoordinationDependencyValidationException
                 eventV2CoordinationDependencyValidationException)
