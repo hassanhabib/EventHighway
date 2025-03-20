@@ -26,6 +26,13 @@ namespace EventHighway.Core.Clients.Events.V2
                 return await this.eventV2CoordinationService
                     .SubmitEventV2Async(eventV2);
             }
+            catch (EventV2CoordinationValidationException
+                eventV2CoordinationValidationException)
+            {
+                throw CreateEventV2ClientDependencyValidationException(
+                    eventV2CoordinationValidationException.InnerException
+                        as Xeption);
+            }
             catch (EventV2CoordinationDependencyValidationException
                 eventV2CoordinationDependencyValidationException)
             {
