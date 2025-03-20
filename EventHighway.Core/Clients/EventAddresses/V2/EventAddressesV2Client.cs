@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.EventAddresses.V2.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
@@ -48,6 +49,12 @@ namespace EventHighway.Core.Clients.EventAddresses.V2
                     eventV2ServiceException.InnerException
                         as Xeption);
             }
+        }
+
+        public async ValueTask<EventAddressV2> RemoveEventAddressV2ByIdAsync(Guid eventAddressV2Id)
+        {
+            return await this.eventAddressV2Service.RemoveEventAddressV2ByIdAsync(
+                eventAddressV2Id);
         }
 
         private static EventAddressV2ClientDependencyValidationException
