@@ -40,20 +40,6 @@ namespace EventHighway.Core.Clients.EventListeners.V2
                     eventListenerV2OrchestrationDependencyValidationException.InnerException
                         as Xeption);
             }
-            catch (EventListenerV2OrchestrationDependencyException
-                eventListenerV2OrchestrationDependencyException)
-            {
-                throw CreateEventListenerV2ClientDependencyException(
-                    eventListenerV2OrchestrationDependencyException.InnerException
-                        as Xeption);
-            }
-            catch (EventListenerV2OrchestrationServiceException
-                eventListenerV2OrchestrationServiceException)
-            {
-                throw CreateEventListenerV2ClientServiceException(
-                    eventListenerV2OrchestrationServiceException.InnerException
-                        as Xeption);
-            }
         }
 
         private static EventListenerV2ClientDependencyValidationException
