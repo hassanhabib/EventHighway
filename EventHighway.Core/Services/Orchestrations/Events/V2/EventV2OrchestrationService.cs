@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Loggings;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
 using EventHighway.Core.Models.Services.Foundations.Events.V2;
 using EventHighway.Core.Services.Processings.EventAddresses.V2;
@@ -38,8 +39,14 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
         {
             ValidateEventV2IsNotNull(eventV2);
 
-            _ = await this.eventAddressV2ProcessingService
-                .RetrieveEventAddressV2ByIdAsync(eventV2.EventAddressId);
+            EventAddressV2 maybeEventAddressV2 =
+                await this.eventAddressV2ProcessingService
+                    .RetrieveEventAddressV2ByIdAsync(
+                        eventV2.EventAddressId);
+
+            ValidateListenerEventV2Exists(
+                maybeEventAddressV2,
+                eventV2.EventAddressId);
 
             return await this.eventV2ProcessingService
                 .AddEventV2Async(eventV2);

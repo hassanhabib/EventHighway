@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
 using EventHighway.Core.Models.Services.Foundations.Events.V2;
 using EventHighway.Core.Models.Services.Orchestrations.Events.V2.Exceptions;
@@ -26,6 +27,15 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
             {
                 throw new NullEventV2OrchestrationException(
                     message: "Event is null.");
+            }
+        }
+
+        private static void ValidateListenerEventV2Exists(EventAddressV2 eventAddressV2, Guid eventAddressV2Id)
+        {
+            if (eventAddressV2 is null)
+            {
+                throw new NotFoundEventAddressV2OrchestrationException(
+                    message: $"Could not find event address with id: {eventAddressV2Id}.");
             }
         }
 
