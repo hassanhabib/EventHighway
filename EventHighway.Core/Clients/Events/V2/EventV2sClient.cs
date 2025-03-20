@@ -20,8 +20,18 @@ namespace EventHighway.Core.Clients.Events.V2
 
         public async ValueTask<EventV2> SubmitEventV2Async(EventV2 eventV2)
         {
-            return await this.eventV2CoordinationService
-                .SubmitEventV2Async(eventV2);
+            try
+            {
+                return await this.eventV2CoordinationService
+                    .SubmitEventV2Async(eventV2);
+            }
+            catch (EventV2CoordinationDependencyValidationException
+                eventV2CoordinationDependencyValidationException)
+            {
+                throw CreateEventV2ClientDependencyValidationException(
+                    eventV2CoordinationDependencyValidationException.InnerException
+                        as Xeption);
+            }
         }
 
         public async ValueTask FireScheduledPendingEventV2sAsync()
