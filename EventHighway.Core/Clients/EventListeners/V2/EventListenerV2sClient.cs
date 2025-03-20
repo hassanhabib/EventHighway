@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.EventListeners.V2.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
@@ -54,6 +55,13 @@ namespace EventHighway.Core.Clients.EventListeners.V2
                     eventListenerV2OrchestrationServiceException.InnerException
                         as Xeption);
             }
+        }
+
+        public async ValueTask<EventListenerV2> RemoveEventListenerV2ByIdAsync(
+            Guid eventListenerV2Id)
+        {
+            return await this.eventListenerV2OrchestrationService
+                .RemoveEventListenerV2ByIdAsync(eventListenerV2Id);
         }
 
         private static EventListenerV2ClientDependencyValidationException
