@@ -12,6 +12,7 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
 {
     internal interface IEventV2OrchestrationService
     {
+        ValueTask<EventV2> SubmitEventV2Async(EventV2 eventV2);
         ValueTask<IQueryable<EventV2>> RetrieveScheduledPendingEventV2sAsync();
         ValueTask<EventV2> RemoveEventV2ByIdAsync(Guid eventV2Id);
         ValueTask<EventCallV2> RunEventCallV2Async(EventCallV2 eventCallV2);
