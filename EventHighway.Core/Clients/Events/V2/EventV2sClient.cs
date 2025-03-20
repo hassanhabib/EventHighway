@@ -5,6 +5,7 @@
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.Events.V2.Exceptions;
 using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.Events.V2;
 using EventHighway.Core.Services.Coordinations.Events.V2;
 using Xeptions;
 
@@ -16,6 +17,12 @@ namespace EventHighway.Core.Clients.Events.V2
 
         public EventV2sClient(IEventV2CoordinationService eventV2CoordinationService) =>
             this.eventV2CoordinationService = eventV2CoordinationService;
+
+        public async ValueTask<EventV2> SubmitEventV2Async(EventV2 eventV2)
+        {
+            return await this.eventV2CoordinationService
+                .SubmitEventV2Async(eventV2);
+        }
 
         public async ValueTask FireScheduledPendingEventV2sAsync()
         {
