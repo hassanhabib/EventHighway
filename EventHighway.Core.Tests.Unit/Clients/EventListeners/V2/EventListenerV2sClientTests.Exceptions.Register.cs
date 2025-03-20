@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.EventListeners.V2.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2.Exceptions;
+using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xeptions;
@@ -59,19 +60,21 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventListeners.V2
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();
 
-            var eventV2DependencyException =
-                new EventListenerV2DependencyException(
+            var EventListenerV2OrchestrationDependencyException =
+                new EventListenerV2OrchestrationDependencyException(
                     someMessage,
                     someInnerException);
 
             var expectedEventListenerV2ClientDependencyException =
                 new EventListenerV2ClientDependencyException(
                     message: "Event listener client dependency error occurred, contact support.",
-                    innerException: eventV2DependencyException.InnerException as Xeption);
+
+                    innerException: EventListenerV2OrchestrationDependencyException
+                        .InnerException as Xeption);
 
             this.eventListenerV2OrchestrationServiceMock.Setup(service =>
                 service.AddEventListenerV2Async(It.IsAny<EventListenerV2>()))
-                    .ThrowsAsync(eventV2DependencyException);
+                    .ThrowsAsync(EventListenerV2OrchestrationDependencyException);
 
             // when
             ValueTask<EventListenerV2> registerEventListenerV2Task =
