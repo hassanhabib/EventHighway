@@ -93,5 +93,46 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
 
             this.eventAddressV2ServiceMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRemoveByIdIfServiceErrorOccursAsync()
+        {
+            // given
+            Guid someEventAddressV2Id = GetRandomId();
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            var eventV2ServiceException =
+                new EventAddressV2ServiceException(
+                    someMessage,
+                    someInnerException);
+
+            var expectedEventAddressV2ClientServiceException =
+                new EventAddressV2ClientServiceException(
+                    message: "Event address client service error occurred, contact support.",
+                    innerException: eventV2ServiceException.InnerException as Xeption);
+
+            this.eventAddressV2ServiceMock.Setup(service =>
+                service.RemoveEventAddressV2ByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(eventV2ServiceException);
+
+            // when
+            ValueTask<EventAddressV2> removeEventAddressV2ByIdTask =
+                this.eventAddressesClient.RemoveEventAddressV2ByIdAsync(someEventAddressV2Id);
+
+            EventAddressV2ClientServiceException actualEventAddressV2ClientServiceException =
+                await Assert.ThrowsAsync<EventAddressV2ClientServiceException>(
+                    removeEventAddressV2ByIdTask.AsTask);
+
+            // then
+            actualEventAddressV2ClientServiceException.Should()
+                .BeEquivalentTo(expectedEventAddressV2ClientServiceException);
+
+            this.eventAddressV2ServiceMock.Verify(service =>
+                service.RemoveEventAddressV2ByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.eventAddressV2ServiceMock.VerifyNoOtherCalls();
+        }
     }
 }
