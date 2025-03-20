@@ -53,8 +53,23 @@ namespace EventHighway.Core.Clients.EventAddresses.V2
 
         public async ValueTask<EventAddressV2> RemoveEventAddressV2ByIdAsync(Guid eventAddressV2Id)
         {
-            return await this.eventAddressV2Service.RemoveEventAddressV2ByIdAsync(
-                eventAddressV2Id);
+            try
+            {
+                return await this.eventAddressV2Service.RemoveEventAddressV2ByIdAsync(
+                    eventAddressV2Id);
+            }
+            catch (EventAddressV2ValidationException eventAddressV2ValidationException)
+            {
+                throw CreateEventAddressV2ClientDependencyValidationException(
+                    eventAddressV2ValidationException.InnerException
+                        as Xeption);
+            }
+            catch (EventAddressV2DependencyValidationException eventAddressV2DependencyValidationException)
+            {
+                throw CreateEventAddressV2ClientDependencyValidationException(
+                    eventAddressV2DependencyValidationException.InnerException
+                        as Xeption);
+            }
         }
 
         private static EventAddressV2ClientDependencyValidationException
