@@ -14,29 +14,22 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
 {
     public partial class EventV2sClientTests
     {
-        [Fact]
-        public async Task ShouldThrowDependencyValidationExceptionOnSubmitIfDependencyValidationErrorOccursAsync()
+        [Theory]
+        [MemberData(nameof(ValidationExceptions))]
+        public async Task ShouldThrowDependencyValidationExceptionOnSubmitIfDependencyValidationErrorOccursAsync(
+            Xeption validationException)
         {
             // given
             EventV2 someEventV2 = CreateRandomEventV2();
-            string someMessage = GetRandomString();
-            var someInnerException = new Xeption();
-
-            var eventV2CoordinationDependencyValidationException =
-                new EventV2CoordinationDependencyValidationException(
-                    someMessage,
-                    someInnerException);
 
             var expectedEventV2ClientDependencyValidationException =
                 new EventV2ClientDependencyValidationException(
                     message: "Event client validation error occurred, fix the errors and try again.",
-
-                    innerException: eventV2CoordinationDependencyValidationException
-                        .InnerException as Xeption);
+                    innerException: validationException.InnerException as Xeption);
 
             this.eventV2CoordinationServiceMock.Setup(service =>
                 service.SubmitEventV2Async(It.IsAny<EventV2>()))
-                    .ThrowsAsync(eventV2CoordinationDependencyValidationException);
+                    .ThrowsAsync(validationException);
 
             // when
             ValueTask<EventV2> submitEventV2Task =
