@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.Events.V2.Exceptions;
 using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
@@ -76,6 +77,12 @@ namespace EventHighway.Core.Clients.Events.V2
                     eventV2CoordinationServiceException.InnerException
                         as Xeption);
             }
+        }
+
+        public async ValueTask<EventV2> RemoveEventV2ByIdAsync(Guid eventV2Id)
+        {
+            return await this.eventV2CoordinationService
+                .RemoveEventV2ByIdAsync(eventV2Id);
         }
 
         private static EventV2ClientDependencyValidationException CreateEventV2ClientDependencyValidationException(
