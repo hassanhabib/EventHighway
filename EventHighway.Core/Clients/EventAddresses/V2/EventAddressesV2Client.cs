@@ -76,6 +76,12 @@ namespace EventHighway.Core.Clients.EventAddresses.V2
                     eventV2DependencyException.InnerException
                         as Xeption);
             }
+            catch (EventAddressV2ServiceException eventV2ServiceException)
+            {
+                throw CreateEventAddressV2ClientServiceException(
+                    eventV2ServiceException.InnerException
+                        as Xeption);
+            }
         }
 
         private static EventAddressV2ClientDependencyValidationException
