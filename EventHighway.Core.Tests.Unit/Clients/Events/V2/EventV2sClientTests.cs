@@ -27,6 +27,9 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                         this.eventV2CoordinationServiceMock.Object);
         }
 
+        private static Guid GetRandomId() =>
+            Guid.NewGuid();
+
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
