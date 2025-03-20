@@ -81,8 +81,18 @@ namespace EventHighway.Core.Clients.Events.V2
 
         public async ValueTask<EventV2> RemoveEventV2ByIdAsync(Guid eventV2Id)
         {
-            return await this.eventV2CoordinationService
-                .RemoveEventV2ByIdAsync(eventV2Id);
+            try
+            {
+                return await this.eventV2CoordinationService
+                    .RemoveEventV2ByIdAsync(eventV2Id);
+            }
+            catch (EventV2CoordinationDependencyValidationException
+                eventV2CoordinationDependencyValidationException)
+            {
+                throw CreateEventV2ClientDependencyValidationException(
+                    eventV2CoordinationDependencyValidationException.InnerException
+                        as Xeption);
+            }
         }
 
         private static EventV2ClientDependencyValidationException CreateEventV2ClientDependencyValidationException(
