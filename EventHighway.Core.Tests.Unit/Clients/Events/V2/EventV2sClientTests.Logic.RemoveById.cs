@@ -2,12 +2,12 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
+using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.Events.V2;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
-using System;
-using System.Threading.Tasks;
 
 namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
 {
@@ -22,7 +22,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
             EventV2 randomEventV2 = CreateRandomEventV2();
             EventV2 removedEventV2 = randomEventV2;
 
-            EventV2 expectedEventV2 = 
+            EventV2 expectedEventV2 =
                 removedEventV2.DeepClone();
 
             this.eventV2CoordinationServiceMock.Setup(service =>
