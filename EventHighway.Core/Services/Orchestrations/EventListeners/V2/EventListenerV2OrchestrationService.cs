@@ -29,6 +29,15 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
             this.loggingBroker = loggingBroker;
         }
 
+        public ValueTask<EventListenerV2> AddEventListenerV2Async(EventListenerV2 eventListenerV2) =>
+        TryCatch(async () =>
+        {
+            ValidateEventListenerV2IsNotNull(eventListenerV2);
+
+            return await this.eventListenerV2ProcessingService.AddEventListenerV2Async(
+                eventListenerV2);
+        });
+
         public ValueTask<IQueryable<EventListenerV2>> RetrieveEventListenerV2sByEventAddressIdAsync(
             Guid eventAddressId) => TryCatch(async () =>
         {
@@ -36,6 +45,15 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
 
             return await this.eventListenerV2ProcessingService
                 .RetrieveEventListenerV2sByEventAddressIdAsync(eventAddressId);
+        });
+
+        public ValueTask<EventListenerV2> RemoveEventListenerV2ByIdAsync(Guid eventListenerV2Id) =>
+        TryCatch(async () =>
+        {
+            ValidateEventListenerV2Id(eventListenerV2Id);
+
+            return await this.eventListenerV2ProcessingService.RemoveEventListenerV2ByIdAsync(
+                eventListenerV2Id);
         });
 
         public ValueTask<ListenerEventV2> AddListenerEventV2Async(ListenerEventV2 listenerEventV2) =>

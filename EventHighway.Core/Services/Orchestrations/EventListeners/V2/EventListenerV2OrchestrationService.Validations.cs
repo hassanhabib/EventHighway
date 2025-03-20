@@ -11,18 +11,34 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
 {
     internal partial class EventListenerV2OrchestrationService
     {
+        private static void ValidateEventListenerV2Id(Guid eventListenerV2Id)
+        {
+            Validate(
+                (Rule: IsInvalid(eventListenerV2Id),
+                Parameter: nameof(EventListenerV2.Id)));
+        }
+
         private static void ValidateEventAddressId(Guid eventAddressId)
         {
             Validate(
                 (Rule: IsInvalid(eventAddressId),
                 Parameter: nameof(EventListenerV2.EventAddressId)));
         }
-        
+
         private static void ValidateListenerEventV2Id(Guid listenerEventV2Id)
         {
             Validate(
                 (Rule: IsInvalid(listenerEventV2Id),
                 Parameter: nameof(ListenerEventV2.Id)));
+        }
+
+        private static void ValidateEventListenerV2IsNotNull(EventListenerV2 eventListenerV2)
+        {
+            if (eventListenerV2 is null)
+            {
+                throw new NullEventListenerV2OrchestrationException(
+                    message: "Event listener is null.");
+            }
         }
 
         private static void ValidateListenerEventV2IsNotNull(ListenerEventV2 listenerEventV2)

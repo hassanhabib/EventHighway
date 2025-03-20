@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
 using EventHighway.Core.Models.Services.Foundations.Events.V2;
 using EventHighway.Core.Models.Services.Processings.EventAddresses.V2.Exceptions;
@@ -182,11 +183,33 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                     .AsQueryable();
         }
 
+        private static EventAddressV2 CreateRandomEventAddressV2() =>
+            CreateEventAddressV2Filler().Create();
+
         private static EventV2 CreateRandomEventV2() =>
             CreateEventV2Filler().Create();
 
         private static Filler<EventCallV2> CreateEventCallV2Filler() =>
             new Filler<EventCallV2>();
+
+        private static Filler<EventAddressV2> CreateEventAddressV2Filler()
+        {
+            var filler = new Filler<EventAddressV2>();
+
+            filler.Setup()
+                .OnType<DateTimeOffset>().Use(GetRandomDateTimeOffset)
+
+                .OnProperty(eventAddressV2 => eventAddressV2.Events)
+                    .IgnoreIt()
+
+                .OnProperty(eventAddressV2 => eventAddressV2.EventListeners)
+                    .IgnoreIt()
+
+                .OnProperty(eventAddressV2 => eventAddressV2.ListenerEvents)
+                    .IgnoreIt();
+
+            return filler;
+        }
 
         private static Filler<EventV2> CreateEventV2Filler()
         {

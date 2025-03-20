@@ -99,7 +99,16 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
             }
         }
 
-        private async ValueTask RunEventCallAsync(
+        public ValueTask<EventV2> RemoveEventV2ByIdAsync(Guid eventV2Id) =>
+        TryCatch(async () =>
+        {
+            ValidateEventV2Id(eventV2Id);
+
+            return await this.eventV2OrchestrationService
+                .RemoveEventV2ByIdAsync(eventV2Id);
+        });
+
+        private async Task RunEventCallAsync(
             EventV2 eventV2,
             EventListenerV2 eventListenerV2,
             ListenerEventV2 listenerEventV2)
