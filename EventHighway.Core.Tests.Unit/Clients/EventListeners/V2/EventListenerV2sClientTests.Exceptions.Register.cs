@@ -5,6 +5,7 @@
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.EventListeners.V2.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V2.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xeptions;
@@ -42,6 +43,48 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventListeners.V2
             // then
             actualEventListenerV2ClientDependencyValidationException.Should()
                 .BeEquivalentTo(expectedEventListenerV2ClientDependencyValidationException);
+
+            this.eventListenerV2OrchestrationServiceMock.Verify(service =>
+                service.AddEventListenerV2Async(It.IsAny<EventListenerV2>()),
+                    Times.Once);
+
+            this.eventListenerV2OrchestrationServiceMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyExceptionOnRegisterIfDependencyErrorOccursAsync()
+        {
+            // given
+            EventListenerV2 someEventListenerV2 = CreateRandomEventListenerV2();
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            var eventV2DependencyException =
+                new EventListenerV2DependencyException(
+                    someMessage,
+                    someInnerException);
+
+            var expectedEventListenerV2ClientDependencyException =
+                new EventListenerV2ClientDependencyException(
+                    message: "Event listener client dependency error occurred, contact support.",
+                    innerException: eventV2DependencyException.InnerException as Xeption);
+
+            this.eventListenerV2OrchestrationServiceMock.Setup(service =>
+                service.AddEventListenerV2Async(It.IsAny<EventListenerV2>()))
+                    .ThrowsAsync(eventV2DependencyException);
+
+            // when
+            ValueTask<EventListenerV2> registerEventListenerV2Task =
+                this.eventListenerV2SClient.RegisterEventListenerV2Async(someEventListenerV2);
+
+            EventListenerV2ClientDependencyException
+                actualEventListenerV2ClientDependencyException =
+                    await Assert.ThrowsAsync<EventListenerV2ClientDependencyException>(
+                        registerEventListenerV2Task.AsTask);
+
+            // then
+            actualEventListenerV2ClientDependencyException.Should()
+                .BeEquivalentTo(expectedEventListenerV2ClientDependencyException);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
                 service.AddEventListenerV2Async(It.IsAny<EventListenerV2>()),
