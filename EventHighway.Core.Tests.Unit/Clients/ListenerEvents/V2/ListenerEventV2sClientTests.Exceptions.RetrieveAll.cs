@@ -57,5 +57,47 @@ namespace EventHighway.Core.Tests.Unit.Clients.ListenerEvents.V2
 
             this.eventListenerV2OrchestrationServiceMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowDependencyExceptionOnRetrieveAllIfDependencyErrorOccursAsync()
+        {
+            // given
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            var EventListenerV2OrchestrationDependencyException =
+                new EventListenerV2OrchestrationDependencyException(
+                    someMessage,
+                    someInnerException);
+
+            var expectedListenerEventV2ClientDependencyException =
+                new ListenerEventV2ClientDependencyException(
+                    message: "Listener event client dependency error occurred, contact support.",
+
+                    innerException: EventListenerV2OrchestrationDependencyException
+                        .InnerException as Xeption);
+
+            this.eventListenerV2OrchestrationServiceMock.Setup(service =>
+                service.RetrieveAllListenerEventV2sAsync())
+                    .ThrowsAsync(EventListenerV2OrchestrationDependencyException);
+
+            // when
+            ValueTask<IQueryable<ListenerEventV2>> retrieveAllListenerEventV2sTask =
+                this.listenerEventV2SClient.RetrieveAllListenerEventV2sAsync();
+
+            ListenerEventV2ClientDependencyException actualListenerEventV2ClientDependencyException =
+                await Assert.ThrowsAsync<ListenerEventV2ClientDependencyException>(
+                    retrieveAllListenerEventV2sTask.AsTask);
+
+            // then
+            actualListenerEventV2ClientDependencyException.Should()
+                .BeEquivalentTo(expectedListenerEventV2ClientDependencyException);
+
+            this.eventListenerV2OrchestrationServiceMock.Verify(service =>
+                service.RetrieveAllListenerEventV2sAsync(),
+                    Times.Once);
+
+            this.eventListenerV2OrchestrationServiceMock.VerifyNoOtherCalls();
+        }
     }
 }
