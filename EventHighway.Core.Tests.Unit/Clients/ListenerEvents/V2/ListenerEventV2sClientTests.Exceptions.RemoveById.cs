@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.ListenerEvents.V2.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xeptions;
@@ -43,6 +44,49 @@ namespace EventHighway.Core.Tests.Unit.Clients.ListenerEvents.V2
             // then
             actualListenerEventV2ClientDependencyValidationException.Should()
                 .BeEquivalentTo(expectedListenerEventV2ClientDependencyValidationException);
+
+            this.eventListenerV2OrchestrationServiceMock.Verify(service =>
+                service.RemoveListenerEventV2ByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.eventListenerV2OrchestrationServiceMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyExceptionOnRemoveByIdIfDependencyErrorOccursAsync()
+        {
+            // given
+            Guid someListenerEventV2Id = GetRandomId();
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            var eventListenerV2OrchestrationDependencyException =
+                new EventListenerV2OrchestrationDependencyException(
+                    someMessage,
+                    someInnerException);
+
+            var expectedListenerEventV2ClientDependencyException =
+                new ListenerEventV2ClientDependencyException(
+                    message: "Listener event client dependency error occurred, contact support.",
+
+                    innerException: eventListenerV2OrchestrationDependencyException
+                        .InnerException as Xeption);
+
+            this.eventListenerV2OrchestrationServiceMock.Setup(service =>
+                service.RemoveListenerEventV2ByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(eventListenerV2OrchestrationDependencyException);
+
+            // when
+            ValueTask<ListenerEventV2> removeListenerEventV2ByIdTask =
+                this.listenerEventV2SClient.RemoveListenerEventV2ByIdAsync(someListenerEventV2Id);
+
+            ListenerEventV2ClientDependencyException actualListenerEventV2ClientDependencyException =
+                await Assert.ThrowsAsync<ListenerEventV2ClientDependencyException>(
+                    removeListenerEventV2ByIdTask.AsTask);
+
+            // then
+            actualListenerEventV2ClientDependencyException.Should()
+                .BeEquivalentTo(expectedListenerEventV2ClientDependencyException);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
                 service.RemoveListenerEventV2ByIdAsync(It.IsAny<Guid>()),
