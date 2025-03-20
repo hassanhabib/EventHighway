@@ -99,5 +99,47 @@ namespace EventHighway.Core.Tests.Unit.Clients.ListenerEvents.V2
 
             this.eventListenerV2OrchestrationServiceMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRetrieveAllIfServiceErrorOccursAsync()
+        {
+            // given
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            var EventListenerV2OrchestrationServiceException =
+                new EventListenerV2OrchestrationServiceException(
+                    someMessage,
+                    someInnerException);
+
+            var expectedListenerEventV2ClientServiceException =
+                new ListenerEventV2ClientServiceException(
+                    message: "Listener event client service error occurred, contact support.",
+
+                    innerException: EventListenerV2OrchestrationServiceException
+                        .InnerException as Xeption);
+
+            this.eventListenerV2OrchestrationServiceMock.Setup(service =>
+                service.RetrieveAllListenerEventV2sAsync())
+                    .ThrowsAsync(EventListenerV2OrchestrationServiceException);
+
+            // when
+            ValueTask<IQueryable<ListenerEventV2>> retrieveAllListenerEventV2sTask =
+                this.listenerEventV2SClient.RetrieveAllListenerEventV2sAsync();
+
+            ListenerEventV2ClientServiceException actualListenerEventV2ClientServiceException =
+                await Assert.ThrowsAsync<ListenerEventV2ClientServiceException>(
+                    retrieveAllListenerEventV2sTask.AsTask);
+
+            // then
+            actualListenerEventV2ClientServiceException.Should()
+                .BeEquivalentTo(expectedListenerEventV2ClientServiceException);
+
+            this.eventListenerV2OrchestrationServiceMock.Verify(service =>
+                service.RetrieveAllListenerEventV2sAsync(),
+                    Times.Once);
+
+            this.eventListenerV2OrchestrationServiceMock.VerifyNoOtherCalls();
+        }
     }
 }
