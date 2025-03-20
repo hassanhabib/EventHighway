@@ -6,9 +6,11 @@ using System;
 using System.Linq;
 using EventHighway.Core.Clients.ListenerEvents.V2;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 using EventHighway.Core.Services.Orchestrations.EventListeners.V2;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace EventHighway.Core.Tests.Unit.Clients.ListenerEvents.V2
 {
@@ -26,6 +28,23 @@ namespace EventHighway.Core.Tests.Unit.Clients.ListenerEvents.V2
                 new ListenerEventV2sClient(
                     eventListenerV2OrchestrationService:
                         this.eventListenerV2OrchestrationServiceMock.Object);
+        }
+
+        public static TheoryData<Xeption> ValidationExceptions()
+        {
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            return new TheoryData<Xeption>
+            {
+                new EventListenerV2OrchestrationValidationException(
+                    someMessage,
+                    someInnerException),
+
+                new EventListenerV2OrchestrationDependencyValidationException(
+                    someMessage,
+                    someInnerException),
+            };
         }
 
         private static int GetRandomNumber() =>
