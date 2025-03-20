@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.EventListeners.V2.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
@@ -25,6 +26,44 @@ namespace EventHighway.Core.Clients.EventListeners.V2
             {
                 return await this.eventListenerV2OrchestrationService
                     .AddEventListenerV2Async(eventListenerV2);
+            }
+            catch (EventListenerV2OrchestrationValidationException
+                eventListenerV2OrchestrationValidationException)
+            {
+                throw CreateEventListenerV2ClientDependencyValidationException(
+                    eventListenerV2OrchestrationValidationException.InnerException
+                        as Xeption);
+            }
+            catch (EventListenerV2OrchestrationDependencyValidationException
+                eventListenerV2OrchestrationDependencyValidationException)
+            {
+                throw CreateEventListenerV2ClientDependencyValidationException(
+                    eventListenerV2OrchestrationDependencyValidationException.InnerException
+                        as Xeption);
+            }
+            catch (EventListenerV2OrchestrationDependencyException
+                eventListenerV2OrchestrationDependencyException)
+            {
+                throw CreateEventListenerV2ClientDependencyException(
+                    eventListenerV2OrchestrationDependencyException.InnerException
+                        as Xeption);
+            }
+            catch (EventListenerV2OrchestrationServiceException
+                eventListenerV2OrchestrationServiceException)
+            {
+                throw CreateEventListenerV2ClientServiceException(
+                    eventListenerV2OrchestrationServiceException.InnerException
+                        as Xeption);
+            }
+        }
+
+        public async ValueTask<EventListenerV2> RemoveEventListenerV2ByIdAsync(
+            Guid eventListenerV2Id)
+        {
+            try
+            {
+                return await this.eventListenerV2OrchestrationService
+                    .RemoveEventListenerV2ByIdAsync(eventListenerV2Id);
             }
             catch (EventListenerV2OrchestrationValidationException
                 eventListenerV2OrchestrationValidationException)
