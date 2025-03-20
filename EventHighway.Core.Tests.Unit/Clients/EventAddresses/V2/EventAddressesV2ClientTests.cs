@@ -5,9 +5,11 @@
 using System;
 using EventHighway.Core.Clients.EventAddresses.V2;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.Exceptions;
 using EventHighway.Core.Services.Foundations.EventAddresses.V2;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
 {
@@ -26,8 +28,28 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
                     eventAddressV2Service: this.eventAddressV2ServiceMock.Object);
         }
 
+        public static TheoryData<Xeption> ValidationExceptions()
+        {
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            return new TheoryData<Xeption>
+            {
+                new EventAddressV2ValidationException(
+                    someMessage,
+                    someInnerException),
+
+                new EventAddressV2DependencyValidationException(
+                    someMessage,
+                    someInnerException),
+            };
+        }
+
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
+
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
 
         private static EventAddressV2 CreateRandomEventAddressV2() =>
             CreateEventAddressV2Filler().Create();
