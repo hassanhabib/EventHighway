@@ -4,8 +4,11 @@
 
 using System.Linq;
 using System.Threading.Tasks;
+using EventHighway.Core.Models.Clients.ListenerEvents.V2.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 using EventHighway.Core.Services.Orchestrations.EventListeners.V2;
+using Xeptions;
 
 namespace EventHighway.Core.Clients.ListenerEvents.V2
 {
@@ -18,8 +21,43 @@ namespace EventHighway.Core.Clients.ListenerEvents.V2
 
         public async ValueTask<IQueryable<ListenerEventV2>> RetrieveAllListenerEventV2sAsync()
         {
-            return await this.eventListenerV2OrchestrationService
-                .RetrieveAllListenerEventV2sAsync();
+            try
+            {
+                return await this.eventListenerV2OrchestrationService
+                    .RetrieveAllListenerEventV2sAsync();
+            }
+            catch (EventListenerV2OrchestrationDependencyValidationException
+                eventListenerV2OrchestrationDependencyValidationException)
+            {
+                throw CreateListenerEventV2ClientDependencyValidationException(
+                    eventListenerV2OrchestrationDependencyValidationException.InnerException
+                        as Xeption);
+            }
+        }
+
+        private static ListenerEventV2ClientDependencyValidationException
+            CreateListenerEventV2ClientDependencyValidationException(
+                Xeption innerException)
+        {
+            return new ListenerEventV2ClientDependencyValidationException(
+                message: "Listener event client validation error occurred, fix the errors and try again.",
+                innerException: innerException);
+        }
+
+        private static ListenerEventV2ClientDependencyException CreateListenerEventV2ClientDependencyException(
+            Xeption innerException)
+        {
+            return new ListenerEventV2ClientDependencyException(
+                message: "Listener event client dependency error occurred, contact support.",
+                innerException: innerException);
+        }
+
+        private static ListenerEventV2ClientServiceException CreateListenerEventV2ClientServiceException(
+            Xeption innerException)
+        {
+            return new ListenerEventV2ClientServiceException(
+                message: "Listener event client service error occurred, contact support.",
+                innerException: innerException);
         }
     }
 }
