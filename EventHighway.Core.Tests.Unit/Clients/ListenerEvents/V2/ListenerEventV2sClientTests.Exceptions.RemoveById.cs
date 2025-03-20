@@ -94,5 +94,48 @@ namespace EventHighway.Core.Tests.Unit.Clients.ListenerEvents.V2
 
             this.eventListenerV2OrchestrationServiceMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRemoveByIdIfServiceErrorOccursAsync()
+        {
+            // given
+            Guid someListenerEventV2Id = GetRandomId();
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            var eventListenerV2OrchestrationServiceException =
+                new EventListenerV2OrchestrationServiceException(
+                    someMessage,
+                    someInnerException);
+
+            var expectedListenerEventV2ClientServiceException =
+                new ListenerEventV2ClientServiceException(
+                    message: "Listener event client service error occurred, contact support.",
+
+                    innerException: eventListenerV2OrchestrationServiceException
+                        .InnerException as Xeption);
+
+            this.eventListenerV2OrchestrationServiceMock.Setup(service =>
+                service.RemoveListenerEventV2ByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(eventListenerV2OrchestrationServiceException);
+
+            // when
+            ValueTask<ListenerEventV2> removeListenerEventV2ByIdTask =
+                this.listenerEventV2SClient.RemoveListenerEventV2ByIdAsync(someListenerEventV2Id);
+
+            ListenerEventV2ClientServiceException actualListenerEventV2ClientServiceException =
+                await Assert.ThrowsAsync<ListenerEventV2ClientServiceException>(
+                    removeListenerEventV2ByIdTask.AsTask);
+
+            // then
+            actualListenerEventV2ClientServiceException.Should()
+                .BeEquivalentTo(expectedListenerEventV2ClientServiceException);
+
+            this.eventListenerV2OrchestrationServiceMock.Verify(service =>
+                service.RemoveListenerEventV2ByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.eventListenerV2OrchestrationServiceMock.VerifyNoOtherCalls();
+        }
     }
 }
