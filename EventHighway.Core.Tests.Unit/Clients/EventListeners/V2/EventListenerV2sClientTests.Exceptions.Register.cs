@@ -59,7 +59,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventListeners.V2
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();
 
-            var EventListenerV2OrchestrationDependencyException =
+            var eventListenerV2OrchestrationDependencyException =
                 new EventListenerV2OrchestrationDependencyException(
                     someMessage,
                     someInnerException);
@@ -68,12 +68,12 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventListeners.V2
                 new EventListenerV2ClientDependencyException(
                     message: "Event listener client dependency error occurred, contact support.",
 
-                    innerException: EventListenerV2OrchestrationDependencyException
+                    innerException: eventListenerV2OrchestrationDependencyException
                         .InnerException as Xeption);
 
             this.eventListenerV2OrchestrationServiceMock.Setup(service =>
                 service.AddEventListenerV2Async(It.IsAny<EventListenerV2>()))
-                    .ThrowsAsync(EventListenerV2OrchestrationDependencyException);
+                    .ThrowsAsync(eventListenerV2OrchestrationDependencyException);
 
             // when
             ValueTask<EventListenerV2> registerEventListenerV2Task =
