@@ -60,6 +60,26 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                 service.SubmitEventV2Async(inputScheduledEventV2),
                     Times.Once);
 
+            this.eventListenerV2OrchestrationServiceMock.Verify(service =>
+                service.RetrieveEventListenerV2sByEventAddressIdAsync(
+                    It.IsAny<Guid>()),
+                        Times.Never);
+
+            this.eventListenerV2OrchestrationServiceMock.Verify(service =>
+                service.AddListenerEventV2Async(
+                    It.IsAny<ListenerEventV2>()),
+                        Times.Never);
+
+            this.eventV2OrchestrationServiceMock.Verify(service =>
+                service.RunEventCallV2Async(
+                    It.IsAny<EventCallV2>()),
+                        Times.Never);
+
+            this.eventListenerV2OrchestrationServiceMock.Verify(service =>
+                service.ModifyListenerEventV2Async(
+                    It.IsAny<ListenerEventV2>()),
+                        Times.Never);
+
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.eventV2OrchestrationServiceMock.VerifyNoOtherCalls();
             this.eventListenerV2OrchestrationServiceMock.VerifyNoOtherCalls();
@@ -100,10 +120,16 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                         UpdatedDate = inputImmediateEventV2.UpdatedDate
                     }).ToList();
 
-            List<ListenerEventV2> expectedListenerEventV2s =
+            List<ListenerEventV2> addedListenerEventV2s =
                 inputListenerEventV2s.DeepClone();
 
-            List<EventCallV2> expectedCallEventV2s =
+            List<ListenerEventV2> modifiedListenerEventV2s =
+                addedListenerEventV2s;
+
+            List<ListenerEventV2> expectedListenerEventV2s =
+                modifiedListenerEventV2s.DeepClone();
+
+            List<EventCallV2> expectedInputCallEventV2s =
                 retrievedEventListenerV2s.Select(
                     retrievedEventListenerV2 =>
                         new EventCallV2
@@ -136,19 +162,19 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                     .InSequence(mockSequence).Setup(service =>
                         service.AddListenerEventV2Async(
                             It.Is(SameListenerEventAs(inputListenerEventV2s[index]))))
-                                .ReturnsAsync(inputListenerEventV2s[index].DeepClone());
+                                .ReturnsAsync(addedListenerEventV2s[index]);
 
                 var ranEventCall = new EventCallV2
                 {
-                    Endpoint = expectedCallEventV2s[index].Endpoint,
-                    Content = expectedCallEventV2s[index].Content,
+                    Endpoint = expectedInputCallEventV2s[index].Endpoint,
+                    Content = expectedInputCallEventV2s[index].Content,
                     Response = GetRandomString()
                 };
 
                 this.eventV2OrchestrationServiceMock
                     .InSequence(mockSequence).Setup(service =>
                         service.RunEventCallV2Async(
-                            It.Is(SameEventCallAs(expectedCallEventV2s[index]))))
+                            It.Is(SameEventCallAs(expectedInputCallEventV2s[index]))))
                                 .ReturnsAsync(ranEventCall);
 
                 ranEventCallV2s.Add(item: ranEventCall);
@@ -157,15 +183,15 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                     broker.GetDateTimeOffsetAsync())
                         .ReturnsAsync(randomDateTimeOffset);
 
-                expectedListenerEventV2s[index].UpdatedDate = randomDateTimeOffset;
-                expectedListenerEventV2s[index].Status = ListenerEventV2Status.Success;
-                expectedListenerEventV2s[index].Response = ranEventCallV2s[index].Response;
+                addedListenerEventV2s[index].UpdatedDate = randomDateTimeOffset;
+                addedListenerEventV2s[index].Status = ListenerEventV2Status.Success;
+                addedListenerEventV2s[index].Response = ranEventCallV2s[index].Response;
 
                 this.eventListenerV2OrchestrationServiceMock
                     .InSequence(mockSequence).Setup(service =>
                         service.ModifyListenerEventV2Async(
-                            It.Is(SameListenerEventAs(expectedListenerEventV2s[index]))))
-                                .ReturnsAsync(expectedListenerEventV2s[index]);
+                            It.Is(SameListenerEventAs(addedListenerEventV2s[index]))))
+                                .ReturnsAsync(modifiedListenerEventV2s[index]);
             }
 
             // when
@@ -198,12 +224,12 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
                 this.eventV2OrchestrationServiceMock.Verify(service =>
                     service.RunEventCallV2Async(
-                        It.Is(SameEventCallAs(expectedCallEventV2s[index]))),
+                        It.Is(SameEventCallAs(expectedInputCallEventV2s[index]))),
                             Times.Once);
 
                 this.eventListenerV2OrchestrationServiceMock.Verify(service =>
                     service.ModifyListenerEventV2Async(
-                        It.Is(SameListenerEventAs(expectedListenerEventV2s[index]))),
+                        It.Is(SameListenerEventAs(addedListenerEventV2s[index]))),
                             Times.Once);
             }
 
