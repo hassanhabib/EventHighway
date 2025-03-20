@@ -52,7 +52,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
         }
 
         [Fact]
-        public async Task ShouldThrowDependencyExceptionOnFireIfDependencyErrorOccursAsync()
+        public async Task ShouldThrowDependencyExceptionOnRegisterIfDependencyErrorOccursAsync()
         {
             // given
             EventAddressV2 someEventAddressV2 = CreateRandomEventAddressV2();
@@ -85,6 +85,47 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
             // then
             actualEventAddressV2ClientDependencyException.Should()
                 .BeEquivalentTo(expectedEventAddressV2ClientDependencyException);
+
+            this.eventAddressV2ServiceMock.Verify(service =>
+                service.AddEventAddressV2Async(It.IsAny<EventAddressV2>()),
+                    Times.Once);
+
+            this.eventAddressV2ServiceMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRegisterIfServiceErrorOccursAsync()
+        {
+            // given
+            EventAddressV2 someEventAddressV2 = CreateRandomEventAddressV2();
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            var eventV2ServiceException =
+                new EventAddressV2ServiceException(
+                    someMessage,
+                    someInnerException);
+
+            var expectedEventAddressV2ClientServiceException =
+                new EventAddressV2ClientServiceException(
+                    message: "Event client service error occurred, contact support.",
+                    innerException: eventV2ServiceException.InnerException as Xeption);
+
+            this.eventAddressV2ServiceMock.Setup(service =>
+                service.AddEventAddressV2Async(It.IsAny<EventAddressV2>()))
+                    .ThrowsAsync(eventV2ServiceException);
+
+            // when
+            ValueTask<EventAddressV2> registerEventAddressV2Task =
+                this.eventAddressesClient.RegisterEventAddressV2Async(someEventAddressV2);
+
+            EventAddressV2ClientServiceException actualEventAddressV2ClientServiceException =
+                await Assert.ThrowsAsync<EventAddressV2ClientServiceException>(
+                    registerEventAddressV2Task.AsTask);
+
+            // then
+            actualEventAddressV2ClientServiceException.Should()
+                .BeEquivalentTo(expectedEventAddressV2ClientServiceException);
 
             this.eventAddressV2ServiceMock.Verify(service =>
                 service.AddEventAddressV2Async(It.IsAny<EventAddressV2>()),
