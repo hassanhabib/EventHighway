@@ -4,10 +4,13 @@
 
 using System;
 using EventHighway.Core.Clients.Events.V2;
+using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.Events.V2;
 using EventHighway.Core.Services.Coordinations.Events.V2;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
 {
@@ -25,6 +28,23 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                 new EventV2sClient(
                     eventV2CoordinationService:
                         this.eventV2CoordinationServiceMock.Object);
+        }
+
+        public static TheoryData<Xeption> ValidationExceptions()
+        {
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            return new TheoryData<Xeption>
+            {
+                new EventV2CoordinationValidationException(
+                    someMessage,
+                    someInnerException),
+
+                new EventV2CoordinationDependencyValidationException(
+                    someMessage,
+                    someInnerException),
+            };
         }
 
         private static Guid GetRandomId() =>
