@@ -48,6 +48,9 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
+        private static Guid GetRandomId() => 
+            Guid.NewGuid();
+
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
