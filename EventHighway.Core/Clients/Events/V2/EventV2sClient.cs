@@ -86,6 +86,13 @@ namespace EventHighway.Core.Clients.Events.V2
                 return await this.eventV2CoordinationService
                     .RemoveEventV2ByIdAsync(eventV2Id);
             }
+            catch (EventV2CoordinationValidationException
+                eventV2CoordinationValidationException)
+            {
+                throw CreateEventV2ClientDependencyValidationException(
+                    eventV2CoordinationValidationException.InnerException
+                        as Xeption);
+            }
             catch (EventV2CoordinationDependencyValidationException
                 eventV2CoordinationDependencyValidationException)
             {
