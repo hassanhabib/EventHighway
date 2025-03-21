@@ -50,7 +50,7 @@ namespace EventHighway.Core.Clients.ListenerEvents.V2
                 return await this.eventListenerV2OrchestrationService.RemoveListenerEventV2ByIdAsync(
                     listenerEventV2Id);
             }
-catch (EventListenerV2OrchestrationValidationException
+            catch (EventListenerV2OrchestrationValidationException
                 eventListenerV2OrchestrationValidationException)
             {
                 throw CreateListenerEventV2ClientDependencyValidationException(
