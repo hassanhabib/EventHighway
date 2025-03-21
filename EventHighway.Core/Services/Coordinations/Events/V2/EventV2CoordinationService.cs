@@ -86,7 +86,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
             foreach (EventListenerV2 eventListenerV2 in eventListenerV2s)
             {
                 ListenerEventV2 listenerEventV2 =
-                    CreateEventListener(eventV2, eventListenerV2);
+                    CreateEventListenerV2(eventV2, eventListenerV2);
 
                 ListenerEventV2 addedListenerEventV2 =
                     await this.eventListenerV2OrchestrationService
@@ -143,7 +143,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
                 .ModifyListenerEventV2Async(listenerEventV2);
         }
 
-        private static ListenerEventV2 CreateEventListener(
+        private static ListenerEventV2 CreateEventListenerV2(
             EventV2 eventV2,
             EventListenerV2 eventListenerV2)
         {

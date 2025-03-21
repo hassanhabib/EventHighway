@@ -221,6 +221,10 @@ namespace EventHighway.Core.Clients.EventHighways
                 EventAddressesV2Client>();
 
             services.AddTransient<
+                IListenerEventV2sClient,
+                ListenerEventV2sClient>();
+
+            services.AddTransient<
                 IEventHighwayClient,
                 EventHighwayClient>();
         }
