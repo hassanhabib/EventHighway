@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventHighway.App", "EventHi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EventHighway", "EventHighway", "{24113A50-3D3D-4B94-9D16-D7B69A9EB51F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHighway.Core.Tests.Acceptance", "EventHighway.Core.Tests.Acceptance\EventHighway.Core.Tests.Acceptance.csproj", "{0DB68730-A2E4-465F-9B1D-6ECFED6EEFAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{4717718D-8736-4221-A7F9-175F7A304AAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4717718D-8736-4221-A7F9-175F7A304AAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4717718D-8736-4221-A7F9-175F7A304AAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DB68730-A2E4-465F-9B1D-6ECFED6EEFAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DB68730-A2E4-465F-9B1D-6ECFED6EEFAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DB68730-A2E4-465F-9B1D-6ECFED6EEFAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DB68730-A2E4-465F-9B1D-6ECFED6EEFAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
