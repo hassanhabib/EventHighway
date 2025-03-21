@@ -13,3 +13,6 @@
 /EventHighway.App/obj/Release/net8.0
 /EventHighway.Core/bin/Debug
 /EventHighway.App/obj
+/EventHighway.Core.Tests.Acceptance/obj
+/EventHighway.Core.Tests.Acceptance/bin/Debug/net9.0
+/EventHighway.Core.Tests.Acceptance/bin/Debug/net8.0
