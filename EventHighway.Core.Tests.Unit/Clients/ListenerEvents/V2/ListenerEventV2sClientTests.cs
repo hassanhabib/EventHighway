@@ -6,9 +6,11 @@ using System;
 using System.Linq;
 using EventHighway.Core.Clients.ListenerEvents.V2;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 using EventHighway.Core.Services.Orchestrations.EventListeners.V2;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace EventHighway.Core.Tests.Unit.Clients.ListenerEvents.V2
 {
@@ -28,8 +30,28 @@ namespace EventHighway.Core.Tests.Unit.Clients.ListenerEvents.V2
                         this.eventListenerV2OrchestrationServiceMock.Object);
         }
 
+        public static TheoryData<Xeption> ValidationExceptions()
+        {
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            return new TheoryData<Xeption>
+            {
+                new EventListenerV2OrchestrationValidationException(
+                    someMessage,
+                    someInnerException),
+
+                new EventListenerV2OrchestrationDependencyValidationException(
+                    someMessage,
+                    someInnerException),
+            };
+        }
+
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
+
+        private static Guid GetRandomId() =>
+            Guid.NewGuid();
 
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
@@ -39,6 +61,9 @@ namespace EventHighway.Core.Tests.Unit.Clients.ListenerEvents.V2
 
         private static IQueryable<ListenerEventV2> CreateRandomListenerEventV2s() =>
             CreateListenerEventV2Filler().Create(count: GetRandomNumber()).AsQueryable();
+
+        private static ListenerEventV2 CreateRandomListenerEventV2() =>
+            CreateListenerEventV2Filler().Create();
 
         private static Filler<ListenerEventV2> CreateListenerEventV2Filler()
         {

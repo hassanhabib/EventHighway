@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.ListenerEvents.V2.Exceptions;
@@ -25,6 +26,43 @@ namespace EventHighway.Core.Clients.ListenerEvents.V2
             {
                 return await this.eventListenerV2OrchestrationService
                     .RetrieveAllListenerEventV2sAsync();
+            }
+            catch (EventListenerV2OrchestrationDependencyException
+                eventListenerV2OrchestrationDependencyException)
+            {
+                throw CreateListenerEventV2ClientDependencyException(
+                    eventListenerV2OrchestrationDependencyException.InnerException
+                        as Xeption);
+            }
+            catch (EventListenerV2OrchestrationServiceException
+                eventListenerV2OrchestrationServiceException)
+            {
+                throw CreateListenerEventV2ClientServiceException(
+                    eventListenerV2OrchestrationServiceException.InnerException
+                        as Xeption);
+            }
+        }
+
+        public async ValueTask<ListenerEventV2> RemoveListenerEventV2ByIdAsync(Guid listenerEventV2Id)
+        {
+            try
+            {
+                return await this.eventListenerV2OrchestrationService.RemoveListenerEventV2ByIdAsync(
+                    listenerEventV2Id);
+            }
+            catch (EventListenerV2OrchestrationDependencyValidationException
+                eventListenerV2OrchestrationDependencyValidationException)
+            {
+                throw CreateListenerEventV2ClientDependencyValidationException(
+                    eventListenerV2OrchestrationDependencyValidationException.InnerException
+                        as Xeption);
+            }
+            catch (EventListenerV2OrchestrationValidationException
+                eventListenerV2OrchestrationValidationException)
+            {
+                throw CreateListenerEventV2ClientDependencyValidationException(
+                    eventListenerV2OrchestrationValidationException.InnerException
+                        as Xeption);
             }
             catch (EventListenerV2OrchestrationDependencyException
                 eventListenerV2OrchestrationDependencyException)
