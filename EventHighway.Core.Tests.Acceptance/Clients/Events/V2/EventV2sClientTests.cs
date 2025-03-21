@@ -15,19 +15,15 @@ using WireMock.Server;
 
 namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
 {
-    public partial class EventV2sClientTests
+    public partial class EventV2sClientTests : IDisposable
     {
         private readonly WireMockServer wireMockServer;
         private readonly ClientBroker clientBroker;
 
         public EventV2sClientTests()
         {
-            string connectionString = String.Concat(
-                "Server=(localdb)\\MSSQLLocalDB;Database=EventHighwayDb;",
-                "Trusted_Connection=True;MultipleActiveResultSets=true");
-
             this.wireMockServer = WireMockServer.Start();
-            this.clientBroker = new ClientBroker(connectionString);
+            this.clientBroker = new ClientBroker();
         }
 
         private static int GetRandomNumber() =>
@@ -199,5 +195,7 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
 
             return filler;
         }
+
+        public void Dispose() => this.wireMockServer.Stop();
     }
 }

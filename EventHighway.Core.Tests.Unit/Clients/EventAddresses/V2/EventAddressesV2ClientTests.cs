@@ -16,7 +16,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
     public partial class EventAddressesV2ClientTests
     {
         private readonly Mock<IEventAddressV2Service> eventAddressV2ServiceMock;
-        private readonly IEventAddressesV2Client eventAddressesClient;
+        private readonly IEventAddressV2sClient eventAddressesClient;
 
         public EventAddressesV2ClientTests()
         {
@@ -24,7 +24,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
                 new Mock<IEventAddressV2Service>();
 
             this.eventAddressesClient =
-                new EventAddressesV2Client(
+                new EventAddressV2sClient(
                     eventAddressV2Service: this.eventAddressV2ServiceMock.Object);
         }
 

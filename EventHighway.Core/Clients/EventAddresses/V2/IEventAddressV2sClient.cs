@@ -8,7 +8,7 @@ using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
 
 namespace EventHighway.Core.Clients.EventAddresses.V2
 {
-    public interface IEventAddressesV2Client
+    public interface IEventAddressV2sClient
     {
         ValueTask<EventAddressV2> RegisterEventAddressV2Async(EventAddressV2 eventAddressV2);
         ValueTask<EventAddressV2> RemoveEventAddressV2ByIdAsync(Guid eventAddressV2Id);
