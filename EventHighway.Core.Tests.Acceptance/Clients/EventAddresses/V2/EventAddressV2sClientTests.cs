@@ -5,6 +5,7 @@
 using System;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
 using EventHighway.Core.Tests.Acceptance.Brokers;
+using Microsoft.Data.SqlClient;
 using Tynamix.ObjectFiller;
 
 namespace EventHighway.Core.Tests.Acceptance.Clients.EventAddresses.V2

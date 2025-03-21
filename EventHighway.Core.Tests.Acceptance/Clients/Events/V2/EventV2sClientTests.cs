@@ -15,7 +15,7 @@ using WireMock.Server;
 
 namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
 {
-    public partial class EventV2sClientTests
+    public partial class EventV2sClientTests : IDisposable
     {
         private readonly WireMockServer wireMockServer;
         private readonly ClientBroker clientBroker;
@@ -195,5 +195,7 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
 
             return filler;
         }
+
+        public void Dispose() => this.wireMockServer.Stop();
     }
 }
