@@ -13,8 +13,7 @@ namespace EventHighway.Core.Tests.Acceptance.Brokers
     {
         private readonly string connectionString = String.Concat(
             "Server=(localdb)\\MSSQLLocalDB;Database=EventHighwayDb;",
-            "Trusted_Connection=True;MultipleActiveResultSets=true;" +
-            "Min Pool Size=5;Max Pool Size=1000;");
+            "Trusted_Connection=True;MultipleActiveResultSets=true;");
 
         private readonly SqlConnection sqlConnection;
         private readonly IEventHighwayClient eventHighwayClient;
