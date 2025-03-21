@@ -50,18 +50,18 @@ namespace EventHighway.Core.Clients.ListenerEvents.V2
                 return await this.eventListenerV2OrchestrationService.RemoveListenerEventV2ByIdAsync(
                     listenerEventV2Id);
             }
-            catch (EventListenerV2OrchestrationDependencyValidationException
-                eventListenerV2OrchestrationDependencyValidationException)
-            {
-                throw CreateListenerEventV2ClientDependencyValidationException(
-                    eventListenerV2OrchestrationDependencyValidationException.InnerException
-                        as Xeption);
-            }
             catch (EventListenerV2OrchestrationValidationException
                 eventListenerV2OrchestrationValidationException)
             {
                 throw CreateListenerEventV2ClientDependencyValidationException(
                     eventListenerV2OrchestrationValidationException.InnerException
+                        as Xeption);
+            }
+            catch (EventListenerV2OrchestrationDependencyValidationException
+                eventListenerV2OrchestrationDependencyValidationException)
+            {
+                throw CreateListenerEventV2ClientDependencyValidationException(
+                    eventListenerV2OrchestrationDependencyValidationException.InnerException
                         as Xeption);
             }
             catch (EventListenerV2OrchestrationDependencyException
