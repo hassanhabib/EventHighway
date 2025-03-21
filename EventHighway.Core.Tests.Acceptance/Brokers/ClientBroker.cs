@@ -19,7 +19,8 @@ namespace EventHighway.Core.Tests.Acceptance.Brokers
                 "Server=(localdb)\\MSSQLLocalDB;Database=EventHighwayDb10;",
                 "Trusted_Connection=True;MultipleActiveResultSets=true;Max Pool Size=200;");
 
-            this.sqlConnection = new SqlConnection(connectionString);
+            this.sqlConnection = 
+                new SqlConnection(connectionString);
 
             this.eventHighwayClient =
                 new EventHighwayClient(connectionString);
