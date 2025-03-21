@@ -16,8 +16,8 @@ namespace EventHighway.Core.Tests.Acceptance.Brokers
         public ClientBroker()
         {
             string connectionString = String.Concat(
-                "Server=(localdb)\\MSSQLLocalDB;Database=EventHighwayDb10;",
-                "Trusted_Connection=True;MultipleActiveResultSets=true;Max Pool Size=200;");
+                "Server=(localdb)\\MSSQLLocalDB;Database=EventHighwayDb;",
+                "Trusted_Connection=True;MultipleActiveResultSets=true;Max Pool Size=500;");
 
             this.sqlConnection = 
                 new SqlConnection(connectionString);
