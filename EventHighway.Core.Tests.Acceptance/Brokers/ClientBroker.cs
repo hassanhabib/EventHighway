@@ -11,7 +11,7 @@ namespace EventHighway.Core.Tests.Acceptance.Brokers
 {
     public partial class ClientBroker : IAsyncDisposable
     {
-        string connectionString = String.Concat(
+        private readonly string connectionString = String.Concat(
             "Server=(localdb)\\MSSQLLocalDB;Database=EventHighwayDb;",
             "Trusted_Connection=True;MultipleActiveResultSets=true;" +
             "Min Pool Size=5;Max Pool Size=1000;");
@@ -22,13 +22,13 @@ namespace EventHighway.Core.Tests.Acceptance.Brokers
         public ClientBroker()
         {
             this.eventHighwayClient =
-                new EventHighwayClient(connectionString);
+                new EventHighwayClient(this.connectionString);
         }
 
         public async ValueTask DisposeAsync()
         {
             using (var sqlConnection =
-                new SqlConnection(connectionString))
+                new SqlConnection(this.connectionString))
             {
                 await sqlConnection.CloseAsync();
                 await sqlConnection.DisposeAsync();
