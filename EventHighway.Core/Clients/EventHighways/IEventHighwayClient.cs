@@ -18,7 +18,7 @@ namespace EventHighway.Core.Clients.EventHighways
         public IEventListenersClient EventListeners { get; }
         public IEventsClient Events { get; }
         public IEventV2sClient EventV2s { get; set; }
-        public IEventAddressesV2Client IEventAddressV2s { get; set; }
+        public IEventAddressV2sClient IEventAddressV2s { get; set; }
         public IEventListenerV2sClient EventListenerV2s { get; set; }
         public IListenerEventV2sClient ListenerEventV2s { get; set; }
     }

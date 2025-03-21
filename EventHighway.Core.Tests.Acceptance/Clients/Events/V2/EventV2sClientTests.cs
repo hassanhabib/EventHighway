@@ -22,12 +22,8 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
 
         public EventV2sClientTests()
         {
-            string connectionString = String.Concat(
-                "Server=(localdb)\\MSSQLLocalDB;Database=EventHighwayDb;",
-                "Trusted_Connection=True;MultipleActiveResultSets=true");
-
             this.wireMockServer = WireMockServer.Start();
-            this.clientBroker = new ClientBroker(connectionString);
+            this.clientBroker = new ClientBroker();
         }
 
         private static int GetRandomNumber() =>

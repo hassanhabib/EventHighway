@@ -57,7 +57,7 @@ namespace EventHighway.Core.Clients.EventHighways
         public IEventListenersClient EventListeners { get; set; }
         public IEventsClient Events { get; set; }
         public IEventV2sClient EventV2s { get; set; }
-        public IEventAddressesV2Client IEventAddressV2s { get; set; }
+        public IEventAddressV2sClient IEventAddressV2s { get; set; }
         public IEventListenerV2sClient EventListenerV2s { get; set; }
         public IListenerEventV2sClient ListenerEventV2s { get; set; }
 
@@ -76,7 +76,7 @@ namespace EventHighway.Core.Clients.EventHighways
                 serviceProvider.GetRequiredService<IEventV2sClient>();
 
             this.IEventAddressV2s =
-                serviceProvider.GetRequiredService<IEventAddressesV2Client>();
+                serviceProvider.GetRequiredService<IEventAddressV2sClient>();
 
             this.EventListenerV2s =
                 serviceProvider.GetRequiredService<IEventListenerV2sClient>();
@@ -217,8 +217,8 @@ namespace EventHighway.Core.Clients.EventHighways
                 EventAddressesClient>();
 
             services.AddTransient<
-                IEventAddressesV2Client,
-                EventAddressesV2Client>();
+                IEventAddressV2sClient,
+                EventAddressV2sClient>();
 
             services.AddTransient<
                 IListenerEventV2sClient,
