@@ -27,7 +27,10 @@ namespace EventHighway.Core.Tests.Acceptance.Brokers
                 new EventHighwayClient(connectionString);
         }
 
-        public async ValueTask DisposeAsync() =>
+        public async ValueTask DisposeAsync()
+        {
+            await this.sqlConnection.CloseAsync();
             await this.sqlConnection.DisposeAsync();
+        }
     }
 }
