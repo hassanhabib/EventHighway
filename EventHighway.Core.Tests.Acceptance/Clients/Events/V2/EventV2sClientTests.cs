@@ -170,6 +170,12 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
 
             filler.Setup()
                 .OnProperty(eventV2 =>
+                    eventV2.EventAddress).IgnoreIt()
+                    
+                .OnProperty(eventV2 =>
+                    eventV2.ListenerEvents).IgnoreIt()
+                    
+                .OnProperty(eventV2 =>
                     eventV2.EventAddressId).Use(eventAddressV2Id)
 
                 .OnProperty(eventV2 =>

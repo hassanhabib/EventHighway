@@ -129,6 +129,12 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
             var filler = new Filler<EventV2>();
 
             filler.Setup()
+                .OnProperty(eventV2 =>
+                    eventV2.EventAddress).IgnoreIt()
+
+                .OnProperty(eventV2 =>
+                    eventV2.ListenerEvents).IgnoreIt()
+
                 .OnType<DateTimeOffset>().Use(dates)
 
                 .OnType<DateTimeOffset?>()
