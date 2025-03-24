@@ -26,7 +26,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                 removedEventV2.DeepClone();
 
             this.eventV2ProcessingServiceMock.Setup(service =>
-                service.RemoveEventV2ByIdAsync(
+                service.RemoveEventV1ByIdAsync(
                     inputEventV2Id))
                         .ReturnsAsync(removedEventV2);
 
@@ -41,7 +41,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                 .BeEquivalentTo(expectedEventV2);
 
             this.eventV2ProcessingServiceMock.Verify(service =>
-                service.RemoveEventV2ByIdAsync(
+                service.RemoveEventV1ByIdAsync(
                     inputEventV2Id),
                         Times.Once);
 

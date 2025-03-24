@@ -10,29 +10,29 @@ using EventHighway.Core.Brokers.Times;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1.Exceptions;
 using EventHighway.Core.Services.Foundations.Events.V1;
-using EventHighway.Core.Services.Processings.Events.V2;
+using EventHighway.Core.Services.Processings.Events.V1;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
 
-namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
+namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V1
 {
-    public partial class EventV2ProcessingServiceTests
+    public partial class EventV1ProcessingServiceTests
     {
-        private readonly Mock<IEventV1Service> eventV2ServiceMock;
+        private readonly Mock<IEventV1Service> eventV1ServiceMock;
         private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
-        private readonly IEventV2ProcessingService eventV2ProcessingService;
+        private readonly IEventV1ProcessingService eventV1ProcessingService;
 
-        public EventV2ProcessingServiceTests()
+        public EventV1ProcessingServiceTests()
         {
-            this.eventV2ServiceMock = new Mock<IEventV1Service>();
+            this.eventV1ServiceMock = new Mock<IEventV1Service>();
             this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
-            this.eventV2ProcessingService =
-                new EventV2ProcessingService(
-                    eventV2Service: this.eventV2ServiceMock.Object,
+            this.eventV1ProcessingService =
+                new EventV1ProcessingService(
+                    eventV1Service: this.eventV1ServiceMock.Object,
                     dateTimeBroker: this.dateTimeBrokerMock.Object,
                     loggingBroker: this.loggingBrokerMock.Object);
         }
@@ -53,7 +53,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                     someInnerException),
             };
         }
-        
+
         public static TheoryData<Xeption> DependencyExceptions()
         {
             string someMessage = GetRandomString();
@@ -86,30 +86,30 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
         private static int GetNegativeRandomNumber() =>
             -1 * GetRandomNumber();
 
-        private static EventV1 CreateRandomEventV2()
+        private static EventV1 CreateRandomEventV1()
         {
-            return CreateEventV2Filler(
+            return CreateEventV1Filler(
                 dates: GetRandomDateTimeOffset(),
-                eventV2Type: EventV1Type.Immediate)
+                eventV1Type: EventV1Type.Immediate)
                     .Create();
         }
 
-        private static IQueryable<EventV1> CreateRandomEventV2s()
+        private static IQueryable<EventV1> CreateRandomEventV1s()
         {
-            return CreateEventV2Filler(
+            return CreateEventV1Filler(
                 dates: GetRandomDateTimeOffset(),
-                eventV2Type: EventV1Type.Immediate)
+                eventV1Type: EventV1Type.Immediate)
                     .Create(count: GetRandomNumber())
                         .AsQueryable();
         }
 
-        private static IQueryable<EventV1> CreateRandomEventV2s(
+        private static IQueryable<EventV1> CreateRandomEventV1s(
             DateTimeOffset dates,
-            EventV1Type eventV2Type)
+            EventV1Type eventV1Type)
         {
-            return CreateEventV2Filler(
+            return CreateEventV1Filler(
                 dates,
-                eventV2Type)
+                eventV1Type)
                     .Create(count: GetRandomNumber())
                         .AsQueryable();
         }
@@ -121,9 +121,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                     .GetValue();
         }
 
-        private static Filler<EventV1> CreateEventV2Filler(
+        private static Filler<EventV1> CreateEventV1Filler(
             DateTimeOffset dates,
-            EventV1Type eventV2Type)
+            EventV1Type eventV1Type)
         {
             var filler = new Filler<EventV1>();
 
@@ -133,7 +133,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                 .OnType<DateTimeOffset?>()
                     .Use(dates)
 
-                .OnType<EventV1Type>().Use(eventV2Type);
+                .OnType<EventV1Type>().Use(eventV1Type);
 
             return filler;
         }

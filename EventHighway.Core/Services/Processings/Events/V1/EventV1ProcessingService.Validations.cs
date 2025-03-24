@@ -4,25 +4,25 @@
 
 using System;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
-using EventHighway.Core.Models.Services.Processings.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Processings.Events.V1.Exceptions;
 
-namespace EventHighway.Core.Services.Processings.Events.V2
+namespace EventHighway.Core.Services.Processings.Events.V1
 {
-    internal partial class EventV2ProcessingService
+    internal partial class EventV1ProcessingService
     {
-        private static void ValidateEventV2IsNotNull(EventV1 listenerEventV2)
+        private static void ValidateEventV1IsNotNull(EventV1 listenerEventV1)
         {
-            if (listenerEventV2 is null)
+            if (listenerEventV1 is null)
             {
-                throw new NullEventV2ProcessingException(
+                throw new NullEventV1ProcessingException(
                     message: "Event is null.");
             }
         }
 
-        private static void ValidateEventV2Id(Guid eventV2Id)
+        private static void ValidateEventV1Id(Guid eventV1Id)
         {
             Validate(
-                (Rule: IsInvalid(eventV2Id),
+                (Rule: IsInvalid(eventV1Id),
                 Parameter: nameof(EventV1.Id)));
         }
 
@@ -34,21 +34,21 @@ namespace EventHighway.Core.Services.Processings.Events.V2
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
-            var invalidEventV2ProcessingException =
-                new InvalidEventV2ProcessingException(
+            var invalidEventV1ProcessingException =
+                new InvalidEventV1ProcessingException(
                     message: "Event is invalid, fix the errors and try again.");
 
             foreach ((dynamic rule, string parameter) in validations)
             {
                 if (rule.Condition)
                 {
-                    invalidEventV2ProcessingException.UpsertDataList(
+                    invalidEventV1ProcessingException.UpsertDataList(
                         key: parameter,
                         value: rule.Message);
                 }
             }
 
-            invalidEventV2ProcessingException.ThrowIfContainsErrors();
+            invalidEventV1ProcessingException.ThrowIfContainsErrors();
         }
     }
 }

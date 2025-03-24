@@ -10,7 +10,7 @@ using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Orchestrations.Events.V2.Exceptions;
 using EventHighway.Core.Models.Services.Processings.EventAddresses.V1.Exceptions;
 using EventHighway.Core.Models.Services.Processings.EventCalls.V1.Exceptions;
-using EventHighway.Core.Models.Services.Processings.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Processings.Events.V1.Exceptions;
 using Xeptions;
 
 namespace EventHighway.Core.Services.Orchestrations.Events.V2
@@ -45,13 +45,13 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     notFoundEventAddressV2OrchestrationException);
             }
-            catch (EventV2ProcessingValidationException
+            catch (EventV1ProcessingValidationException
                 eventV2ProcessingValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventV2ProcessingValidationException);
             }
-            catch (EventV2ProcessingDependencyValidationException
+            catch (EventV1ProcessingDependencyValidationException
                 eventV2ProcessingDependencyValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
@@ -69,13 +69,13 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventAddressV2ProcessingDependencyValidationException);
             }
-            catch (EventV2ProcessingDependencyException
+            catch (EventV1ProcessingDependencyException
                 eventV2ProcessingDependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
                     eventV2ProcessingDependencyException);
             }
-            catch (EventV2ProcessingServiceException
+            catch (EventV1ProcessingServiceException
                 eventV2ProcessingServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
@@ -111,11 +111,11 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
             {
                 return await returningEventV2sFunction();
             }
-            catch (EventV2ProcessingDependencyException eventV2ProcessingDependencyException)
+            catch (EventV1ProcessingDependencyException eventV2ProcessingDependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(eventV2ProcessingDependencyException);
             }
-            catch (EventV2ProcessingServiceException eventV2ProcessingServiceException)
+            catch (EventV1ProcessingServiceException eventV2ProcessingServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(eventV2ProcessingServiceException);
             }
