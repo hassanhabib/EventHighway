@@ -48,7 +48,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                         Times.Once);
 
             this.eventAddressV2ProcessingServiceMock.Verify(service =>
-                service.RetrieveEventAddressV2ByIdAsync(It.IsAny<Guid>()),
+                service.RetrieveEventAddressV1ByIdAsync(It.IsAny<Guid>()),
                     Times.Never);
 
             this.eventV2ProcessingServiceMock.Verify(broker =>
@@ -80,7 +80,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                     innerException: notFoundEventAddressV2OrchestrationException);
 
             this.eventAddressV2ProcessingServiceMock.Setup(broker =>
-                broker.RetrieveEventAddressV2ByIdAsync(It.IsAny<Guid>()))
+                broker.RetrieveEventAddressV1ByIdAsync(It.IsAny<Guid>()))
                     .ReturnsAsync(nullEventAddressV2);
 
             // when
@@ -96,7 +96,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                 .BeEquivalentTo(expectedEventV2OrchestrationValidationException);
 
             this.eventAddressV2ProcessingServiceMock.Verify(broker =>
-                broker.RetrieveEventAddressV2ByIdAsync(
+                broker.RetrieveEventAddressV1ByIdAsync(
                     It.IsAny<Guid>()),
                         Times.Once);
 

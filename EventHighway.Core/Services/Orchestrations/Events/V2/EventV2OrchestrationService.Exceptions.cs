@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Orchestrations.Events.V2.Exceptions;
-using EventHighway.Core.Models.Services.Processings.EventAddresses.V2.Exceptions;
+using EventHighway.Core.Models.Services.Processings.EventAddresses.V1.Exceptions;
 using EventHighway.Core.Models.Services.Processings.EventCalls.V2.Exceptions;
 using EventHighway.Core.Models.Services.Processings.Events.V2.Exceptions;
 using Xeptions;
@@ -57,13 +57,13 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventV2ProcessingDependencyValidationException);
             }
-            catch (EventAddressV2ProcessingValidationException
+            catch (EventAddressV1ProcessingValidationException
                 eventAddressV2ProcessingValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventAddressV2ProcessingValidationException);
             }
-            catch (EventAddressV2ProcessingDependencyValidationException
+            catch (EventAddressV1ProcessingDependencyValidationException
                 eventAddressV2ProcessingDependencyValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
@@ -81,13 +81,13 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
                 throw await CreateAndLogDependencyExceptionAsync(
                     eventV2ProcessingServiceException);
             }
-            catch (EventAddressV2ProcessingDependencyException
+            catch (EventAddressV1ProcessingDependencyException
                 eventAddressV2ProcessingDependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
                     eventAddressV2ProcessingDependencyException);
             }
-            catch (EventAddressV2ProcessingServiceException
+            catch (EventAddressV1ProcessingServiceException
                 eventAddressV2ProcessingServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(

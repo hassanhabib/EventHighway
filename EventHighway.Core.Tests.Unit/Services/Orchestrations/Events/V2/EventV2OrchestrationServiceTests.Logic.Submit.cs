@@ -33,7 +33,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                 randomEventAddressV2;
 
             this.eventAddressV2ProcessingServiceMock.Setup(service =>
-                service.RetrieveEventAddressV2ByIdAsync(
+                service.RetrieveEventAddressV1ByIdAsync(
                     inputEventV2.EventAddressId))
                         .ReturnsAsync(retrievedEventAddressV2);
 
@@ -52,7 +52,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                 expectedEventV2);
 
             this.eventAddressV2ProcessingServiceMock.Verify(service =>
-                service.RetrieveEventAddressV2ByIdAsync(
+                service.RetrieveEventAddressV1ByIdAsync(
                     inputEventV2.EventAddressId),
                         Times.Once);
 

@@ -8,29 +8,29 @@ using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions;
 using EventHighway.Core.Services.Foundations.EventAddresses.V1;
-using EventHighway.Core.Services.Processings.EventAddresses.V2;
+using EventHighway.Core.Services.Processings.EventAddresses.V1;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
 
-namespace EventHighway.Core.Tests.Unit.Services.Processings.EventAddresses.V2
+namespace EventHighway.Core.Tests.Unit.Services.Processings.EventAddresses.V1
 {
-    public partial class EventAddressV2ProcessingServiceTests
+    public partial class EventAddressV1ProcessingServiceTests
     {
-        private readonly Mock<IEventAddressV1Service> eventAddressV2ServiceMock;
+        private readonly Mock<IEventAddressV1Service> eventAddressV1ServiceMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
-        private readonly IEventAddressV2ProcessingService eventAddressV2ProcessingService;
+        private readonly IEventAddressV1ProcessingService eventAddressV1ProcessingService;
 
-        public EventAddressV2ProcessingServiceTests()
+        public EventAddressV1ProcessingServiceTests()
         {
-            this.eventAddressV2ServiceMock =
+            this.eventAddressV1ServiceMock =
                 new Mock<IEventAddressV1Service>();
 
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
-            this.eventAddressV2ProcessingService =
-                new EventAddressV2ProcessingService(
-                    eventAddressV2Service: this.eventAddressV2ServiceMock.Object,
+            this.eventAddressV1ProcessingService =
+                new EventAddressV1ProcessingService(
+                    eventAddressV1Service: this.eventAddressV1ServiceMock.Object,
                     loggingBroker: this.loggingBrokerMock.Object);
         }
 
@@ -80,23 +80,23 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventAddresses.V2
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
-        private static EventAddressV1 CreateRandomEventAddressV2() =>
-            CreateEventAddressV2Filler().Create();
+        private static EventAddressV1 CreateRandomEventAddressV1() =>
+            CreateEventAddressV1Filler().Create();
 
-        private static Filler<EventAddressV1> CreateEventAddressV2Filler()
+        private static Filler<EventAddressV1> CreateEventAddressV1Filler()
         {
             var filler = new Filler<EventAddressV1>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>().Use(GetRandomDateTimeOffset)
 
-                .OnProperty(eventAddressV2 => eventAddressV2.Events)
+                .OnProperty(eventAddressV1 => eventAddressV1.Events)
                     .IgnoreIt()
 
-                .OnProperty(eventAddressV2 => eventAddressV2.EventListeners)
+                .OnProperty(eventAddressV1 => eventAddressV1.EventListeners)
                     .IgnoreIt()
 
-                .OnProperty(eventAddressV2 => eventAddressV2.ListenerEvents)
+                .OnProperty(eventAddressV1 => eventAddressV1.ListenerEvents)
                     .IgnoreIt();
 
             return filler;
