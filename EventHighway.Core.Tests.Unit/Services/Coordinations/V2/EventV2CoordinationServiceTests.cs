@@ -7,7 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Times;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
@@ -191,8 +191,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                         .AreEqual;
         }
 
-        private Expression<Func<EventCallV2, bool>> SameEventCallAs(
-           EventCallV2 expectedEventCallV2)
+        private Expression<Func<EventCallV1, bool>> SameEventCallAs(
+           EventCallV1 expectedEventCallV2)
         {
             return actualEventCallV2 =>
                 this.compareLogic.Compare(

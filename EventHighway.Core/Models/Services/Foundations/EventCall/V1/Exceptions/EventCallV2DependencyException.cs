@@ -4,12 +4,12 @@
 
 using Xeptions;
 
-namespace EventHighway.Core.Models.Services.Foundations.EventCall.V2.Exceptions
+namespace EventHighway.Core.Models.Services.Foundations.EventCall.V1.Exceptions
 {
-    public class NullEventCallV2Exception : Xeption
+    public class EventCallV2DependencyException : Xeption
     {
-        public NullEventCallV2Exception(string message)
-            : base(message)
+        public EventCallV2DependencyException(string message, Xeption innerException)
+            : base(message, innerException)
         { }
     }
 }

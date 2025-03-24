@@ -5,7 +5,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Orchestrations.Events.V2.Exceptions;
 using EventHighway.Core.Models.Services.Processings.EventAddresses.V2.Exceptions;
@@ -19,7 +19,7 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
     {
         private delegate ValueTask<EventV1> ReturningEventV2Function();
         private delegate ValueTask<IQueryable<EventV1>> ReturningEventV2sFunction();
-        private delegate ValueTask<EventCallV2> ReturningEventCallV2Function();
+        private delegate ValueTask<EventCallV1> ReturningEventCallV2Function();
 
         private async ValueTask<EventV1> TryCatch(ReturningEventV2Function returningEventV2Function)
         {
@@ -130,7 +130,7 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
             }
         }
 
-        private async ValueTask<EventCallV2> TryCatch(
+        private async ValueTask<EventCallV1> TryCatch(
             ReturningEventCallV2Function returningEventCallV2Function)
         {
             try

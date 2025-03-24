@@ -35,7 +35,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     .ReturnsAsync(randomDateTimeOffset);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.InsertEventV2Async(inputEventV2))
+                broker.InsertEventV1Async(inputEventV2))
                     .ReturnsAsync(insertedEventV2);
 
             // when
@@ -52,7 +52,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventV2Async(inputEventV2),
+                broker.InsertEventV1Async(inputEventV2),
                     Times.Once);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();

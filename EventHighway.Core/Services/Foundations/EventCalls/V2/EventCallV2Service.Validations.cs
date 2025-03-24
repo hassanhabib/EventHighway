@@ -2,26 +2,26 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1.Exceptions;
 
 namespace EventHighway.Core.Services.Foundations.EventCalls.V2
 {
     internal partial class EventCallV2Service
     {
-        private void ValidateEventCallV2OnRun(EventCallV2 eventCallV2)
+        private void ValidateEventCallV2OnRun(EventCallV1 eventCallV2)
         {
             ValidateEventCallV2IsNotNull(eventCallV2);
 
             Validate(
                 (Rule: IsInvalid(eventCallV2.Endpoint),
-                Parameter: nameof(EventCallV2.Endpoint)),
+                Parameter: nameof(EventCallV1.Endpoint)),
 
                 (Rule: IsInvalid(eventCallV2.Content),
-                Parameter: nameof(EventCallV2.Content)));
+                Parameter: nameof(EventCallV1.Content)));
         }
 
-        private static void ValidateEventCallV2IsNotNull(EventCallV2 eventCallV2)
+        private static void ValidateEventCallV2IsNotNull(EventCallV1 eventCallV2)
         {
             if (eventCallV2 is null)
             {

@@ -5,7 +5,7 @@
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Apis;
 using EventHighway.Core.Brokers.Loggings;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 
 namespace EventHighway.Core.Services.Foundations.EventCalls.V2
 {
@@ -22,7 +22,7 @@ namespace EventHighway.Core.Services.Foundations.EventCalls.V2
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<EventCallV2> RunEventCallV2Async(EventCallV2 eventCallV2) =>
+        public ValueTask<EventCallV1> RunEventCallV2Async(EventCallV1 eventCallV2) =>
         TryCatch(async () =>
         {
             ValidateEventCallV2OnRun(eventCallV2);

@@ -33,12 +33,12 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                 deletedEventAddressV2.DeepClone();
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectEventAddressV2ByIdAsync(
+                broker.SelectEventAddressV1ByIdAsync(
                     inputEventAddressV2Id))
                         .ReturnsAsync(retrievedEventAddressV2);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.DeleteEventAddressV2Async(
+                broker.DeleteEventAddressV1Async(
                     retrievedEventAddressV2))
                         .ReturnsAsync(deletedEventAddressV2);
 
@@ -53,12 +53,12 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                 expectedEventAddressV2);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectEventAddressV2ByIdAsync(
+                broker.SelectEventAddressV1ByIdAsync(
                     inputEventAddressV2Id),
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.DeleteEventAddressV2Async(
+                broker.DeleteEventAddressV1Async(
                     retrievedEventAddressV2),
                         Times.Once);
 

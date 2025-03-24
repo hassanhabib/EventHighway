@@ -4,7 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Orchestrations.Events.V2.Exceptions;
 using FluentAssertions;
 using Moq;
@@ -20,7 +20,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
             Xeption eventCallV2ValidationException)
         {
             // given
-            EventCallV2 someEventCallV2 = CreateRandomEventCallV2();
+            EventCallV1 someEventCallV2 = CreateRandomEventCallV2();
 
             var expectedEventV2OrchestrationDependencyValidationException =
                 new EventV2OrchestrationDependencyValidationException(
@@ -28,11 +28,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                     innerException: eventCallV2ValidationException.InnerException as Xeption);
 
             this.eventCallV2ProcessingServiceMock.Setup(service =>
-                service.RunEventCallV2Async(It.IsAny<EventCallV2>()))
+                service.RunEventCallV2Async(It.IsAny<EventCallV1>()))
                     .ThrowsAsync(eventCallV2ValidationException);
 
             // when
-            ValueTask<EventCallV2> runEventCallV2Task =
+            ValueTask<EventCallV1> runEventCallV2Task =
                 this.eventV2OrchestrationService.RunEventCallV2Async(
                     someEventCallV2);
 
@@ -46,7 +46,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                 .BeEquivalentTo(expectedEventV2OrchestrationDependencyValidationException);
 
             this.eventCallV2ProcessingServiceMock.Verify(service =>
-                service.RunEventCallV2Async(It.IsAny<EventCallV2>()),
+                service.RunEventCallV2Async(It.IsAny<EventCallV1>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -66,7 +66,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
             Xeption eventCallV2DependencyException)
         {
             // given
-            EventCallV2 someEventCallV2 = CreateRandomEventCallV2();
+            EventCallV1 someEventCallV2 = CreateRandomEventCallV2();
 
             var expectedEventV2OrchestrationDependencyException =
                 new EventV2OrchestrationDependencyException(
@@ -74,11 +74,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                     innerException: eventCallV2DependencyException.InnerException as Xeption);
 
             this.eventCallV2ProcessingServiceMock.Setup(service =>
-                service.RunEventCallV2Async(It.IsAny<EventCallV2>()))
+                service.RunEventCallV2Async(It.IsAny<EventCallV1>()))
                     .ThrowsAsync(eventCallV2DependencyException);
 
             // when
-            ValueTask<EventCallV2> runEventCallV2Task =
+            ValueTask<EventCallV1> runEventCallV2Task =
                 this.eventV2OrchestrationService.RunEventCallV2Async(
                     someEventCallV2);
 
@@ -91,7 +91,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                 .BeEquivalentTo(expectedEventV2OrchestrationDependencyException);
 
             this.eventCallV2ProcessingServiceMock.Verify(service =>
-                service.RunEventCallV2Async(It.IsAny<EventCallV2>()),
+                service.RunEventCallV2Async(It.IsAny<EventCallV1>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -109,7 +109,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
         public async Task ShouldThrowServiceExceptionOnRunIfExceptionOccursAndLogItAsync()
         {
             // given
-            EventCallV2 someEventCallV2 = CreateRandomEventCallV2();
+            EventCallV1 someEventCallV2 = CreateRandomEventCallV2();
             var serviceException = new Exception();
 
             var failedEventV2OrchestrationServiceException =
@@ -123,11 +123,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                     innerException: failedEventV2OrchestrationServiceException);
 
             this.eventCallV2ProcessingServiceMock.Setup(service =>
-                service.RunEventCallV2Async(It.IsAny<EventCallV2>()))
+                service.RunEventCallV2Async(It.IsAny<EventCallV1>()))
                     .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<EventCallV2> runEventCallV2Task =
+            ValueTask<EventCallV1> runEventCallV2Task =
                 this.eventV2OrchestrationService.RunEventCallV2Async(
                     someEventCallV2);
 
@@ -140,7 +140,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                 .BeEquivalentTo(expectedEventV2OrchestrationServiceException);
 
             this.eventCallV2ProcessingServiceMock.Verify(service =>
-                service.RunEventCallV2Async(It.IsAny<EventCallV2>()),
+                service.RunEventCallV2Async(It.IsAny<EventCallV1>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>

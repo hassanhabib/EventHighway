@@ -3,8 +3,8 @@
 // ----------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1.Exceptions;
 using FluentAssertions;
 using Moq;
 
@@ -16,7 +16,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
         public async Task ShouldThrowValidationExceptionOnAddIfEventCallV2IsNullAndLogItAsync()
         {
             // given
-            EventCallV2 nullEventCallV2 = null;
+            EventCallV1 nullEventCallV2 = null;
 
             var nullEventCallV2Exception =
                 new NullEventCallV2Exception(message: "Event call is null.");
@@ -27,7 +27,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
                     innerException: nullEventCallV2Exception);
 
             // when
-            ValueTask<EventCallV2> runEventCallV2Task =
+            ValueTask<EventCallV1> runEventCallV2Task =
                 this.eventCallV2Service.RunEventCallV2Async(nullEventCallV2);
 
             EventCallV2ValidationException actualEventCallV2ValidationException =
@@ -61,7 +61,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
         private async Task ShouldThrowValidationExceptionOnAddIfEventCallV2IsInvalidAndLogItAsync(
             string invalidText)
         {
-            var invalidEventCallV2 = new EventCallV2
+            var invalidEventCallV2 = new EventCallV1
             {
                 Endpoint = invalidText,
                 Content = invalidText
@@ -72,11 +72,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
                     message: "Event call is invalid, fix the errors and try again.");
 
             invalidEventCallV2Exception.AddData(
-                key: nameof(EventCallV2.Endpoint),
+                key: nameof(EventCallV1.Endpoint),
                 values: "Required");
 
             invalidEventCallV2Exception.AddData(
-                key: nameof(EventCallV2.Content),
+                key: nameof(EventCallV1.Content),
                 values: "Required");
 
             var expectedEventCallV2ValidationException =
@@ -85,7 +85,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
                     innerException: invalidEventCallV2Exception);
 
             // when
-            ValueTask<EventCallV2> runEventCallV2Task =
+            ValueTask<EventCallV1> runEventCallV2Task =
                 this.eventCallV2Service.RunEventCallV2Async(invalidEventCallV2);
 
             EventCallV2ValidationException actualEventCallV2ValidationException =

@@ -6,7 +6,7 @@ using System;
 using System.Collections;
 using Xeptions;
 
-namespace EventHighway.Core.Models.Services.Foundations.EventCall.V2.Exceptions
+namespace EventHighway.Core.Models.Services.Foundations.EventCall.V1.Exceptions
 {
     public class InvalidEventCallV2Exception : Xeption
     {

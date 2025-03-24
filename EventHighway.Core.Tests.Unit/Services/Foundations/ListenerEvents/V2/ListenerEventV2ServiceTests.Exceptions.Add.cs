@@ -59,7 +59,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertListenerEventV2Async(It.IsAny<ListenerEventV1>()),
+                broker.InsertListenerEventV1Async(It.IsAny<ListenerEventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -111,7 +111,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertListenerEventV2Async(It.IsAny<ListenerEventV1>()),
+                broker.InsertListenerEventV1Async(It.IsAny<ListenerEventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -165,7 +165,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertListenerEventV2Async(It.IsAny<ListenerEventV1>()),
+                broker.InsertListenerEventV1Async(It.IsAny<ListenerEventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -216,7 +216,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertListenerEventV2Async(It.IsAny<ListenerEventV1>()),
+                broker.InsertListenerEventV1Async(It.IsAny<ListenerEventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -267,7 +267,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertListenerEventV2Async(It.IsAny<ListenerEventV1>()),
+                broker.InsertListenerEventV1Async(It.IsAny<ListenerEventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();

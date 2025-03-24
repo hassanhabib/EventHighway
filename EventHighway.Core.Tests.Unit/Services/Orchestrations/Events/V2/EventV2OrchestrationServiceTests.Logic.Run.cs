@@ -3,7 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
@@ -16,16 +16,16 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
         public async Task ShouldRunEventCallV2Async()
         {
             // given
-            EventCallV2 randomEventCallV2 =
+            EventCallV1 randomEventCallV2 =
                 CreateRandomEventCallV2();
 
-            EventCallV2 inputEventCallV2 =
+            EventCallV1 inputEventCallV2 =
                 randomEventCallV2;
 
-            EventCallV2 ranEventCallV2 =
+            EventCallV1 ranEventCallV2 =
                 inputEventCallV2;
 
-            EventCallV2 expectedEventCallV2 =
+            EventCallV1 expectedEventCallV2 =
                 inputEventCallV2.DeepClone();
 
             this.eventCallV2ProcessingServiceMock.Setup(service =>
@@ -34,7 +34,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                         .ReturnsAsync(ranEventCallV2);
 
             // when
-            EventCallV2 actualEventCallV2 =
+            EventCallV1 actualEventCallV2 =
                 await this.eventV2OrchestrationService
                     .RunEventCallV2Async(inputEventCallV2);
 

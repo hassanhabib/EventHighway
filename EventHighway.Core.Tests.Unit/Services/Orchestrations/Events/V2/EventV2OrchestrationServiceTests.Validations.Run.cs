@@ -3,7 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Orchestrations.Events.V2.Exceptions;
 using FluentAssertions;
 using Moq;
@@ -16,7 +16,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
         public async Task ShouldThrowValidationExceptionOnRunIfEventCallV2IsNullAndLogItAsync()
         {
             // given
-            EventCallV2 nullEventCallV2 = null;
+            EventCallV1 nullEventCallV2 = null;
 
             var nullEventCallV2OrchestrationException =
                 new NullEventCallV2OrchestrationException(message: "Event call is null.");
@@ -27,7 +27,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                     innerException: nullEventCallV2OrchestrationException);
 
             // when
-            ValueTask<EventCallV2> runEventCallV2Task =
+            ValueTask<EventCallV1> runEventCallV2Task =
                 this.eventV2OrchestrationService.RunEventCallV2Async(nullEventCallV2);
 
             EventV2OrchestrationValidationException
@@ -46,7 +46,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
 
             this.eventCallV2ProcessingServiceMock.Verify(broker =>
                 broker.RunEventCallV2Async(
-                    It.IsAny<EventCallV2>()),
+                    It.IsAny<EventCallV1>()),
                         Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();

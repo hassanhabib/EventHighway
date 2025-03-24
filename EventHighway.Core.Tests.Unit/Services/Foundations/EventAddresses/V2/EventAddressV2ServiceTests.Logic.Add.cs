@@ -38,7 +38,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                     .ReturnsAsync(randomDateTimeOffset);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.InsertEventAddressV2Async(
+                broker.InsertEventAddressV1Async(
                     inputEventAddressV2))
                         .ReturnsAsync(insertedEventAddressV2);
 
@@ -57,7 +57,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                     Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventAddressV2Async(
+                broker.InsertEventAddressV1Async(
                     inputEventAddressV2),
                         Times.Once);
 

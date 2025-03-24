@@ -38,7 +38,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                     .ReturnsAsync(randomDateTimeOffset);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.InsertListenerEventV2Async(
+                broker.InsertListenerEventV1Async(
                     inputListenerEventV2))
                         .ReturnsAsync(storageListenerEventV2);
 
@@ -57,7 +57,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                     Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertListenerEventV2Async(
+                broker.InsertListenerEventV1Async(
                     inputListenerEventV2),
                         Times.Once);
 

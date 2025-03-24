@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
@@ -72,7 +72,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
             this.eventV2OrchestrationServiceMock.Verify(service =>
                 service.RunEventCallV2Async(
-                    It.IsAny<EventCallV2>()),
+                    It.IsAny<EventCallV1>()),
                         Times.Never);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
@@ -129,17 +129,17 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             List<ListenerEventV1> expectedListenerEventV2s =
                 modifiedListenerEventV2s.DeepClone();
 
-            List<EventCallV2> expectedInputCallEventV2s =
+            List<EventCallV1> expectedInputCallEventV2s =
                 retrievedEventListenerV2s.Select(
                     retrievedEventListenerV2 =>
-                        new EventCallV2
+                        new EventCallV1
                         {
                             Endpoint = retrievedEventListenerV2.Endpoint,
                             Content = inputImmediateEventV2.Content,
                             Secret = retrievedEventListenerV2.HeaderSecret,
                         }).ToList();
 
-            var ranEventCallV2s = new List<EventCallV2>();
+            var ranEventCallV2s = new List<EventCallV1>();
 
             this.dateTimeBrokerMock.InSequence(mockSequence).Setup(broker =>
                 broker.GetDateTimeOffsetAsync())
@@ -164,7 +164,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                             It.Is(SameListenerEventAs(inputListenerEventV2s[index]))))
                                 .ReturnsAsync(addedListenerEventV2s[index]);
 
-                var ranEventCall = new EventCallV2
+                var ranEventCall = new EventCallV1
                 {
                     Endpoint = expectedInputCallEventV2s[index].Endpoint,
                     Content = expectedInputCallEventV2s[index].Content,

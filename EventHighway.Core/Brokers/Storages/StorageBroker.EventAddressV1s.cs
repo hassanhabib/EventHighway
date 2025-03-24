@@ -13,13 +13,13 @@ namespace EventHighway.Core.Brokers.Storages
     {
         public DbSet<EventAddressV1> EventAddressV1s { get; set; }
 
-        public async ValueTask<EventAddressV1> InsertEventAddressV2Async(EventAddressV1 eventAddressV2) =>
-            await InsertAsync(eventAddressV2);
+        public async ValueTask<EventAddressV1> InsertEventAddressV1Async(EventAddressV1 eventAddressV1) =>
+            await InsertAsync(eventAddressV1);
 
-        public async ValueTask<EventAddressV1> SelectEventAddressV2ByIdAsync(Guid eventAddressV2Id) =>
-            await SelectAsync<EventAddressV1>(eventAddressV2Id);
+        public async ValueTask<EventAddressV1> SelectEventAddressV1ByIdAsync(Guid eventAddressV1Id) =>
+            await SelectAsync<EventAddressV1>(eventAddressV1Id);
 
-        public async ValueTask<EventAddressV1> DeleteEventAddressV2Async(EventAddressV1 eventAddressV2) =>
-            await DeleteAsync(eventAddressV2);
+        public async ValueTask<EventAddressV1> DeleteEventAddressV1Async(EventAddressV1 eventAddressV1) =>
+            await DeleteAsync(eventAddressV1);
     }
 }
