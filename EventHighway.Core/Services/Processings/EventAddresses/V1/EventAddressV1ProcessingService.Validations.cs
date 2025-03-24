@@ -4,16 +4,16 @@
 
 using System;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
-using EventHighway.Core.Models.Services.Processings.EventAddresses.V2.Exceptions;
+using EventHighway.Core.Models.Services.Processings.EventAddresses.V1.Exceptions;
 
-namespace EventHighway.Core.Services.Processings.EventAddresses.V2
+namespace EventHighway.Core.Services.Processings.EventAddresses.V1
 {
-    internal partial class EventAddressV2ProcessingService
+    internal partial class EventAddressV1ProcessingService
     {
-        private static void ValidateEventAddressV2Id(Guid eventAddressV2Id)
+        private static void ValidateEventAddressV1Id(Guid eventAddressV1Id)
         {
             Validate(
-                (Rule: IsInvalid(eventAddressV2Id),
+                (Rule: IsInvalid(eventAddressV1Id),
                 Parameter: nameof(EventAddressV1.Id)));
         }
 
@@ -25,21 +25,21 @@ namespace EventHighway.Core.Services.Processings.EventAddresses.V2
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
-            var invalidEventAddressV2ProcessingException =
-                new InvalidEventAddressV2ProcessingException(
+            var invalidEventAddressV1ProcessingException =
+                new InvalidEventAddressV1ProcessingException(
                     message: "Event address is invalid, fix the errors and try again.");
 
             foreach ((dynamic rule, string parameter) in validations)
             {
                 if (rule.Condition)
                 {
-                    invalidEventAddressV2ProcessingException.UpsertDataList(
+                    invalidEventAddressV1ProcessingException.UpsertDataList(
                         key: parameter,
                         value: rule.Message);
                 }
             }
 
-            invalidEventAddressV2ProcessingException.ThrowIfContainsErrors();
+            invalidEventAddressV1ProcessingException.ThrowIfContainsErrors();
         }
     }
 }

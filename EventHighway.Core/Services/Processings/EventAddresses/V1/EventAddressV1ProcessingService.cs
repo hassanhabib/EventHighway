@@ -8,28 +8,28 @@ using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Services.Foundations.EventAddresses.V1;
 
-namespace EventHighway.Core.Services.Processings.EventAddresses.V2
+namespace EventHighway.Core.Services.Processings.EventAddresses.V1
 {
-    internal partial class EventAddressV2ProcessingService : IEventAddressV2ProcessingService
+    internal partial class EventAddressV1ProcessingService : IEventAddressV1ProcessingService
     {
-        private readonly IEventAddressV1Service eventAddressV2Service;
+        private readonly IEventAddressV1Service eventAddressV1Service;
         private readonly ILoggingBroker loggingBroker;
 
-        public EventAddressV2ProcessingService(
-            IEventAddressV1Service eventAddressV2Service,
+        public EventAddressV1ProcessingService(
+            IEventAddressV1Service eventAddressV1Service,
             ILoggingBroker loggingBroker)
         {
-            this.eventAddressV2Service = eventAddressV2Service;
+            this.eventAddressV1Service = eventAddressV1Service;
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<EventAddressV1> RetrieveEventAddressV2ByIdAsync(Guid eventAddressV2Id) =>
+        public ValueTask<EventAddressV1> RetrieveEventAddressV1ByIdAsync(Guid eventAddressV1Id) =>
         TryCatch(async () =>
         {
-            ValidateEventAddressV2Id(eventAddressV2Id);
+            ValidateEventAddressV1Id(eventAddressV1Id);
 
-            return await this.eventAddressV2Service.RetrieveEventAddressV1ByIdAsync(
-                eventAddressV2Id);
+            return await this.eventAddressV1Service.RetrieveEventAddressV1ByIdAsync(
+                eventAddressV1Id);
         });
     }
 }

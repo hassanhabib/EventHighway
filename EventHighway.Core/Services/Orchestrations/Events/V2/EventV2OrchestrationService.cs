@@ -9,7 +9,7 @@ using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
-using EventHighway.Core.Services.Processings.EventAddresses.V2;
+using EventHighway.Core.Services.Processings.EventAddresses.V1;
 using EventHighway.Core.Services.Processings.EventCalls.V2;
 using EventHighway.Core.Services.Processings.Events.V2;
 
@@ -18,13 +18,13 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
     internal partial class EventV2OrchestrationService : IEventV2OrchestrationService
     {
         private readonly IEventV2ProcessingService eventV2ProcessingService;
-        private readonly IEventAddressV2ProcessingService eventAddressV2ProcessingService;
+        private readonly IEventAddressV1ProcessingService eventAddressV2ProcessingService;
         private readonly IEventCallV2ProcessingService eventCallV2ProcessingService;
         private readonly ILoggingBroker loggingBroker;
 
         public EventV2OrchestrationService(
             IEventV2ProcessingService eventV2ProcessingService,
-            IEventAddressV2ProcessingService eventAddressV2ProcessingService,
+            IEventAddressV1ProcessingService eventAddressV2ProcessingService,
             IEventCallV2ProcessingService eventCallV2ProcessingService,
             ILoggingBroker loggingBroker)
         {
@@ -41,7 +41,7 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
 
             EventAddressV1 maybeEventAddressV2 =
                 await this.eventAddressV2ProcessingService
-                    .RetrieveEventAddressV2ByIdAsync(
+                    .RetrieveEventAddressV1ByIdAsync(
                         eventV2.EventAddressId);
 
             ValidateListenerEventV2Exists(
