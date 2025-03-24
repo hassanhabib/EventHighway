@@ -4,8 +4,8 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1.Exceptions;
 using FluentAssertions;
 using Moq;
 using RESTFulSense.Exceptions;
@@ -21,7 +21,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
             Xeption criticalDependencyException)
         {
             // given
-            EventCallV2 someEventCallV2 = CreateRandomEventCallV2();
+            EventCallV1 someEventCallV2 = CreateRandomEventCallV2();
 
             var failedEventCallV2ConfigurationException =
                 new FailedEventCallV2ConfigurationException(
@@ -41,7 +41,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
                         .ThrowsAsync(criticalDependencyException);
 
             // when
-            ValueTask<EventCallV2> runEventCallV2Task =
+            ValueTask<EventCallV1> runEventCallV2Task =
                 this.eventCallV2Service.RunEventCallV2Async(someEventCallV2);
 
             EventCallV2DependencyException actualEventCallV2DependencyException =
@@ -72,7 +72,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
         public async Task ShouldThrowDependencyValidationExceptionOnAddIfHttpUnprocessableErrorOccursAndLogItAsync()
         {
             // given
-            EventCallV2 someEventCallV2 = CreateRandomEventCallV2();
+            EventCallV1 someEventCallV2 = CreateRandomEventCallV2();
             var httpUnprocessableEntityException = new HttpResponseUnprocessableEntityException();
 
             var failedEventCallV2RequestException =
@@ -93,7 +93,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
                         .ThrowsAsync(httpUnprocessableEntityException);
 
             // when
-            ValueTask<EventCallV2> runEventCallV2Task =
+            ValueTask<EventCallV1> runEventCallV2Task =
                 this.eventCallV2Service.RunEventCallV2Async(someEventCallV2);
 
             EventCallV2DependencyValidationException actualEventCallV2DependencyValidationException =
@@ -124,7 +124,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
         public async Task ShouldThrowDependencyValidationExceptionOnAddIfBadRequestErrorOccursAndLogItAsync()
         {
             // given
-            EventCallV2 someEventCallV2 = CreateRandomEventCallV2();
+            EventCallV1 someEventCallV2 = CreateRandomEventCallV2();
 
             HttpResponseBadRequestException httpBadRequestException =
                 CreateHttpBadRequestException();
@@ -148,7 +148,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
                         .ThrowsAsync(httpBadRequestException);
 
             // when
-            ValueTask<EventCallV2> runEventCallV2Task =
+            ValueTask<EventCallV1> runEventCallV2Task =
                 this.eventCallV2Service.RunEventCallV2Async(someEventCallV2);
 
             EventCallV2DependencyValidationException actualEventCallV2DependencyValidationException =
@@ -179,7 +179,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
         public async Task ShouldThrowDependencyValidationExceptionOnAddIfHttpConflictErrorOccursAndLogItAsync()
         {
             // given
-            EventCallV2 someEventCallV2 = CreateRandomEventCallV2();
+            EventCallV1 someEventCallV2 = CreateRandomEventCallV2();
             var httpConflictException = new HttpResponseConflictException();
 
             var alreadyExistsEventCallV2Exception =
@@ -200,7 +200,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
                         .ThrowsAsync(httpConflictException);
 
             // when
-            ValueTask<EventCallV2> runEventCallV2Task =
+            ValueTask<EventCallV1> runEventCallV2Task =
                 this.eventCallV2Service.RunEventCallV2Async(someEventCallV2);
 
             EventCallV2DependencyValidationException actualEventCallV2DependencyValidationException =
@@ -231,7 +231,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
         public async Task ShouldThrowDependencyValidationExceptionOnAddIfFailedDependencyErrorOccursAndLogItAsync()
         {
             // given
-            EventCallV2 someEventCallV2 = CreateRandomEventCallV2();
+            EventCallV1 someEventCallV2 = CreateRandomEventCallV2();
 
             var httpResponseFailedDependencyException =
                 new HttpResponseFailedDependencyException();
@@ -254,7 +254,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
                         .ThrowsAsync(httpResponseFailedDependencyException);
 
             // when
-            ValueTask<EventCallV2> runEventCallV2Task =
+            ValueTask<EventCallV1> runEventCallV2Task =
                 this.eventCallV2Service.RunEventCallV2Async(someEventCallV2);
 
             EventCallV2DependencyValidationException actualEventCallV2DependencyValidationException =
@@ -285,7 +285,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
         public async Task ShouldThrowDependencyExceptionOnAddIfHttpErrorOccursAndLogItAsync()
         {
             // given
-            EventCallV2 someEventCallV2 = CreateRandomEventCallV2();
+            EventCallV1 someEventCallV2 = CreateRandomEventCallV2();
             var httpException = new HttpResponseException();
 
             var failedEventCallV2DependencyException =
@@ -306,7 +306,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
                         .ThrowsAsync(httpException);
 
             // when
-            ValueTask<EventCallV2> runEventCallV2Task =
+            ValueTask<EventCallV1> runEventCallV2Task =
                 this.eventCallV2Service.RunEventCallV2Async(someEventCallV2);
 
             EventCallV2DependencyException actualEventCallV2DependencyException =
@@ -337,7 +337,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
         public async Task ShouldThrowServiceExceptionOnAddIfExceptionOccursAndLogItAsync()
         {
             // given
-            EventCallV2 someEventCallV2 = CreateRandomEventCallV2();
+            EventCallV1 someEventCallV2 = CreateRandomEventCallV2();
             var serviceException = new Exception();
 
             var failedEventCallV2ServiceException =
@@ -358,7 +358,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
                         .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<EventCallV2> runEventCallV2Task =
+            ValueTask<EventCallV1> runEventCallV2Task =
                 this.eventCallV2Service.RunEventCallV2Async(someEventCallV2);
 
             EventCallV2ServiceException actualEventCallV2ServiceException =

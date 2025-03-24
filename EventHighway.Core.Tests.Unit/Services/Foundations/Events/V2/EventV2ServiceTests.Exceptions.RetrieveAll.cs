@@ -32,7 +32,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     innerException: failedEventV2StorageException);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectAllEventV2sAsync())
+                broker.SelectAllEventV1sAsync())
                     .ThrowsAsync(sqlException);
 
             // when
@@ -48,7 +48,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                 .BeEquivalentTo(expectedEventV2DependencyException);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectAllEventV2sAsync(),
+                broker.SelectAllEventV1sAsync(),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -78,7 +78,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     innerException: failedEventV2ServiceException);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectAllEventV2sAsync())
+                broker.SelectAllEventV1sAsync())
                     .ThrowsAsync(serviceException);
 
             // when
@@ -94,7 +94,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                 .BeEquivalentTo(expectedEventV2ServiceException);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectAllEventV2sAsync(),
+                broker.SelectAllEventV1sAsync(),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>

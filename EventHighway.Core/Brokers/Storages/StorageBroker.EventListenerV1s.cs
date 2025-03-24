@@ -14,16 +14,16 @@ namespace EventHighway.Core.Brokers.Storages
     {
         public DbSet<EventListenerV1> EventListenerV1s { get; set; }
 
-        public async ValueTask<EventListenerV1> InsertEventListenerV2Async(EventListenerV1 eventListenerV2) =>
-            await InsertAsync(eventListenerV2);
+        public async ValueTask<EventListenerV1> InsertEventListenerV1Async(EventListenerV1 eventListenerV1) =>
+            await InsertAsync(eventListenerV1);
 
-        public async ValueTask<IQueryable<EventListenerV1>> SelectAllEventListenerV2sAsync() =>
+        public async ValueTask<IQueryable<EventListenerV1>> SelectAllEventListenerV1sAsync() =>
             SelectAll<EventListenerV1>();
 
-        public async ValueTask<EventListenerV1> SelectEventListenerV2ByIdAsync(Guid eventListenerV2Id) =>
-            await SelectAsync<EventListenerV1>(eventListenerV2Id);
+        public async ValueTask<EventListenerV1> SelectEventListenerV1ByIdAsync(Guid eventListenerV1Id) =>
+            await SelectAsync<EventListenerV1>(eventListenerV1Id);
 
-        public async ValueTask<EventListenerV1> DeleteEventListenerV2Async(EventListenerV1 eventListenerV2) =>
-            await DeleteAsync(eventListenerV2);
+        public async ValueTask<EventListenerV1> DeleteEventListenerV1Async(EventListenerV1 eventListenerV1) =>
+            await DeleteAsync(eventListenerV1);
     }
 }

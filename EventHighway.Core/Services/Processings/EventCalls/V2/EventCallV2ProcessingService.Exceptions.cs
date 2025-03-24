@@ -4,8 +4,8 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1.Exceptions;
 using EventHighway.Core.Models.Services.Processings.EventCalls.V2.Exceptions;
 using Xeptions;
 
@@ -13,9 +13,9 @@ namespace EventHighway.Core.Services.Processings.EventCalls.V2
 {
     internal partial class EventCallV2ProcessingService
     {
-        private delegate ValueTask<EventCallV2> ReturningEventCallV2Function();
+        private delegate ValueTask<EventCallV1> ReturningEventCallV2Function();
 
-        private async ValueTask<EventCallV2> TryCatch(ReturningEventCallV2Function returningEventCallV2Function)
+        private async ValueTask<EventCallV1> TryCatch(ReturningEventCallV2Function returningEventCallV2Function)
         {
             try
             {

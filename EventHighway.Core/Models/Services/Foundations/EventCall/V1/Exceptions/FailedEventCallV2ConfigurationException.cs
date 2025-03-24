@@ -5,11 +5,11 @@
 using System;
 using Xeptions;
 
-namespace EventHighway.Core.Models.Services.Foundations.EventCall.V2.Exceptions
+namespace EventHighway.Core.Models.Services.Foundations.EventCall.V1.Exceptions
 {
-    public class FailedEventCallV2RequestException : Xeption
+    public class FailedEventCallV2ConfigurationException : Xeption
     {
-        public FailedEventCallV2RequestException(string message, Exception innerException)
+        public FailedEventCallV2ConfigurationException(string message, Exception innerException)
             : base(message, innerException)
         { }
     }

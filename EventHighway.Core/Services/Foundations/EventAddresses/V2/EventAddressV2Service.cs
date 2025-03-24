@@ -32,7 +32,7 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
         {
             await ValidateEventAddressV2OnAddAsync(eventAddressV2);
 
-            return await this.storageBroker.InsertEventAddressV2Async(eventAddressV2);
+            return await this.storageBroker.InsertEventAddressV1Async(eventAddressV2);
         });
 
         public ValueTask<EventAddressV1> RetrieveEventAddressV2ByIdAsync(Guid eventAddressV2Id) =>
@@ -40,7 +40,7 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
         {
             ValidateEventAddressV2Id(eventAddressV2Id);
 
-            return await this.storageBroker.SelectEventAddressV2ByIdAsync(eventAddressV2Id);
+            return await this.storageBroker.SelectEventAddressV1ByIdAsync(eventAddressV2Id);
         });
 
         public ValueTask<EventAddressV1> RemoveEventAddressV2ByIdAsync(Guid eventAddressV2Id) =>
@@ -49,11 +49,11 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V2
             ValidateEventAddressV2Id(eventAddressV2Id);
 
             EventAddressV1 maybeEventAddressV2 =
-                await this.storageBroker.SelectEventAddressV2ByIdAsync(eventAddressV2Id);
+                await this.storageBroker.SelectEventAddressV1ByIdAsync(eventAddressV2Id);
 
             ValidateEventAddressV2Exists(maybeEventAddressV2, eventAddressV2Id);
 
-            return await this.storageBroker.DeleteEventAddressV2Async(maybeEventAddressV2);
+            return await this.storageBroker.DeleteEventAddressV1Async(maybeEventAddressV2);
         });
     }
 }

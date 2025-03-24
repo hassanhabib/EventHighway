@@ -33,11 +33,11 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
         {
             await ValidateListenerEventV2OnAddAsync(listenerEventV2);
 
-            return await storageBroker.InsertListenerEventV2Async(listenerEventV2);
+            return await storageBroker.InsertListenerEventV1Async(listenerEventV2);
         });
 
         public ValueTask<IQueryable<ListenerEventV1>> RetrieveAllListenerEventV2sAsync() =>
-        TryCatch(async () => await this.storageBroker.SelectAllListenerEventV2sAsync());
+        TryCatch(async () => await this.storageBroker.SelectAllListenerEventV1sAsync());
 
         public ValueTask<ListenerEventV1> ModifyListenerEventV2Async(ListenerEventV1 listenerEventV2) =>
         TryCatch(async () =>
@@ -45,12 +45,12 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
             await ValidateListenerEventV2OnModifyAsync(listenerEventV2);
 
             ListenerEventV1 maybeListenerEventV2 =
-                await this.storageBroker.SelectListenerEventV2ByIdAsync(
+                await this.storageBroker.SelectListenerEventV1ByIdAsync(
                     listenerEventV2.Id);
 
             ValidateListenerEventV2AgainstStorage(listenerEventV2, maybeListenerEventV2);
 
-            return await storageBroker.UpdateListenerEventV2Async(listenerEventV2);
+            return await storageBroker.UpdateListenerEventV1Async(listenerEventV2);
         });
 
         public ValueTask<ListenerEventV1> RemoveListenerEventV2ByIdAsync(Guid listenerEventV2Id) =>
@@ -59,11 +59,11 @@ namespace EventHighway.Core.Services.Foundations.ListernEvents.V2
             ValidateListenerEventV2Id(listenerEventV2Id);
 
             ListenerEventV1 maybeListenerEventV2 =
-                await this.storageBroker.SelectListenerEventV2ByIdAsync(listenerEventV2Id);
+                await this.storageBroker.SelectListenerEventV1ByIdAsync(listenerEventV2Id);
 
             ValidateListenerEventV2Exists(maybeListenerEventV2, listenerEventV2Id);
 
-            return await this.storageBroker.DeleteListenerEventV2Async(maybeListenerEventV2);
+            return await this.storageBroker.DeleteListenerEventV1Async(maybeListenerEventV2);
         });
     }
 }

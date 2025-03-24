@@ -60,7 +60,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectListenerEventV2ByIdAsync(
+                broker.SelectListenerEventV1ByIdAsync(
                     It.IsAny<Guid>()),
                         Times.Never);
 
@@ -115,7 +115,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.UpdateListenerEventV2Async(It.IsAny<ListenerEventV1>()),
+                broker.UpdateListenerEventV1Async(It.IsAny<ListenerEventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -166,7 +166,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectListenerEventV2ByIdAsync(
+                broker.SelectListenerEventV1ByIdAsync(
                     It.IsAny<Guid>()),
                         Times.Never);
 
@@ -218,7 +218,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectListenerEventV2ByIdAsync(
+                broker.SelectListenerEventV1ByIdAsync(
                     It.IsAny<Guid>()),
                         Times.Never);
 
@@ -270,7 +270,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectListenerEventV2ByIdAsync(
+                broker.SelectListenerEventV1ByIdAsync(
                     It.IsAny<Guid>()),
                         Times.Never);
 

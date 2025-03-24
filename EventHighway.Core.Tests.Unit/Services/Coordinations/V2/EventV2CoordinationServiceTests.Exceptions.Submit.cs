@@ -5,7 +5,7 @@
 using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using FluentAssertions;
@@ -72,7 +72,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
             this.eventV2OrchestrationServiceMock.Verify(service =>
                 service.RunEventCallV2Async(
-                    It.IsAny<EventCallV2>()),
+                    It.IsAny<EventCallV1>()),
                         Times.Never);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
@@ -142,7 +142,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
             this.eventV2OrchestrationServiceMock.Verify(service =>
                 service.RunEventCallV2Async(
-                    It.IsAny<EventCallV2>()),
+                    It.IsAny<EventCallV1>()),
                         Times.Never);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
@@ -215,7 +215,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
             this.eventV2OrchestrationServiceMock.Verify(service =>
                 service.RunEventCallV2Async(
-                    It.IsAny<EventCallV2>()),
+                    It.IsAny<EventCallV1>()),
                         Times.Never);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>

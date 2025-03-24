@@ -5,8 +5,8 @@
 using System;
 using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1.Exceptions;
 using EventHighway.Core.Services.Foundations.EventCalls.V2;
 using EventHighway.Core.Services.Processings.EventCalls.V2;
 using Moq;
@@ -71,10 +71,10 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
-        private static EventCallV2 CreateRandomEventCallV2() =>
+        private static EventCallV1 CreateRandomEventCallV2() =>
             CreateEventCallV2Filler().Create();
 
-        private static Filler<EventCallV2> CreateEventCallV2Filler() =>
-            new Filler<EventCallV2>();
+        private static Filler<EventCallV1> CreateEventCallV2Filler() =>
+            new Filler<EventCallV1>();
     }
 }

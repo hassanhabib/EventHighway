@@ -51,7 +51,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectEventAddressV2ByIdAsync(
+                broker.SelectEventAddressV1ByIdAsync(
                     It.IsAny<Guid>()),
                         Times.Never);
 

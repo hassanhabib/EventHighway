@@ -2,14 +2,14 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Processings.EventCalls.V2.Exceptions;
 
 namespace EventHighway.Core.Services.Processings.EventCalls.V2
 {
     internal partial class EventCallV2ProcessingService
     {
-        private static void ValidateEventCallV2IsNotNull(EventCallV2 eventCallV2)
+        private static void ValidateEventCallV2IsNotNull(EventCallV1 eventCallV2)
         {
             if (eventCallV2 is null)
             {

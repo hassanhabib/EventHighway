@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Times;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
@@ -113,7 +113,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
             EventListenerV1 eventListenerV2,
             ListenerEventV1 listenerEventV2)
         {
-            var eventCallV2 = new EventCallV2
+            var eventCallV2 = new EventCallV1
             {
                 Content = eventV2.Content,
                 Endpoint = eventListenerV2.Endpoint,
@@ -123,7 +123,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
 
             try
             {
-                EventCallV2 ranEventCallV2 =
+                EventCallV1 ranEventCallV2 =
                     await this.eventV2OrchestrationService
                         .RunEventCallV2Async(eventCallV2);
 

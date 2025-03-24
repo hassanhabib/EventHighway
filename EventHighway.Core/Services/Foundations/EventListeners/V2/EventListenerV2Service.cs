@@ -33,11 +33,11 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
         {
             await ValidateEventListenerV2OnAddAsync(eventListenerV2);
 
-            return await this.storageBroker.InsertEventListenerV2Async(eventListenerV2);
+            return await this.storageBroker.InsertEventListenerV1Async(eventListenerV2);
         });
 
         public ValueTask<IQueryable<EventListenerV1>> RetrieveAllEventListenerV2sAsync() =>
-        TryCatch(async () => await storageBroker.SelectAllEventListenerV2sAsync());
+        TryCatch(async () => await storageBroker.SelectAllEventListenerV1sAsync());
 
         public ValueTask<EventListenerV1> RemoveEventListenerV2ByIdAsync(Guid eventListenerV2Id) =>
         TryCatch(async () =>
@@ -45,11 +45,11 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
             ValidateEventListenerV2Id(eventListenerV2Id);
 
             EventListenerV1 maybeEventListenerV2 =
-                await this.storageBroker.SelectEventListenerV2ByIdAsync(eventListenerV2Id);
+                await this.storageBroker.SelectEventListenerV1ByIdAsync(eventListenerV2Id);
 
             ValidateEventListenerV2Exists(maybeEventListenerV2, eventListenerV2Id);
 
-            return await this.storageBroker.DeleteEventListenerV2Async(maybeEventListenerV2);
+            return await this.storageBroker.DeleteEventListenerV1Async(maybeEventListenerV2);
         });
     }
 }

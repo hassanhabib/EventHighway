@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
@@ -49,18 +49,18 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             List<ListenerEventV1> expectedListenerEventV2s =
                 inputListenerEventV2s.DeepClone();
 
-            List<EventCallV2> expectedCallEventV2s =
+            List<EventCallV1> expectedCallEventV2s =
                 retrievedEventV2s.SelectMany(eventV2 =>
                     retrievedEventListenerV2s.Select(
                         retrievedEventListenerV2 =>
-                            new EventCallV2
+                            new EventCallV1
                             {
                                 Endpoint = retrievedEventListenerV2.Endpoint,
                                 Content = eventV2.Content,
                                 Secret = retrievedEventListenerV2.HeaderSecret,
                             })).ToList();
 
-            var ranEventCallV2s = new List<EventCallV2>();
+            var ranEventCallV2s = new List<EventCallV1>();
 
             this.eventV2OrchestrationServiceMock.Setup(service =>
                 service.RetrieveScheduledPendingEventV2sAsync())
@@ -86,9 +86,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                             .ReturnsAsync(expectedListenerEventV2.DeepClone());
             }
 
-            foreach (EventCallV2 expectedCallEventV2 in expectedCallEventV2s)
+            foreach (EventCallV1 expectedCallEventV2 in expectedCallEventV2s)
             {
-                var ranEventCall = new EventCallV2
+                var ranEventCall = new EventCallV1
                 {
                     Endpoint = expectedCallEventV2.Endpoint,
                     Content = expectedCallEventV2.Content,
@@ -144,7 +144,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                             Times.Once);
             }
 
-            foreach (EventCallV2 expectedCallEventV2 in expectedCallEventV2s)
+            foreach (EventCallV1 expectedCallEventV2 in expectedCallEventV2s)
             {
                 this.eventV2OrchestrationServiceMock.Verify(service =>
                     service.RunEventCallV2Async(
@@ -199,11 +199,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             List<ListenerEventV1> expectedListenerEventV2sOnModify =
                 expectedListenerEventV2s.DeepClone();
 
-            List<EventCallV2> expectedCallEventV2s =
+            List<EventCallV1> expectedCallEventV2s =
                 retrievedEventV2s.SelectMany(eventV2 =>
                     retrievedEventListenerV2s.Select(
                         retrievedEventListenerV2 =>
-                            new EventCallV2
+                            new EventCallV1
                             {
                                 Endpoint = retrievedEventListenerV2.Endpoint,
                                 Content = eventV2.Content,
@@ -215,7 +215,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                     new Exception(message: GetRandomString()))
                         .ToList();
 
-            var ranEventCallV2s = new List<EventCallV2>();
+            var ranEventCallV2s = new List<EventCallV1>();
 
             this.eventV2OrchestrationServiceMock.Setup(service =>
                 service.RetrieveScheduledPendingEventV2sAsync())
@@ -243,7 +243,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
             for (int index = 0; index < expectedCallEventV2s.Count; index++)
             {
-                var ranEventCall = new EventCallV2
+                var ranEventCall = new EventCallV1
                 {
                     Endpoint = expectedCallEventV2s[index].Endpoint,
                     Content = expectedCallEventV2s[index].Content,
@@ -299,7 +299,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                             Times.Once);
             }
 
-            foreach (EventCallV2 expectedCallEventV2 in expectedCallEventV2s)
+            foreach (EventCallV1 expectedCallEventV2 in expectedCallEventV2s)
             {
                 this.eventV2OrchestrationServiceMock.Verify(service =>
                     service.RunEventCallV2Async(

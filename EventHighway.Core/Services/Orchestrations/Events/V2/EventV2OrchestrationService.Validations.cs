@@ -4,7 +4,7 @@
 
 using System;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
+using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Orchestrations.Events.V2.Exceptions;
 
@@ -12,7 +12,7 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
 {
     internal partial class EventV2OrchestrationService
     {
-        private static void ValidateEventCallV2IsNotNull(EventCallV2 eventCallV2)
+        private static void ValidateEventCallV2IsNotNull(EventCallV1 eventCallV2)
         {
             if (eventCallV2 is null)
             {

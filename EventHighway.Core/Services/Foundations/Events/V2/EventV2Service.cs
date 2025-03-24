@@ -33,11 +33,11 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
         {
             await ValidateEventV2OnAddAsync(eventV2);
 
-            return await storageBroker.InsertEventV2Async(eventV2);
+            return await storageBroker.InsertEventV1Async(eventV2);
         });
 
         public ValueTask<IQueryable<EventV1>> RetrieveAllEventV2sAsync() =>
-        TryCatch(async () => await this.storageBroker.SelectAllEventV2sAsync());
+        TryCatch(async () => await this.storageBroker.SelectAllEventV1sAsync());
 
         public ValueTask<EventV1> RemoveEventV2ByIdAsync(Guid eventV2Id) =>
         TryCatch(async () =>
@@ -45,11 +45,11 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
             ValidateEventV2Id(eventV2Id);
 
             EventV1 maybeEventV2 =
-                await this.storageBroker.SelectEventV2ByIdAsync(eventV2Id);
+                await this.storageBroker.SelectEventV1ByIdAsync(eventV2Id);
 
             ValidateEventV2Exists(maybeEventV2, eventV2Id);
 
-            return await this.storageBroker.DeleteEventV2Async(maybeEventV2);
+            return await this.storageBroker.DeleteEventV1Async(maybeEventV2);
         });
     }
 }

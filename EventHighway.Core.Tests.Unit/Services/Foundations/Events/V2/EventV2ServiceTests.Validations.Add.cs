@@ -49,7 +49,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     Times.Never);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventV2Async(It.IsAny<EventV1>()),
+                broker.InsertEventV1Async(It.IsAny<EventV1>()),
                     Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
@@ -129,7 +129,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventV2Async(It.IsAny<EventV1>()),
+                broker.InsertEventV1Async(It.IsAny<EventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -186,7 +186,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventV2Async(It.IsAny<EventV1>()),
+                broker.InsertEventV1Async(It.IsAny<EventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -246,7 +246,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventV2Async(It.IsAny<EventV1>()),
+                broker.InsertEventV1Async(It.IsAny<EventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();

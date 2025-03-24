@@ -27,12 +27,12 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                 deletedEventV2.DeepClone();
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectEventV2ByIdAsync(
+                broker.SelectEventV1ByIdAsync(
                     inputEventV2Id))
                         .ReturnsAsync(retrievedEventV2);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.DeleteEventV2Async(
+                broker.DeleteEventV1Async(
                     retrievedEventV2))
                         .ReturnsAsync(deletedEventV2);
 
@@ -47,12 +47,12 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                 expectedEventV2);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectEventV2ByIdAsync(
+                broker.SelectEventV1ByIdAsync(
                     inputEventV2Id),
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.DeleteEventV2Async(
+                broker.DeleteEventV1Async(
                     retrievedEventV2),
                         Times.Once);
 
