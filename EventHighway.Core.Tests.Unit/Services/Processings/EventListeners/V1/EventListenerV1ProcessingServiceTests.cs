@@ -9,30 +9,30 @@ using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1.Exceptions;
 using EventHighway.Core.Services.Foundations.EventListeners.V1;
-using EventHighway.Core.Services.Processings.EventListeners.V2;
+using EventHighway.Core.Services.Processings.EventListeners.V1;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
 
-namespace EventHighway.Core.Tests.Unit.Services.Processings.EventListeners.V2
+namespace EventHighway.Core.Tests.Unit.Services.Processings.EventListeners.V1
 {
-    public partial class EventListenerV2ProcessingServiceTests
+    public partial class EventListenerV1ProcessingServiceTests
     {
-        private readonly Mock<IEventListenerV1Service> eventListenerV2ServiceMock;
+        private readonly Mock<IEventListenerV1Service> eventListenerV1ServiceMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
-        private readonly IEventListenerV2ProcessingService eventListenerV2ProcessingService;
+        private readonly IEventListenerV1ProcessingService eventListenerV1ProcessingService;
 
-        public EventListenerV2ProcessingServiceTests()
+        public EventListenerV1ProcessingServiceTests()
         {
-            this.eventListenerV2ServiceMock =
+            this.eventListenerV1ServiceMock =
                 new Mock<IEventListenerV1Service>();
 
             this.loggingBrokerMock =
                 new Mock<ILoggingBroker>();
 
-            this.eventListenerV2ProcessingService =
-                new EventListenerV2ProcessingService(
-                    eventListenerV2Service: eventListenerV2ServiceMock.Object,
+            this.eventListenerV1ProcessingService =
+                new EventListenerV1ProcessingService(
+                    eventListenerV1Service: eventListenerV1ServiceMock.Object,
                     loggingBroker: this.loggingBrokerMock.Object);
         }
 
@@ -52,7 +52,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventListeners.V2
                     someInnerException),
             };
         }
-        
+
         public static TheoryData<Xeption> DependencyExceptions()
         {
             string someMessage = GetRandomString();
@@ -76,24 +76,24 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventListeners.V2
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
-        private static IQueryable<EventListenerV1> CreateRandomEventListenerV2s() =>
-            CreateEventListenerV2Filler().Create(count: GetRandomNumber()).AsQueryable();
+        private static IQueryable<EventListenerV1> CreateRandomEventListenerV1s() =>
+            CreateEventListenerV1Filler().Create(count: GetRandomNumber()).AsQueryable();
 
-        private static EventListenerV1 CreateRandomEventListenerV2() =>
-            CreateEventListenerV2Filler().Create();
+        private static EventListenerV1 CreateRandomEventListenerV1() =>
+            CreateEventListenerV1Filler().Create();
 
-        private static IQueryable<EventListenerV1> CreateRandomEventListenerV2s(
+        private static IQueryable<EventListenerV1> CreateRandomEventListenerV1s(
             Guid eventAddressId)
         {
-            IQueryable<EventListenerV1> randomEventListenerV2s =
-                CreateRandomEventListenerV2s();
+            IQueryable<EventListenerV1> randomEventListenerV1s =
+                CreateRandomEventListenerV1s();
 
-            randomEventListenerV2s.ToList().ForEach(listener =>
+            randomEventListenerV1s.ToList().ForEach(listener =>
             {
                 listener.EventAddressId = eventAddressId;
             });
 
-            return randomEventListenerV2s;
+            return randomEventListenerV1s;
         }
 
         private static Guid GetRandomId() =>
@@ -105,17 +105,17 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventListeners.V2
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
-        private static Filler<EventListenerV1> CreateEventListenerV2Filler()
+        private static Filler<EventListenerV1> CreateEventListenerV1Filler()
         {
             var filler = new Filler<EventListenerV1>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>().Use(GetRandomDateTimeOffset)
 
-                .OnProperty(eventListenerV2 => eventListenerV2.EventAddress)
+                .OnProperty(eventListenerV1 => eventListenerV1.EventAddress)
                     .IgnoreIt()
 
-                .OnProperty(eventListenerV2 => eventListenerV2.ListenerEvents)
+                .OnProperty(eventListenerV1 => eventListenerV1.ListenerEvents)
                     .IgnoreIt();
 
             return filler;

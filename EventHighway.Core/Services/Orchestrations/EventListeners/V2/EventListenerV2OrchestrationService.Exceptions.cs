@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
-using EventHighway.Core.Models.Services.Processings.EventListeners.V2.Exceptions;
+using EventHighway.Core.Models.Services.Processings.EventListeners.V1.Exceptions;
 using EventHighway.Core.Models.Services.Processings.ListenerEvents.V2.Exceptions;
 using Xeptions;
 
@@ -40,25 +40,25 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     nullEventListenerV2OrchestrationException);
             }
-            catch (EventListenerV2ProcessingValidationException
+            catch (EventListenerV1ProcessingValidationException
                 eventListenerV2ProcessingValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventListenerV2ProcessingValidationException);
             }
-            catch (EventListenerV2ProcessingDependencyValidationException
+            catch (EventListenerV1ProcessingDependencyValidationException
                 eventListenerV2ProcessingDependencyValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventListenerV2ProcessingDependencyValidationException);
             }
-            catch (EventListenerV2ProcessingDependencyException
+            catch (EventListenerV1ProcessingDependencyException
                 eventListenerV2ProcessingDependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
                     eventListenerV2ProcessingDependencyException);
             }
-            catch (EventListenerV2ProcessingServiceException
+            catch (EventListenerV1ProcessingServiceException
                 eventListenerV2ProcessingServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
@@ -89,19 +89,19 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     invalidEventListenerV2OrchestrationException);
             }
-            catch (EventListenerV2ProcessingValidationException
+            catch (EventListenerV1ProcessingValidationException
                 eventListenerV2ProcessingValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventListenerV2ProcessingValidationException);
             }
-            catch (EventListenerV2ProcessingDependencyException
+            catch (EventListenerV1ProcessingDependencyException
                 eventListenerV2ProcessingDependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
                     eventListenerV2ProcessingDependencyException);
             }
-            catch (EventListenerV2ProcessingServiceException
+            catch (EventListenerV1ProcessingServiceException
                 eventListenerV2ProcessingServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(

@@ -34,7 +34,7 @@ using EventHighway.Core.Services.Processings.EventAddresses.V1;
 using EventHighway.Core.Services.Processings.EventCalls;
 using EventHighway.Core.Services.Processings.EventCalls.V1;
 using EventHighway.Core.Services.Processings.EventListeners;
-using EventHighway.Core.Services.Processings.EventListeners.V2;
+using EventHighway.Core.Services.Processings.EventListeners.V1;
 using EventHighway.Core.Services.Processings.Events.V2;
 using EventHighway.Core.Services.Processings.ListenerEvents;
 using EventHighway.Core.Services.Processings.ListenerEvents.V2;
@@ -148,8 +148,8 @@ namespace EventHighway.Core.Clients.EventHighways
                 EventCallV1ProcessingService>();
 
             services.AddTransient<
-                IEventListenerV2ProcessingService,
-                EventListenerV2ProcessingService>();
+                IEventListenerV1ProcessingService,
+                EventListenerV1ProcessingService>();
 
             services.AddTransient<
                 IEventV2ProcessingService,

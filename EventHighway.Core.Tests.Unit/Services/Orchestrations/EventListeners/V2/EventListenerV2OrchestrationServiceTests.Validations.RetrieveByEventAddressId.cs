@@ -52,7 +52,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                         Times.Once);
 
             this.eventListenerV2ProcessingServiceMock.Verify(service =>
-                service.RetrieveEventListenerV2sByEventAddressIdAsync(
+                service.RetrieveEventListenerV1sByEventAddressIdAsync(
                     It.IsAny<Guid>()),
                         Times.Never);
 

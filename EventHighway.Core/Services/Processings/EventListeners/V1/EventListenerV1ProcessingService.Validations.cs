@@ -4,11 +4,11 @@
 
 using System;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
-using EventHighway.Core.Models.Services.Processings.EventListeners.V2.Exceptions;
+using EventHighway.Core.Models.Services.Processings.EventListeners.V1.Exceptions;
 
-namespace EventHighway.Core.Services.Processings.EventListeners.V2
+namespace EventHighway.Core.Services.Processings.EventListeners.V1
 {
-    internal partial class EventListenerV2ProcessingService
+    internal partial class EventListenerV1ProcessingService
     {
         private static void ValidateEventAddressId(Guid eventAddressId)
         {
@@ -17,18 +17,18 @@ namespace EventHighway.Core.Services.Processings.EventListeners.V2
                 Parameter: nameof(EventListenerV1.EventAddressId)));
         }
 
-        private static void ValidateEventListenerV2Id(Guid eventListenerV2Id)
+        private static void ValidateEventListenerV1Id(Guid eventListenerV1Id)
         {
             Validate(
-                (Rule: IsInvalid(eventListenerV2Id),
+                (Rule: IsInvalid(eventListenerV1Id),
                 Parameter: nameof(EventListenerV1.Id)));
         }
 
-        private static void ValidateEventListenerV2IsNotNull(EventListenerV1 eventListenerV2)
+        private static void ValidateEventListenerV1IsNotNull(EventListenerV1 eventListenerV1)
         {
-            if (eventListenerV2 is null)
+            if (eventListenerV1 is null)
             {
-                throw new NullEventListenerV2ProcessingException(
+                throw new NullEventListenerV1ProcessingException(
                     message: "Event listener is null.");
             }
         }
@@ -41,21 +41,21 @@ namespace EventHighway.Core.Services.Processings.EventListeners.V2
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
-            var invalidEventListenerV2ProcessingException =
-                new InvalidEventListenerV2ProcessingException(
+            var invalidEventListenerV1ProcessingException =
+                new InvalidEventListenerV1ProcessingException(
                     message: "Event listener is invalid, fix the errors and try again.");
 
             foreach ((dynamic rule, string parameter) in validations)
             {
                 if (rule.Condition)
                 {
-                    invalidEventListenerV2ProcessingException.UpsertDataList(
+                    invalidEventListenerV1ProcessingException.UpsertDataList(
                         key: parameter,
                         value: rule.Message);
                 }
             }
 
-            invalidEventListenerV2ProcessingException.ThrowIfContainsErrors();
+            invalidEventListenerV1ProcessingException.ThrowIfContainsErrors();
         }
     }
 }
