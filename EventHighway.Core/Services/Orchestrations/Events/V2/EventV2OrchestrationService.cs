@@ -11,19 +11,19 @@ using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Services.Processings.EventAddresses.V1;
 using EventHighway.Core.Services.Processings.EventCalls.V1;
-using EventHighway.Core.Services.Processings.Events.V2;
+using EventHighway.Core.Services.Processings.Events.V1;
 
 namespace EventHighway.Core.Services.Orchestrations.Events.V2
 {
     internal partial class EventV2OrchestrationService : IEventV2OrchestrationService
     {
-        private readonly IEventV2ProcessingService eventV2ProcessingService;
+        private readonly IEventV1ProcessingService eventV2ProcessingService;
         private readonly IEventAddressV1ProcessingService eventAddressV2ProcessingService;
         private readonly IEventCallV1ProcessingService eventCallV2ProcessingService;
         private readonly ILoggingBroker loggingBroker;
 
         public EventV2OrchestrationService(
-            IEventV2ProcessingService eventV2ProcessingService,
+            IEventV1ProcessingService eventV2ProcessingService,
             IEventAddressV1ProcessingService eventAddressV2ProcessingService,
             IEventCallV1ProcessingService eventCallV2ProcessingService,
             ILoggingBroker loggingBroker)
@@ -49,14 +49,14 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
                 eventV2.EventAddressId);
 
             return await this.eventV2ProcessingService
-                .AddEventV2Async(eventV2);
+                .AddEventV1Async(eventV2);
         });
 
         public ValueTask<IQueryable<EventV1>> RetrieveScheduledPendingEventV2sAsync() =>
         TryCatch(async () =>
         {
             return await this.eventV2ProcessingService
-                .RetrieveScheduledPendingEventV2sAsync();
+                .RetrieveScheduledPendingEventV1sAsync();
         });
 
         public ValueTask<EventV1> RemoveEventV2ByIdAsync(Guid eventV2Id) =>
@@ -65,7 +65,7 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
             ValidateEventV2Id(eventV2Id);
 
             return await this.eventV2ProcessingService
-                .RemoveEventV2ByIdAsync(eventV2Id);
+                .RemoveEventV1ByIdAsync(eventV2Id);
         });
 
         public ValueTask<EventCallV1> RunEventCallV2Async(EventCallV1 eventCallV2) =>

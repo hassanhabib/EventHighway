@@ -38,7 +38,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                         .ReturnsAsync(retrievedEventAddressV2);
 
             this.eventV2ProcessingServiceMock.Setup(service =>
-                service.AddEventV2Async(inputEventV2))
+                service.AddEventV1Async(inputEventV2))
                     .ReturnsAsync(addedEventV2);
 
             // when
@@ -57,7 +57,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                         Times.Once);
 
             this.eventV2ProcessingServiceMock.Verify(broker =>
-                broker.AddEventV2Async(inputEventV2),
+                broker.AddEventV1Async(inputEventV2),
                     Times.Once);
 
             this.eventAddressV2ProcessingServiceMock

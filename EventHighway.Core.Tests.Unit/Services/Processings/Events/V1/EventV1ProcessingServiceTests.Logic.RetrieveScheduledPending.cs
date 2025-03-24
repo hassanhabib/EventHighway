@@ -10,12 +10,12 @@ using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using FluentAssertions;
 using Moq;
 
-namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
+namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V1
 {
-    public partial class EventV2ProcessingServiceTests
+    public partial class EventV1ProcessingServiceTests
     {
         [Fact]
-        public async Task ShouldRetrieveScheduledPendingEventV2sAsync()
+        public async Task ShouldRetrieveScheduledPendingEventV1sAsync()
         {
             // given
             int randomDaysAgo = GetNegativeRandomNumber();
@@ -29,39 +29,39 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
             DateTimeOffset scheduledDateTimeOffset =
                 retrievedDateTimeOffset.AddDays(randomDaysAgo);
 
-            List<EventV1> randomEventV2s =
-                CreateRandomEventV2s(
+            List<EventV1> randomEventV1s =
+                CreateRandomEventV1s(
                     dates: scheduledDateTimeOffset,
-                    eventV2Type: EventV1Type.Scheduled)
+                    eventV1Type: EventV1Type.Scheduled)
                         .ToList();
 
-            List<EventV1> randomOtherEventV2s =
-                CreateRandomEventV2s().ToList();
+            List<EventV1> randomOtherEventV1s =
+                CreateRandomEventV1s().ToList();
 
-            IQueryable<EventV1> retrievedEventV2s =
-                randomEventV2s.Union(randomOtherEventV2s)
+            IQueryable<EventV1> retrievedEventV1s =
+                randomEventV1s.Union(randomOtherEventV1s)
                     .AsQueryable();
 
-            IQueryable<EventV1> expectedEventV2s =
-                randomEventV2s.AsQueryable();
+            IQueryable<EventV1> expectedEventV1s =
+                randomEventV1s.AsQueryable();
 
-            this.eventV2ServiceMock.Setup(service =>
+            this.eventV1ServiceMock.Setup(service =>
                 service.RetrieveAllEventV1sAsync())
-                    .ReturnsAsync(retrievedEventV2s);
+                    .ReturnsAsync(retrievedEventV1s);
 
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetDateTimeOffsetAsync())
                     .ReturnsAsync(retrievedDateTimeOffset);
 
             // when
-            IQueryable<EventV1> actualEventV2s =
-                await this.eventV2ProcessingService
-                    .RetrieveScheduledPendingEventV2sAsync();
+            IQueryable<EventV1> actualEventV1s =
+                await this.eventV1ProcessingService
+                    .RetrieveScheduledPendingEventV1sAsync();
 
             // then
-            actualEventV2s.Should().BeEquivalentTo(expectedEventV2s);
+            actualEventV1s.Should().BeEquivalentTo(expectedEventV1s);
 
-            this.eventV2ServiceMock.Verify(service =>
+            this.eventV1ServiceMock.Verify(service =>
                 service.RetrieveAllEventV1sAsync(),
                     Times.Once);
 
@@ -69,7 +69,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                 broker.GetDateTimeOffsetAsync(),
                     Times.Once);
 
-            this.eventV2ServiceMock.VerifyNoOtherCalls();
+            this.eventV1ServiceMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }

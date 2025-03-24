@@ -52,7 +52,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                     Times.Never);
 
             this.eventV2ProcessingServiceMock.Verify(broker =>
-                broker.AddEventV2Async(
+                broker.AddEventV1Async(
                     It.IsAny<EventV1>()),
                         Times.Never);
 
@@ -106,7 +106,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                         Times.Once);
 
             this.eventV2ProcessingServiceMock.Verify(broker =>
-                broker.AddEventV2Async(
+                broker.AddEventV1Async(
                     It.IsAny<EventV1>()),
                         Times.Never);
 

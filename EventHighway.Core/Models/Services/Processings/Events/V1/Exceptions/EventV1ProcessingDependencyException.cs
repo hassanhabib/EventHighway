@@ -4,12 +4,12 @@
 
 using Xeptions;
 
-namespace EventHighway.Core.Models.Services.Processings.Events.V2.Exceptions
+namespace EventHighway.Core.Models.Services.Processings.Events.V1.Exceptions
 {
-    public class InvalidEventV2ProcessingException : Xeption
+    public class EventV1ProcessingDependencyException : Xeption
     {
-        public InvalidEventV2ProcessingException(string message)
-            : base(message)
+        public EventV1ProcessingDependencyException(string message, Xeption innerException)
+            : base(message, innerException)
         { }
     }
 }

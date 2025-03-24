@@ -2,13 +2,14 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using Xeptions;
 
-namespace EventHighway.Core.Models.Services.Processings.Events.V2.Exceptions
+namespace EventHighway.Core.Models.Services.Processings.Events.V1.Exceptions
 {
-    public class EventV2ProcessingDependencyException : Xeption
+    public class FailedEventV1ProcessingServiceException : Xeption
     {
-        public EventV2ProcessingDependencyException(string message, Xeption innerException)
+        public FailedEventV1ProcessingServiceException(string message, Exception innerException)
             : base(message, innerException)
         { }
     }

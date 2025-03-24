@@ -7,12 +7,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 
-namespace EventHighway.Core.Services.Processings.Events.V2
+namespace EventHighway.Core.Services.Processings.Events.V1
 {
-    internal interface IEventV2ProcessingService
+    internal interface IEventV1ProcessingService
     {
-        ValueTask<EventV1> AddEventV2Async(EventV1 eventV2);
-        ValueTask<IQueryable<EventV1>> RetrieveScheduledPendingEventV2sAsync();
-        ValueTask<EventV1> RemoveEventV2ByIdAsync(Guid eventV2Id);
+        ValueTask<EventV1> AddEventV1Async(EventV1 eventV1);
+        ValueTask<IQueryable<EventV1>> RetrieveScheduledPendingEventV1sAsync();
+        ValueTask<EventV1> RemoveEventV1ByIdAsync(Guid eventV1Id);
     }
 }

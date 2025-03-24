@@ -56,7 +56,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                         Times.Once);
 
             this.eventV2ProcessingServiceMock.Verify(broker =>
-                broker.AddEventV2Async(It.IsAny<EventV1>()),
+                broker.AddEventV1Async(It.IsAny<EventV1>()),
                     Times.Never);
 
             this.eventAddressV2ProcessingServiceMock.VerifyNoOtherCalls();
@@ -107,7 +107,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                         Times.Once);
 
             this.eventV2ProcessingServiceMock.Verify(broker =>
-                broker.AddEventV2Async(It.IsAny<EventV1>()),
+                broker.AddEventV1Async(It.IsAny<EventV1>()),
                     Times.Never);
 
             this.eventAddressV2ProcessingServiceMock.VerifyNoOtherCalls();
@@ -161,7 +161,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                         Times.Once);
 
             this.eventV2ProcessingServiceMock.Verify(broker =>
-                broker.AddEventV2Async(It.IsAny<EventV1>()),
+                broker.AddEventV1Async(It.IsAny<EventV1>()),
                     Times.Never);
 
             this.eventAddressV2ProcessingServiceMock.VerifyNoOtherCalls();
