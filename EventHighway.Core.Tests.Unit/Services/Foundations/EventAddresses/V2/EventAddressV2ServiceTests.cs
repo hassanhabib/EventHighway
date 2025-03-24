@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Storages;
 using EventHighway.Core.Brokers.Times;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Services.Foundations.EventAddresses.V2;
 using Microsoft.Data.SqlClient;
 using Moq;
@@ -69,18 +69,18 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
 
-        private static EventAddressV2 CreateRandomEventAddressV2(DateTimeOffset dates) =>
+        private static EventAddressV1 CreateRandomEventAddressV2(DateTimeOffset dates) =>
             CreateEventAddressV2Filler(dates).Create();
 
-        private static EventAddressV2 CreateRandomEventAddressV2() =>
+        private static EventAddressV1 CreateRandomEventAddressV2() =>
             CreateEventAddressV2Filler(dates: GetRandomDateTimeOffset()).Create();
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
-        private static Filler<EventAddressV2> CreateEventAddressV2Filler(DateTimeOffset dates)
+        private static Filler<EventAddressV1> CreateEventAddressV2Filler(DateTimeOffset dates)
         {
-            var filler = new Filler<EventAddressV2>();
+            var filler = new Filler<EventAddressV1>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>().Use(dates)

@@ -3,7 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
@@ -16,16 +16,16 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
         public async Task ShouldRegisterEventAddressV2Async()
         {
             // given
-            EventAddressV2 randomEventAddressV2 =
+            EventAddressV1 randomEventAddressV2 =
                 CreateRandomEventAddressV2();
 
-            EventAddressV2 inputEventAddressV2 =
+            EventAddressV1 inputEventAddressV2 =
                 randomEventAddressV2;
 
-            EventAddressV2 registeredEventAddressV2 =
+            EventAddressV1 registeredEventAddressV2 =
                 inputEventAddressV2;
 
-            EventAddressV2 expectedEventAddressV2 =
+            EventAddressV1 expectedEventAddressV2 =
                 registeredEventAddressV2.DeepClone();
 
             this.eventAddressV2ServiceMock.Setup(service =>
@@ -34,7 +34,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
                         .ReturnsAsync(registeredEventAddressV2);
 
             // when
-            EventAddressV2 actualEventAddressV2 =
+            EventAddressV1 actualEventAddressV2 =
                 await this.eventAddressesClient
                     .RegisterEventAddressV2Async(
                         inputEventAddressV2);

@@ -4,8 +4,8 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +37,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                     .ThrowsAsync(sqlException);
 
             // when
-            ValueTask<EventAddressV2> removeEventAddressV2ByIdTask =
+            ValueTask<EventAddressV1> removeEventAddressV2ByIdTask =
                 this.eventAddressV2Service.RemoveEventAddressV2ByIdAsync(
                     someEventAddressV2Id);
 
@@ -85,7 +85,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                     .ThrowsAsync(dbUpdateConcurrencyException);
 
             // when
-            ValueTask<EventAddressV2> removeEventAddressV2ByIdTask =
+            ValueTask<EventAddressV1> removeEventAddressV2ByIdTask =
                 this.eventAddressV2Service.RemoveEventAddressV2ByIdAsync(
                     someEventAddressV2Id);
 
@@ -134,7 +134,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                     .ThrowsAsync(dbUpdateException);
 
             // when
-            ValueTask<EventAddressV2> removeEventAddressV2ByIdTask =
+            ValueTask<EventAddressV1> removeEventAddressV2ByIdTask =
                 this.eventAddressV2Service.RemoveEventAddressV2ByIdAsync(someEventAddressV2Id);
 
             EventAddressV2DependencyException actualEventAddressV2DependencyException =
@@ -182,7 +182,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                     .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<EventAddressV2> removeEventAddressV2ByIdTask =
+            ValueTask<EventAddressV1> removeEventAddressV2ByIdTask =
                 this.eventAddressV2Service.RemoveEventAddressV2ByIdAsync(
                     someEventAddressV2Id);
 

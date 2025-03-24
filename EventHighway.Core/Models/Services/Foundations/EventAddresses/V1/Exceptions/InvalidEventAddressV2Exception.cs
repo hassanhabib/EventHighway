@@ -4,11 +4,11 @@
 
 using Xeptions;
 
-namespace EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.Exceptions
+namespace EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions
 {
-    public class NullEventAddressV2Exception : Xeption
+    public class InvalidEventAddressV2Exception : Xeption
     {
-        public NullEventAddressV2Exception(string message)
+        public InvalidEventAddressV2Exception(string message)
             : base(message)
         { }
     }

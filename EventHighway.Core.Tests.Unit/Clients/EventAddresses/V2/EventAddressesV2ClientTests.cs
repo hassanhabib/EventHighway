@@ -4,8 +4,8 @@
 
 using System;
 using EventHighway.Core.Clients.EventAddresses.V2;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions;
 using EventHighway.Core.Services.Foundations.EventAddresses.V2;
 using Moq;
 using Tynamix.ObjectFiller;
@@ -54,12 +54,12 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
-        private static EventAddressV2 CreateRandomEventAddressV2() =>
+        private static EventAddressV1 CreateRandomEventAddressV2() =>
             CreateEventAddressV2Filler().Create();
 
-        private static Filler<EventAddressV2> CreateEventAddressV2Filler()
+        private static Filler<EventAddressV1> CreateEventAddressV2Filler()
         {
-            var filler = new Filler<EventAddressV2>();
+            var filler = new Filler<EventAddressV1>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>().Use(GetRandomDateTimeOffset)

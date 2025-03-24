@@ -4,12 +4,12 @@
 
 using Xeptions;
 
-namespace EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.Exceptions
+namespace EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions
 {
-    public class NotFoundEventAddressV2Exception : Xeption
+    public class EventAddressV2ValidationException : Xeption
     {
-        public NotFoundEventAddressV2Exception(string message)
-            : base(message)
+        public EventAddressV2ValidationException(string message, Xeption innerException)
+            : base(message, innerException)
         { }
     }
 }

@@ -4,8 +4,8 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions;
 using FluentAssertions;
 using Moq;
 
@@ -24,7 +24,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                     message: "Event address is invalid, fix the errors and try again.");
 
             invalidEventAddressV2Exception.AddData(
-                key: nameof(EventAddressV2.Id),
+                key: nameof(EventAddressV1.Id),
                 values: "Required");
 
             var expectedEventAddressV2ValidationException =
@@ -33,7 +33,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                     innerException: invalidEventAddressV2Exception);
 
             // when
-            ValueTask<EventAddressV2> removeEventAddressV2ByIdTask =
+            ValueTask<EventAddressV1> removeEventAddressV2ByIdTask =
                 this.eventAddressV2Service.RemoveEventAddressV2ByIdAsync(
                     invalidEventAddressV2Id);
 
@@ -65,7 +65,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
         {
             // given
             Guid nonExistingEventAddressV2Id = GetRandomId();
-            EventAddressV2 nullEventAddressV2 = null;
+            EventAddressV1 nullEventAddressV2 = null;
 
             var notFoundEventAddressV2Exception =
                 new NotFoundEventAddressV2Exception(
@@ -81,7 +81,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                     .ReturnsAsync(nullEventAddressV2);
 
             // when
-            ValueTask<EventAddressV2> removeEventAddressV2ByIdTask =
+            ValueTask<EventAddressV1> removeEventAddressV2ByIdTask =
                 this.eventAddressV2Service.RemoveEventAddressV2ByIdAsync(nonExistingEventAddressV2Id);
 
             EventAddressV2ValidationException actualEventAddressV2ValidationException =
@@ -104,7 +104,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
 
             this.storageBrokerMock.Verify(broker =>
                 broker.DeleteEventAddressV2Async(
-                    It.IsAny<EventAddressV2>()),
+                    It.IsAny<EventAddressV1>()),
                         Times.Never);
 
             this.storageBrokerMock.VerifyNoOtherCalls();

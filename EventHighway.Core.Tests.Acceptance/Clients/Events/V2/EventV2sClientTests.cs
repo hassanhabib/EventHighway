@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Tests.Acceptance.Brokers;
@@ -125,9 +125,9 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
                     .Create();
         }
 
-        private async ValueTask<EventAddressV2> CreateRandomEventAddressV2Async()
+        private async ValueTask<EventAddressV1> CreateRandomEventAddressV2Async()
         {
-            EventAddressV2 randomEventAddressV2 =
+            EventAddressV1 randomEventAddressV2 =
                 CreateEventAddressV2Filler().Create();
 
             await this.clientBroker.RegisterEventAddressV2Async(
@@ -186,10 +186,10 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
             return filler;
         }
 
-        private static Filler<EventAddressV2> CreateEventAddressV2Filler()
+        private static Filler<EventAddressV1> CreateEventAddressV2Filler()
         {
             DateTimeOffset now = DateTimeOffset.UtcNow;
-            var filler = new Filler<EventAddressV2>();
+            var filler = new Filler<EventAddressV1>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>().Use(now)
