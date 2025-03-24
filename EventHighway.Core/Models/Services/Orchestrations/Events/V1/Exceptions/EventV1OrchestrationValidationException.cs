@@ -4,12 +4,12 @@
 
 using Xeptions;
 
-namespace EventHighway.Core.Models.Services.Orchestrations.Events.V2.Exceptions
+namespace EventHighway.Core.Models.Services.Orchestrations.Events.V1.Exceptions
 {
-    public class NullEventCallV2OrchestrationException : Xeption
+    public class EventV1OrchestrationValidationException : Xeption
     {
-        public NullEventCallV2OrchestrationException(string message)
-            : base(message)
+        public EventV1OrchestrationValidationException(string message, Xeption innerException)
+            : base(message, innerException)
         { }
     }
 }

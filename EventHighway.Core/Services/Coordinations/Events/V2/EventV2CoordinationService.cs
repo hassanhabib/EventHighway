@@ -12,19 +12,19 @@ using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using EventHighway.Core.Services.Orchestrations.EventListeners.V2;
-using EventHighway.Core.Services.Orchestrations.Events.V2;
+using EventHighway.Core.Services.Orchestrations.Events.V1;
 
 namespace EventHighway.Core.Services.Coordinations.Events.V2
 {
     internal partial class EventV2CoordinationService : IEventV2CoordinationService
     {
-        private readonly IEventV2OrchestrationService eventV2OrchestrationService;
+        private readonly IEventV1OrchestrationService eventV2OrchestrationService;
         private readonly IEventListenerV2OrchestrationService eventListenerV2OrchestrationService;
         private readonly IDateTimeBroker dateTimeBroker;
         private readonly ILoggingBroker loggingBroker;
 
         public EventV2CoordinationService(
-            IEventV2OrchestrationService eventV2OrchestrationService,
+            IEventV1OrchestrationService eventV2OrchestrationService,
             IEventListenerV2OrchestrationService eventListenerV2OrchestrationService,
             IDateTimeBroker dateTimeBroker,
             ILoggingBroker loggingBroker)
@@ -55,7 +55,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
 
             EventV1 submittedEventV2 =
                 await this.eventV2OrchestrationService
-                    .SubmitEventV2Async(eventV2);
+                    .SubmitEventV1Async(eventV2);
 
             if (submittedEventV2.Type is EventV1Type.Immediate)
                 await ProcessEventListenersAsync(submittedEventV2);
@@ -68,7 +68,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
         {
             IQueryable<EventV1> eventV2s =
                 await this.eventV2OrchestrationService
-                    .RetrieveScheduledPendingEventV2sAsync();
+                    .RetrieveScheduledPendingEventV1sAsync();
 
             foreach (EventV1 eventV2 in eventV2s)
             {
@@ -105,7 +105,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
             ValidateEventV2Id(eventV2Id);
 
             return await this.eventV2OrchestrationService
-                .RemoveEventV2ByIdAsync(eventV2Id);
+                .RemoveEventV1ByIdAsync(eventV2Id);
         });
 
         private async Task RunEventCallAsync(
@@ -125,7 +125,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
             {
                 EventCallV1 ranEventCallV2 =
                     await this.eventV2OrchestrationService
-                        .RunEventCallV2Async(eventCallV2);
+                        .RunEventCallV1Async(eventCallV2);
 
                 listenerEventV2.Response = ranEventCallV2.Response;
                 listenerEventV2.Status = ListenerEventV1Status.Success;
