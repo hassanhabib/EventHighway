@@ -8,30 +8,30 @@ using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V1.Exceptions;
 using EventHighway.Core.Services.Foundations.EventCalls.V1;
-using EventHighway.Core.Services.Processings.EventCalls.V2;
+using EventHighway.Core.Services.Processings.EventCalls.V1;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
 
-namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
+namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V1
 {
-    public partial class EventCallV2ProcessingServiceTests
+    public partial class EventCallV1ProcessingServiceTests
     {
-        private readonly Mock<IEventCallV1Service> eventCallV2ServiceMock;
+        private readonly Mock<IEventCallV1Service> eventCallV1ServiceMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
-        private readonly IEventCallV2ProcessingService eventCallV2ProcessingService;
+        private readonly IEventCallV1ProcessingService eventCallV1ProcessingService;
 
-        public EventCallV2ProcessingServiceTests()
+        public EventCallV1ProcessingServiceTests()
         {
-            this.eventCallV2ServiceMock = new Mock<IEventCallV1Service>();
+            this.eventCallV1ServiceMock = new Mock<IEventCallV1Service>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
-            this.eventCallV2ProcessingService = new EventCallV2ProcessingService(
-                eventCallV2Service: this.eventCallV2ServiceMock.Object,
+            this.eventCallV1ProcessingService = new EventCallV1ProcessingService(
+                eventCallV1Service: this.eventCallV1ServiceMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
 
-        public static TheoryData<Xeption> EventCallV2ValidationExceptions()
+        public static TheoryData<Xeption> EventCallV1ValidationExceptions()
         {
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();
@@ -48,7 +48,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
             };
         }
 
-        public static TheoryData<Xeption> EventCallV2DependencyExceptions()
+        public static TheoryData<Xeption> EventCallV1DependencyExceptions()
         {
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();
@@ -71,10 +71,10 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
-        private static EventCallV1 CreateRandomEventCallV2() =>
-            CreateEventCallV2Filler().Create();
+        private static EventCallV1 CreateRandomEventCallV1() =>
+            CreateEventCallV1Filler().Create();
 
-        private static Filler<EventCallV1> CreateEventCallV2Filler() =>
+        private static Filler<EventCallV1> CreateEventCallV1Filler() =>
             new Filler<EventCallV1>();
     }
 }

@@ -9,7 +9,7 @@ using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Orchestrations.Events.V2.Exceptions;
 using EventHighway.Core.Models.Services.Processings.EventAddresses.V1.Exceptions;
-using EventHighway.Core.Models.Services.Processings.EventCalls.V2.Exceptions;
+using EventHighway.Core.Models.Services.Processings.EventCalls.V1.Exceptions;
 using EventHighway.Core.Models.Services.Processings.Events.V2.Exceptions;
 using Xeptions;
 
@@ -143,25 +143,25 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     nullEventCallV2OrchestrationException);
             }
-            catch (EventCallV2ProcessingValidationException
+            catch (EventCallV1ProcessingValidationException
                 eventCallV2ProcessingValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventCallV2ProcessingValidationException);
             }
-            catch (EventCallV2ProcessingDependencyValidationException
+            catch (EventCallV1ProcessingDependencyValidationException
                 eventCallV2ProcessingDependencyValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventCallV2ProcessingDependencyValidationException);
             }
-            catch (EventCallV2ProcessingDependencyException
+            catch (EventCallV1ProcessingDependencyException
                 eventCallV2ProcessingDependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
                     eventCallV2ProcessingDependencyException);
             }
-            catch (EventCallV2ProcessingServiceException
+            catch (EventCallV1ProcessingServiceException
                 eventCallV2ProcessingServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(

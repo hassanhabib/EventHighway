@@ -10,11 +10,11 @@ using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Processings.EventAddresses.V1.Exceptions;
-using EventHighway.Core.Models.Services.Processings.EventCalls.V2.Exceptions;
+using EventHighway.Core.Models.Services.Processings.EventCalls.V1.Exceptions;
 using EventHighway.Core.Models.Services.Processings.Events.V2.Exceptions;
 using EventHighway.Core.Services.Orchestrations.Events.V2;
 using EventHighway.Core.Services.Processings.EventAddresses.V1;
-using EventHighway.Core.Services.Processings.EventCalls.V2;
+using EventHighway.Core.Services.Processings.EventCalls.V1;
 using EventHighway.Core.Services.Processings.Events.V2;
 using Moq;
 using Tynamix.ObjectFiller;
@@ -26,7 +26,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
     {
         private readonly Mock<IEventV2ProcessingService> eventV2ProcessingServiceMock;
         private readonly Mock<IEventAddressV1ProcessingService> eventAddressV2ProcessingServiceMock;
-        private readonly Mock<IEventCallV2ProcessingService> eventCallV2ProcessingServiceMock;
+        private readonly Mock<IEventCallV1ProcessingService> eventCallV2ProcessingServiceMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly IEventV2OrchestrationService eventV2OrchestrationService;
 
@@ -39,7 +39,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                 new Mock<IEventAddressV1ProcessingService>();
 
             this.eventCallV2ProcessingServiceMock =
-                new Mock<IEventCallV2ProcessingService>();
+                new Mock<IEventCallV1ProcessingService>();
 
             this.loggingBrokerMock =
                 new Mock<ILoggingBroker>();
@@ -59,11 +59,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
 
             return new TheoryData<Xeption>
             {
-                new EventCallV2ProcessingValidationException(
+                new EventCallV1ProcessingValidationException(
                     someMessage,
                     someInnerException),
 
-                new EventCallV2ProcessingDependencyValidationException(
+                new EventCallV1ProcessingDependencyValidationException(
                     someMessage,
                     someInnerException),
             };
@@ -76,11 +76,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
 
             return new TheoryData<Xeption>
             {
-                new EventCallV2ProcessingDependencyException(
+                new EventCallV1ProcessingDependencyException(
                     someMessage,
                     someInnerException),
 
-                new EventCallV2ProcessingServiceException(
+                new EventCallV1ProcessingServiceException(
                     someMessage,
                     someInnerException),
             };
