@@ -36,25 +36,25 @@ namespace EventHighway.Core.Services.Processings.EventListeners.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     invalidEventListenerV2ProcessingException);
             }
-            catch (EventListenerV2ValidationException
+            catch (EventListenerV1ValidationException
                 eventListenerV2ValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventListenerV2ValidationException);
             }
-            catch (EventListenerV2DependencyValidationException
+            catch (EventListenerV1DependencyValidationException
                 eventListenerV2DependencyValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventListenerV2DependencyValidationException);
             }
-            catch (EventListenerV2DependencyException
+            catch (EventListenerV1DependencyException
                 eventListenerV2DependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
                     eventListenerV2DependencyException);
             }
-            catch (EventListenerV2ServiceException
+            catch (EventListenerV1ServiceException
                 eventListenerV2ServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
@@ -85,13 +85,13 @@ namespace EventHighway.Core.Services.Processings.EventListeners.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     invalidEventListenerV2ProcessingException);
             }
-            catch (EventListenerV2DependencyException
+            catch (EventListenerV1DependencyException
                 eventListenerV2DependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
                     eventListenerV2DependencyException);
             }
-            catch (EventListenerV2ServiceException
+            catch (EventListenerV1ServiceException
                 eventListenerV2ServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(

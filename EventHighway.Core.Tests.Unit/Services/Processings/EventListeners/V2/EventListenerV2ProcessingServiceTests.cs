@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1.Exceptions;
-using EventHighway.Core.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Services.Processings.EventListeners.V2;
 using Moq;
 using Tynamix.ObjectFiller;
@@ -18,14 +18,14 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventListeners.V2
 {
     public partial class EventListenerV2ProcessingServiceTests
     {
-        private readonly Mock<IEventListenerV2Service> eventListenerV2ServiceMock;
+        private readonly Mock<IEventListenerV1Service> eventListenerV2ServiceMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly IEventListenerV2ProcessingService eventListenerV2ProcessingService;
 
         public EventListenerV2ProcessingServiceTests()
         {
             this.eventListenerV2ServiceMock =
-                new Mock<IEventListenerV2Service>();
+                new Mock<IEventListenerV1Service>();
 
             this.loggingBrokerMock =
                 new Mock<ILoggingBroker>();
@@ -43,11 +43,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventListeners.V2
 
             return new TheoryData<Xeption>
             {
-                new EventListenerV2ValidationException(
+                new EventListenerV1ValidationException(
                     someMessage,
                     someInnerException),
 
-                new EventListenerV2DependencyValidationException(
+                new EventListenerV1DependencyValidationException(
                     someMessage,
                     someInnerException),
             };
@@ -60,11 +60,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventListeners.V2
 
             return new TheoryData<Xeption>
             {
-                new EventListenerV2DependencyException(
+                new EventListenerV1DependencyException(
                     someMessage,
                     someInnerException),
 
-                new EventListenerV2ServiceException(
+                new EventListenerV1ServiceException(
                     someMessage,
                     someInnerException),
             };
