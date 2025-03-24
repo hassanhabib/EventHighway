@@ -5,11 +5,11 @@
 using System;
 using Xeptions;
 
-namespace EventHighway.Core.Models.Services.Foundations.Events.V2.Exceptions
+namespace EventHighway.Core.Models.Services.Foundations.Events.V1.Exceptions
 {
-    public class InvalidEventV2ReferenceException : Xeption
+    public class LockedEventV2Exception : Xeption
     {
-        public InvalidEventV2ReferenceException(string message, Exception innerException)
+        public LockedEventV2Exception(string message, Exception innerException)
             : base(message, innerException)
         { }
     }

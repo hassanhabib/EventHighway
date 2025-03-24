@@ -4,55 +4,55 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
-using EventHighway.Core.Models.Services.Foundations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
+using EventHighway.Core.Models.Services.Foundations.Events.V1.Exceptions;
 
 namespace EventHighway.Core.Services.Foundations.Events.V2
 {
     internal partial class EventV2Service
     {
-        private async ValueTask ValidateEventV2OnAddAsync(EventV2 eventV2)
+        private async ValueTask ValidateEventV2OnAddAsync(EventV1 eventV2)
         {
             ValidateEventV2IsNotNull(eventV2);
 
             Validate(
                 (Rule: IsInvalid(eventV2.Id),
-                Parameter: nameof(EventV2.Id)),
+                Parameter: nameof(EventV1.Id)),
 
                 (Rule: IsInvalid(eventV2.Content),
-                Parameter: nameof(EventV2.Content)),
+                Parameter: nameof(EventV1.Content)),
 
                 (Rule: IsInvalid(eventV2.EventAddressId),
-                Parameter: nameof(EventV2.EventAddressId)),
+                Parameter: nameof(EventV1.EventAddressId)),
 
                 (Rule: IsInvalid(eventV2.Type),
-                Parameter: nameof(EventV2.Type)),
+                Parameter: nameof(EventV1.Type)),
 
                 (Rule: IsInvalid(eventV2.CreatedDate),
-                Parameter: nameof(EventV2.CreatedDate)),
+                Parameter: nameof(EventV1.CreatedDate)),
 
                 (Rule: IsInvalid(eventV2.UpdatedDate),
-                Parameter: nameof(EventV2.UpdatedDate)),
+                Parameter: nameof(EventV1.UpdatedDate)),
 
                 (Rule: IsNotSameAs(
                     firstDate: eventV2.CreatedDate,
                     secondDate: eventV2.UpdatedDate,
-                    secondDateName: nameof(EventV2.UpdatedDate)),
+                    secondDateName: nameof(EventV1.UpdatedDate)),
 
-                Parameter: nameof(EventV2.CreatedDate)),
+                Parameter: nameof(EventV1.CreatedDate)),
 
                 (Rule: await IsNotRecentAsync(eventV2.CreatedDate),
-                Parameter: nameof(EventV2.CreatedDate)));
+                Parameter: nameof(EventV1.CreatedDate)));
         }
 
         private static void ValidateEventV2Id(Guid eventV2Id)
         {
             Validate(
                 (Rule: IsInvalid(eventV2Id),
-                Parameter: nameof(EventV2.Id)));
+                Parameter: nameof(EventV1.Id)));
         }
 
-        private static void ValidateEventV2IsNotNull(EventV2 eventV2)
+        private static void ValidateEventV2IsNotNull(EventV1 eventV2)
         {
             if (eventV2 is null)
             {
@@ -62,7 +62,7 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
         }
 
         private static void ValidateEventV2Exists(
-            EventV2 eventV2,
+            EventV1 eventV2,
             Guid eventV2Id)
         {
             if (eventV2 is null)

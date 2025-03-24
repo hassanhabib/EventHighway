@@ -22,7 +22,7 @@ namespace EventHighway.Core.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EventHighway.Core.Models.EventAddresses.EventAddress", b =>
+            modelBuilder.Entity("EventHighway.Core.Models.Services.Foundations.EventAddresses.EventAddress", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -45,7 +45,7 @@ namespace EventHighway.Core.Migrations
                     b.ToTable("EventAddresses");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.EventAddresses.V2.EventAddressV2", b =>
+            modelBuilder.Entity("EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.EventAddressV2", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,7 +68,7 @@ namespace EventHighway.Core.Migrations
                     b.ToTable("EventAddressV2s");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.EventListeners.EventListener", b =>
+            modelBuilder.Entity("EventHighway.Core.Models.Services.Foundations.EventListeners.EventListener", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -102,7 +102,7 @@ namespace EventHighway.Core.Migrations
                     b.ToTable("EventListeners");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.EventListeners.V2.EventListenerV2", b =>
+            modelBuilder.Entity("EventHighway.Core.Models.Services.Foundations.EventListeners.V2.EventListenerV2", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -136,7 +136,7 @@ namespace EventHighway.Core.Migrations
                     b.ToTable("EventListenerV2s");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.Events.Event", b =>
+            modelBuilder.Entity("EventHighway.Core.Models.Services.Foundations.Events.Event", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -161,7 +161,7 @@ namespace EventHighway.Core.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.Events.V2.EventV2", b =>
+            modelBuilder.Entity("EventHighway.Core.Models.Services.Foundations.Events.V1.EventV1", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -192,7 +192,7 @@ namespace EventHighway.Core.Migrations
                     b.ToTable("EventV2s");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.ListenerEvents.ListenerEvent", b =>
+            modelBuilder.Entity("EventHighway.Core.Models.Services.Foundations.ListenerEvents.ListenerEvent", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -230,7 +230,7 @@ namespace EventHighway.Core.Migrations
                     b.ToTable("ListenerEvents");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.ListenerEvents.V2.ListenerEventV2", b =>
+            modelBuilder.Entity("EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2.ListenerEventV2", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -268,9 +268,9 @@ namespace EventHighway.Core.Migrations
                     b.ToTable("ListenerEventV2s");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.EventListeners.EventListener", b =>
+            modelBuilder.Entity("EventHighway.Core.Models.Services.Foundations.EventListeners.EventListener", b =>
                 {
-                    b.HasOne("EventHighway.Core.Models.EventAddresses.EventAddress", "EventAddress")
+                    b.HasOne("EventHighway.Core.Models.Services.Foundations.EventAddresses.EventAddress", "EventAddress")
                         .WithMany("EventListeners")
                         .HasForeignKey("EventAddressId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -279,9 +279,9 @@ namespace EventHighway.Core.Migrations
                     b.Navigation("EventAddress");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.EventListeners.V2.EventListenerV2", b =>
+            modelBuilder.Entity("EventHighway.Core.Models.Services.Foundations.EventListeners.V2.EventListenerV2", b =>
                 {
-                    b.HasOne("EventHighway.Core.Models.EventAddresses.V2.EventAddressV2", "EventAddress")
+                    b.HasOne("EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.EventAddressV2", "EventAddress")
                         .WithMany("EventListeners")
                         .HasForeignKey("EventAddressId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -290,9 +290,9 @@ namespace EventHighway.Core.Migrations
                     b.Navigation("EventAddress");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.Events.Event", b =>
+            modelBuilder.Entity("EventHighway.Core.Models.Services.Foundations.Events.Event", b =>
                 {
-                    b.HasOne("EventHighway.Core.Models.EventAddresses.EventAddress", "EventAddress")
+                    b.HasOne("EventHighway.Core.Models.Services.Foundations.EventAddresses.EventAddress", "EventAddress")
                         .WithMany("Events")
                         .HasForeignKey("EventAddressId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -301,9 +301,9 @@ namespace EventHighway.Core.Migrations
                     b.Navigation("EventAddress");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.Events.V2.EventV2", b =>
+            modelBuilder.Entity("EventHighway.Core.Models.Services.Foundations.Events.V1.EventV1", b =>
                 {
-                    b.HasOne("EventHighway.Core.Models.EventAddresses.V2.EventAddressV2", "EventAddress")
+                    b.HasOne("EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.EventAddressV2", "EventAddress")
                         .WithMany("Events")
                         .HasForeignKey("EventAddressId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -312,21 +312,21 @@ namespace EventHighway.Core.Migrations
                     b.Navigation("EventAddress");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.ListenerEvents.ListenerEvent", b =>
+            modelBuilder.Entity("EventHighway.Core.Models.Services.Foundations.ListenerEvents.ListenerEvent", b =>
                 {
-                    b.HasOne("EventHighway.Core.Models.EventAddresses.EventAddress", "EventAddress")
+                    b.HasOne("EventHighway.Core.Models.Services.Foundations.EventAddresses.EventAddress", "EventAddress")
                         .WithMany("ListenerEvents")
                         .HasForeignKey("EventAddressId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("EventHighway.Core.Models.Events.Event", "Event")
+                    b.HasOne("EventHighway.Core.Models.Services.Foundations.Events.Event", "Event")
                         .WithMany("ListenerEvents")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("EventHighway.Core.Models.EventListeners.EventListener", "EventListener")
+                    b.HasOne("EventHighway.Core.Models.Services.Foundations.EventListeners.EventListener", "EventListener")
                         .WithMany("ListenerEvents")
                         .HasForeignKey("EventListenerId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -339,21 +339,21 @@ namespace EventHighway.Core.Migrations
                     b.Navigation("EventListener");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.ListenerEvents.V2.ListenerEventV2", b =>
+            modelBuilder.Entity("EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2.ListenerEventV2", b =>
                 {
-                    b.HasOne("EventHighway.Core.Models.EventAddresses.V2.EventAddressV2", "EventAddress")
+                    b.HasOne("EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.EventAddressV2", "EventAddress")
                         .WithMany("ListenerEvents")
                         .HasForeignKey("EventAddressId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("EventHighway.Core.Models.Events.V2.EventV2", "Event")
+                    b.HasOne("EventHighway.Core.Models.Services.Foundations.Events.V1.EventV1", "Event")
                         .WithMany("ListenerEvents")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("EventHighway.Core.Models.EventListeners.V2.EventListenerV2", "EventListener")
+                    b.HasOne("EventHighway.Core.Models.Services.Foundations.EventListeners.V2.EventListenerV2", "EventListener")
                         .WithMany("ListenerEvents")
                         .HasForeignKey("EventListenerId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -366,7 +366,7 @@ namespace EventHighway.Core.Migrations
                     b.Navigation("EventListener");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.EventAddresses.EventAddress", b =>
+            modelBuilder.Entity("EventHighway.Core.Models.Services.Foundations.EventAddresses.EventAddress", b =>
                 {
                     b.Navigation("EventListeners");
 
@@ -375,7 +375,7 @@ namespace EventHighway.Core.Migrations
                     b.Navigation("ListenerEvents");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.EventAddresses.V2.EventAddressV2", b =>
+            modelBuilder.Entity("EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.EventAddressV2", b =>
                 {
                     b.Navigation("EventListeners");
 
@@ -384,22 +384,22 @@ namespace EventHighway.Core.Migrations
                     b.Navigation("ListenerEvents");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.EventListeners.EventListener", b =>
+            modelBuilder.Entity("EventHighway.Core.Models.Services.Foundations.EventListeners.EventListener", b =>
                 {
                     b.Navigation("ListenerEvents");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.EventListeners.V2.EventListenerV2", b =>
+            modelBuilder.Entity("EventHighway.Core.Models.Services.Foundations.EventListeners.V2.EventListenerV2", b =>
                 {
                     b.Navigation("ListenerEvents");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.Events.Event", b =>
+            modelBuilder.Entity("EventHighway.Core.Models.Services.Foundations.Events.Event", b =>
                 {
                     b.Navigation("ListenerEvents");
                 });
 
-            modelBuilder.Entity("EventHighway.Core.Models.Events.V2.EventV2", b =>
+            modelBuilder.Entity("EventHighway.Core.Models.Services.Foundations.Events.V1.EventV1", b =>
                 {
                     b.Navigation("ListenerEvents");
                 });

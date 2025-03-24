@@ -6,7 +6,7 @@ using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.Events.V2.Exceptions;
 using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Services.Coordinations.Events.V2;
 using Xeptions;
 
@@ -19,7 +19,7 @@ namespace EventHighway.Core.Clients.Events.V2
         public EventV2sClient(IEventV2CoordinationService eventV2CoordinationService) =>
             this.eventV2CoordinationService = eventV2CoordinationService;
 
-        public async ValueTask<EventV2> SubmitEventV2Async(EventV2 eventV2)
+        public async ValueTask<EventV1> SubmitEventV2Async(EventV1 eventV2)
         {
             try
             {
@@ -86,7 +86,7 @@ namespace EventHighway.Core.Clients.Events.V2
             }
         }
 
-        public async ValueTask<EventV2> RemoveEventV2ByIdAsync(Guid eventV2Id)
+        public async ValueTask<EventV1> RemoveEventV2ByIdAsync(Guid eventV2Id)
         {
             try
             {

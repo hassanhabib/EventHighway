@@ -4,7 +4,7 @@
 
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
@@ -17,13 +17,13 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
         public async Task ShouldSubmitEventV2Async()
         {
             // given
-            EventV2 randomEventV2 =
+            EventV1 randomEventV2 =
                 CreateRandomEventV2();
 
-            EventV2 inputEventV2 = randomEventV2;
-            EventV2 addedEventV2 = inputEventV2;
+            EventV1 inputEventV2 = randomEventV2;
+            EventV1 addedEventV2 = inputEventV2;
 
-            EventV2 expectedEventV2 =
+            EventV1 expectedEventV2 =
                 addedEventV2.DeepClone();
 
             EventAddressV2 randomEventAddressV2 =
@@ -42,7 +42,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                     .ReturnsAsync(addedEventV2);
 
             // when
-            EventV2 actualEventV2 =
+            EventV1 actualEventV2 =
                 await this.eventV2OrchestrationService
                     .SubmitEventV2Async(
                         inputEventV2);

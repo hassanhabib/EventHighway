@@ -4,7 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Processings.Events.V2.Exceptions;
 using FluentAssertions;
 using Moq;
@@ -24,7 +24,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                     message: "Event is invalid, fix the errors and try again.");
 
             invalidEventV2Exception.AddData(
-                key: nameof(EventV2.Id),
+                key: nameof(EventV1.Id),
                 values: "Required");
 
             var expectedEventV2ProcessingValidationException =
@@ -33,7 +33,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                     innerException: invalidEventV2Exception);
 
             // when
-            ValueTask<EventV2> removeEventV2ByIdTask =
+            ValueTask<EventV1> removeEventV2ByIdTask =
                 this.eventV2ProcessingService
                     .RemoveEventV2ByIdAsync(
                         invalidEventV2Id);

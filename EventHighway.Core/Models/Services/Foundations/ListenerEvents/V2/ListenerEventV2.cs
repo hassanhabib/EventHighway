@@ -5,7 +5,7 @@
 using System;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 
 namespace EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2
 {
@@ -18,7 +18,7 @@ namespace EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2
         public DateTimeOffset UpdatedDate { get; set; }
 
         public Guid EventId { get; set; }
-        public EventV2 Event { get; set; }
+        public EventV1 Event { get; set; }
 
         public Guid EventAddressId { get; set; }
         public EventAddressV2 EventAddress { get; set; }

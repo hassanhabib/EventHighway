@@ -4,7 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Processings.Events.V2.Exceptions;
 using FluentAssertions;
 using Moq;
@@ -20,7 +20,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
             Xeption validationException)
         {
             // given
-            EventV2 someEventV2 = CreateRandomEventV2();
+            EventV1 someEventV2 = CreateRandomEventV2();
 
             var expectedEventV2ProcessingDependencyValidationException =
                 new EventV2ProcessingDependencyValidationException(
@@ -28,11 +28,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                     innerException: validationException.InnerException as Xeption);
 
             this.eventV2ServiceMock.Setup(service =>
-                service.AddEventV2Async(It.IsAny<EventV2>()))
+                service.AddEventV2Async(It.IsAny<EventV1>()))
                     .ThrowsAsync(validationException);
 
             // when
-            ValueTask<EventV2> addEventV2Task =
+            ValueTask<EventV1> addEventV2Task =
                 this.eventV2ProcessingService.AddEventV2Async(someEventV2);
 
             EventV2ProcessingDependencyValidationException
@@ -45,7 +45,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                 .BeEquivalentTo(expectedEventV2ProcessingDependencyValidationException);
 
             this.eventV2ServiceMock.Verify(service =>
-                service.AddEventV2Async(It.IsAny<EventV2>()),
+                service.AddEventV2Async(It.IsAny<EventV1>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -63,7 +63,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
             Xeption dependencyException)
         {
             // given
-            EventV2 someEventV2 = CreateRandomEventV2();
+            EventV1 someEventV2 = CreateRandomEventV2();
 
             var expectedEventV2ProcessingDependencyException =
                 new EventV2ProcessingDependencyException(
@@ -71,11 +71,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                     innerException: dependencyException.InnerException as Xeption);
 
             this.eventV2ServiceMock.Setup(service =>
-                service.AddEventV2Async(It.IsAny<EventV2>()))
+                service.AddEventV2Async(It.IsAny<EventV1>()))
                     .ThrowsAsync(dependencyException);
 
             // when
-            ValueTask<EventV2> addEventV2Task =
+            ValueTask<EventV1> addEventV2Task =
                 this.eventV2ProcessingService.AddEventV2Async(someEventV2);
 
             EventV2ProcessingDependencyException
@@ -88,7 +88,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                 .BeEquivalentTo(expectedEventV2ProcessingDependencyException);
 
             this.eventV2ServiceMock.Verify(service =>
-                service.AddEventV2Async(It.IsAny<EventV2>()),
+                service.AddEventV2Async(It.IsAny<EventV1>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -104,7 +104,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
         public async Task ShouldThrowServiceExceptionOnAddIfExceptionOccursAndLogItAsync()
         {
             // given
-            EventV2 someEventV2 = CreateRandomEventV2();
+            EventV1 someEventV2 = CreateRandomEventV2();
             var serviceException = new Exception();
 
             var failedEventV2ProcessingServiceException =
@@ -118,11 +118,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                     innerException: failedEventV2ProcessingServiceException);
 
             this.eventV2ServiceMock.Setup(service =>
-                service.AddEventV2Async(It.IsAny<EventV2>()))
+                service.AddEventV2Async(It.IsAny<EventV1>()))
                     .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<EventV2> addEventV2Task =
+            ValueTask<EventV1> addEventV2Task =
                 this.eventV2ProcessingService.AddEventV2Async(
                     someEventV2);
 
@@ -136,7 +136,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                 .BeEquivalentTo(expectedEventV2ProcessingExceptionException);
 
             this.eventV2ServiceMock.Verify(service =>
-                service.AddEventV2Async(It.IsAny<EventV2>()),
+                service.AddEventV2Async(It.IsAny<EventV1>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>

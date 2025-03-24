@@ -5,8 +5,8 @@
 using System;
 using System.Threading.Tasks;
 using EFxceptions.Models.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
-using EventHighway.Core.Models.Services.Foundations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
+using EventHighway.Core.Models.Services.Foundations.Events.V1.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +20,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
         public async Task ShouldThrowCriticalDependencyExceptionOnAddIfSqlExceptionOccursAndLogItAsync()
         {
             // given
-            EventV2 someEventV2 = CreateRandomEventV2();
+            EventV1 someEventV2 = CreateRandomEventV2();
             SqlException sqlException = GetSqlException();
 
             var failedEventV2StorageException =
@@ -38,7 +38,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     .ThrowsAsync(sqlException);
 
             // when
-            ValueTask<EventV2> addEventV2Task =
+            ValueTask<EventV1> addEventV2Task =
                 this.eventV2Service.AddEventV2Async(someEventV2);
 
             EventV2DependencyException actualEventV2DependencyException =
@@ -59,7 +59,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventV2Async(It.IsAny<EventV2>()),
+                broker.InsertEventV2Async(It.IsAny<EventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -72,7 +72,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
         {
             // given
             string randomMessage = GetRandomString();
-            EventV2 someEventV2 = CreateRandomEventV2();
+            EventV1 someEventV2 = CreateRandomEventV2();
             var duplicateKeyException = new DuplicateKeyException(randomMessage);
 
             var alreadyExistsEventV2Exception =
@@ -90,7 +90,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     .ThrowsAsync(duplicateKeyException);
 
             // when
-            ValueTask<EventV2> addEventV2Task =
+            ValueTask<EventV1> addEventV2Task =
                 this.eventV2Service.AddEventV2Async(someEventV2);
 
             EventV2DependencyValidationException actualEventV2DependencyValidationException =
@@ -111,7 +111,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventV2Async(It.IsAny<EventV2>()),
+                broker.InsertEventV2Async(It.IsAny<EventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -123,7 +123,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
         public async Task ShouldThrowDependencyValidationExceptionOnAddIfReferenceErrorOccursAndLogItAsync()
         {
             // given
-            EventV2 someEventV2 = CreateRandomEventV2();
+            EventV1 someEventV2 = CreateRandomEventV2();
             string someMessage = GetRandomString();
 
             var foreignKeyConstraintConflictException =
@@ -144,7 +144,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     .ThrowsAsync(foreignKeyConstraintConflictException);
 
             // when
-            ValueTask<EventV2> addEventV2Task =
+            ValueTask<EventV1> addEventV2Task =
                 this.eventV2Service.AddEventV2Async(someEventV2);
 
             EventV2DependencyValidationException actualEventV2DependencyValidationException =
@@ -165,7 +165,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventV2Async(It.IsAny<EventV2>()),
+                broker.InsertEventV2Async(It.IsAny<EventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -177,7 +177,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
         public async Task ShouldThrowDependencyExceptionOnAddIfDbUpdateExceptionOccursAndLogItAsync()
         {
             // given
-            EventV2 someEventV2 = CreateRandomEventV2();
+            EventV1 someEventV2 = CreateRandomEventV2();
             var dbUpdateException = new DbUpdateException();
 
             var failedEventV2StorageException =
@@ -195,7 +195,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     .ThrowsAsync(dbUpdateException);
 
             // when
-            ValueTask<EventV2> addEventV2Task =
+            ValueTask<EventV1> addEventV2Task =
                 this.eventV2Service.AddEventV2Async(someEventV2);
 
             EventV2DependencyException actualEventV2DependencyException =
@@ -216,7 +216,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventV2Async(It.IsAny<EventV2>()),
+                broker.InsertEventV2Async(It.IsAny<EventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -228,7 +228,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
         public async Task ShouldThrowServiceExceptionOnAddIfExceptionOccursAndLogItAsync()
         {
             // given
-            EventV2 someEventV2 = CreateRandomEventV2();
+            EventV1 someEventV2 = CreateRandomEventV2();
             var serviceException = new Exception();
 
             var failedEventV2ServiceException =
@@ -246,7 +246,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<EventV2> addEventV2Task =
+            ValueTask<EventV1> addEventV2Task =
                 this.eventV2Service.AddEventV2Async(someEventV2);
 
             EventV2ServiceException actualEventV2ServiceException =
@@ -267,7 +267,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventV2Async(It.IsAny<EventV2>()),
+                broker.InsertEventV2Async(It.IsAny<EventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();

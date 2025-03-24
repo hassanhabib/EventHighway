@@ -9,7 +9,7 @@ using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Times;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 using EventHighway.Core.Services.Orchestrations.EventListeners.V2;
 using EventHighway.Core.Services.Orchestrations.Events.V2;
@@ -35,7 +35,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<EventV2> SubmitEventV2Async(EventV2 eventV2) =>
+        public ValueTask<EventV1> SubmitEventV2Async(EventV1 eventV2) =>
         TryCatch(async () =>
         {
             ValidateEventV2IsNotNull(eventV2);
@@ -45,19 +45,19 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
 
             eventV2.Type = eventV2.ScheduledDate switch
             {
-                null => EventV2Type.Immediate,
+                null => EventV1Type.Immediate,
 
                 DateTimeOffset scheduledDate
-                    when scheduledDate < now => EventV2Type.Immediate,
+                    when scheduledDate < now => EventV1Type.Immediate,
 
-                _ => EventV2Type.Scheduled,
+                _ => EventV1Type.Scheduled,
             };
 
-            EventV2 submittedEventV2 =
+            EventV1 submittedEventV2 =
                 await this.eventV2OrchestrationService
                     .SubmitEventV2Async(eventV2);
 
-            if (submittedEventV2.Type is EventV2Type.Immediate)
+            if (submittedEventV2.Type is EventV1Type.Immediate)
                 await ProcessEventListenersAsync(submittedEventV2);
 
             return submittedEventV2;
@@ -66,17 +66,17 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
         public ValueTask FireScheduledPendingEventV2sAsync() =>
         TryCatch(async () =>
         {
-            IQueryable<EventV2> eventV2s =
+            IQueryable<EventV1> eventV2s =
                 await this.eventV2OrchestrationService
                     .RetrieveScheduledPendingEventV2sAsync();
 
-            foreach (EventV2 eventV2 in eventV2s)
+            foreach (EventV1 eventV2 in eventV2s)
             {
                 await ProcessEventListenersAsync(eventV2);
             }
         });
 
-        private async ValueTask ProcessEventListenersAsync(EventV2 eventV2)
+        private async ValueTask ProcessEventListenersAsync(EventV1 eventV2)
         {
             IQueryable<EventListenerV2> eventListenerV2s =
                 await this.eventListenerV2OrchestrationService
@@ -99,7 +99,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
             }
         }
 
-        public ValueTask<EventV2> RemoveEventV2ByIdAsync(Guid eventV2Id) =>
+        public ValueTask<EventV1> RemoveEventV2ByIdAsync(Guid eventV2Id) =>
         TryCatch(async () =>
         {
             ValidateEventV2Id(eventV2Id);
@@ -109,7 +109,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
         });
 
         private async Task RunEventCallAsync(
-            EventV2 eventV2,
+            EventV1 eventV2,
             EventListenerV2 eventListenerV2,
             ListenerEventV2 listenerEventV2)
         {
@@ -144,7 +144,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
         }
 
         private static ListenerEventV2 CreateEventListener(
-            EventV2 eventV2,
+            EventV1 eventV2,
             EventListenerV2 eventListenerV2)
         {
             return new ListenerEventV2

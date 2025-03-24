@@ -5,7 +5,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Processings.Events.V2.Exceptions;
 using FluentAssertions;
 using Moq;
@@ -31,7 +31,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                     .ThrowsAsync(eventV2DependencyException);
 
             // when
-            ValueTask<IQueryable<EventV2>> retrieveScheduledPendingEventV2sTask =
+            ValueTask<IQueryable<EventV1>> retrieveScheduledPendingEventV2sTask =
                 this.eventV2ProcessingService.RetrieveScheduledPendingEventV2sAsync();
 
             EventV2ProcessingDependencyException actualEventV2ProcessingDependencyException =
@@ -81,7 +81,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                     .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<IQueryable<EventV2>> retrieveScheduledPendingEventV2sTask =
+            ValueTask<IQueryable<EventV1>> retrieveScheduledPendingEventV2sTask =
                 this.eventV2ProcessingService.RetrieveScheduledPendingEventV2sAsync();
 
             EventV2ProcessingServiceException actualEventV2ProcessingServiceException =

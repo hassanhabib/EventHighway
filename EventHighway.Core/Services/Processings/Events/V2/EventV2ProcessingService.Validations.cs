@@ -3,14 +3,14 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Processings.Events.V2.Exceptions;
 
 namespace EventHighway.Core.Services.Processings.Events.V2
 {
     internal partial class EventV2ProcessingService
     {
-        private static void ValidateEventV2IsNotNull(EventV2 listenerEventV2)
+        private static void ValidateEventV2IsNotNull(EventV1 listenerEventV2)
         {
             if (listenerEventV2 is null)
             {
@@ -23,7 +23,7 @@ namespace EventHighway.Core.Services.Processings.Events.V2
         {
             Validate(
                 (Rule: IsInvalid(eventV2Id),
-                Parameter: nameof(EventV2.Id)));
+                Parameter: nameof(EventV1.Id)));
         }
 
         private static dynamic IsInvalid(Guid id) => new

@@ -5,25 +5,25 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventHighway.Core.Brokers.Storages
 {
     internal partial class StorageBroker
     {
-        public DbSet<EventV2> EventV2s { get; set; }
+        public DbSet<EventV1> EventV2s { get; set; }
 
-        public async ValueTask<EventV2> InsertEventV2Async(EventV2 eventV2) =>
+        public async ValueTask<EventV1> InsertEventV2Async(EventV1 eventV2) =>
             await InsertAsync(eventV2);
 
-        public async ValueTask<IQueryable<EventV2>> SelectAllEventV2sAsync() =>
-            SelectAll<EventV2>();
+        public async ValueTask<IQueryable<EventV1>> SelectAllEventV2sAsync() =>
+            SelectAll<EventV1>();
 
-        public async ValueTask<EventV2> SelectEventV2ByIdAsync(Guid eventV2Id) =>
-            await SelectAsync<EventV2>(eventV2Id);
+        public async ValueTask<EventV1> SelectEventV2ByIdAsync(Guid eventV2Id) =>
+            await SelectAsync<EventV1>(eventV2Id);
 
-        public async ValueTask<EventV2> DeleteEventV2Async(EventV2 eventV2) =>
+        public async ValueTask<EventV1> DeleteEventV2Async(EventV1 eventV2) =>
             await DeleteAsync(eventV2);
     }
 }

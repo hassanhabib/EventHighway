@@ -4,7 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
@@ -20,14 +20,14 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
             DateTimeOffset randomDateTimeOffset =
                 GetRandomDateTimeOffset();
 
-            EventV2 randomEventV2 =
+            EventV1 randomEventV2 =
                 CreateRandomEventV2(
                     dates: randomDateTimeOffset);
 
-            EventV2 inputEventV2 = randomEventV2;
-            EventV2 insertedEventV2 = inputEventV2;
+            EventV1 inputEventV2 = randomEventV2;
+            EventV1 insertedEventV2 = inputEventV2;
 
-            EventV2 expectedEventV2 =
+            EventV1 expectedEventV2 =
                 insertedEventV2.DeepClone();
 
             this.dateTimeBrokerMock.Setup(broker =>
@@ -39,7 +39,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     .ReturnsAsync(insertedEventV2);
 
             // when
-            EventV2 actualEventV2 =
+            EventV1 actualEventV2 =
                 await this.eventV2Service
                     .AddEventV2Async(inputEventV2);
 

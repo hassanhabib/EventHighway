@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Processings.EventAddresses.V2.Exceptions;
 using EventHighway.Core.Models.Services.Processings.EventCalls.V2.Exceptions;
 using EventHighway.Core.Models.Services.Processings.Events.V2.Exceptions;
@@ -176,7 +176,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
         private static EventCallV2 CreateRandomEventCallV2() =>
             CreateEventCallV2Filler().Create();
 
-        private static IQueryable<EventV2> CreateRandomEventV2s()
+        private static IQueryable<EventV1> CreateRandomEventV2s()
         {
             return CreateEventV2Filler()
                 .Create(count: GetRandomNumber())
@@ -186,7 +186,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
         private static EventAddressV2 CreateRandomEventAddressV2() =>
             CreateEventAddressV2Filler().Create();
 
-        private static EventV2 CreateRandomEventV2() =>
+        private static EventV1 CreateRandomEventV2() =>
             CreateEventV2Filler().Create();
 
         private static Filler<EventCallV2> CreateEventCallV2Filler() =>
@@ -211,9 +211,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
             return filler;
         }
 
-        private static Filler<EventV2> CreateEventV2Filler()
+        private static Filler<EventV1> CreateEventV2Filler()
         {
-            var filler = new Filler<EventV2>();
+            var filler = new Filler<EventV1>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>()

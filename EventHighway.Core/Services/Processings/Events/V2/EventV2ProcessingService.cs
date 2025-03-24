@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Times;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Services.Foundations.Events.V2;
 
 namespace EventHighway.Core.Services.Processings.Events.V2
@@ -28,7 +28,7 @@ namespace EventHighway.Core.Services.Processings.Events.V2
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<EventV2> AddEventV2Async(EventV2 eventV2) =>
+        public ValueTask<EventV1> AddEventV2Async(EventV1 eventV2) =>
         TryCatch(async () =>
         {
             ValidateEventV2IsNotNull(eventV2);
@@ -36,21 +36,21 @@ namespace EventHighway.Core.Services.Processings.Events.V2
             return await this.eventV2Service.AddEventV2Async(eventV2);
         });
 
-        public ValueTask<IQueryable<EventV2>> RetrieveScheduledPendingEventV2sAsync() =>
+        public ValueTask<IQueryable<EventV1>> RetrieveScheduledPendingEventV2sAsync() =>
         TryCatch(async () =>
         {
-            IQueryable<EventV2> eventV2s =
+            IQueryable<EventV1> eventV2s =
                 await this.eventV2Service.RetrieveAllEventV2sAsync();
 
             DateTimeOffset now =
                 await this.dateTimeBroker.GetDateTimeOffsetAsync();
 
             return eventV2s.Where(eventV2 =>
-                eventV2.Type == EventV2Type.Scheduled &&
+                eventV2.Type == EventV1Type.Scheduled &&
                 eventV2.ScheduledDate < now);
         });
 
-        public ValueTask<EventV2> RemoveEventV2ByIdAsync(Guid eventV2Id) =>
+        public ValueTask<EventV1> RemoveEventV2ByIdAsync(Guid eventV2Id) =>
         TryCatch(async () =>
         {
             ValidateEventV2Id(eventV2Id);

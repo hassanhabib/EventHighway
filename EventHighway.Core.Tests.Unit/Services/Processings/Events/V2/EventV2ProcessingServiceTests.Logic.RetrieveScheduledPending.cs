@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using FluentAssertions;
 using Moq;
 
@@ -29,20 +29,20 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
             DateTimeOffset scheduledDateTimeOffset =
                 retrievedDateTimeOffset.AddDays(randomDaysAgo);
 
-            List<EventV2> randomEventV2s =
+            List<EventV1> randomEventV2s =
                 CreateRandomEventV2s(
                     dates: scheduledDateTimeOffset,
-                    eventV2Type: EventV2Type.Scheduled)
+                    eventV2Type: EventV1Type.Scheduled)
                         .ToList();
 
-            List<EventV2> randomOtherEventV2s =
+            List<EventV1> randomOtherEventV2s =
                 CreateRandomEventV2s().ToList();
 
-            IQueryable<EventV2> retrievedEventV2s =
+            IQueryable<EventV1> retrievedEventV2s =
                 randomEventV2s.Union(randomOtherEventV2s)
                     .AsQueryable();
 
-            IQueryable<EventV2> expectedEventV2s =
+            IQueryable<EventV1> expectedEventV2s =
                 randomEventV2s.AsQueryable();
 
             this.eventV2ServiceMock.Setup(service =>
@@ -54,7 +54,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                     .ReturnsAsync(retrievedDateTimeOffset);
 
             // when
-            IQueryable<EventV2> actualEventV2s =
+            IQueryable<EventV1> actualEventV2s =
                 await this.eventV2ProcessingService
                     .RetrieveScheduledPendingEventV2sAsync();
 

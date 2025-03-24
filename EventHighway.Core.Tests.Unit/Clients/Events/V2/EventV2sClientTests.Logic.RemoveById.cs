@@ -4,7 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
@@ -19,10 +19,10 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
             // given 
             Guid randomEventV2Id = GetRandomId();
             Guid inputEventV2Id = randomEventV2Id;
-            EventV2 randomEventV2 = CreateRandomEventV2();
-            EventV2 removedEventV2 = randomEventV2;
+            EventV1 randomEventV2 = CreateRandomEventV2();
+            EventV1 removedEventV2 = randomEventV2;
 
-            EventV2 expectedEventV2 =
+            EventV1 expectedEventV2 =
                 removedEventV2.DeepClone();
 
             this.eventV2CoordinationServiceMock.Setup(service =>
@@ -30,7 +30,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                     .ReturnsAsync(removedEventV2);
 
             // when
-            EventV2 actualEventV2 =
+            EventV1 actualEventV2 =
                 await this.eventV2SClient
                     .RemoveEventV2ByIdAsync(inputEventV2Id);
 

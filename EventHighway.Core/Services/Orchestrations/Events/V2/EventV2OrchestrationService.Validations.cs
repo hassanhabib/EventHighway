@@ -5,7 +5,7 @@
 using System;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Orchestrations.Events.V2.Exceptions;
 
 namespace EventHighway.Core.Services.Orchestrations.Events.V2
@@ -21,7 +21,7 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
             }
         }
 
-        private static void ValidateEventV2IsNotNull(EventV2 eventV2)
+        private static void ValidateEventV2IsNotNull(EventV1 eventV2)
         {
             if (eventV2 is null)
             {
@@ -43,7 +43,7 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
         {
             Validate(
                 (Rule: IsInvalid(eventV2Id),
-                Parameter: nameof(EventV2.Id)));
+                Parameter: nameof(EventV1.Id)));
         }
 
         private static dynamic IsInvalid(Guid id) => new

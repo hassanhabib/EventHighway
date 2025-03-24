@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 using Force.DeepCloner;
 using Moq;
@@ -21,8 +21,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
         public async Task ShouldFireScheduledPendingEventV2sAsync()
         {
             // given
-            IQueryable<EventV2> randomEventV2s = CreateRandomEventV2s();
-            IQueryable<EventV2> retrievedEventV2s = randomEventV2s;
+            IQueryable<EventV1> randomEventV2s = CreateRandomEventV2s();
+            IQueryable<EventV1> retrievedEventV2s = randomEventV2s;
 
             IQueryable<EventListenerV2> randomEventListenerV2s =
                 CreateRandomEventListenerV2s();
@@ -66,7 +66,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                 service.RetrieveScheduledPendingEventV2sAsync())
                     .ReturnsAsync(retrievedEventV2s);
 
-            foreach (EventV2 eventV2 in retrievedEventV2s)
+            foreach (EventV1 eventV2 in retrievedEventV2s)
             {
                 this.eventListenerV2OrchestrationServiceMock.Setup(service =>
                     service.RetrieveEventListenerV2sByEventAddressIdAsync(
@@ -124,7 +124,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                 service.RetrieveScheduledPendingEventV2sAsync(),
                     Times.Once);
 
-            foreach (EventV2 eventV2 in retrievedEventV2s)
+            foreach (EventV1 eventV2 in retrievedEventV2s)
             {
                 this.eventListenerV2OrchestrationServiceMock.Verify(service =>
                     service.RetrieveEventListenerV2sByEventAddressIdAsync(
@@ -170,8 +170,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
         public async Task ShouldRecordFailuresOnFireScheduledPendingEventV2sAsync()
         {
             // given
-            IQueryable<EventV2> randomEventV2s = CreateRandomEventV2s();
-            IQueryable<EventV2> retrievedEventV2s = randomEventV2s;
+            IQueryable<EventV1> randomEventV2s = CreateRandomEventV2s();
+            IQueryable<EventV1> retrievedEventV2s = randomEventV2s;
 
             IQueryable<EventListenerV2> randomEventListenerV2s =
                 CreateRandomEventListenerV2s();
@@ -221,7 +221,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                 service.RetrieveScheduledPendingEventV2sAsync())
                     .ReturnsAsync(retrievedEventV2s);
 
-            foreach (EventV2 eventV2 in retrievedEventV2s)
+            foreach (EventV1 eventV2 in retrievedEventV2s)
             {
                 this.eventListenerV2OrchestrationServiceMock.Setup(service =>
                     service.RetrieveEventListenerV2sByEventAddressIdAsync(
@@ -279,7 +279,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                 service.RetrieveScheduledPendingEventV2sAsync(),
                     Times.Once);
 
-            foreach (EventV2 eventV2 in retrievedEventV2s)
+            foreach (EventV1 eventV2 in retrievedEventV2s)
             {
                 this.eventListenerV2OrchestrationServiceMock.Verify(service =>
                     service.RetrieveEventListenerV2sByEventAddressIdAsync(

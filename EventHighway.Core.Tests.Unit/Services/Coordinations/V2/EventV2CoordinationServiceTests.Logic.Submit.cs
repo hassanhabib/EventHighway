@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 using FluentAssertions;
 using Force.DeepCloner;
@@ -25,16 +25,16 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             int randomDays = GetRandomNumber();
             DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
             DateTimeOffset retrievedDateTimeOffset = randomDateTimeOffset;
-            EventV2 randomEventV2 = CreateRandomEventV2();
-            EventV2 inputEventV2 = randomEventV2;
+            EventV1 randomEventV2 = CreateRandomEventV2();
+            EventV1 inputEventV2 = randomEventV2;
 
             inputEventV2.ScheduledDate =
                 retrievedDateTimeOffset.AddDays(randomDays);
 
-            EventV2 inputScheduledEventV2 = inputEventV2;
-            inputScheduledEventV2.Type = EventV2Type.Scheduled;
-            EventV2 submittedEventV2 = inputScheduledEventV2;
-            EventV2 expectedEventV2 = submittedEventV2.DeepClone();
+            EventV1 inputScheduledEventV2 = inputEventV2;
+            inputScheduledEventV2.Type = EventV1Type.Scheduled;
+            EventV1 submittedEventV2 = inputScheduledEventV2;
+            EventV1 expectedEventV2 = submittedEventV2.DeepClone();
 
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetDateTimeOffsetAsync())
@@ -45,7 +45,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                     .ReturnsAsync(submittedEventV2);
 
             // when
-            EventV2 actualEventV2 =
+            EventV1 actualEventV2 =
                 await this.eventV2CoordinationService
                     .SubmitEventV2Async(inputEventV2);
 
@@ -94,13 +94,13 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
         {
             // given
             var mockSequence = new MockSequence();
-            EventV2 randomEventV2 = CreateRandomEventV2();
-            EventV2 inputEventV2 = randomEventV2;
+            EventV1 randomEventV2 = CreateRandomEventV2();
+            EventV1 inputEventV2 = randomEventV2;
             inputEventV2.ScheduledDate = scheduledDate;
-            EventV2 inputImmediateEventV2 = inputEventV2;
-            inputImmediateEventV2.Type = EventV2Type.Immediate;
-            EventV2 submittedEventV2 = inputImmediateEventV2;
-            EventV2 expectedEventV2 = submittedEventV2.DeepClone();
+            EventV1 inputImmediateEventV2 = inputEventV2;
+            inputImmediateEventV2.Type = EventV1Type.Immediate;
+            EventV1 submittedEventV2 = inputImmediateEventV2;
+            EventV1 expectedEventV2 = submittedEventV2.DeepClone();
 
             IQueryable<EventListenerV2> randomEventListenerV2s =
                 CreateRandomEventListenerV2s();
@@ -195,7 +195,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             }
 
             // when
-            EventV2 actualEventV2 =
+            EventV1 actualEventV2 =
                 await this.eventV2CoordinationService
                     .SubmitEventV2Async(inputEventV2);
 

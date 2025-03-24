@@ -3,7 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
@@ -16,11 +16,11 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
         public async Task ShouldSubmitEventV2Async()
         {
             // given 
-            EventV2 randomEventV2 = CreateRandomEventV2();
-            EventV2 inputEventV2 = randomEventV2;
-            EventV2 submittedEventV2 = inputEventV2;
+            EventV1 randomEventV2 = CreateRandomEventV2();
+            EventV1 inputEventV2 = randomEventV2;
+            EventV1 submittedEventV2 = inputEventV2;
 
-            EventV2 expectedEventV2 = 
+            EventV1 expectedEventV2 = 
                 submittedEventV2.DeepClone();
 
             this.eventV2CoordinationServiceMock.Setup(service =>
@@ -28,7 +28,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                     .ReturnsAsync(submittedEventV2);
 
             // when
-            EventV2 actualEventV2 =
+            EventV1 actualEventV2 =
                 await this.eventV2SClient
                     .SubmitEventV2Async(inputEventV2);
 
