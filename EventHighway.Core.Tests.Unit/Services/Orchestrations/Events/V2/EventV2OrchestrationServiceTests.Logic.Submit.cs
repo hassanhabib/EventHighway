@@ -3,7 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using FluentAssertions;
 using Force.DeepCloner;
@@ -26,10 +26,10 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
             EventV1 expectedEventV2 =
                 addedEventV2.DeepClone();
 
-            EventAddressV2 randomEventAddressV2 =
+            EventAddressV1 randomEventAddressV2 =
                 CreateRandomEventAddressV2();
 
-            EventAddressV2 retrievedEventAddressV2 =
+            EventAddressV1 retrievedEventAddressV2 =
                 randomEventAddressV2;
 
             this.eventAddressV2ProcessingServiceMock.Setup(service =>

@@ -2,13 +2,14 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using Xeptions;
 
-namespace EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.Exceptions
+namespace EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions
 {
-    public class EventAddressV2ValidationException : Xeption
+    public class LockedEventAddressV2Exception : Xeption
     {
-        public EventAddressV2ValidationException(string message, Xeption innerException)
+        public LockedEventAddressV2Exception(string message, Exception innerException)
             : base(message, innerException)
         { }
     }

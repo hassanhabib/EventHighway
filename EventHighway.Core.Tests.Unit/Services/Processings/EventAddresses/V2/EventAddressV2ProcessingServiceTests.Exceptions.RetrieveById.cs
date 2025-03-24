@@ -4,7 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Processings.EventAddresses.V2.Exceptions;
 using FluentAssertions;
 using Moq;
@@ -32,7 +32,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventAddresses.V2
                     .ThrowsAsync(validationException);
 
             // when
-            ValueTask<EventAddressV2> retrieveEventAddressV2ByIdTask =
+            ValueTask<EventAddressV1> retrieveEventAddressV2ByIdTask =
                 this.eventAddressV2ProcessingService.RetrieveEventAddressV2ByIdAsync(
                     someEventAddressV2Id);
 
@@ -76,7 +76,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventAddresses.V2
                     .ThrowsAsync(dependencyException);
 
             // when
-            ValueTask<EventAddressV2> retrieveEventAddressV2ByIdTask =
+            ValueTask<EventAddressV1> retrieveEventAddressV2ByIdTask =
                 this.eventAddressV2ProcessingService.RetrieveEventAddressV2ByIdAsync(
                     someEventAddressV2Id);
 
@@ -124,7 +124,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventAddresses.V2
                     .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<EventAddressV2> retrieveEventAddressV2ByIdTask =
+            ValueTask<EventAddressV1> retrieveEventAddressV2ByIdTask =
                 this.eventAddressV2ProcessingService.RetrieveEventAddressV2ByIdAsync(
                     someEventAddressV2Id);
 

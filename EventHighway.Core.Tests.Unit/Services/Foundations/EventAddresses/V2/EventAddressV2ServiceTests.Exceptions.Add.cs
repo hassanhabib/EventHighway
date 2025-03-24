@@ -5,8 +5,8 @@
 using System;
 using System.Threading.Tasks;
 using EFxceptions.Models.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +20,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
         public async Task ShouldThrowCriticalDependencyExceptionOnAddIfSqlExceptionOccursAndLogItAsync()
         {
             // given
-            EventAddressV2 someEventAddressV2 = CreateRandomEventAddressV2();
+            EventAddressV1 someEventAddressV2 = CreateRandomEventAddressV2();
             SqlException sqlException = CreateSqlException();
 
             var failedEventAddressV2StorageException =
@@ -38,7 +38,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                     .ThrowsAsync(sqlException);
 
             // when
-            ValueTask<EventAddressV2> addEventAddressV2Task =
+            ValueTask<EventAddressV1> addEventAddressV2Task =
                 this.eventAddressV2Service.AddEventAddressV2Async(someEventAddressV2);
 
             EventAddressV2DependencyException actualEventAddressV2DependencyException =
@@ -59,7 +59,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventAddressV2Async(It.IsAny<EventAddressV2>()),
+                broker.InsertEventAddressV2Async(It.IsAny<EventAddressV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -72,7 +72,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
         {
             // given
             string someMessage = GetRandomString();
-            EventAddressV2 someEventAddressV2 = CreateRandomEventAddressV2();
+            EventAddressV1 someEventAddressV2 = CreateRandomEventAddressV2();
             var duplicateKeyException = new DuplicateKeyException(someMessage);
 
             var alreadyExistsEventAddressV2Exception =
@@ -90,7 +90,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                     .ThrowsAsync(duplicateKeyException);
 
             // when
-            ValueTask<EventAddressV2> addEventAddressV2Task =
+            ValueTask<EventAddressV1> addEventAddressV2Task =
                 this.eventAddressV2Service.AddEventAddressV2Async(someEventAddressV2);
 
             EventAddressV2DependencyValidationException actualEventAddressV2DependencyValidationException =
@@ -111,7 +111,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventAddressV2Async(It.IsAny<EventAddressV2>()),
+                broker.InsertEventAddressV2Async(It.IsAny<EventAddressV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -123,7 +123,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
         public async Task ShouldThrowDependencyExceptionOnAddIfDbUpdateExceptionOccursAndLogItAsync()
         {
             // given
-            EventAddressV2 someEventAddressV2 = CreateRandomEventAddressV2();
+            EventAddressV1 someEventAddressV2 = CreateRandomEventAddressV2();
             var dbUpdateException = new DbUpdateException();
 
             var failedEventAddressV2StorageException =
@@ -141,7 +141,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                     .ThrowsAsync(dbUpdateException);
 
             // when
-            ValueTask<EventAddressV2> addEventAddressV2Task =
+            ValueTask<EventAddressV1> addEventAddressV2Task =
                 this.eventAddressV2Service.AddEventAddressV2Async(someEventAddressV2);
 
             EventAddressV2DependencyException actualEventAddressV2DependencyException =
@@ -162,7 +162,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventAddressV2Async(It.IsAny<EventAddressV2>()),
+                broker.InsertEventAddressV2Async(It.IsAny<EventAddressV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -174,7 +174,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
         public async Task ShouldThrowServiceExceptionOnAddIfExceptionOccursAndLogItAsync()
         {
             // given
-            EventAddressV2 someEventAddressV2 = CreateRandomEventAddressV2();
+            EventAddressV1 someEventAddressV2 = CreateRandomEventAddressV2();
             var serviceException = new Exception();
 
             var failedEventAddressV2ServiceException =
@@ -192,7 +192,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                     .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<EventAddressV2> addEventAddressV2Task =
+            ValueTask<EventAddressV1> addEventAddressV2Task =
                 this.eventAddressV2Service.AddEventAddressV2Async(someEventAddressV2);
 
             EventAddressV2ServiceException actualEventAddressV2ServiceException =
@@ -213,7 +213,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventAddressV2Async(It.IsAny<EventAddressV2>()),
+                broker.InsertEventAddressV2Async(It.IsAny<EventAddressV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();

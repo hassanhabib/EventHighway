@@ -4,7 +4,7 @@
 
 using System;
 using System.Collections.Generic;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 
 namespace EventHighway.Core.Models.Services.Foundations.Events.V1
@@ -19,7 +19,7 @@ namespace EventHighway.Core.Models.Services.Foundations.Events.V1
         public DateTimeOffset? ScheduledDate { get; set; }
 
         public Guid EventAddressId { get; set; }
-        public EventAddressV2 EventAddress { get; set; }
+        public EventAddressV1 EventAddress { get; set; }
 
         public IEnumerable<ListenerEventV2> ListenerEvents { get; set; }
     }

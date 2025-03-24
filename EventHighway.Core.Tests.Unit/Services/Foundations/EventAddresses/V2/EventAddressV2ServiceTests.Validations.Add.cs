@@ -4,8 +4,8 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions;
 using FluentAssertions;
 using Moq;
 
@@ -17,7 +17,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
         public async Task ShouldThrowValidationExceptionOnAddIfEventAddressV2IsNullAndLogItAsync()
         {
             // given
-            EventAddressV2 nullEventAddressV2 = null;
+            EventAddressV1 nullEventAddressV2 = null;
 
             var nullEventAddressV2Exception =
                 new NullEventAddressV2Exception(message: "Event address is null.");
@@ -28,7 +28,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                     innerException: nullEventAddressV2Exception);
 
             // when
-            ValueTask<EventAddressV2> addEventAddressV2Task =
+            ValueTask<EventAddressV1> addEventAddressV2Task =
                 this.eventAddressV2Service.AddEventAddressV2Async(nullEventAddressV2);
 
             EventAddressV2ValidationException actualEventAddressV2ValidationException =
@@ -49,7 +49,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                     Times.Never);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventAddressV2Async(It.IsAny<EventAddressV2>()),
+                broker.InsertEventAddressV2Async(It.IsAny<EventAddressV1>()),
                     Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
@@ -64,7 +64,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
         private async Task ShouldThrowValidationExceptionOnAddIfEventAddressV2IsInvalidAndLogItAsync(
             string invalidText)
         {
-            var invalidEventAddressV2 = new EventAddressV2
+            var invalidEventAddressV2 = new EventAddressV1
             {
                 Id = Guid.Empty,
                 Name = invalidText,
@@ -76,23 +76,23 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                     message: "Event address is invalid, fix the errors and try again.");
 
             invalidEventAddressV2Exception.AddData(
-                key: nameof(EventAddressV2.Id),
+                key: nameof(EventAddressV1.Id),
                 values: "Required");
 
             invalidEventAddressV2Exception.AddData(
-                key: nameof(EventAddressV2.Name),
+                key: nameof(EventAddressV1.Name),
                 values: "Required");
 
             invalidEventAddressV2Exception.AddData(
-                key: nameof(EventAddressV2.Description),
+                key: nameof(EventAddressV1.Description),
                 values: "Required");
 
             invalidEventAddressV2Exception.AddData(
-                key: nameof(EventAddressV2.CreatedDate),
+                key: nameof(EventAddressV1.CreatedDate),
                 values: "Required");
 
             invalidEventAddressV2Exception.AddData(
-                key: nameof(EventAddressV2.UpdatedDate),
+                key: nameof(EventAddressV1.UpdatedDate),
                 values: "Required");
 
             var expectedEventAddressV2ValidationException =
@@ -101,7 +101,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                     innerException: invalidEventAddressV2Exception);
 
             // when
-            ValueTask<EventAddressV2> addEventAddressV2Task =
+            ValueTask<EventAddressV1> addEventAddressV2Task =
                 this.eventAddressV2Service.AddEventAddressV2Async(invalidEventAddressV2);
 
             EventAddressV2ValidationException actualEventAddressV2ValidationException =
@@ -122,7 +122,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventAddressV2Async(It.IsAny<EventAddressV2>()),
+                broker.InsertEventAddressV2Async(It.IsAny<EventAddressV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -136,8 +136,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
             // given
             DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
             DateTimeOffset anotherRandomDateTimeOffset = GetRandomDateTimeOffset();
-            EventAddressV2 randomEventAddressV2 = CreateRandomEventAddressV2(dates: randomDateTimeOffset);
-            EventAddressV2 invalidEventAddressV2 = randomEventAddressV2;
+            EventAddressV1 randomEventAddressV2 = CreateRandomEventAddressV2(dates: randomDateTimeOffset);
+            EventAddressV1 invalidEventAddressV2 = randomEventAddressV2;
             invalidEventAddressV2.UpdatedDate = anotherRandomDateTimeOffset;
 
             var invalidEventAddressV2Exception =
@@ -145,8 +145,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                     message: "Event address is invalid, fix the errors and try again.");
 
             invalidEventAddressV2Exception.AddData(
-                key: nameof(EventAddressV2.CreatedDate),
-                values: $"Date is not the same as {nameof(EventAddressV2.UpdatedDate)}");
+                key: nameof(EventAddressV1.CreatedDate),
+                values: $"Date is not the same as {nameof(EventAddressV1.UpdatedDate)}");
 
             var expectedEventAddressV2ValidationException =
                 new EventAddressV2ValidationException(
@@ -158,7 +158,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                     .ReturnsAsync(randomDateTimeOffset);
 
             // when
-            ValueTask<EventAddressV2> addEventAddressV2Task =
+            ValueTask<EventAddressV1> addEventAddressV2Task =
                 this.eventAddressV2Service.AddEventAddressV2Async(invalidEventAddressV2);
 
             EventAddressV2ValidationException actualEventAddressV2ValidationException =
@@ -179,7 +179,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventAddressV2Async(It.IsAny<EventAddressV2>()),
+                broker.InsertEventAddressV2Async(It.IsAny<EventAddressV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -195,18 +195,18 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
             // given
             DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
 
-            EventAddressV2 randomEventAddressV2 =
+            EventAddressV1 randomEventAddressV2 =
                 CreateRandomEventAddressV2(
                     dates: randomDateTimeOffset.AddMinutes(minutesBeforeAndAfterNow));
 
-            EventAddressV2 invalidEventAddressV2 = randomEventAddressV2;
+            EventAddressV1 invalidEventAddressV2 = randomEventAddressV2;
 
             var invalidEventAddressV2Exception =
                 new InvalidEventAddressV2Exception(
                     message: "Event address is invalid, fix the errors and try again.");
 
             invalidEventAddressV2Exception.AddData(
-                key: nameof(EventAddressV2.CreatedDate),
+                key: nameof(EventAddressV1.CreatedDate),
                 values: "Date is not recent");
 
             var expectedEventAddressV2ValidationException =
@@ -219,7 +219,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                     .ReturnsAsync(randomDateTimeOffset);
 
             // when
-            ValueTask<EventAddressV2> addEventAddressV2Task =
+            ValueTask<EventAddressV1> addEventAddressV2Task =
                 this.eventAddressV2Service.AddEventAddressV2Async(invalidEventAddressV2);
 
             EventAddressV2ValidationException actualEventAddressV2ValidationException =
@@ -240,7 +240,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventAddressV2Async(It.IsAny<EventAddressV2>()),
+                broker.InsertEventAddressV2Async(It.IsAny<EventAddressV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();

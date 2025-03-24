@@ -4,7 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Processings.EventAddresses.V2.Exceptions;
 using FluentAssertions;
 using Moq;
@@ -24,7 +24,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventAddresses.V2
                     message: "Event address is invalid, fix the errors and try again.");
 
             invalidEventAddressV2ProcessingException.AddData(
-                key: nameof(EventAddressV2.Id),
+                key: nameof(EventAddressV1.Id),
                 values: "Required");
 
             var expectedEventAddressV2ProcessingValidationException =
@@ -33,7 +33,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventAddresses.V2
                     innerException: invalidEventAddressV2ProcessingException);
 
             // when
-            ValueTask<EventAddressV2> retrieveEventAddressV2ByIdTask =
+            ValueTask<EventAddressV1> retrieveEventAddressV2ByIdTask =
                 this.eventAddressV2ProcessingService.RetrieveEventAddressV2ByIdAsync(
                     invalidEventAddressV2Id);
 

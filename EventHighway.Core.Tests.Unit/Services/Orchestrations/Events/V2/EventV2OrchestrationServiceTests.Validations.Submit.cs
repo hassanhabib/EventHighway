@@ -4,8 +4,8 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Orchestrations.Events.V2.Exceptions;
 using FluentAssertions;
@@ -68,7 +68,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
             // given
             EventV1 someEventV2 = CreateRandomEventV2();
             Guid nonExistingEventAddressV2Id = someEventV2.EventAddressId;
-            EventAddressV2 nullEventAddressV2 = null;
+            EventAddressV1 nullEventAddressV2 = null;
 
             var notFoundEventAddressV2OrchestrationException =
                 new NotFoundEventAddressV2OrchestrationException(

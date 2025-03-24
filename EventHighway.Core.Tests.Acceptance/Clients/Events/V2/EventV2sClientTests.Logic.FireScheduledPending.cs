@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
@@ -24,10 +24,10 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
             // given
             string inputMockEndpoint = this.wireMockServer.Url;
 
-            EventAddressV2 randomEventAddressV2 =
+            EventAddressV1 randomEventAddressV2 =
                 await CreateRandomEventAddressV2Async();
 
-            EventAddressV2 inputEventAddressV2 =
+            EventAddressV1 inputEventAddressV2 =
                 randomEventAddressV2;
 
             Guid inputEventAddressV2Id =

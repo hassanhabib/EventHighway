@@ -4,8 +4,8 @@
 
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.EventAddresses.V2.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xeptions;
@@ -20,7 +20,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
             Xeption validationException)
         {
             // given
-            EventAddressV2 someEventAddressV2 = CreateRandomEventAddressV2();
+            EventAddressV1 someEventAddressV2 = CreateRandomEventAddressV2();
 
             var expectedEventAddressV2ClientDependencyValidationException =
                 new EventAddressV2ClientDependencyValidationException(
@@ -28,11 +28,11 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
                     innerException: validationException.InnerException as Xeption);
 
             this.eventAddressV2ServiceMock.Setup(service =>
-                service.AddEventAddressV2Async(It.IsAny<EventAddressV2>()))
+                service.AddEventAddressV2Async(It.IsAny<EventAddressV1>()))
                     .ThrowsAsync(validationException);
 
             // when
-            ValueTask<EventAddressV2> registerEventAddressV2Task =
+            ValueTask<EventAddressV1> registerEventAddressV2Task =
                 this.eventAddressesClient.RegisterEventAddressV2Async(someEventAddressV2);
 
             EventAddressV2ClientDependencyValidationException
@@ -45,7 +45,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
                 .BeEquivalentTo(expectedEventAddressV2ClientDependencyValidationException);
 
             this.eventAddressV2ServiceMock.Verify(service =>
-                service.AddEventAddressV2Async(It.IsAny<EventAddressV2>()),
+                service.AddEventAddressV2Async(It.IsAny<EventAddressV1>()),
                     Times.Once);
 
             this.eventAddressV2ServiceMock.VerifyNoOtherCalls();
@@ -55,7 +55,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
         public async Task ShouldThrowDependencyExceptionOnRegisterIfDependencyErrorOccursAsync()
         {
             // given
-            EventAddressV2 someEventAddressV2 = CreateRandomEventAddressV2();
+            EventAddressV1 someEventAddressV2 = CreateRandomEventAddressV2();
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();
 
@@ -70,11 +70,11 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
                     innerException: eventV2DependencyException.InnerException as Xeption);
 
             this.eventAddressV2ServiceMock.Setup(service =>
-                service.AddEventAddressV2Async(It.IsAny<EventAddressV2>()))
+                service.AddEventAddressV2Async(It.IsAny<EventAddressV1>()))
                     .ThrowsAsync(eventV2DependencyException);
 
             // when
-            ValueTask<EventAddressV2> registerEventAddressV2Task =
+            ValueTask<EventAddressV1> registerEventAddressV2Task =
                 this.eventAddressesClient.RegisterEventAddressV2Async(someEventAddressV2);
 
             EventAddressV2ClientDependencyException
@@ -87,7 +87,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
                 .BeEquivalentTo(expectedEventAddressV2ClientDependencyException);
 
             this.eventAddressV2ServiceMock.Verify(service =>
-                service.AddEventAddressV2Async(It.IsAny<EventAddressV2>()),
+                service.AddEventAddressV2Async(It.IsAny<EventAddressV1>()),
                     Times.Once);
 
             this.eventAddressV2ServiceMock.VerifyNoOtherCalls();
@@ -97,7 +97,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
         public async Task ShouldThrowServiceExceptionOnRegisterIfServiceErrorOccursAsync()
         {
             // given
-            EventAddressV2 someEventAddressV2 = CreateRandomEventAddressV2();
+            EventAddressV1 someEventAddressV2 = CreateRandomEventAddressV2();
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();
 
@@ -112,11 +112,11 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
                     innerException: eventV2ServiceException.InnerException as Xeption);
 
             this.eventAddressV2ServiceMock.Setup(service =>
-                service.AddEventAddressV2Async(It.IsAny<EventAddressV2>()))
+                service.AddEventAddressV2Async(It.IsAny<EventAddressV1>()))
                     .ThrowsAsync(eventV2ServiceException);
 
             // when
-            ValueTask<EventAddressV2> registerEventAddressV2Task =
+            ValueTask<EventAddressV1> registerEventAddressV2Task =
                 this.eventAddressesClient.RegisterEventAddressV2Async(someEventAddressV2);
 
             EventAddressV2ClientServiceException actualEventAddressV2ClientServiceException =
@@ -128,7 +128,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
                 .BeEquivalentTo(expectedEventAddressV2ClientServiceException);
 
             this.eventAddressV2ServiceMock.Verify(service =>
-                service.AddEventAddressV2Async(It.IsAny<EventAddressV2>()),
+                service.AddEventAddressV2Async(It.IsAny<EventAddressV1>()),
                     Times.Once);
 
             this.eventAddressV2ServiceMock.VerifyNoOtherCalls();
