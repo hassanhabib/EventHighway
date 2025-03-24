@@ -5,7 +5,7 @@
 using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Loggings;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Services.Foundations.EventAddresses.V2;
 
 namespace EventHighway.Core.Services.Processings.EventAddresses.V2
@@ -23,7 +23,7 @@ namespace EventHighway.Core.Services.Processings.EventAddresses.V2
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<EventAddressV2> RetrieveEventAddressV2ByIdAsync(Guid eventAddressV2Id) =>
+        public ValueTask<EventAddressV1> RetrieveEventAddressV2ByIdAsync(Guid eventAddressV2Id) =>
         TryCatch(async () =>
         {
             ValidateEventAddressV2Id(eventAddressV2Id);

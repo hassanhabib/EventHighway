@@ -8,9 +8,9 @@ using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 
-namespace EventHighway.Core.Models.Services.Foundations.EventAddresses.V2
+namespace EventHighway.Core.Models.Services.Foundations.EventAddresses.V1
 {
-    public class EventAddressV2
+    public class EventAddressV1
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

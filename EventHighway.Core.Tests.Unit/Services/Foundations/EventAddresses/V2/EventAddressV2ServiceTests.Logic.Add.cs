@@ -4,7 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
@@ -20,17 +20,17 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
             DateTimeOffset randomDateTimeOffset =
                 GetRandomDateTimeOffset();
 
-            EventAddressV2 randomEventAddressV2 =
+            EventAddressV1 randomEventAddressV2 =
                 CreateRandomEventAddressV2(
                     dates: randomDateTimeOffset);
 
-            EventAddressV2 inputEventAddressV2 =
+            EventAddressV1 inputEventAddressV2 =
                 randomEventAddressV2;
 
-            EventAddressV2 insertedEventAddressV2 =
+            EventAddressV1 insertedEventAddressV2 =
                 inputEventAddressV2;
 
-            EventAddressV2 expectedEventAddressV2 =
+            EventAddressV1 expectedEventAddressV2 =
                 insertedEventAddressV2.DeepClone();
 
             this.dateTimeBrokerMock.Setup(broker =>
@@ -43,7 +43,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V2
                         .ReturnsAsync(insertedEventAddressV2);
 
             // when
-            EventAddressV2 actualEventAddressV2 =
+            EventAddressV1 actualEventAddressV2 =
                 await this.eventAddressV2Service
                     .AddEventAddressV2Async(
                         inputEventAddressV2);

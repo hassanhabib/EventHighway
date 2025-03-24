@@ -4,8 +4,8 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions;
 using EventHighway.Core.Models.Services.Processings.EventAddresses.V2.Exceptions;
 using Xeptions;
 
@@ -13,9 +13,9 @@ namespace EventHighway.Core.Services.Processings.EventAddresses.V2
 {
     internal partial class EventAddressV2ProcessingService
     {
-        private delegate ValueTask<EventAddressV2> ReturningEventAddressV2Function();
+        private delegate ValueTask<EventAddressV1> ReturningEventAddressV2Function();
 
-        private async ValueTask<EventAddressV2> TryCatch(
+        private async ValueTask<EventAddressV1> TryCatch(
             ReturningEventAddressV2Function returningEventAddressV2Function)
         {
             try

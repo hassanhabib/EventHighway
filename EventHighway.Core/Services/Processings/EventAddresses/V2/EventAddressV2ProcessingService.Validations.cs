@@ -3,7 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Processings.EventAddresses.V2.Exceptions;
 
 namespace EventHighway.Core.Services.Processings.EventAddresses.V2
@@ -14,7 +14,7 @@ namespace EventHighway.Core.Services.Processings.EventAddresses.V2
         {
             Validate(
                 (Rule: IsInvalid(eventAddressV2Id),
-                Parameter: nameof(EventAddressV2.Id)));
+                Parameter: nameof(EventAddressV1.Id)));
         }
 
         private static dynamic IsInvalid(Guid id) => new

@@ -3,7 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Orchestrations.Events.V2.Exceptions;
@@ -30,7 +30,7 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
             }
         }
 
-        private static void ValidateListenerEventV2Exists(EventAddressV2 eventAddressV2, Guid eventAddressV2Id)
+        private static void ValidateListenerEventV2Exists(EventAddressV1 eventAddressV2, Guid eventAddressV2Id)
         {
             if (eventAddressV2 is null)
             {

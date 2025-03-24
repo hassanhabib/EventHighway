@@ -5,8 +5,8 @@
 using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.EventAddresses.V2.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xeptions;
@@ -33,7 +33,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
                     .ThrowsAsync(validationException);
 
             // when
-            ValueTask<EventAddressV2> removeEventAddressV2ByIdTask =
+            ValueTask<EventAddressV1> removeEventAddressV2ByIdTask =
                 this.eventAddressesClient.RemoveEventAddressV2ByIdAsync(someEventAddressV2Id);
 
             EventAddressV2ClientDependencyValidationException
@@ -75,7 +75,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
                     .ThrowsAsync(eventV2DependencyException);
 
             // when
-            ValueTask<EventAddressV2> removeEventAddressV2ByIdTask =
+            ValueTask<EventAddressV1> removeEventAddressV2ByIdTask =
                 this.eventAddressesClient.RemoveEventAddressV2ByIdAsync(someEventAddressV2Id);
 
             EventAddressV2ClientDependencyException
@@ -117,7 +117,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
                     .ThrowsAsync(eventV2ServiceException);
 
             // when
-            ValueTask<EventAddressV2> removeEventAddressV2ByIdTask =
+            ValueTask<EventAddressV1> removeEventAddressV2ByIdTask =
                 this.eventAddressesClient.RemoveEventAddressV2ByIdAsync(someEventAddressV2Id);
 
             EventAddressV2ClientServiceException actualEventAddressV2ClientServiceException =

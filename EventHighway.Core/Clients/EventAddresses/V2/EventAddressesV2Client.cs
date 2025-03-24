@@ -5,8 +5,8 @@
 using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.EventAddresses.V2.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
-using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions;
 using EventHighway.Core.Services.Foundations.EventAddresses.V2;
 using Xeptions;
 
@@ -19,7 +19,7 @@ namespace EventHighway.Core.Clients.EventAddresses.V2
         public EventAddressesV2Client(IEventAddressV2Service eventAddressV2Service) =>
             this.eventAddressV2Service = eventAddressV2Service;
 
-        public async ValueTask<EventAddressV2> RegisterEventAddressV2Async(EventAddressV2 eventAddressV2)
+        public async ValueTask<EventAddressV1> RegisterEventAddressV2Async(EventAddressV1 eventAddressV2)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace EventHighway.Core.Clients.EventAddresses.V2
             }
         }
 
-        public async ValueTask<EventAddressV2> RemoveEventAddressV2ByIdAsync(Guid eventAddressV2Id)
+        public async ValueTask<EventAddressV1> RemoveEventAddressV2ByIdAsync(Guid eventAddressV2Id)
         {
             try
             {
