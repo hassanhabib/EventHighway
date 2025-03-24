@@ -5,7 +5,7 @@
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.Events.V2.Exceptions;
 using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using FluentAssertions;
 using Moq;
 using Xeptions;
@@ -20,7 +20,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
             Xeption validationException)
         {
             // given
-            EventV2 someEventV2 = CreateRandomEventV2();
+            EventV1 someEventV2 = CreateRandomEventV2();
 
             var expectedEventV2ClientDependencyValidationException =
                 new EventV2ClientDependencyValidationException(
@@ -28,11 +28,11 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                     innerException: validationException.InnerException as Xeption);
 
             this.eventV2CoordinationServiceMock.Setup(service =>
-                service.SubmitEventV2Async(It.IsAny<EventV2>()))
+                service.SubmitEventV2Async(It.IsAny<EventV1>()))
                     .ThrowsAsync(validationException);
 
             // when
-            ValueTask<EventV2> submitEventV2Task =
+            ValueTask<EventV1> submitEventV2Task =
                 this.eventV2SClient.SubmitEventV2Async(someEventV2);
 
             EventV2ClientDependencyValidationException actualEventV2ClientDependencyValidationException =
@@ -44,7 +44,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                 .BeEquivalentTo(expectedEventV2ClientDependencyValidationException);
 
             this.eventV2CoordinationServiceMock.Verify(service =>
-                service.SubmitEventV2Async(It.IsAny<EventV2>()),
+                service.SubmitEventV2Async(It.IsAny<EventV1>()),
                     Times.Once);
 
             this.eventV2CoordinationServiceMock.VerifyNoOtherCalls();
@@ -54,7 +54,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
         public async Task ShouldThrowDependencyExceptionOnSubmitIfDependencyErrorOccursAsync()
         {
             // given
-            EventV2 someEventV2 = CreateRandomEventV2();
+            EventV1 someEventV2 = CreateRandomEventV2();
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();
 
@@ -71,11 +71,11 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                         .InnerException as Xeption);
 
             this.eventV2CoordinationServiceMock.Setup(service =>
-                service.SubmitEventV2Async(It.IsAny<EventV2>()))
+                service.SubmitEventV2Async(It.IsAny<EventV1>()))
                     .ThrowsAsync(eventV2CoordinationDependencyException);
 
             // when
-            ValueTask<EventV2> submitEventV2Task =
+            ValueTask<EventV1> submitEventV2Task =
                 this.eventV2SClient.SubmitEventV2Async(someEventV2);
 
             EventV2ClientDependencyException actualEventV2ClientDependencyException =
@@ -87,7 +87,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                 .BeEquivalentTo(expectedEventV2ClientDependencyException);
 
             this.eventV2CoordinationServiceMock.Verify(service =>
-                service.SubmitEventV2Async(It.IsAny<EventV2>()),
+                service.SubmitEventV2Async(It.IsAny<EventV1>()),
                     Times.Once);
 
             this.eventV2CoordinationServiceMock.VerifyNoOtherCalls();
@@ -97,7 +97,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
         public async Task ShouldThrowServiceExceptionOnSubmitIfServiceErrorOccursAsync()
         {
             // given
-            EventV2 someEventV2 = CreateRandomEventV2();
+            EventV1 someEventV2 = CreateRandomEventV2();
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();
 
@@ -114,11 +114,11 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                         .InnerException as Xeption);
 
             this.eventV2CoordinationServiceMock.Setup(service =>
-                service.SubmitEventV2Async(It.IsAny<EventV2>()))
+                service.SubmitEventV2Async(It.IsAny<EventV1>()))
                     .ThrowsAsync(eventV2CoordinationServiceException);
 
             // when
-            ValueTask<EventV2> submitEventV2Task =
+            ValueTask<EventV1> submitEventV2Task =
                 this.eventV2SClient.SubmitEventV2Async(someEventV2);
 
             EventV2ClientServiceException actualEventV2ClientServiceException =
@@ -130,7 +130,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                 .BeEquivalentTo(expectedEventV2ClientServiceException);
 
             this.eventV2CoordinationServiceMock.Verify(service =>
-                service.SubmitEventV2Async(It.IsAny<EventV2>()),
+                service.SubmitEventV2Async(It.IsAny<EventV1>()),
                     Times.Once);
 
             this.eventV2CoordinationServiceMock.VerifyNoOtherCalls();

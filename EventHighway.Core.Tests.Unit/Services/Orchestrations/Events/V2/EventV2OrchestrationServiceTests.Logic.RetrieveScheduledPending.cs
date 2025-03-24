@@ -4,7 +4,7 @@
 
 using System.Linq;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
@@ -17,10 +17,10 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
         public async Task ShouldRetrieveScheduledPendingEventV2sAsync()
         {
             // given
-            IQueryable<EventV2> randomEventV2s = CreateRandomEventV2s();
-            IQueryable<EventV2> retrievedEventV2s = randomEventV2s;
+            IQueryable<EventV1> randomEventV2s = CreateRandomEventV2s();
+            IQueryable<EventV1> retrievedEventV2s = randomEventV2s;
 
-            IQueryable<EventV2> expectedEventV2s = retrievedEventV2s
+            IQueryable<EventV1> expectedEventV2s = retrievedEventV2s
                 .DeepClone();
 
             this.eventV2ProcessingServiceMock.Setup(service =>
@@ -28,7 +28,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                     .ReturnsAsync(retrievedEventV2s);
 
             // when
-            IQueryable<EventV2> actualEventV2s =
+            IQueryable<EventV1> actualEventV2s =
                 await this.eventV2OrchestrationService
                     .RetrieveScheduledPendingEventV2sAsync();
 

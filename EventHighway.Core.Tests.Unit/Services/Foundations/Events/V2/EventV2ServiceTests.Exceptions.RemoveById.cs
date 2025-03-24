@@ -4,8 +4,8 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
-using EventHighway.Core.Models.Services.Foundations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
+using EventHighway.Core.Models.Services.Foundations.Events.V1.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +37,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     .ThrowsAsync(sqlException);
 
             // when
-            ValueTask<EventV2> removeEventV2ByIdTask =
+            ValueTask<EventV1> removeEventV2ByIdTask =
                 this.eventV2Service.RemoveEventV2ByIdAsync(
                     someEventV2Id);
 
@@ -85,7 +85,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     .ThrowsAsync(dbUpdateConcurrencyException);
 
             // when
-            ValueTask<EventV2> removeEventV2ByIdTask =
+            ValueTask<EventV1> removeEventV2ByIdTask =
                 this.eventV2Service.RemoveEventV2ByIdAsync(
                     someEventV2Id);
 
@@ -134,7 +134,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     .ThrowsAsync(dbUpdateException);
 
             // when
-            ValueTask<EventV2> removeEventV2ByIdTask =
+            ValueTask<EventV1> removeEventV2ByIdTask =
                 this.eventV2Service.RemoveEventV2ByIdAsync(someEventV2Id);
 
             EventV2DependencyException actualEventV2DependencyException =
@@ -182,7 +182,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<EventV2> removeEventV2ByIdTask =
+            ValueTask<EventV1> removeEventV2ByIdTask =
                 this.eventV2Service.RemoveEventV2ByIdAsync(
                     someEventV2Id);
 

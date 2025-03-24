@@ -7,13 +7,13 @@ using System.Collections.Generic;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 
-namespace EventHighway.Core.Models.Services.Foundations.Events.V2
+namespace EventHighway.Core.Models.Services.Foundations.Events.V1
 {
-    public class EventV2
+    public class EventV1
     {
         public Guid Id { get; set; }
         public string Content { get; set; }
-        public EventV2Type Type { get; set; }
+        public EventV1Type Type { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
         public DateTimeOffset UpdatedDate { get; set; }
         public DateTimeOffset? ScheduledDate { get; set; }

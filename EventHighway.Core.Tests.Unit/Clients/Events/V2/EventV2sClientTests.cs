@@ -6,7 +6,7 @@ using System;
 using EventHighway.Core.Clients.Events.V2;
 using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Services.Coordinations.Events.V2;
 using Moq;
 using Tynamix.ObjectFiller;
@@ -56,12 +56,12 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
-        private static EventV2 CreateRandomEventV2() =>
+        private static EventV1 CreateRandomEventV2() =>
             CreateEventV2Filler().Create();
 
-        private static Filler<EventV2> CreateEventV2Filler()
+        private static Filler<EventV1> CreateEventV2Filler()
         {
-            var filler = new Filler<EventV2>();
+            var filler = new Filler<EventV1>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>()

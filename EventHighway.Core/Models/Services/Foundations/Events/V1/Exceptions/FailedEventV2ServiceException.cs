@@ -5,11 +5,11 @@
 using System;
 using Xeptions;
 
-namespace EventHighway.Core.Models.Services.Foundations.Events.V2.Exceptions
+namespace EventHighway.Core.Models.Services.Foundations.Events.V1.Exceptions
 {
-    public class FailedEventV2StorageException : Xeption
+    public class FailedEventV2ServiceException : Xeption
     {
-        public FailedEventV2StorageException(string message, Exception innerException)
+        public FailedEventV2ServiceException(string message, Exception innerException)
             : base(message, innerException)
         { }
     }

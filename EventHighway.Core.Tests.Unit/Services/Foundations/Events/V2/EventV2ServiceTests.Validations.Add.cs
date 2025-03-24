@@ -4,8 +4,8 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
-using EventHighway.Core.Models.Services.Foundations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
+using EventHighway.Core.Models.Services.Foundations.Events.V1.Exceptions;
 using FluentAssertions;
 using Moq;
 
@@ -17,7 +17,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
         public async Task ShouldThrowValidationExceptionOnAddIfEventV2IsNullAndLogItAsync()
         {
             // given
-            EventV2 nullEventV2 = null;
+            EventV1 nullEventV2 = null;
 
             var nullEventV2Exception =
                 new NullEventV2Exception(message: "Event is null.");
@@ -28,7 +28,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     innerException: nullEventV2Exception);
 
             // when
-            ValueTask<EventV2> addEventV2Task =
+            ValueTask<EventV1> addEventV2Task =
                 this.eventV2Service.AddEventV2Async(nullEventV2);
 
             EventV2ValidationException actualEventV2ValidationException =
@@ -49,7 +49,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     Times.Never);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventV2Async(It.IsAny<EventV2>()),
+                broker.InsertEventV2Async(It.IsAny<EventV1>()),
                     Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
@@ -64,9 +64,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
         private async Task ShouldThrowValidationExceptionOnAddIfEventV2IsInvalidAndLogItAsync(
             string invalidText)
         {
-            EventV2Type invalidEventV2Type = GetInvalidEnum<EventV2Type>();
+            EventV1Type invalidEventV2Type = GetInvalidEnum<EventV1Type>();
 
-            var invalidEventV2 = new EventV2
+            var invalidEventV2 = new EventV1
             {
                 Id = Guid.Empty,
                 Content = invalidText,
@@ -79,27 +79,27 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     message: "Event is invalid, fix the errors and try again.");
 
             invalidEventV2Exception.AddData(
-                key: nameof(EventV2.Id),
+                key: nameof(EventV1.Id),
                 values: "Required");
 
             invalidEventV2Exception.AddData(
-                key: nameof(EventV2.Content),
+                key: nameof(EventV1.Content),
                 values: "Required");
 
             invalidEventV2Exception.AddData(
-                key: nameof(EventV2.EventAddressId),
+                key: nameof(EventV1.EventAddressId),
                 values: "Required");
 
             invalidEventV2Exception.AddData(
-                key: nameof(EventV2.Type),
+                key: nameof(EventV1.Type),
                 values: "Value is not recognized");
 
             invalidEventV2Exception.AddData(
-                key: nameof(EventV2.CreatedDate),
+                key: nameof(EventV1.CreatedDate),
                 values: "Required");
 
             invalidEventV2Exception.AddData(
-                key: nameof(EventV2.UpdatedDate),
+                key: nameof(EventV1.UpdatedDate),
                 values: "Required");
 
             var expectedEventV2ValidationException =
@@ -108,7 +108,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     innerException: invalidEventV2Exception);
 
             // when
-            ValueTask<EventV2> addEventV2Task =
+            ValueTask<EventV1> addEventV2Task =
                 this.eventV2Service.AddEventV2Async(invalidEventV2);
 
             EventV2ValidationException actualEventV2ValidationException =
@@ -129,7 +129,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventV2Async(It.IsAny<EventV2>()),
+                broker.InsertEventV2Async(It.IsAny<EventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -143,8 +143,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
             // given
             DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
             DateTimeOffset anotherRandomDateTimeOffset = GetRandomDateTimeOffset();
-            EventV2 randomEventV2 = CreateRandomEventV2(randomDateTimeOffset);
-            EventV2 invalidEventV2 = randomEventV2;
+            EventV1 randomEventV2 = CreateRandomEventV2(randomDateTimeOffset);
+            EventV1 invalidEventV2 = randomEventV2;
             invalidEventV2.UpdatedDate = anotherRandomDateTimeOffset;
 
             var invalidEventV2Exception =
@@ -152,8 +152,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     message: "Event is invalid, fix the errors and try again.");
 
             invalidEventV2Exception.AddData(
-                key: nameof(EventV2.CreatedDate),
-                values: $"Date is not the same as {nameof(EventV2.UpdatedDate)}");
+                key: nameof(EventV1.CreatedDate),
+                values: $"Date is not the same as {nameof(EventV1.UpdatedDate)}");
 
             var expectedEventV2ValidationException =
                 new EventV2ValidationException(
@@ -165,7 +165,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     .ReturnsAsync(randomDateTimeOffset);
 
             // when
-            ValueTask<EventV2> addEventV2Task =
+            ValueTask<EventV1> addEventV2Task =
                 this.eventV2Service.AddEventV2Async(invalidEventV2);
 
             EventV2ValidationException actualEventV2ValidationException =
@@ -186,7 +186,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventV2Async(It.IsAny<EventV2>()),
+                broker.InsertEventV2Async(It.IsAny<EventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -202,17 +202,17 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
             // given
             DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
 
-            EventV2 randomEventV2 =
+            EventV1 randomEventV2 =
                 CreateRandomEventV2(randomDateTimeOffset.AddMinutes(minutesBeforeAndAfter));
 
-            EventV2 invalidEventV2 = randomEventV2;
+            EventV1 invalidEventV2 = randomEventV2;
 
             var invalidEventV2Exception =
                 new InvalidEventV2Exception(
                     message: "Event is invalid, fix the errors and try again.");
 
             invalidEventV2Exception.AddData(
-                key: nameof(EventV2.CreatedDate),
+                key: nameof(EventV1.CreatedDate),
                 values: "Date is not recent");
 
             var expectedEventV2ValidationException =
@@ -225,7 +225,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     .ReturnsAsync(randomDateTimeOffset);
 
             // when
-            ValueTask<EventV2> addEventV2Task =
+            ValueTask<EventV1> addEventV2Task =
                 this.eventV2Service.AddEventV2Async(invalidEventV2);
 
             EventV2ValidationException actualEventV2ValidationException =
@@ -246,7 +246,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventV2Async(It.IsAny<EventV2>()),
+                broker.InsertEventV2Async(It.IsAny<EventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();

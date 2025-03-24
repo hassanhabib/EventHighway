@@ -4,8 +4,8 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
-using EventHighway.Core.Models.Services.Foundations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
+using EventHighway.Core.Models.Services.Foundations.Events.V1.Exceptions;
 using FluentAssertions;
 using Moq;
 
@@ -24,7 +24,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     message: "Event is invalid, fix the errors and try again.");
 
             invalidEventV2Exception.AddData(
-                key: nameof(EventV2.Id),
+                key: nameof(EventV1.Id),
                 values: "Required");
 
             var expectedEventV2ValidationException =
@@ -33,7 +33,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     innerException: invalidEventV2Exception);
 
             // when
-            ValueTask<EventV2> removeEventV2ByIdTask =
+            ValueTask<EventV1> removeEventV2ByIdTask =
                 this.eventV2Service.RemoveEventV2ByIdAsync(
                     invalidEventV2Id);
 
@@ -65,7 +65,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
         {
             // given
             Guid nonExistingEventV2Id = GetRandomId();
-            EventV2 nullEventV2 = null;
+            EventV1 nullEventV2 = null;
 
             var notFoundEventV2Exception =
                 new NotFoundEventV2Exception(
@@ -81,7 +81,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     .ReturnsAsync(nullEventV2);
 
             // when
-            ValueTask<EventV2> removeEventV2ByIdTask =
+            ValueTask<EventV1> removeEventV2ByIdTask =
                 this.eventV2Service.RemoveEventV2ByIdAsync(nonExistingEventV2Id);
 
             EventV2ValidationException actualEventV2ValidationException =
@@ -104,7 +104,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
 
             this.storageBrokerMock.Verify(broker =>
                 broker.DeleteEventV2Async(
-                    It.IsAny<EventV2>()),
+                    It.IsAny<EventV1>()),
                         Times.Never);
 
             this.storageBrokerMock.VerifyNoOtherCalls();

@@ -6,7 +6,7 @@ using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.Events.V2.Exceptions;
 using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using FluentAssertions;
 using Moq;
 using Xeptions;
@@ -33,7 +33,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                     .ThrowsAsync(validationException);
 
             // when
-            ValueTask<EventV2> removeEventV2ByIdTask =
+            ValueTask<EventV1> removeEventV2ByIdTask =
                 this.eventV2SClient.RemoveEventV2ByIdAsync(someEventV2Id);
 
             EventV2ClientDependencyValidationException actualEventV2ClientDependencyValidationException =
@@ -76,7 +76,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                     .ThrowsAsync(eventV2CoordinationDependencyException);
 
             // when
-            ValueTask<EventV2> removeEventV2ByIdTask =
+            ValueTask<EventV1> removeEventV2ByIdTask =
                 this.eventV2SClient.RemoveEventV2ByIdAsync(someEventV2Id);
 
             EventV2ClientDependencyException actualEventV2ClientDependencyException =
@@ -119,7 +119,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                     .ThrowsAsync(eventV2CoordinationServiceException);
 
             // when
-            ValueTask<EventV2> submitEventV2Task =
+            ValueTask<EventV1> submitEventV2Task =
                 this.eventV2SClient.RemoveEventV2ByIdAsync(someEventV2Id);
 
             EventV2ClientServiceException actualEventV2ClientServiceException =

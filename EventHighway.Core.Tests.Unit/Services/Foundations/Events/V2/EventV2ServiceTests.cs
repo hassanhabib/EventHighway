@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Storages;
 using EventHighway.Core.Brokers.Times;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Services.Foundations.Events.V2;
 using Microsoft.Data.SqlClient;
 using Moq;
@@ -100,21 +100,21 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
             }
         }
 
-        private static IQueryable<EventV2> CreateRandomEventV2s()
+        private static IQueryable<EventV1> CreateRandomEventV2s()
         {
             return CreateEventV2Filler(dates: GetRandomDateTimeOffset())
                 .Create(count: GetRandomNumber())
                     .AsQueryable();
         }
 
-        private static EventV2 CreateRandomEventV2()
+        private static EventV1 CreateRandomEventV2()
         {
             return CreateEventV2Filler(
                 dates: GetRandomDateTimeOffset())
                     .Create();
         }
 
-        private static EventV2 CreateRandomEventV2(DateTimeOffset dates) =>
+        private static EventV1 CreateRandomEventV2(DateTimeOffset dates) =>
             CreateEventV2Filler(dates).Create();
 
         private static DateTimeOffset GetRandomDateTimeOffset()
@@ -124,17 +124,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V2
                     .GetValue();
         }
 
-        private static Filler<EventV2> CreateEventV2Filler(DateTimeOffset dates)
+        private static Filler<EventV1> CreateEventV2Filler(DateTimeOffset dates)
         {
-            var filler = new Filler<EventV2>();
+            var filler = new Filler<EventV1>();
 
             filler.Setup()
-                .OnProperty(eventV2 =>
-                    eventV2.EventAddress).IgnoreIt()
-
-                .OnProperty(eventV2 =>
-                    eventV2.ListenerEvents).IgnoreIt()
-
                 .OnType<DateTimeOffset>().Use(dates)
 
                 .OnType<DateTimeOffset?>()

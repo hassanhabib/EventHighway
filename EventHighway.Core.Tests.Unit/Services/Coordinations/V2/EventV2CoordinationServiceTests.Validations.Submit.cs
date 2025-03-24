@@ -6,7 +6,7 @@ using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 using FluentAssertions;
 using Moq;
@@ -19,7 +19,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
         public async Task ShouldThrowValidationExceptionOnSubmitIfEventV2IsNullAndLogItAsync()
         {
             // given
-            EventV2 nullEventV2 = null;
+            EventV1 nullEventV2 = null;
 
             var nullEventV2CoordinationException =
                 new NullEventV2CoordinationException(message: "Event is null.");
@@ -30,7 +30,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                     innerException: nullEventV2CoordinationException);
 
             // when
-            ValueTask<EventV2> submitEventV2Task =
+            ValueTask<EventV1> submitEventV2Task =
                 this.eventV2CoordinationService.SubmitEventV2Async(nullEventV2);
 
             EventV2CoordinationValidationException
@@ -49,7 +49,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
             this.eventV2OrchestrationServiceMock.Verify(broker =>
                 broker.SubmitEventV2Async(
-                    It.IsAny<EventV2>()),
+                    It.IsAny<EventV1>()),
                         Times.Never);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>

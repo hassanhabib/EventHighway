@@ -7,8 +7,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Times;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
-using EventHighway.Core.Models.Services.Foundations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
+using EventHighway.Core.Models.Services.Foundations.Events.V1.Exceptions;
 using EventHighway.Core.Services.Foundations.Events.V2;
 using EventHighway.Core.Services.Processings.Events.V2;
 using Moq;
@@ -86,26 +86,26 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
         private static int GetNegativeRandomNumber() =>
             -1 * GetRandomNumber();
 
-        private static EventV2 CreateRandomEventV2()
+        private static EventV1 CreateRandomEventV2()
         {
             return CreateEventV2Filler(
                 dates: GetRandomDateTimeOffset(),
-                eventV2Type: EventV2Type.Immediate)
+                eventV2Type: EventV1Type.Immediate)
                     .Create();
         }
 
-        private static IQueryable<EventV2> CreateRandomEventV2s()
+        private static IQueryable<EventV1> CreateRandomEventV2s()
         {
             return CreateEventV2Filler(
                 dates: GetRandomDateTimeOffset(),
-                eventV2Type: EventV2Type.Immediate)
+                eventV2Type: EventV1Type.Immediate)
                     .Create(count: GetRandomNumber())
                         .AsQueryable();
         }
 
-        private static IQueryable<EventV2> CreateRandomEventV2s(
+        private static IQueryable<EventV1> CreateRandomEventV2s(
             DateTimeOffset dates,
-            EventV2Type eventV2Type)
+            EventV1Type eventV2Type)
         {
             return CreateEventV2Filler(
                 dates,
@@ -121,11 +121,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                     .GetValue();
         }
 
-        private static Filler<EventV2> CreateEventV2Filler(
+        private static Filler<EventV1> CreateEventV2Filler(
             DateTimeOffset dates,
-            EventV2Type eventV2Type)
+            EventV1Type eventV2Type)
         {
-            var filler = new Filler<EventV2>();
+            var filler = new Filler<EventV1>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>().Use(dates)
@@ -133,7 +133,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                 .OnType<DateTimeOffset?>()
                     .Use(dates)
 
-                .OnType<EventV2Type>().Use(eventV2Type);
+                .OnType<EventV1Type>().Use(eventV2Type);
 
             return filler;
         }

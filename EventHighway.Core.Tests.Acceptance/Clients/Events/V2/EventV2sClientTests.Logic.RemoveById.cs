@@ -5,7 +5,7 @@
 using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using FluentAssertions;
 
 namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
@@ -31,16 +31,16 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
                 DateTimeOffset.Now
                     .AddSeconds(randomSeconds);
 
-            EventV2 randomEventV2 =
+            EventV1 randomEventV2 =
                 await SubmitEventV2Async(
                     inputEventAddressV2Id,
                     scheduledDate);
 
             Guid inputEventV2Id = randomEventV2.Id;
-            EventV2 expectedEventV2 = randomEventV2;
+            EventV1 expectedEventV2 = randomEventV2;
 
             // when 
-            EventV2 actualEventV2 =
+            EventV1 actualEventV2 =
                 await this.clientBroker
                     .RemoveEventV2ByIdAsync(
                         inputEventV2Id);

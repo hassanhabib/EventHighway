@@ -6,8 +6,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using EFxceptions.Models.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
-using EventHighway.Core.Models.Services.Foundations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
+using EventHighway.Core.Models.Services.Foundations.Events.V1.Exceptions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Xeptions;
@@ -16,10 +16,10 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
 {
     internal partial class EventV2Service
     {
-        private delegate ValueTask<EventV2> ReturningEventV2Function();
-        private delegate ValueTask<IQueryable<EventV2>> ReturningEventV2sFunction();
+        private delegate ValueTask<EventV1> ReturningEventV2Function();
+        private delegate ValueTask<IQueryable<EventV1>> ReturningEventV2sFunction();
 
-        private async ValueTask<EventV2> TryCatch(ReturningEventV2Function returningEventV2Function)
+        private async ValueTask<EventV1> TryCatch(ReturningEventV2Function returningEventV2Function)
         {
             try
             {
@@ -95,7 +95,7 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
             }
         }
 
-        private async ValueTask<IQueryable<EventV2>> TryCatch(ReturningEventV2sFunction returningEventV2sFunction)
+        private async ValueTask<IQueryable<EventV1>> TryCatch(ReturningEventV2sFunction returningEventV2sFunction)
         {
             try
             {

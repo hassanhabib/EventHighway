@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V2;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Tests.Acceptance.Brokers;
 using Tynamix.ObjectFiller;
 using WireMock.Server;
@@ -68,18 +68,18 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
             return randomEventListenerV2;
         }
 
-        private async ValueTask<IQueryable<EventV2>> CreateRandomEventV2sAsync(
+        private async ValueTask<IQueryable<EventV1>> CreateRandomEventV2sAsync(
             Guid eventAddressV2Id)
         {
             int randomNumber = GetRandomNumber();
-            var randomEventV2s = new List<EventV2>();
+            var randomEventV2s = new List<EventV1>();
 
             for (int index = 0; index < randomNumber; index++)
             {
                 DateTimeOffset scheduledDate =
                     DateTimeOffset.Now.AddSeconds(seconds: 1);
 
-                EventV2 randomPostedEntitlementV2 =
+                EventV1 randomPostedEntitlementV2 =
                     await SubmitEventV2Async(
                         eventAddressV2Id,
                         scheduledDate);
@@ -90,11 +90,11 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
             return randomEventV2s.AsQueryable();
         }
 
-        private async ValueTask<EventV2> SubmitEventV2Async(
+        private async ValueTask<EventV1> SubmitEventV2Async(
             Guid eventAddressV2Id,
             DateTimeOffset scheduledDate)
         {
-            EventV2 randomEventV2 =
+            EventV1 randomEventV2 =
                 CreateRandomEventV2(
                     eventAddressV2Id,
                     scheduledDate);
@@ -115,7 +115,7 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
                     .Create();
         }
 
-        private static EventV2 CreateRandomEventV2(
+        private static EventV1 CreateRandomEventV2(
             Guid eventAddressV2Id,
             DateTimeOffset scheduledDate)
         {
@@ -161,12 +161,12 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
             return filler;
         }
 
-        private static Filler<EventV2> CreateEventV2Filler(
+        private static Filler<EventV1> CreateEventV2Filler(
             Guid eventAddressV2Id,
             DateTimeOffset scheduledDate)
         {
             DateTimeOffset now = DateTimeOffset.UtcNow;
-            var filler = new Filler<EventV2>();
+            var filler = new Filler<EventV1>();
 
             filler.Setup()
                 .OnProperty(eventV2 =>

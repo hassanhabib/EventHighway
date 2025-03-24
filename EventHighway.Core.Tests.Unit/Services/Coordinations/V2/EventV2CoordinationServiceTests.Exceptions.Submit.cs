@@ -6,7 +6,7 @@ using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 using FluentAssertions;
 using Moq;
@@ -23,7 +23,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             Xeption validationException)
         {
             // given
-            EventV2 someEventV2 = CreateRandomEventV2();
+            EventV1 someEventV2 = CreateRandomEventV2();
 
             var expectedEventV2CoordinationDependencyValidationException =
                 new EventV2CoordinationDependencyValidationException(
@@ -35,7 +35,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                     .ThrowsAsync(validationException);
 
             // when
-            ValueTask<EventV2> submitEventV2Task =
+            ValueTask<EventV1> submitEventV2Task =
                 this.eventV2CoordinationService.SubmitEventV2Async(someEventV2);
 
             EventV2CoordinationDependencyValidationException
@@ -62,7 +62,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                         Times.Never);
 
             this.eventV2OrchestrationServiceMock.Verify(service =>
-                service.SubmitEventV2Async(It.IsAny<EventV2>()),
+                service.SubmitEventV2Async(It.IsAny<EventV1>()),
                     Times.Never);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
@@ -93,7 +93,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             Xeption validationException)
         {
             // given
-            EventV2 someEventV2 = CreateRandomEventV2();
+            EventV1 someEventV2 = CreateRandomEventV2();
 
             var expectedEventV2CoordinationDependencyException =
                 new EventV2CoordinationDependencyException(
@@ -105,7 +105,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                     .ThrowsAsync(validationException);
 
             // when
-            ValueTask<EventV2> submitEventV2Task =
+            ValueTask<EventV1> submitEventV2Task =
                 this.eventV2CoordinationService.SubmitEventV2Async(someEventV2);
 
             EventV2CoordinationDependencyException
@@ -132,7 +132,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                         Times.Never);
 
             this.eventV2OrchestrationServiceMock.Verify(service =>
-                service.SubmitEventV2Async(It.IsAny<EventV2>()),
+                service.SubmitEventV2Async(It.IsAny<EventV1>()),
                     Times.Never);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
@@ -160,7 +160,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
         public async Task ShouldThrowServiceExceptionOnSubmitIfExceptionOccursAndLogItAsync()
         {
             // given
-            EventV2 someEventV2 = CreateRandomEventV2();
+            EventV1 someEventV2 = CreateRandomEventV2();
             var serviceException = new Exception();
 
             var failedEventV2CoordinationServiceException =
@@ -178,7 +178,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                     .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<EventV2> submitEventV2Task =
+            ValueTask<EventV1> submitEventV2Task =
                 this.eventV2CoordinationService.SubmitEventV2Async(someEventV2);
 
             EventV2CoordinationServiceException
@@ -205,7 +205,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                         Times.Never);
 
             this.eventV2OrchestrationServiceMock.Verify(service =>
-                service.SubmitEventV2Async(It.IsAny<EventV2>()),
+                service.SubmitEventV2Async(It.IsAny<EventV1>()),
                     Times.Never);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>

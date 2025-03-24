@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Storages;
 using EventHighway.Core.Brokers.Times;
-using EventHighway.Core.Models.Services.Foundations.Events.V2;
+using EventHighway.Core.Models.Services.Foundations.Events.V1;
 
 namespace EventHighway.Core.Services.Foundations.Events.V2
 {
@@ -28,7 +28,7 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<EventV2> AddEventV2Async(EventV2 eventV2) =>
+        public ValueTask<EventV1> AddEventV2Async(EventV1 eventV2) =>
         TryCatch(async () =>
         {
             await ValidateEventV2OnAddAsync(eventV2);
@@ -36,15 +36,15 @@ namespace EventHighway.Core.Services.Foundations.Events.V2
             return await storageBroker.InsertEventV2Async(eventV2);
         });
 
-        public ValueTask<IQueryable<EventV2>> RetrieveAllEventV2sAsync() =>
+        public ValueTask<IQueryable<EventV1>> RetrieveAllEventV2sAsync() =>
         TryCatch(async () => await this.storageBroker.SelectAllEventV2sAsync());
 
-        public ValueTask<EventV2> RemoveEventV2ByIdAsync(Guid eventV2Id) =>
+        public ValueTask<EventV1> RemoveEventV2ByIdAsync(Guid eventV2Id) =>
         TryCatch(async () =>
         {
             ValidateEventV2Id(eventV2Id);
 
-            EventV2 maybeEventV2 =
+            EventV1 maybeEventV2 =
                 await this.storageBroker.SelectEventV2ByIdAsync(eventV2Id);
 
             ValidateEventV2Exists(maybeEventV2, eventV2Id);
