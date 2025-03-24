@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Storages;
 using EventHighway.Core.Brokers.Times;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using EventHighway.Core.Services.Foundations.ListernEvents.V2;
 using Microsoft.Data.SqlClient;
 using Moq;
@@ -100,10 +100,10 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
-        private static ListenerEventV2 CreateRandomListenerEventV2() =>
+        private static ListenerEventV1 CreateRandomListenerEventV2() =>
             CreateListenerEventV2Filler(dates: GetRandomDateTimeOffset()).Create();
 
-        private static IQueryable<ListenerEventV2> CreateRandomListenerEventV2s()
+        private static IQueryable<ListenerEventV1> CreateRandomListenerEventV2s()
         {
             return CreateListenerEventV2Filler(
                 dates: GetRandomDateTimeOffset()).Create(
@@ -111,15 +111,15 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                         .AsQueryable();
         }
 
-        private static ListenerEventV2 CreateRandomListenerEventV2(DateTimeOffset dates) =>
+        private static ListenerEventV1 CreateRandomListenerEventV2(DateTimeOffset dates) =>
             CreateListenerEventV2Filler(dates).Create();
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
-        private static Filler<ListenerEventV2> CreateListenerEventV2Filler(DateTimeOffset dates)
+        private static Filler<ListenerEventV1> CreateListenerEventV2Filler(DateTimeOffset dates)
         {
-            var filler = new Filler<ListenerEventV2>();
+            var filler = new Filler<ListenerEventV1>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>().Use(dates)

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
@@ -67,7 +67,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
                 service.AddListenerEventV2Async(
-                    It.IsAny<ListenerEventV2>()),
+                    It.IsAny<ListenerEventV1>()),
                         Times.Never);
 
             this.eventV2OrchestrationServiceMock.Verify(service =>
@@ -77,7 +77,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
                 service.ModifyListenerEventV2Async(
-                    It.IsAny<ListenerEventV2>()),
+                    It.IsAny<ListenerEventV1>()),
                         Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -108,25 +108,25 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             IQueryable<EventListenerV1> retrievedEventListenerV2s =
                 randomEventListenerV2s;
 
-            List<ListenerEventV2> inputListenerEventV2s =
+            List<ListenerEventV1> inputListenerEventV2s =
                 retrievedEventListenerV2s.Select(eventListenerV2 =>
-                    new ListenerEventV2
+                    new ListenerEventV1
                     {
                         EventListenerId = eventListenerV2.Id,
                         EventId = inputImmediateEventV2.Id,
-                        Status = ListenerEventV2Status.Pending,
+                        Status = ListenerEventV1Status.Pending,
                         EventAddressId = inputImmediateEventV2.EventAddressId,
                         CreatedDate = inputImmediateEventV2.CreatedDate,
                         UpdatedDate = inputImmediateEventV2.UpdatedDate
                     }).ToList();
 
-            List<ListenerEventV2> addedListenerEventV2s =
+            List<ListenerEventV1> addedListenerEventV2s =
                 inputListenerEventV2s.DeepClone();
 
-            List<ListenerEventV2> modifiedListenerEventV2s =
+            List<ListenerEventV1> modifiedListenerEventV2s =
                 addedListenerEventV2s;
 
-            List<ListenerEventV2> expectedListenerEventV2s =
+            List<ListenerEventV1> expectedListenerEventV2s =
                 modifiedListenerEventV2s.DeepClone();
 
             List<EventCallV2> expectedInputCallEventV2s =
@@ -184,7 +184,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                         .ReturnsAsync(randomDateTimeOffset);
 
                 addedListenerEventV2s[index].UpdatedDate = randomDateTimeOffset;
-                addedListenerEventV2s[index].Status = ListenerEventV2Status.Success;
+                addedListenerEventV2s[index].Status = ListenerEventV1Status.Success;
                 addedListenerEventV2s[index].Response = ranEventCallV2s[index].Response;
 
                 this.eventListenerV2OrchestrationServiceMock

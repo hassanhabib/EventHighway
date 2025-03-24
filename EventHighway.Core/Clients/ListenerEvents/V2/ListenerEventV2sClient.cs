@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.ListenerEvents.V2.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 using EventHighway.Core.Services.Orchestrations.EventListeners.V2;
 using Xeptions;
@@ -20,7 +20,7 @@ namespace EventHighway.Core.Clients.ListenerEvents.V2
         public ListenerEventV2sClient(IEventListenerV2OrchestrationService eventListenerV2OrchestrationService) =>
             this.eventListenerV2OrchestrationService = eventListenerV2OrchestrationService;
 
-        public async ValueTask<IQueryable<ListenerEventV2>> RetrieveAllListenerEventV2sAsync()
+        public async ValueTask<IQueryable<ListenerEventV1>> RetrieveAllListenerEventV2sAsync()
         {
             try
             {
@@ -43,7 +43,7 @@ namespace EventHighway.Core.Clients.ListenerEvents.V2
             }
         }
 
-        public async ValueTask<ListenerEventV2> RemoveListenerEventV2ByIdAsync(Guid listenerEventV2Id)
+        public async ValueTask<ListenerEventV1> RemoveListenerEventV2ByIdAsync(Guid listenerEventV2Id)
         {
             try
             {

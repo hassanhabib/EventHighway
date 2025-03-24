@@ -5,13 +5,13 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 
 namespace EventHighway.Core.Clients.ListenerEvents.V2
 {
     public interface IListenerEventV2sClient
     {
-        ValueTask<IQueryable<ListenerEventV2>> RetrieveAllListenerEventV2sAsync();
-        ValueTask<ListenerEventV2> RemoveListenerEventV2ByIdAsync(Guid listenerEventV2Id);
+        ValueTask<IQueryable<ListenerEventV1>> RetrieveAllListenerEventV2sAsync();
+        ValueTask<ListenerEventV1> RemoveListenerEventV2ByIdAsync(Guid listenerEventV2Id);
     }
 }

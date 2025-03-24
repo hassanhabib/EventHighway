@@ -5,11 +5,11 @@
 using System;
 using Xeptions;
 
-namespace EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2.Exceptions
+namespace EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1.Exceptions
 {
-    public class FailedListenerEventV2ServiceException : Xeption
+    public class FailedListenerEventV2StorageException : Xeption
     {
-        public FailedListenerEventV2ServiceException(string message, Exception innerException)
+        public FailedListenerEventV2StorageException(string message, Exception innerException)
             : base(message, innerException)
         { }
     }

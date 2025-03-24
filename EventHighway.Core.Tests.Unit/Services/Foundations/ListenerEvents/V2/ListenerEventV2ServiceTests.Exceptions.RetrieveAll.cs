@@ -5,8 +5,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Moq;
@@ -36,7 +36,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                     .ThrowsAsync(sqlException);
 
             // when
-            ValueTask<IQueryable<ListenerEventV2>> retrieveAllListenerEventV2sTask =
+            ValueTask<IQueryable<ListenerEventV1>> retrieveAllListenerEventV2sTask =
                 this.listenerEventV2Service.RetrieveAllListenerEventV2sAsync();
 
             ListenerEventV2DependencyException actualListenerEventV2DependencyException =
@@ -82,7 +82,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                     .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<IQueryable<ListenerEventV2>> retrieveAllListenerEventV2sTask =
+            ValueTask<IQueryable<ListenerEventV1>> retrieveAllListenerEventV2sTask =
                 this.listenerEventV2Service.RetrieveAllListenerEventV2sAsync();
 
             ListenerEventV2ServiceException actualListenerEventV2ServiceException =

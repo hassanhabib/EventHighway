@@ -6,8 +6,8 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1.Exceptions;
 using EventHighway.Core.Services.Foundations.ListernEvents.V2;
 using EventHighway.Core.Services.Processings.ListenerEvents.V2;
 using Moq;
@@ -78,18 +78,18 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.ListenerEvents.V2
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
-        private static IQueryable<ListenerEventV2> CreateRandomListenerEventV2s() =>
+        private static IQueryable<ListenerEventV1> CreateRandomListenerEventV2s() =>
             CreateListenerEventV2Filler().Create(count: GetRandomNumber()).AsQueryable();
 
-        private static ListenerEventV2 CreateRandomListenerEventV2() =>
+        private static ListenerEventV1 CreateRandomListenerEventV2() =>
             CreateListenerEventV2Filler().Create();
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
-        private static Filler<ListenerEventV2> CreateListenerEventV2Filler()
+        private static Filler<ListenerEventV1> CreateListenerEventV2Filler()
         {
-            var filler = new Filler<ListenerEventV2>();
+            var filler = new Filler<ListenerEventV1>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>().Use(GetRandomDateTimeOffset)

@@ -4,8 +4,8 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1.Exceptions;
 using FluentAssertions;
 using Moq;
 
@@ -24,7 +24,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                     message: "Listener event is invalid, fix the errors and try again.");
 
             invalidListenerEventV2Exception.AddData(
-                key: nameof(ListenerEventV2.Id),
+                key: nameof(ListenerEventV1.Id),
                 values: "Required");
 
             var expectedListenerEventV2ValidationException =
@@ -33,7 +33,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                     innerException: invalidListenerEventV2Exception);
 
             // when
-            ValueTask<ListenerEventV2> removeListenerEventV2ByIdTask =
+            ValueTask<ListenerEventV1> removeListenerEventV2ByIdTask =
                 this.listenerEventV2Service.RemoveListenerEventV2ByIdAsync(
                     invalidListenerEventV2Id);
 
@@ -65,7 +65,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
         {
             // given
             Guid nonExistingListenerEventV2Id = GetRandomId();
-            ListenerEventV2 nullListenerEventV2 = null;
+            ListenerEventV1 nullListenerEventV2 = null;
 
             var notFoundListenerEventV2Exception =
                 new NotFoundListenerEventV2Exception(
@@ -81,7 +81,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                     .ReturnsAsync(nullListenerEventV2);
 
             // when
-            ValueTask<ListenerEventV2> removeListenerEventV2ByIdTask =
+            ValueTask<ListenerEventV1> removeListenerEventV2ByIdTask =
                 this.listenerEventV2Service.RemoveListenerEventV2ByIdAsync(nonExistingListenerEventV2Id);
 
             ListenerEventV2ValidationException actualListenerEventV2ValidationException =
@@ -104,7 +104,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
 
             this.storageBrokerMock.Verify(broker =>
                 broker.DeleteListenerEventV2Async(
-                    It.IsAny<ListenerEventV2>()),
+                    It.IsAny<ListenerEventV1>()),
                         Times.Never);
 
             this.storageBrokerMock.VerifyNoOtherCalls();

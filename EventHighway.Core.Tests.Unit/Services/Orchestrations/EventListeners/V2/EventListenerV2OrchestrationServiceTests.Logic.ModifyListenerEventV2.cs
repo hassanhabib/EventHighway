@@ -3,7 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
@@ -16,16 +16,16 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
         public async Task ShouldModifyListenerEventV2Async()
         {
             // given
-            ListenerEventV2 randomListenerEventV2 =
+            ListenerEventV1 randomListenerEventV2 =
                 CreateRandomListenerEventV2();
 
-            ListenerEventV2 inputListenerEventV2 =
+            ListenerEventV1 inputListenerEventV2 =
                 randomListenerEventV2;
 
-            ListenerEventV2 modifiedListenerEventV2 =
+            ListenerEventV1 modifiedListenerEventV2 =
                 inputListenerEventV2;
 
-            ListenerEventV2 expectedListenerEventV2 =
+            ListenerEventV1 expectedListenerEventV2 =
                 modifiedListenerEventV2.DeepClone();
 
             this.listenerEventV2ProcessingServiceMock.Setup(service =>
@@ -34,7 +34,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                         .ReturnsAsync(modifiedListenerEventV2);
 
             // when
-            ListenerEventV2 actualListenerEventV2 =
+            ListenerEventV1 actualListenerEventV2 =
                 await this.eventListenerV2OrchestrationService
                     .ModifyListenerEventV2Async(
                         inputListenerEventV2);

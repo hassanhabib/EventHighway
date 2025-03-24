@@ -63,7 +63,7 @@ namespace EventHighway.Core.Brokers.Storages
 
             return @object;
         }
-        
+
         private async ValueTask<T> DeleteAsync<T>(T @object)
         {
             var broker = new StorageBroker(this.connectionString);

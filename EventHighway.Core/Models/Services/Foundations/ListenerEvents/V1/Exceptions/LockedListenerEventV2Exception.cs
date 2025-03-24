@@ -5,11 +5,11 @@
 using System;
 using Xeptions;
 
-namespace EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2.Exceptions
+namespace EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1.Exceptions
 {
-    public class AlreadyExistsListenerEventV2Exception : Xeption
+    public class LockedListenerEventV2Exception : Xeption
     {
-        public AlreadyExistsListenerEventV2Exception(string message, Exception innerException)
+        public LockedListenerEventV2Exception(string message, Exception innerException)
             : base(message, innerException)
         { }
     }

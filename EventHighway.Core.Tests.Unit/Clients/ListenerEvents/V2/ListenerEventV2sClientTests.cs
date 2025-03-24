@@ -5,7 +5,7 @@
 using System;
 using System.Linq;
 using EventHighway.Core.Clients.ListenerEvents.V2;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 using EventHighway.Core.Services.Orchestrations.EventListeners.V2;
 using Moq;
@@ -59,15 +59,15 @@ namespace EventHighway.Core.Tests.Unit.Clients.ListenerEvents.V2
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
-        private static IQueryable<ListenerEventV2> CreateRandomListenerEventV2s() =>
+        private static IQueryable<ListenerEventV1> CreateRandomListenerEventV2s() =>
             CreateListenerEventV2Filler().Create(count: GetRandomNumber()).AsQueryable();
 
-        private static ListenerEventV2 CreateRandomListenerEventV2() =>
+        private static ListenerEventV1 CreateRandomListenerEventV2() =>
             CreateListenerEventV2Filler().Create();
 
-        private static Filler<ListenerEventV2> CreateListenerEventV2Filler()
+        private static Filler<ListenerEventV1> CreateListenerEventV2Filler()
         {
-            var filler = new Filler<ListenerEventV2>();
+            var filler = new Filler<ListenerEventV1>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>().Use(GetRandomDateTimeOffset)

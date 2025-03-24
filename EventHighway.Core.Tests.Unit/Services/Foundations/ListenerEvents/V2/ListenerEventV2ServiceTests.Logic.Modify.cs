@@ -4,7 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
@@ -25,16 +25,16 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
             int randomDaysAgo =
                 GetRandomNegativeNumber();
 
-            ListenerEventV2 randomListenerEventV2 =
+            ListenerEventV1 randomListenerEventV2 =
                 CreateRandomListenerEventV2(dates: randomDateTimeOffset);
 
-            ListenerEventV2 inputListenerEventV2 =
+            ListenerEventV1 inputListenerEventV2 =
                 randomListenerEventV2;
 
             inputListenerEventV2.CreatedDate =
                 randomDateTimeOffset.AddDays(randomDaysAgo);
 
-            ListenerEventV2 storageListenerEventV2 =
+            ListenerEventV1 storageListenerEventV2 =
                 inputListenerEventV2.DeepClone();
 
             int randomSecondsAgo =
@@ -47,10 +47,10 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
             storageListenerEventV2.UpdatedDate =
                 storageUpdatedDate;
 
-            ListenerEventV2 persistedListenerEventV2 =
+            ListenerEventV1 persistedListenerEventV2 =
                 inputListenerEventV2;
 
-            ListenerEventV2 expectedListenerEventV2 =
+            ListenerEventV1 expectedListenerEventV2 =
                 persistedListenerEventV2.DeepClone();
 
             Guid inputListenerEventV2Id =
@@ -75,7 +75,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                             .ReturnsAsync(persistedListenerEventV2);
 
             // when
-            ListenerEventV2 actualListenerEventV2 =
+            ListenerEventV1 actualListenerEventV2 =
                 await this.listenerEventV2Service
                     .ModifyListenerEventV2Async(
                         inputListenerEventV2);

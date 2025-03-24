@@ -4,7 +4,7 @@
 
 using System;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 
 namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
@@ -29,7 +29,7 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
         {
             Validate(
                 (Rule: IsInvalid(listenerEventV2Id),
-                Parameter: nameof(ListenerEventV2.Id)));
+                Parameter: nameof(ListenerEventV1.Id)));
         }
 
         private static void ValidateEventListenerV2IsNotNull(EventListenerV1 eventListenerV2)
@@ -41,7 +41,7 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
             }
         }
 
-        private static void ValidateListenerEventV2IsNotNull(ListenerEventV2 listenerEventV2)
+        private static void ValidateListenerEventV2IsNotNull(ListenerEventV1 listenerEventV2)
         {
             if (listenerEventV2 is null)
             {
