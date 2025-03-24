@@ -5,7 +5,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using EventHighway.Core.Models.Services.Processings.ListenerEvents.V2.Exceptions;
 using FluentAssertions;
 using Moq;
@@ -31,7 +31,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.ListenerEvents.V2
                     .ThrowsAsync(listenerEventV2DependencyException);
 
             // when
-            ValueTask<IQueryable<ListenerEventV2>> retrieveAllListenerEventV2sTask =
+            ValueTask<IQueryable<ListenerEventV1>> retrieveAllListenerEventV2sTask =
                 this.listenerEventV2ProcessingService.RetrieveAllListenerEventV2sAsync();
 
             ListenerEventV2ProcessingDependencyException
@@ -77,7 +77,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.ListenerEvents.V2
                     .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<IQueryable<ListenerEventV2>> retrieveAllListenerEventV2sTask =
+            ValueTask<IQueryable<ListenerEventV1>> retrieveAllListenerEventV2sTask =
                 this.listenerEventV2ProcessingService.RetrieveAllListenerEventV2sAsync();
 
             ListenerEventV2ProcessingServiceException

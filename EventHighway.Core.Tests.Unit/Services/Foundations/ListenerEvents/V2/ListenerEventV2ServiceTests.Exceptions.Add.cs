@@ -5,8 +5,8 @@
 using System;
 using System.Threading.Tasks;
 using EFxceptions.Models.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +20,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
         public async Task ShouldThrowCriticalDependencyExceptionOnAddIfSqlExceptionOccursAndLogItAsync()
         {
             // given
-            ListenerEventV2 someListenerEventV2 = CreateRandomListenerEventV2();
+            ListenerEventV1 someListenerEventV2 = CreateRandomListenerEventV2();
             SqlException sqlException = GetSqlException();
 
             var failedListenerEventV2StorageException =
@@ -38,7 +38,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                     .ThrowsAsync(sqlException);
 
             // when
-            ValueTask<ListenerEventV2> addListenerEventV2Task =
+            ValueTask<ListenerEventV1> addListenerEventV2Task =
                 this.listenerEventV2Service.AddListenerEventV2Async(someListenerEventV2);
 
             ListenerEventV2DependencyException actualListenerEventV2DependencyException =
@@ -59,7 +59,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertListenerEventV2Async(It.IsAny<ListenerEventV2>()),
+                broker.InsertListenerEventV2Async(It.IsAny<ListenerEventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -72,7 +72,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
         {
             // given
             string randomMessage = GetRandomString();
-            ListenerEventV2 someListenerEventV2 = CreateRandomListenerEventV2();
+            ListenerEventV1 someListenerEventV2 = CreateRandomListenerEventV2();
             var duplicateKeyException = new DuplicateKeyException(randomMessage);
 
             var alreadyExistsListenerEventV2Exception =
@@ -90,7 +90,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                     .ThrowsAsync(duplicateKeyException);
 
             // when
-            ValueTask<ListenerEventV2> addListenerEventV2Task =
+            ValueTask<ListenerEventV1> addListenerEventV2Task =
                 this.listenerEventV2Service.AddListenerEventV2Async(someListenerEventV2);
 
             ListenerEventV2DependencyValidationException actualListenerEventV2DependencyValidationException =
@@ -111,7 +111,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertListenerEventV2Async(It.IsAny<ListenerEventV2>()),
+                broker.InsertListenerEventV2Async(It.IsAny<ListenerEventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -123,7 +123,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
         public async Task ShouldThrowDependencyValidationExceptionOnAddIfReferenceErrorOccursAndLogItAsync()
         {
             // given
-            ListenerEventV2 someListenerEventV2 = CreateRandomListenerEventV2();
+            ListenerEventV1 someListenerEventV2 = CreateRandomListenerEventV2();
             string someMessage = GetRandomString();
 
             var foreignKeyConstraintConflictException =
@@ -144,7 +144,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                     .ThrowsAsync(foreignKeyConstraintConflictException);
 
             // when
-            ValueTask<ListenerEventV2> addListenerEventV2Task =
+            ValueTask<ListenerEventV1> addListenerEventV2Task =
                 this.listenerEventV2Service.AddListenerEventV2Async(someListenerEventV2);
 
             ListenerEventV2DependencyValidationException actualListenerEventV2DependencyValidationException =
@@ -165,7 +165,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertListenerEventV2Async(It.IsAny<ListenerEventV2>()),
+                broker.InsertListenerEventV2Async(It.IsAny<ListenerEventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -177,7 +177,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
         public async Task ShouldThrowDependencyExceptionOnAddIfDbUpdateExceptionOccursAndLogItAsync()
         {
             // given
-            ListenerEventV2 someListenerEventV2 = CreateRandomListenerEventV2();
+            ListenerEventV1 someListenerEventV2 = CreateRandomListenerEventV2();
             var dbUpdateException = new DbUpdateException();
 
             var failedListenerEventV2StorageException =
@@ -195,7 +195,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                     .ThrowsAsync(dbUpdateException);
 
             // when
-            ValueTask<ListenerEventV2> addListenerEventV2Task =
+            ValueTask<ListenerEventV1> addListenerEventV2Task =
                 this.listenerEventV2Service.AddListenerEventV2Async(someListenerEventV2);
 
             ListenerEventV2DependencyException actualListenerEventV2DependencyException =
@@ -216,7 +216,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertListenerEventV2Async(It.IsAny<ListenerEventV2>()),
+                broker.InsertListenerEventV2Async(It.IsAny<ListenerEventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -228,7 +228,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
         public async Task ShouldThrowServiceExceptionOnAddIfExceptionOccursAndLogItAsync()
         {
             // given
-            ListenerEventV2 someListenerEventV2 = CreateRandomListenerEventV2();
+            ListenerEventV1 someListenerEventV2 = CreateRandomListenerEventV2();
             var serviceException = new Exception();
 
             var failedListenerEventV2ServiceException =
@@ -246,7 +246,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                     .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<ListenerEventV2> addListenerEventV2Task =
+            ValueTask<ListenerEventV1> addListenerEventV2Task =
                 this.listenerEventV2Service.AddListenerEventV2Async(someListenerEventV2);
 
             ListenerEventV2ServiceException actualListenerEventV2ServiceException =
@@ -267,7 +267,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertListenerEventV2Async(It.IsAny<ListenerEventV2>()),
+                broker.InsertListenerEventV2Async(It.IsAny<ListenerEventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();

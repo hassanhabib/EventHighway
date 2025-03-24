@@ -3,7 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 using FluentAssertions;
 using Moq;
@@ -16,7 +16,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
         public async Task ShouldThrowValidationExceptionOnModifyListenerEventV2IfListenerEventV2IsNullAndLogItAsync()
         {
             // given
-            ListenerEventV2 nullListenerEventV2 = null;
+            ListenerEventV1 nullListenerEventV2 = null;
 
             var nullListenerEventV2OrchestrationException =
                 new NullListenerEventV2OrchestrationException(message: "Listener event is null.");
@@ -27,7 +27,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                     innerException: nullListenerEventV2OrchestrationException);
 
             // when
-            ValueTask<ListenerEventV2> modifyListenerEventV2Task =
+            ValueTask<ListenerEventV1> modifyListenerEventV2Task =
                 this.eventListenerV2OrchestrationService
                     .ModifyListenerEventV2Async(nullListenerEventV2);
 
@@ -47,7 +47,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
 
             this.listenerEventV2ProcessingServiceMock.Verify(broker =>
                 broker.ModifyListenerEventV2Async(
-                    It.IsAny<ListenerEventV2>()),
+                    It.IsAny<ListenerEventV1>()),
                         Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();

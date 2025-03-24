@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using FluentAssertions;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
@@ -58,18 +58,18 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
             // when
             await this.clientBroker.FireScheduledPendingEventV2sAsync();
 
-            IQueryable<ListenerEventV2> storageListenerEventV2s =
+            IQueryable<ListenerEventV1> storageListenerEventV2s =
                 await this.clientBroker.RetrieveAllListenerEventV2s();
 
             // then
-            foreach (ListenerEventV2 storageListenerEventV2
+            foreach (ListenerEventV1 storageListenerEventV2
                 in storageListenerEventV2s)
             {
                 storageListenerEventV2s
                     .Where(listenerEventV2 =>
                         listenerEventV2.EventAddressId == inputEventAddressV2Id)
                             .Should().OnlyContain(listenerEventV2 =>
-                                listenerEventV2.Status == ListenerEventV2Status.Success);
+                                listenerEventV2.Status == ListenerEventV1Status.Success);
 
                 await this.clientBroker.RemoveListenerEventV2ByIdAsync(
                     storageListenerEventV2.Id);

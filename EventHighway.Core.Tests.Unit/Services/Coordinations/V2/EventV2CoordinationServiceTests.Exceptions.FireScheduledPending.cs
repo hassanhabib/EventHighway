@@ -6,7 +6,7 @@ using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using FluentAssertions;
 using Moq;
 using Xeptions;
@@ -64,7 +64,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
                 service.AddListenerEventV2Async(
-                    It.IsAny<ListenerEventV2>()),
+                    It.IsAny<ListenerEventV1>()),
                         Times.Never);
 
             this.eventV2OrchestrationServiceMock.Verify(service =>
@@ -74,7 +74,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
                 service.ModifyListenerEventV2Async(
-                    It.IsAny<ListenerEventV2>()),
+                    It.IsAny<ListenerEventV1>()),
                         Times.Never);
 
             this.eventV2OrchestrationServiceMock.VerifyNoOtherCalls();
@@ -131,7 +131,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
                 service.AddListenerEventV2Async(
-                    It.IsAny<ListenerEventV2>()),
+                    It.IsAny<ListenerEventV1>()),
                         Times.Never);
 
             this.eventV2OrchestrationServiceMock.Verify(service =>
@@ -141,7 +141,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
                 service.ModifyListenerEventV2Async(
-                    It.IsAny<ListenerEventV2>()),
+                    It.IsAny<ListenerEventV1>()),
                         Times.Never);
 
             this.eventV2OrchestrationServiceMock.VerifyNoOtherCalls();
@@ -202,7 +202,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
                 service.AddListenerEventV2Async(
-                    It.IsAny<ListenerEventV2>()),
+                    It.IsAny<ListenerEventV1>()),
                         Times.Never);
 
             this.eventV2OrchestrationServiceMock.Verify(service =>
@@ -212,7 +212,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
                 service.ModifyListenerEventV2Async(
-                    It.IsAny<ListenerEventV2>()),
+                    It.IsAny<ListenerEventV1>()),
                         Times.Never);
 
             this.eventV2OrchestrationServiceMock.VerifyNoOtherCalls();

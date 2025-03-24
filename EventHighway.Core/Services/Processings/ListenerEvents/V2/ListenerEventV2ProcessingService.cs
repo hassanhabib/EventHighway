@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Loggings;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using EventHighway.Core.Services.Foundations.ListernEvents.V2;
 
 namespace EventHighway.Core.Services.Processings.ListenerEvents.V2
@@ -24,7 +24,7 @@ namespace EventHighway.Core.Services.Processings.ListenerEvents.V2
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<ListenerEventV2> AddListenerEventV2Async(ListenerEventV2 listenerEventV2) =>
+        public ValueTask<ListenerEventV1> AddListenerEventV2Async(ListenerEventV1 listenerEventV2) =>
         TryCatch(async () =>
         {
             ValidateListenerEventV2IsNotNull(listenerEventV2);
@@ -32,10 +32,10 @@ namespace EventHighway.Core.Services.Processings.ListenerEvents.V2
             return await this.listenerEventV2Service.AddListenerEventV2Async(listenerEventV2);
         });
 
-        public ValueTask<IQueryable<ListenerEventV2>> RetrieveAllListenerEventV2sAsync() =>
+        public ValueTask<IQueryable<ListenerEventV1>> RetrieveAllListenerEventV2sAsync() =>
         TryCatch(async () => await this.listenerEventV2Service.RetrieveAllListenerEventV2sAsync());
 
-        public ValueTask<ListenerEventV2> ModifyListenerEventV2Async(ListenerEventV2 listenerEventV2) =>
+        public ValueTask<ListenerEventV1> ModifyListenerEventV2Async(ListenerEventV1 listenerEventV2) =>
         TryCatch(async () =>
         {
             ValidateListenerEventV2IsNotNull(listenerEventV2);
@@ -43,7 +43,7 @@ namespace EventHighway.Core.Services.Processings.ListenerEvents.V2
             return await this.listenerEventV2Service.ModifyListenerEventV2Async(listenerEventV2);
         });
 
-        public ValueTask<ListenerEventV2> RemoveListenerEventV2ByIdAsync(
+        public ValueTask<ListenerEventV1> RemoveListenerEventV2ByIdAsync(
             Guid listenerEventV2Id) => TryCatch(async () =>
         {
             ValidateListenerEventV2Id(listenerEventV2Id);

@@ -4,7 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 using FluentAssertions;
 using Moq;
@@ -24,7 +24,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                     message: "Event listener is invalid, fix the errors and try again.");
 
             invalidEventListenerV2OrchestrationException.AddData(
-                key: nameof(ListenerEventV2.Id),
+                key: nameof(ListenerEventV1.Id),
                 values: "Required");
 
             var expectedEventListenerV2OrchestrationValidationException =
@@ -33,7 +33,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                     innerException: invalidEventListenerV2OrchestrationException);
 
             // when
-            ValueTask<ListenerEventV2> removeEventListenerV2sByEventAddressIdTask =
+            ValueTask<ListenerEventV1> removeEventListenerV2sByEventAddressIdTask =
                 this.eventListenerV2OrchestrationService.RemoveListenerEventV2ByIdAsync(
                     invalidEventAddressId);
 

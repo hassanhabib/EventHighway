@@ -10,7 +10,7 @@ using EventHighway.Core.Brokers.Times;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using EventHighway.Core.Services.Orchestrations.EventListeners.V2;
 using EventHighway.Core.Services.Orchestrations.Events.V2;
 
@@ -85,10 +85,10 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
 
             foreach (EventListenerV1 eventListenerV2 in eventListenerV2s)
             {
-                ListenerEventV2 listenerEventV2 =
+                ListenerEventV1 listenerEventV2 =
                     CreateEventListener(eventV2, eventListenerV2);
 
-                ListenerEventV2 addedListenerEventV2 =
+                ListenerEventV1 addedListenerEventV2 =
                     await this.eventListenerV2OrchestrationService
                         .AddListenerEventV2Async(listenerEventV2);
 
@@ -111,7 +111,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
         private async Task RunEventCallAsync(
             EventV1 eventV2,
             EventListenerV1 eventListenerV2,
-            ListenerEventV2 listenerEventV2)
+            ListenerEventV1 listenerEventV2)
         {
             var eventCallV2 = new EventCallV2
             {
@@ -128,12 +128,12 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
                         .RunEventCallV2Async(eventCallV2);
 
                 listenerEventV2.Response = ranEventCallV2.Response;
-                listenerEventV2.Status = ListenerEventV2Status.Success;
+                listenerEventV2.Status = ListenerEventV1Status.Success;
             }
             catch (Exception exception)
             {
                 listenerEventV2.Response = exception.Message;
-                listenerEventV2.Status = ListenerEventV2Status.Error;
+                listenerEventV2.Status = ListenerEventV1Status.Error;
             }
 
             listenerEventV2.UpdatedDate =
@@ -143,17 +143,17 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
                 .ModifyListenerEventV2Async(listenerEventV2);
         }
 
-        private static ListenerEventV2 CreateEventListener(
+        private static ListenerEventV1 CreateEventListener(
             EventV1 eventV2,
             EventListenerV1 eventListenerV2)
         {
-            return new ListenerEventV2
+            return new ListenerEventV1
             {
                 Id = Guid.NewGuid(),
                 EventId = eventV2.Id,
                 EventListenerId = eventListenerV2.Id,
                 EventAddressId = eventV2.EventAddressId,
-                Status = ListenerEventV2Status.Pending,
+                Status = ListenerEventV1Status.Pending,
                 CreatedDate = eventV2.CreatedDate,
                 UpdatedDate = eventV2.UpdatedDate,
             };

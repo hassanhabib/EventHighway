@@ -5,8 +5,8 @@
 using System;
 using System.Threading.Tasks;
 using EFxceptions.Models.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +20,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
         public async Task ShouldThrowCriticalDependencyExceptionOnModifyIfSqlErrorOccursAndLogItAsync()
         {
             // given
-            ListenerEventV2 someListenerEventV2 = CreateRandomListenerEventV2();
+            ListenerEventV1 someListenerEventV2 = CreateRandomListenerEventV2();
             SqlException sqlException = GetSqlException();
 
             var failedListenerEventV2StorageException =
@@ -38,7 +38,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                     .ThrowsAsync(sqlException);
 
             // when
-            ValueTask<ListenerEventV2> modifyListenerEventV2Task =
+            ValueTask<ListenerEventV1> modifyListenerEventV2Task =
                 this.listenerEventV2Service.ModifyListenerEventV2Async(
                     someListenerEventV2);
 
@@ -73,7 +73,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
         public async Task ShouldThrowDependencyValidationExceptionOnModifyIfReferenceErrorOccursAndLogItAsync()
         {
             // given
-            ListenerEventV2 someListenerEventV2 = CreateRandomListenerEventV2();
+            ListenerEventV1 someListenerEventV2 = CreateRandomListenerEventV2();
             string someMessage = GetRandomString();
 
             var foreignKeyConstraintConflictException =
@@ -94,7 +94,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                     .ThrowsAsync(foreignKeyConstraintConflictException);
 
             // when
-            ValueTask<ListenerEventV2> modifyListenerEventV2Task =
+            ValueTask<ListenerEventV1> modifyListenerEventV2Task =
                 this.listenerEventV2Service.ModifyListenerEventV2Async(someListenerEventV2);
 
             ListenerEventV2DependencyValidationException actualListenerEventV2DependencyValidationException =
@@ -115,7 +115,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.UpdateListenerEventV2Async(It.IsAny<ListenerEventV2>()),
+                broker.UpdateListenerEventV2Async(It.IsAny<ListenerEventV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -127,7 +127,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
         public async Task ShouldThrowDependencyValidationErrorOnModifyIfDatabaseUpdateConcurrencyOccursAndLogItAsync()
         {
             // given
-            ListenerEventV2 someListenerEventV2 = CreateRandomListenerEventV2();
+            ListenerEventV1 someListenerEventV2 = CreateRandomListenerEventV2();
             var dbUpdateConcurrencyException = new DbUpdateConcurrencyException();
 
             var lockedListenerEventV2Exception =
@@ -145,7 +145,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                     .ThrowsAsync(dbUpdateConcurrencyException);
 
             // when
-            ValueTask<ListenerEventV2> modifyListenerEventV2Task =
+            ValueTask<ListenerEventV1> modifyListenerEventV2Task =
                 this.listenerEventV2Service.ModifyListenerEventV2Async(someListenerEventV2);
 
             ListenerEventV2DependencyValidationException actualListenerEventV2DependencyValidationException =
@@ -179,7 +179,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
         public async Task ShouldThrowDependencyExceptionOnModifyIfDatabaseUpdateExceptionOccursAndLogItAsync()
         {
             // given
-            ListenerEventV2 someListenerEventV2 = CreateRandomListenerEventV2();
+            ListenerEventV1 someListenerEventV2 = CreateRandomListenerEventV2();
             var dbUpdateException = new DbUpdateException();
 
             var failedListenerEventV2StorageException =
@@ -197,7 +197,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                     .ThrowsAsync(dbUpdateException);
 
             // when
-            ValueTask<ListenerEventV2> modifyListenerEventV2Task =
+            ValueTask<ListenerEventV1> modifyListenerEventV2Task =
                 this.listenerEventV2Service.ModifyListenerEventV2Async(someListenerEventV2);
 
             ListenerEventV2DependencyException actualListenerEventV2DependencyException =
@@ -231,7 +231,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
         public async Task ShouldThrowServiceExceptionOnModifyIfExceptionOccursAndLogItAsync()
         {
             // given
-            ListenerEventV2 someListenerEventV2 = CreateRandomListenerEventV2();
+            ListenerEventV1 someListenerEventV2 = CreateRandomListenerEventV2();
             var serviceException = new Exception();
 
             var failedListenerEventV2ServiceException =
@@ -249,7 +249,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.ListenerEvents.V2
                     .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<ListenerEventV2> modifyListenerEventV2Task =
+            ValueTask<ListenerEventV1> modifyListenerEventV2Task =
                 this.listenerEventV2Service.ModifyListenerEventV2Async(someListenerEventV2);
 
             ListenerEventV2ServiceException actualListenerEventV2ServiceException =

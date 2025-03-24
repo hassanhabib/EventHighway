@@ -5,7 +5,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 using FluentAssertions;
 using Moq;
@@ -31,7 +31,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                     .ThrowsAsync(listenerEventV2DependencyException);
 
             // when
-            ValueTask<IQueryable<ListenerEventV2>> retrieveAllListenerEventV2sTask =
+            ValueTask<IQueryable<ListenerEventV1>> retrieveAllListenerEventV2sTask =
                 this.eventListenerV2OrchestrationService.RetrieveAllListenerEventV2sAsync();
 
             EventListenerV2OrchestrationDependencyException
@@ -61,7 +61,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
         public async Task ShouldThrowServiceExceptionOnRetrieveAllListenerEventV2sIfExceptionOccursAndLogItAsync()
         {
             // given
-            ListenerEventV2 someListenerEventV2 = CreateRandomListenerEventV2();
+            ListenerEventV1 someListenerEventV2 = CreateRandomListenerEventV2();
             var serviceException = new Exception();
 
             var failedEventListenerV2OrchestrationServiceException =
@@ -79,7 +79,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                     .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<IQueryable<ListenerEventV2>> retrieveAllListenerEventV2sTask =
+            ValueTask<IQueryable<ListenerEventV1>> retrieveAllListenerEventV2sTask =
                 this.eventListenerV2OrchestrationService.RetrieveAllListenerEventV2sAsync();
 
             EventListenerV2OrchestrationServiceException

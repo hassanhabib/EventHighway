@@ -5,28 +5,28 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventHighway.Core.Brokers.Storages
 {
     internal partial class StorageBroker
     {
-        public DbSet<ListenerEventV2> ListenerEventV2s { get; set; }
+        public DbSet<ListenerEventV1> ListenerEventV1s { get; set; }
 
-        public async ValueTask<ListenerEventV2> InsertListenerEventV2Async(ListenerEventV2 listenerEventV2) =>
+        public async ValueTask<ListenerEventV1> InsertListenerEventV2Async(ListenerEventV1 listenerEventV2) =>
             await InsertAsync(listenerEventV2);
 
-        public async ValueTask<IQueryable<ListenerEventV2>> SelectAllListenerEventV2sAsync() =>
-            SelectAll<ListenerEventV2>();
+        public async ValueTask<IQueryable<ListenerEventV1>> SelectAllListenerEventV2sAsync() =>
+            SelectAll<ListenerEventV1>();
 
-        public async ValueTask<ListenerEventV2> SelectListenerEventV2ByIdAsync(Guid listenerEventV2Id) =>
-            await SelectAsync<ListenerEventV2>(listenerEventV2Id);
+        public async ValueTask<ListenerEventV1> SelectListenerEventV2ByIdAsync(Guid listenerEventV2Id) =>
+            await SelectAsync<ListenerEventV1>(listenerEventV2Id);
 
-        public async ValueTask<ListenerEventV2> UpdateListenerEventV2Async(ListenerEventV2 listenerEventV2) =>
+        public async ValueTask<ListenerEventV1> UpdateListenerEventV2Async(ListenerEventV1 listenerEventV2) =>
             await UpdateAsync(listenerEventV2);
 
-        public async ValueTask<ListenerEventV2> DeleteListenerEventV2Async(ListenerEventV2 listenerEventV2) =>
+        public async ValueTask<ListenerEventV1> DeleteListenerEventV2Async(ListenerEventV1 listenerEventV2) =>
             await DeleteAsync(listenerEventV2);
     }
 }

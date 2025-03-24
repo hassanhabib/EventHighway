@@ -10,7 +10,7 @@ using EventHighway.Core.Brokers.Times;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
-using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
+using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 using EventHighway.Core.Models.Services.Orchestrations.Events.V2.Exceptions;
 using EventHighway.Core.Services.Coordinations.Events.V2;
@@ -48,7 +48,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
             var compareConfiguration = new ComparisonConfig();
 
-            compareConfiguration.IgnoreProperty<ListenerEventV2>(listenerEventV2 =>
+            compareConfiguration.IgnoreProperty<ListenerEventV1>(listenerEventV2 =>
                 listenerEventV2.Id);
 
             this.compareLogic = new CompareLogic(compareConfiguration);
@@ -181,8 +181,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
-        private Expression<Func<ListenerEventV2, bool>> SameListenerEventAs(
-           ListenerEventV2 expectedListenerEventV2)
+        private Expression<Func<ListenerEventV1, bool>> SameListenerEventAs(
+           ListenerEventV1 expectedListenerEventV2)
         {
             return actualListenerEventV2 =>
                 this.compareLogic.Compare(
