@@ -7,9 +7,9 @@ using Xeptions;
 
 namespace EventHighway.Core.Models.Services.Foundations.EventCall.V1.Exceptions
 {
-    public class InvalidEventCallV2ReferenceException : Xeption
+    public class FailedEventCallV1RequestException : Xeption
     {
-        public InvalidEventCallV2ReferenceException(string message, Exception innerException)
+        public FailedEventCallV1RequestException(string message, Exception innerException)
             : base(message, innerException)
         { }
     }

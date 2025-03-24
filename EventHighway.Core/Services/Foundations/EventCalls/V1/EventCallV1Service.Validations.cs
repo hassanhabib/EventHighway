@@ -5,27 +5,27 @@
 using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V1.Exceptions;
 
-namespace EventHighway.Core.Services.Foundations.EventCalls.V2
+namespace EventHighway.Core.Services.Foundations.EventCalls.V1
 {
-    internal partial class EventCallV2Service
+    internal partial class EventCallV1Service
     {
-        private void ValidateEventCallV2OnRun(EventCallV1 eventCallV2)
+        private void ValidateEventCallV1OnRun(EventCallV1 eventCallV1)
         {
-            ValidateEventCallV2IsNotNull(eventCallV2);
+            ValidateEventCallV1IsNotNull(eventCallV1);
 
             Validate(
-                (Rule: IsInvalid(eventCallV2.Endpoint),
+                (Rule: IsInvalid(eventCallV1.Endpoint),
                 Parameter: nameof(EventCallV1.Endpoint)),
 
-                (Rule: IsInvalid(eventCallV2.Content),
+                (Rule: IsInvalid(eventCallV1.Content),
                 Parameter: nameof(EventCallV1.Content)));
         }
 
-        private static void ValidateEventCallV2IsNotNull(EventCallV1 eventCallV2)
+        private static void ValidateEventCallV1IsNotNull(EventCallV1 eventCallV1)
         {
-            if (eventCallV2 is null)
+            if (eventCallV1 is null)
             {
-                throw new NullEventCallV2Exception(
+                throw new NullEventCallV1Exception(
                     message: "Event call is null.");
             }
         }
@@ -38,21 +38,21 @@ namespace EventHighway.Core.Services.Foundations.EventCalls.V2
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
-            var invalidEventCallV2Exception =
-                new InvalidEventCallV2Exception(
+            var invalidEventCallV1Exception =
+                new InvalidEventCallV1Exception(
                     message: "Event call is invalid, fix the errors and try again.");
 
             foreach ((dynamic rule, string parameter) in validations)
             {
                 if (rule.Condition)
                 {
-                    invalidEventCallV2Exception.UpsertDataList(
+                    invalidEventCallV1Exception.UpsertDataList(
                         key: parameter,
                         value: rule.Message);
                 }
             }
 
-            invalidEventCallV2Exception.ThrowIfContainsErrors();
+            invalidEventCallV1Exception.ThrowIfContainsErrors();
         }
     }
 }

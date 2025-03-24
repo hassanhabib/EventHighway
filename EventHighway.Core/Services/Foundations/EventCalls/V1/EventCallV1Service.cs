@@ -7,14 +7,14 @@ using EventHighway.Core.Brokers.Apis;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 
-namespace EventHighway.Core.Services.Foundations.EventCalls.V2
+namespace EventHighway.Core.Services.Foundations.EventCalls.V1
 {
-    internal partial class EventCallV2Service : IEventCallV2Service
+    internal partial class EventCallV1Service : IEventCallV1Service
     {
         private readonly IApiBroker apiBroker;
         private readonly ILoggingBroker loggingBroker;
 
-        public EventCallV2Service(
+        public EventCallV1Service(
             IApiBroker apiBroker,
             ILoggingBroker loggingBroker)
         {
@@ -22,20 +22,20 @@ namespace EventHighway.Core.Services.Foundations.EventCalls.V2
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<EventCallV1> RunEventCallV2Async(EventCallV1 eventCallV2) =>
+        public ValueTask<EventCallV1> RunEventCallV1Async(EventCallV1 eventCallV1) =>
         TryCatch(async () =>
         {
-            ValidateEventCallV2OnRun(eventCallV2);
+            ValidateEventCallV1OnRun(eventCallV1);
 
             string response =
                 await apiBroker.PostAsync(
-                    content: eventCallV2.Content,
-                    url: eventCallV2.Endpoint,
-                    secret: eventCallV2.Secret);
+                    content: eventCallV1.Content,
+                    url: eventCallV1.Endpoint,
+                    secret: eventCallV1.Secret);
 
-            eventCallV2.Response = response;
+            eventCallV1.Response = response;
 
-            return eventCallV2;
+            return eventCallV1;
         });
     }
 }

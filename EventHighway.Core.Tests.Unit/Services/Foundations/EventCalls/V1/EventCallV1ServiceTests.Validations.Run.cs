@@ -8,39 +8,39 @@ using EventHighway.Core.Models.Services.Foundations.EventCall.V1.Exceptions;
 using FluentAssertions;
 using Moq;
 
-namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
+namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V1
 {
-    public partial class EventCallV2ServiceTests
+    public partial class EventCallV1ServiceTests
     {
         [Fact]
-        public async Task ShouldThrowValidationExceptionOnAddIfEventCallV2IsNullAndLogItAsync()
+        public async Task ShouldThrowValidationExceptionOnAddIfEventCallV1IsNullAndLogItAsync()
         {
             // given
-            EventCallV1 nullEventCallV2 = null;
+            EventCallV1 nullEventCallV1 = null;
 
-            var nullEventCallV2Exception =
-                new NullEventCallV2Exception(message: "Event call is null.");
+            var nullEventCallV1Exception =
+                new NullEventCallV1Exception(message: "Event call is null.");
 
-            var expectedEventCallV2ValidationException =
-                new EventCallV2ValidationException(
+            var expectedEventCallV1ValidationException =
+                new EventCallV1ValidationException(
                     message: "Event call validation error occurred, fix the errors and try again.",
-                    innerException: nullEventCallV2Exception);
+                    innerException: nullEventCallV1Exception);
 
             // when
-            ValueTask<EventCallV1> runEventCallV2Task =
-                this.eventCallV2Service.RunEventCallV2Async(nullEventCallV2);
+            ValueTask<EventCallV1> runEventCallV1Task =
+                this.eventCallV1Service.RunEventCallV1Async(nullEventCallV1);
 
-            EventCallV2ValidationException actualEventCallV2ValidationException =
-                await Assert.ThrowsAsync<EventCallV2ValidationException>(
-                    runEventCallV2Task.AsTask);
+            EventCallV1ValidationException actualEventCallV1ValidationException =
+                await Assert.ThrowsAsync<EventCallV1ValidationException>(
+                    runEventCallV1Task.AsTask);
 
             // then
-            actualEventCallV2ValidationException.Should().BeEquivalentTo(
-                expectedEventCallV2ValidationException);
+            actualEventCallV1ValidationException.Should().BeEquivalentTo(
+                expectedEventCallV1ValidationException);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogErrorAsync(It.Is(SameExceptionAs(
-                    expectedEventCallV2ValidationException))),
+                    expectedEventCallV1ValidationException))),
                         Times.Once);
 
             this.apiBrokerMock.Verify(broker =>
@@ -58,47 +58,47 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
-        private async Task ShouldThrowValidationExceptionOnAddIfEventCallV2IsInvalidAndLogItAsync(
+        private async Task ShouldThrowValidationExceptionOnAddIfEventCallV1IsInvalidAndLogItAsync(
             string invalidText)
         {
-            var invalidEventCallV2 = new EventCallV1
+            var invalidEventCallV1 = new EventCallV1
             {
                 Endpoint = invalidText,
                 Content = invalidText
             };
 
-            var invalidEventCallV2Exception =
-                new InvalidEventCallV2Exception(
+            var invalidEventCallV1Exception =
+                new InvalidEventCallV1Exception(
                     message: "Event call is invalid, fix the errors and try again.");
 
-            invalidEventCallV2Exception.AddData(
+            invalidEventCallV1Exception.AddData(
                 key: nameof(EventCallV1.Endpoint),
                 values: "Required");
 
-            invalidEventCallV2Exception.AddData(
+            invalidEventCallV1Exception.AddData(
                 key: nameof(EventCallV1.Content),
                 values: "Required");
 
-            var expectedEventCallV2ValidationException =
-                new EventCallV2ValidationException(
+            var expectedEventCallV1ValidationException =
+                new EventCallV1ValidationException(
                     message: "Event call validation error occurred, fix the errors and try again.",
-                    innerException: invalidEventCallV2Exception);
+                    innerException: invalidEventCallV1Exception);
 
             // when
-            ValueTask<EventCallV1> runEventCallV2Task =
-                this.eventCallV2Service.RunEventCallV2Async(invalidEventCallV2);
+            ValueTask<EventCallV1> runEventCallV1Task =
+                this.eventCallV1Service.RunEventCallV1Async(invalidEventCallV1);
 
-            EventCallV2ValidationException actualEventCallV2ValidationException =
-                await Assert.ThrowsAsync<EventCallV2ValidationException>(
-                    runEventCallV2Task.AsTask);
+            EventCallV1ValidationException actualEventCallV1ValidationException =
+                await Assert.ThrowsAsync<EventCallV1ValidationException>(
+                    runEventCallV1Task.AsTask);
 
             // then
-            actualEventCallV2ValidationException.Should().BeEquivalentTo(
-                expectedEventCallV2ValidationException);
+            actualEventCallV1ValidationException.Should().BeEquivalentTo(
+                expectedEventCallV1ValidationException);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogErrorAsync(It.Is(SameExceptionAs(
-                    expectedEventCallV2ValidationException))),
+                    expectedEventCallV1ValidationException))),
                         Times.Once);
 
             this.apiBrokerMock.Verify(broker =>

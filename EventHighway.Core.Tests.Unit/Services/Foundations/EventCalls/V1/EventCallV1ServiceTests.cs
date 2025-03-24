@@ -10,26 +10,26 @@ using System.Net.Http;
 using EventHighway.Core.Brokers.Apis;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
-using EventHighway.Core.Services.Foundations.EventCalls.V2;
+using EventHighway.Core.Services.Foundations.EventCalls.V1;
 using Moq;
 using RESTFulSense.Exceptions;
 using Tynamix.ObjectFiller;
 using Xeptions;
 
-namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
+namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V1
 {
-    public partial class EventCallV2ServiceTests
+    public partial class EventCallV1ServiceTests
     {
         private readonly Mock<IApiBroker> apiBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
-        private readonly IEventCallV2Service eventCallV2Service;
+        private readonly IEventCallV1Service eventCallV1Service;
 
-        public EventCallV2ServiceTests()
+        public EventCallV1ServiceTests()
         {
             this.apiBrokerMock = new Mock<IApiBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
-            this.eventCallV2Service = new EventCallV2Service(
+            this.eventCallV1Service = new EventCallV1Service(
                 apiBroker: this.apiBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
@@ -95,13 +95,13 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
-        private static EventCallV1 CreateRandomEventCallV2() =>
-            CreateEventCallV2Filler().Create();
+        private static EventCallV1 CreateRandomEventCallV1() =>
+            CreateEventCallV1Filler().Create();
 
         private static string CreateRandomResponse() =>
             new MnemonicString().GetValue();
 
-        private static Filler<EventCallV1> CreateEventCallV2Filler() =>
+        private static Filler<EventCallV1> CreateEventCallV1Filler() =>
             new Filler<EventCallV1>();
     }
 }

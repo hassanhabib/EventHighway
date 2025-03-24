@@ -6,10 +6,10 @@ using Xeptions;
 
 namespace EventHighway.Core.Models.Services.Foundations.EventCall.V1.Exceptions
 {
-    public class NullEventCallV2Exception : Xeption
+    public class EventCallV1ServiceException : Xeption
     {
-        public NullEventCallV2Exception(string message)
-            : base(message)
+        public EventCallV1ServiceException(string message, Xeption innerException)
+            : base(message, innerException)
         { }
     }
 }

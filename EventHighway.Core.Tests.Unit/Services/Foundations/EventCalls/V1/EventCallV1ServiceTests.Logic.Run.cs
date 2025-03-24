@@ -8,19 +8,19 @@ using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
 
-namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
+namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V1
 {
-    public partial class EventCallV2ServiceTests
+    public partial class EventCallV1ServiceTests
     {
         [Fact]
-        public async Task ShouldRunEventCallV2Async()
+        public async Task ShouldRunEventCallV1Async()
         {
             // given
-            EventCallV1 randomEventCallV2 =
-                CreateRandomEventCallV2();
+            EventCallV1 randomEventCallV1 =
+                CreateRandomEventCallV1();
 
-            EventCallV1 inputEventCallV2 =
-                randomEventCallV2;
+            EventCallV1 inputEventCallV1 =
+                randomEventCallV1;
 
             string randomCallResponse =
                 CreateRandomResponse();
@@ -28,33 +28,33 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventCalls.V2
             string postedCallResponse =
                 randomCallResponse;
 
-            EventCallV1 expectedEventCallV2 =
-                inputEventCallV2.DeepClone();
+            EventCallV1 expectedEventCallV1 =
+                inputEventCallV1.DeepClone();
 
-            expectedEventCallV2.Response =
+            expectedEventCallV1.Response =
                 postedCallResponse;
 
             this.apiBrokerMock.Setup(broker =>
                 broker.PostAsync(
-                    inputEventCallV2.Content,
-                    inputEventCallV2.Endpoint,
-                    inputEventCallV2.Secret))
+                    inputEventCallV1.Content,
+                    inputEventCallV1.Endpoint,
+                    inputEventCallV1.Secret))
                         .ReturnsAsync(postedCallResponse);
 
             // when
-            EventCallV1 actualEventCallV2 =
-                await this.eventCallV2Service
-                    .RunEventCallV2Async(inputEventCallV2);
+            EventCallV1 actualEventCallV1 =
+                await this.eventCallV1Service
+                    .RunEventCallV1Async(inputEventCallV1);
 
             // then
-            actualEventCallV2.Should().BeEquivalentTo(
-                expectedEventCallV2);
+            actualEventCallV1.Should().BeEquivalentTo(
+                expectedEventCallV1);
 
             this.apiBrokerMock.Verify(broker =>
                 broker.PostAsync(
-                    inputEventCallV2.Content,
-                    inputEventCallV2.Endpoint,
-                    inputEventCallV2.Secret),
+                    inputEventCallV1.Content,
+                    inputEventCallV1.Endpoint,
+                    inputEventCallV1.Secret),
                         Times.Once);
 
             this.apiBrokerMock.VerifyNoOtherCalls();
