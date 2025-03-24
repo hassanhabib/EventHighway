@@ -12,7 +12,7 @@ namespace EventHighway.Core.Brokers.Storages
 {
     internal partial class StorageBroker
     {
-        public DbSet<EventV1> EventV2s { get; set; }
+        public DbSet<EventV1> EventV1s { get; set; }
 
         public async ValueTask<EventV1> InsertEventV2Async(EventV1 eventV2) =>
             await InsertAsync(eventV2);
