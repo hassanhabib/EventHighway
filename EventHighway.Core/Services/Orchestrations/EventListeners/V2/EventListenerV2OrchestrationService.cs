@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
-using EventHighway.Core.Services.Processings.EventListeners.V2;
+using EventHighway.Core.Services.Processings.EventListeners.V1;
 using EventHighway.Core.Services.Processings.ListenerEvents.V2;
 
 namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
 {
     internal partial class EventListenerV2OrchestrationService : IEventListenerV2OrchestrationService
     {
-        private readonly IEventListenerV2ProcessingService eventListenerV2ProcessingService;
+        private readonly IEventListenerV1ProcessingService eventListenerV2ProcessingService;
         private readonly IListenerEventV2ProcessingService listenerEventV2ProcessingService;
         private readonly ILoggingBroker loggingBroker;
 
         public EventListenerV2OrchestrationService(
-            IEventListenerV2ProcessingService eventListenerV2ProcessingService,
+            IEventListenerV1ProcessingService eventListenerV2ProcessingService,
             IListenerEventV2ProcessingService listenerEventV2ProcessingService,
             ILoggingBroker loggingBroker)
         {
@@ -34,7 +34,7 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
         {
             ValidateEventListenerV2IsNotNull(eventListenerV2);
 
-            return await this.eventListenerV2ProcessingService.AddEventListenerV2Async(
+            return await this.eventListenerV2ProcessingService.AddEventListenerV1Async(
                 eventListenerV2);
         });
 
@@ -44,7 +44,7 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
             ValidateEventAddressId(eventAddressId);
 
             return await this.eventListenerV2ProcessingService
-                .RetrieveEventListenerV2sByEventAddressIdAsync(eventAddressId);
+                .RetrieveEventListenerV1sByEventAddressIdAsync(eventAddressId);
         });
 
         public ValueTask<EventListenerV1> RemoveEventListenerV2ByIdAsync(Guid eventListenerV2Id) =>
@@ -52,7 +52,7 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
         {
             ValidateEventListenerV2Id(eventListenerV2Id);
 
-            return await this.eventListenerV2ProcessingService.RemoveEventListenerV2ByIdAsync(
+            return await this.eventListenerV2ProcessingService.RemoveEventListenerV1ByIdAsync(
                 eventListenerV2Id);
         });
 
