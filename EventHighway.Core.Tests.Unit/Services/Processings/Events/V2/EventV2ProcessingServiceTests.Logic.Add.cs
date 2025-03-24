@@ -26,7 +26,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                 addedEventV2.DeepClone();
 
             this.eventV2ServiceMock.Setup(broker =>
-                broker.AddEventV2Async(
+                broker.AddEventV1Async(
                     inputEventV2))
                         .ReturnsAsync(addedEventV2);
 
@@ -41,7 +41,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                 expectedEventV2);
 
             this.eventV2ServiceMock.Verify(broker =>
-                broker.AddEventV2Async(
+                broker.AddEventV1Async(
                     inputEventV2),
                         Times.Once);
 

@@ -23,11 +23,11 @@ namespace EventHighway.Core.Services.Processings.Events.V2
             {
                 return await returningEventV2sFunction();
             }
-            catch (EventV2DependencyException eventV2DependencyException)
+            catch (EventV1DependencyException eventV2DependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(eventV2DependencyException);
             }
-            catch (EventV2ServiceException eventV2ServiceException)
+            catch (EventV1ServiceException eventV2ServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(eventV2ServiceException);
             }
@@ -58,21 +58,21 @@ namespace EventHighway.Core.Services.Processings.Events.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     invalidEventV2ProcessingException);
             }
-            catch (EventV2ValidationException eventV2ValidationException)
+            catch (EventV1ValidationException eventV2ValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventV2ValidationException);
             }
-            catch (EventV2DependencyValidationException eventV2DependencyValidationException)
+            catch (EventV1DependencyValidationException eventV2DependencyValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventV2DependencyValidationException);
             }
-            catch (EventV2DependencyException eventV2DependencyException)
+            catch (EventV1DependencyException eventV2DependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(eventV2DependencyException);
             }
-            catch (EventV2ServiceException eventV2ServiceException)
+            catch (EventV1ServiceException eventV2ServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(eventV2ServiceException);
             }

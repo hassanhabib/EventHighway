@@ -6,17 +6,17 @@ using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
-using EventHighway.Core.Services.Foundations.EventAddresses.V2;
+using EventHighway.Core.Services.Foundations.EventAddresses.V1;
 
 namespace EventHighway.Core.Services.Processings.EventAddresses.V2
 {
     internal partial class EventAddressV2ProcessingService : IEventAddressV2ProcessingService
     {
-        private readonly IEventAddressV2Service eventAddressV2Service;
+        private readonly IEventAddressV1Service eventAddressV2Service;
         private readonly ILoggingBroker loggingBroker;
 
         public EventAddressV2ProcessingService(
-            IEventAddressV2Service eventAddressV2Service,
+            IEventAddressV1Service eventAddressV2Service,
             ILoggingBroker loggingBroker)
         {
             this.eventAddressV2Service = eventAddressV2Service;
@@ -28,7 +28,7 @@ namespace EventHighway.Core.Services.Processings.EventAddresses.V2
         {
             ValidateEventAddressV2Id(eventAddressV2Id);
 
-            return await this.eventAddressV2Service.RetrieveEventAddressV2ByIdAsync(
+            return await this.eventAddressV2Service.RetrieveEventAddressV1ByIdAsync(
                 eventAddressV2Id);
         });
     }

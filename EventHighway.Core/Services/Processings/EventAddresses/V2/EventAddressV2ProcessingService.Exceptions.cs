@@ -28,25 +28,25 @@ namespace EventHighway.Core.Services.Processings.EventAddresses.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     invalidEventAddressV2ProcessingException);
             }
-            catch (EventAddressV2ValidationException
+            catch (EventAddressV1ValidationException
                 eventAddressV2ValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventAddressV2ValidationException);
             }
-            catch (EventAddressV2DependencyValidationException
+            catch (EventAddressV1DependencyValidationException
                 eventAddressV2DependencyValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventAddressV2DependencyValidationException);
             }
-            catch (EventAddressV2DependencyException
+            catch (EventAddressV1DependencyException
                 eventAddressV2DependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
                     eventAddressV2DependencyException);
             }
-            catch (EventAddressV2ServiceException
+            catch (EventAddressV1ServiceException
                 eventAddressV2ServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(

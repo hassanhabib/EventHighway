@@ -52,7 +52,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventAddresses.V2
                         Times.Once);
 
             this.eventAddressV2ServiceMock.Verify(broker =>
-                broker.RetrieveEventAddressV2ByIdAsync(
+                broker.RetrieveEventAddressV1ByIdAsync(
                     It.IsAny<Guid>()),
                         Times.Never);
 

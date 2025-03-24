@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Times;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
-using EventHighway.Core.Services.Foundations.Events.V2;
+using EventHighway.Core.Services.Foundations.Events.V1;
 
 namespace EventHighway.Core.Services.Processings.Events.V2
 {
     internal partial class EventV2ProcessingService : IEventV2ProcessingService
     {
-        private readonly IEventV2Service eventV2Service;
+        private readonly IEventV1Service eventV2Service;
         private readonly IDateTimeBroker dateTimeBroker;
         private readonly ILoggingBroker loggingBroker;
 
         public EventV2ProcessingService(
-            IEventV2Service eventV2Service,
+            IEventV1Service eventV2Service,
             IDateTimeBroker dateTimeBroker,
             ILoggingBroker loggingBroker)
         {
@@ -33,14 +33,14 @@ namespace EventHighway.Core.Services.Processings.Events.V2
         {
             ValidateEventV2IsNotNull(eventV2);
 
-            return await this.eventV2Service.AddEventV2Async(eventV2);
+            return await this.eventV2Service.AddEventV1Async(eventV2);
         });
 
         public ValueTask<IQueryable<EventV1>> RetrieveScheduledPendingEventV2sAsync() =>
         TryCatch(async () =>
         {
             IQueryable<EventV1> eventV2s =
-                await this.eventV2Service.RetrieveAllEventV2sAsync();
+                await this.eventV2Service.RetrieveAllEventV1sAsync();
 
             DateTimeOffset now =
                 await this.dateTimeBroker.GetDateTimeOffsetAsync();
@@ -55,7 +55,7 @@ namespace EventHighway.Core.Services.Processings.Events.V2
         {
             ValidateEventV2Id(eventV2Id);
 
-            return await this.eventV2Service.RemoveEventV2ByIdAsync(
+            return await this.eventV2Service.RemoveEventV1ByIdAsync(
                 eventV2Id);
         });
     }

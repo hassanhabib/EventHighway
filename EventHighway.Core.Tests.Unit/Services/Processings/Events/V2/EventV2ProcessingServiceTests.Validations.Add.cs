@@ -45,7 +45,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                         Times.Once);
 
             this.eventV2ServiceMock.Verify(broker =>
-                broker.AddEventV2Async(
+                broker.AddEventV1Async(
                     It.IsAny<EventV1>()),
                         Times.Never);
 

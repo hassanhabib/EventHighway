@@ -29,7 +29,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
                     innerException: validationException.InnerException as Xeption);
 
             this.eventAddressV2ServiceMock.Setup(service =>
-                service.RemoveEventAddressV2ByIdAsync(It.IsAny<Guid>()))
+                service.RemoveEventAddressV1ByIdAsync(It.IsAny<Guid>()))
                     .ThrowsAsync(validationException);
 
             // when
@@ -46,7 +46,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
                 .BeEquivalentTo(expectedEventAddressV2ClientDependencyValidationException);
 
             this.eventAddressV2ServiceMock.Verify(service =>
-                service.RemoveEventAddressV2ByIdAsync(It.IsAny<Guid>()),
+                service.RemoveEventAddressV1ByIdAsync(It.IsAny<Guid>()),
                     Times.Once);
 
             this.eventAddressV2ServiceMock.VerifyNoOtherCalls();
@@ -61,7 +61,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
             var someInnerException = new Xeption();
 
             var eventV2DependencyException =
-                new EventAddressV2DependencyException(
+                new EventAddressV1DependencyException(
                     someMessage,
                     someInnerException);
 
@@ -71,7 +71,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
                     innerException: eventV2DependencyException.InnerException as Xeption);
 
             this.eventAddressV2ServiceMock.Setup(service =>
-                service.RemoveEventAddressV2ByIdAsync(It.IsAny<Guid>()))
+                service.RemoveEventAddressV1ByIdAsync(It.IsAny<Guid>()))
                     .ThrowsAsync(eventV2DependencyException);
 
             // when
@@ -88,7 +88,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
                 .BeEquivalentTo(expectedEventAddressV2ClientDependencyException);
 
             this.eventAddressV2ServiceMock.Verify(service =>
-                service.RemoveEventAddressV2ByIdAsync(It.IsAny<Guid>()),
+                service.RemoveEventAddressV1ByIdAsync(It.IsAny<Guid>()),
                     Times.Once);
 
             this.eventAddressV2ServiceMock.VerifyNoOtherCalls();
@@ -103,7 +103,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
             var someInnerException = new Xeption();
 
             var eventV2ServiceException =
-                new EventAddressV2ServiceException(
+                new EventAddressV1ServiceException(
                     someMessage,
                     someInnerException);
 
@@ -113,7 +113,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
                     innerException: eventV2ServiceException.InnerException as Xeption);
 
             this.eventAddressV2ServiceMock.Setup(service =>
-                service.RemoveEventAddressV2ByIdAsync(It.IsAny<Guid>()))
+                service.RemoveEventAddressV1ByIdAsync(It.IsAny<Guid>()))
                     .ThrowsAsync(eventV2ServiceException);
 
             // when
@@ -129,7 +129,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
                 .BeEquivalentTo(expectedEventAddressV2ClientServiceException);
 
             this.eventAddressV2ServiceMock.Verify(service =>
-                service.RemoveEventAddressV2ByIdAsync(It.IsAny<Guid>()),
+                service.RemoveEventAddressV1ByIdAsync(It.IsAny<Guid>()),
                     Times.Once);
 
             this.eventAddressV2ServiceMock.VerifyNoOtherCalls();
