@@ -29,7 +29,7 @@ using EventHighway.Core.Services.Foundations.ListernEvents.V1;
 using EventHighway.Core.Services.Orchestrations.EventListeners;
 using EventHighway.Core.Services.Orchestrations.EventListeners.V2;
 using EventHighway.Core.Services.Orchestrations.Events;
-using EventHighway.Core.Services.Orchestrations.Events.V2;
+using EventHighway.Core.Services.Orchestrations.Events.V1;
 using EventHighway.Core.Services.Processings.EventAddresses.V1;
 using EventHighway.Core.Services.Processings.EventCalls;
 using EventHighway.Core.Services.Processings.EventCalls.V1;
@@ -179,8 +179,8 @@ namespace EventHighway.Core.Clients.EventHighways
                 EventListenerV2OrchestrationService>();
 
             services.AddTransient<
-                IEventV2OrchestrationService,
-                EventV2OrchestrationService>();
+                IEventV1OrchestrationService,
+                EventV1OrchestrationService>();
         }
 
         private static void RegisterCoordinationServices(IServiceCollection services)

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
-using EventHighway.Core.Models.Services.Orchestrations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Orchestrations.Events.V1.Exceptions;
 using Xeptions;
 
 namespace EventHighway.Core.Services.Coordinations.Events.V2
@@ -35,13 +35,13 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     invalidEventV2CoordinationException);
             }
-            catch (EventV2OrchestrationValidationException
+            catch (EventV1OrchestrationValidationException
                 eventV2OrchestrationValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventV2OrchestrationValidationException);
             }
-            catch (EventV2OrchestrationDependencyValidationException
+            catch (EventV1OrchestrationDependencyValidationException
                 eventV2OrchestrationDependencyValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
@@ -59,13 +59,13 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventListenerV2OrchestrationDependencyValidationException);
             }
-            catch (EventV2OrchestrationDependencyException
+            catch (EventV1OrchestrationDependencyException
                 eventV2OrchestrationDependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
                     eventV2OrchestrationDependencyException);
             }
-            catch (EventV2OrchestrationServiceException
+            catch (EventV1OrchestrationServiceException
                 eventV2OrchestrationServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
@@ -101,13 +101,13 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
             {
                 await returningNothingFunction();
             }
-            catch (EventV2OrchestrationDependencyException
+            catch (EventV1OrchestrationDependencyException
                 eventV2OrchestrationDependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
                     eventV2OrchestrationDependencyException);
             }
-            catch (EventV2OrchestrationServiceException
+            catch (EventV1OrchestrationServiceException
                 eventV2OrchestrationServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
@@ -125,13 +125,13 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
                 throw await CreateAndLogDependencyExceptionAsync(
                     eventListenerV2OrchestrationServiceException);
             }
-            catch (EventV2OrchestrationValidationException
+            catch (EventV1OrchestrationValidationException
                 eventV2OrchestrationValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventV2OrchestrationValidationException);
             }
-            catch (EventV2OrchestrationDependencyValidationException
+            catch (EventV1OrchestrationDependencyValidationException
                 eventV2OrchestrationDependencyValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(

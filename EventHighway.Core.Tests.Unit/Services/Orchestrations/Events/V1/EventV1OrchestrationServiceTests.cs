@@ -12,7 +12,7 @@ using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Processings.EventAddresses.V1.Exceptions;
 using EventHighway.Core.Models.Services.Processings.EventCalls.V1.Exceptions;
 using EventHighway.Core.Models.Services.Processings.Events.V1.Exceptions;
-using EventHighway.Core.Services.Orchestrations.Events.V2;
+using EventHighway.Core.Services.Orchestrations.Events.V1;
 using EventHighway.Core.Services.Processings.EventAddresses.V1;
 using EventHighway.Core.Services.Processings.EventCalls.V1;
 using EventHighway.Core.Services.Processings.Events.V1;
@@ -20,39 +20,39 @@ using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
 
-namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
+namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V1
 {
-    public partial class EventV2OrchestrationServiceTests
+    public partial class EventV1OrchestrationServiceTests
     {
-        private readonly Mock<IEventV1ProcessingService> eventV2ProcessingServiceMock;
-        private readonly Mock<IEventAddressV1ProcessingService> eventAddressV2ProcessingServiceMock;
-        private readonly Mock<IEventCallV1ProcessingService> eventCallV2ProcessingServiceMock;
+        private readonly Mock<IEventV1ProcessingService> eventV1ProcessingServiceMock;
+        private readonly Mock<IEventAddressV1ProcessingService> eventAddressV1ProcessingServiceMock;
+        private readonly Mock<IEventCallV1ProcessingService> eventCallV1ProcessingServiceMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
-        private readonly IEventV2OrchestrationService eventV2OrchestrationService;
+        private readonly IEventV1OrchestrationService eventV1OrchestrationService;
 
-        public EventV2OrchestrationServiceTests()
+        public EventV1OrchestrationServiceTests()
         {
-            this.eventV2ProcessingServiceMock =
+            this.eventV1ProcessingServiceMock =
                 new Mock<IEventV1ProcessingService>();
 
-            this.eventAddressV2ProcessingServiceMock =
+            this.eventAddressV1ProcessingServiceMock =
                 new Mock<IEventAddressV1ProcessingService>();
 
-            this.eventCallV2ProcessingServiceMock =
+            this.eventCallV1ProcessingServiceMock =
                 new Mock<IEventCallV1ProcessingService>();
 
             this.loggingBrokerMock =
                 new Mock<ILoggingBroker>();
 
-            this.eventV2OrchestrationService =
-                new EventV2OrchestrationService(
-                    eventV2ProcessingService: this.eventV2ProcessingServiceMock.Object,
-                    eventAddressV2ProcessingService: this.eventAddressV2ProcessingServiceMock.Object,
-                    eventCallV2ProcessingService: this.eventCallV2ProcessingServiceMock.Object,
+            this.eventV1OrchestrationService =
+                new EventV1OrchestrationService(
+                    eventV1ProcessingService: this.eventV1ProcessingServiceMock.Object,
+                    eventAddressV1ProcessingService: this.eventAddressV1ProcessingServiceMock.Object,
+                    eventCallV1ProcessingService: this.eventCallV1ProcessingServiceMock.Object,
                     loggingBroker: loggingBrokerMock.Object);
         }
 
-        public static TheoryData<Xeption> EventCallV2ValidationExceptions()
+        public static TheoryData<Xeption> EventCallV1ValidationExceptions()
         {
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();
@@ -69,7 +69,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
             };
         }
 
-        public static TheoryData<Xeption> EventCallV2DependencyExceptions()
+        public static TheoryData<Xeption> EventCallV1DependencyExceptions()
         {
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();
@@ -86,7 +86,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
             };
         }
 
-        public static TheoryData<Xeption> EventAddressV2ValidationExceptions()
+        public static TheoryData<Xeption> EventAddressV1ValidationExceptions()
         {
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();
@@ -103,7 +103,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
             };
         }
 
-        public static TheoryData<Xeption> EventAddressV2DependencyExceptions()
+        public static TheoryData<Xeption> EventAddressV1DependencyExceptions()
         {
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();
@@ -120,7 +120,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
             };
         }
 
-        public static TheoryData<Xeption> EventV2ValidationExceptions()
+        public static TheoryData<Xeption> EventV1ValidationExceptions()
         {
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();
@@ -137,7 +137,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
             };
         }
 
-        public static TheoryData<Xeption> EventV2DependencyExceptions()
+        public static TheoryData<Xeption> EventV1DependencyExceptions()
         {
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();
@@ -173,45 +173,45 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V2
                     .GetValue();
         }
 
-        private static EventCallV1 CreateRandomEventCallV2() =>
-            CreateEventCallV2Filler().Create();
+        private static EventCallV1 CreateRandomEventCallV1() =>
+            CreateEventCallV1Filler().Create();
 
-        private static IQueryable<EventV1> CreateRandomEventV2s()
+        private static IQueryable<EventV1> CreateRandomEventV1s()
         {
-            return CreateEventV2Filler()
+            return CreateEventV1Filler()
                 .Create(count: GetRandomNumber())
                     .AsQueryable();
         }
 
-        private static EventAddressV1 CreateRandomEventAddressV2() =>
-            CreateEventAddressV2Filler().Create();
+        private static EventAddressV1 CreateRandomEventAddressV1() =>
+            CreateEventAddressV1Filler().Create();
 
-        private static EventV1 CreateRandomEventV2() =>
-            CreateEventV2Filler().Create();
+        private static EventV1 CreateRandomEventV1() =>
+            CreateEventV1Filler().Create();
 
-        private static Filler<EventCallV1> CreateEventCallV2Filler() =>
+        private static Filler<EventCallV1> CreateEventCallV1Filler() =>
             new Filler<EventCallV1>();
 
-        private static Filler<EventAddressV1> CreateEventAddressV2Filler()
+        private static Filler<EventAddressV1> CreateEventAddressV1Filler()
         {
             var filler = new Filler<EventAddressV1>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>().Use(GetRandomDateTimeOffset)
 
-                .OnProperty(eventAddressV2 => eventAddressV2.Events)
+                .OnProperty(eventAddressV1 => eventAddressV1.Events)
                     .IgnoreIt()
 
-                .OnProperty(eventAddressV2 => eventAddressV2.EventListeners)
+                .OnProperty(eventAddressV1 => eventAddressV1.EventListeners)
                     .IgnoreIt()
 
-                .OnProperty(eventAddressV2 => eventAddressV2.ListenerEvents)
+                .OnProperty(eventAddressV1 => eventAddressV1.ListenerEvents)
                     .IgnoreIt();
 
             return filler;
         }
 
-        private static Filler<EventV1> CreateEventV2Filler()
+        private static Filler<EventV1> CreateEventV1Filler()
         {
             var filler = new Filler<EventV1>();
 

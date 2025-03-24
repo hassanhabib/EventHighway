@@ -6,43 +6,43 @@ using System;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
-using EventHighway.Core.Models.Services.Orchestrations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Orchestrations.Events.V1.Exceptions;
 
-namespace EventHighway.Core.Services.Orchestrations.Events.V2
+namespace EventHighway.Core.Services.Orchestrations.Events.V1
 {
-    internal partial class EventV2OrchestrationService
+    internal partial class EventV1OrchestrationService
     {
-        private static void ValidateEventCallV2IsNotNull(EventCallV1 eventCallV2)
+        private static void ValidateEventCallV1IsNotNull(EventCallV1 eventCallV1)
         {
-            if (eventCallV2 is null)
+            if (eventCallV1 is null)
             {
-                throw new NullEventCallV2OrchestrationException(
+                throw new NullEventCallV1OrchestrationException(
                     message: "Event call is null.");
             }
         }
 
-        private static void ValidateEventV2IsNotNull(EventV1 eventV2)
+        private static void ValidateEventV1IsNotNull(EventV1 eventV1)
         {
-            if (eventV2 is null)
+            if (eventV1 is null)
             {
-                throw new NullEventV2OrchestrationException(
+                throw new NullEventV1OrchestrationException(
                     message: "Event is null.");
             }
         }
 
-        private static void ValidateListenerEventV2Exists(EventAddressV1 eventAddressV2, Guid eventAddressV2Id)
+        private static void ValidateListenerEventV1Exists(EventAddressV1 eventAddressV1, Guid eventAddressV1Id)
         {
-            if (eventAddressV2 is null)
+            if (eventAddressV1 is null)
             {
-                throw new NotFoundEventAddressV2OrchestrationException(
-                    message: $"Could not find event address with id: {eventAddressV2Id}.");
+                throw new NotFoundEventAddressV1OrchestrationException(
+                    message: $"Could not find event address with id: {eventAddressV1Id}.");
             }
         }
 
-        private static void ValidateEventV2Id(Guid eventV2Id)
+        private static void ValidateEventV1Id(Guid eventV1Id)
         {
             Validate(
-                (Rule: IsInvalid(eventV2Id),
+                (Rule: IsInvalid(eventV1Id),
                 Parameter: nameof(EventV1.Id)));
         }
 
@@ -54,21 +54,21 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V2
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
-            var invalidEventV2OrchestrationException =
-                new InvalidEventV2OrchestrationException(
+            var invalidEventV1OrchestrationException =
+                new InvalidEventV1OrchestrationException(
                     message: "Event is invalid, fix the errors and try again.");
 
             foreach ((dynamic rule, string parameter) in validations)
             {
                 if (rule.Condition)
                 {
-                    invalidEventV2OrchestrationException.UpsertDataList(
+                    invalidEventV1OrchestrationException.UpsertDataList(
                         key: parameter,
                         value: rule.Message);
                 }
             }
 
-            invalidEventV2OrchestrationException.ThrowIfContainsErrors();
+            invalidEventV1OrchestrationException.ThrowIfContainsErrors();
         }
     }
 }
