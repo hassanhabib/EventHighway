@@ -3,17 +3,17 @@
 // ----------------------------------------------------------------------------------
 
 using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
-using EventHighway.Core.Models.Services.Processings.EventCalls.V2.Exceptions;
+using EventHighway.Core.Models.Services.Processings.EventCalls.V1.Exceptions;
 
-namespace EventHighway.Core.Services.Processings.EventCalls.V2
+namespace EventHighway.Core.Services.Processings.EventCalls.V1
 {
-    internal partial class EventCallV2ProcessingService
+    internal partial class EventCallV1ProcessingService
     {
-        private static void ValidateEventCallV2IsNotNull(EventCallV1 eventCallV2)
+        private static void ValidateEventCallV1IsNotNull(EventCallV1 eventCallV1)
         {
-            if (eventCallV2 is null)
+            if (eventCallV1 is null)
             {
-                throw new NullEventCallV2ProcessingException(
+                throw new NullEventCallV1ProcessingException(
                     message: "Event call is null.");
             }
         }
