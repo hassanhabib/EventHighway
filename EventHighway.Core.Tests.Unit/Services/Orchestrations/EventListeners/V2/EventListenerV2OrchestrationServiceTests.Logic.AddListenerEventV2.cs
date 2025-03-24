@@ -29,7 +29,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                 addedListenerEventV2.DeepClone();
 
             this.listenerEventV2ProcessingServiceMock.Setup(service =>
-                service.AddListenerEventV2Async(
+                service.AddListenerEventV1Async(
                     inputListenerEventV2))
                         .ReturnsAsync(addedListenerEventV2);
 
@@ -44,7 +44,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                 expectedListenerEventV2);
 
             this.listenerEventV2ProcessingServiceMock.Verify(service =>
-                service.AddListenerEventV2Async(
+                service.AddListenerEventV1Async(
                     inputListenerEventV2),
                         Times.Once);
 

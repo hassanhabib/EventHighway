@@ -9,10 +9,10 @@ using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using EventHighway.Core.Models.Services.Processings.EventListeners.V1.Exceptions;
-using EventHighway.Core.Models.Services.Processings.ListenerEvents.V2.Exceptions;
+using EventHighway.Core.Models.Services.Processings.ListenerEvents.V1.Exceptions;
 using EventHighway.Core.Services.Orchestrations.EventListeners.V2;
 using EventHighway.Core.Services.Processings.EventListeners.V1;
-using EventHighway.Core.Services.Processings.ListenerEvents.V2;
+using EventHighway.Core.Services.Processings.ListenerEvents.V1;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
@@ -22,7 +22,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
     public partial class EventListenerV2OrchestrationServiceTests
     {
         private readonly Mock<IEventListenerV1ProcessingService> eventListenerV2ProcessingServiceMock;
-        private readonly Mock<IListenerEventV2ProcessingService> listenerEventV2ProcessingServiceMock;
+        private readonly Mock<IListenerEventV1ProcessingService> listenerEventV2ProcessingServiceMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly IEventListenerV2OrchestrationService eventListenerV2OrchestrationService;
 
@@ -32,7 +32,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                 new Mock<IEventListenerV1ProcessingService>();
 
             this.listenerEventV2ProcessingServiceMock =
-                new Mock<IListenerEventV2ProcessingService>();
+                new Mock<IListenerEventV1ProcessingService>();
 
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
@@ -59,7 +59,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                     someInnerException),
             };
         }
-        
+
         public static TheoryData<Xeption> EventListenerV2DependencyExceptions()
         {
             string someMessage = GetRandomString();
@@ -84,11 +84,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
 
             return new TheoryData<Xeption>
             {
-                new ListenerEventV2ProcessingValidationException(
+                new ListenerEventV1ProcessingValidationException(
                     someMessage,
                     someInnerException),
 
-                new ListenerEventV2ProcessingDependencyValidationException(
+                new ListenerEventV1ProcessingDependencyValidationException(
                     someMessage,
                     someInnerException),
             };
@@ -101,11 +101,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
 
             return new TheoryData<Xeption>
             {
-                new ListenerEventV2ProcessingDependencyException(
+                new ListenerEventV1ProcessingDependencyException(
                     someMessage,
                     someInnerException),
 
-                new ListenerEventV2ProcessingServiceException(
+                new ListenerEventV1ProcessingServiceException(
                     someMessage,
                     someInnerException),
             };

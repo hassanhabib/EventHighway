@@ -9,19 +9,19 @@ using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using EventHighway.Core.Services.Processings.EventListeners.V1;
-using EventHighway.Core.Services.Processings.ListenerEvents.V2;
+using EventHighway.Core.Services.Processings.ListenerEvents.V1;
 
 namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
 {
     internal partial class EventListenerV2OrchestrationService : IEventListenerV2OrchestrationService
     {
         private readonly IEventListenerV1ProcessingService eventListenerV2ProcessingService;
-        private readonly IListenerEventV2ProcessingService listenerEventV2ProcessingService;
+        private readonly IListenerEventV1ProcessingService listenerEventV2ProcessingService;
         private readonly ILoggingBroker loggingBroker;
 
         public EventListenerV2OrchestrationService(
             IEventListenerV1ProcessingService eventListenerV2ProcessingService,
-            IListenerEventV2ProcessingService listenerEventV2ProcessingService,
+            IListenerEventV1ProcessingService listenerEventV2ProcessingService,
             ILoggingBroker loggingBroker)
         {
             this.eventListenerV2ProcessingService = eventListenerV2ProcessingService;
@@ -61,7 +61,7 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
         {
             ValidateListenerEventV2IsNotNull(listenerEventV2);
 
-            return await this.listenerEventV2ProcessingService.AddListenerEventV2Async(
+            return await this.listenerEventV2ProcessingService.AddListenerEventV1Async(
                 listenerEventV2);
         });
 
@@ -69,7 +69,7 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
         TryCatch(async () =>
         {
             return await this.listenerEventV2ProcessingService
-                .RetrieveAllListenerEventV2sAsync();
+                .RetrieveAllListenerEventV1sAsync();
         });
 
         public ValueTask<ListenerEventV1> ModifyListenerEventV2Async(ListenerEventV1 listenerEventV2) =>
@@ -77,7 +77,7 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
         {
             ValidateListenerEventV2IsNotNull(listenerEventV2);
 
-            return await this.listenerEventV2ProcessingService.ModifyListenerEventV2Async(
+            return await this.listenerEventV2ProcessingService.ModifyListenerEventV1Async(
                 listenerEventV2);
         });
 
@@ -87,7 +87,7 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
             ValidateListenerEventV2Id(listenerEventV2Id);
 
             return await this.listenerEventV2ProcessingService
-                .RemoveListenerEventV2ByIdAsync(listenerEventV2Id);
+                .RemoveListenerEventV1ByIdAsync(listenerEventV2Id);
         });
     }
 }

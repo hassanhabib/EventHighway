@@ -9,47 +9,47 @@ using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
 
-namespace EventHighway.Core.Tests.Unit.Services.Processings.ListenerEvents.V2
+namespace EventHighway.Core.Tests.Unit.Services.Processings.ListenerEvents.V1
 {
-    public partial class ListenerEventV2ProcessingServiceTests
+    public partial class ListenerEventV1ProcessingServiceTests
     {
         [Fact]
-        public async Task ShouldRemoveListenerEventV2ByIdAsync()
+        public async Task ShouldRemoveListenerEventV1ByIdAsync()
         {
             // given
             Guid randomListenerEventId = GetRandomId();
             Guid inputListenerEventId = randomListenerEventId;
 
-            ListenerEventV1 randomListenerEventV2 =
-                CreateRandomListenerEventV2();
+            ListenerEventV1 randomListenerEventV1 =
+                CreateRandomListenerEventV1();
 
-            ListenerEventV1 removedListenerEventV2 =
-                randomListenerEventV2;
+            ListenerEventV1 removedListenerEventV1 =
+                randomListenerEventV1;
 
-            ListenerEventV1 expectedListenerEventV2 =
-                removedListenerEventV2.DeepClone();
+            ListenerEventV1 expectedListenerEventV1 =
+                removedListenerEventV1.DeepClone();
 
-            this.listenerEventV2ServiceMock.Setup(service =>
+            this.listenerEventV1ServiceMock.Setup(service =>
                 service.RemoveListenerEventV1ByIdAsync(
                     inputListenerEventId))
-                        .ReturnsAsync(removedListenerEventV2);
+                        .ReturnsAsync(removedListenerEventV1);
 
             // when
-            ListenerEventV1 actualListenerEventV2 =
-                await this.listenerEventV2ProcessingService
-                    .RemoveListenerEventV2ByIdAsync(
+            ListenerEventV1 actualListenerEventV1 =
+                await this.listenerEventV1ProcessingService
+                    .RemoveListenerEventV1ByIdAsync(
                         inputListenerEventId);
 
             // then
-            actualListenerEventV2.Should()
-                .BeEquivalentTo(expectedListenerEventV2);
+            actualListenerEventV1.Should()
+                .BeEquivalentTo(expectedListenerEventV1);
 
-            this.listenerEventV2ServiceMock.Verify(service =>
+            this.listenerEventV1ServiceMock.Verify(service =>
                 service.RemoveListenerEventV1ByIdAsync(
                     inputListenerEventId),
                         Times.Once);
 
-            this.listenerEventV2ServiceMock
+            this.listenerEventV1ServiceMock
                 .VerifyNoOtherCalls();
 
             this.loggingBrokerMock

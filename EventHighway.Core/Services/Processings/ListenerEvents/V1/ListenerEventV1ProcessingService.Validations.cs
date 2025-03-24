@@ -4,25 +4,25 @@
 
 using System;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
-using EventHighway.Core.Models.Services.Processings.ListenerEvents.V2.Exceptions;
+using EventHighway.Core.Models.Services.Processings.ListenerEvents.V1.Exceptions;
 
-namespace EventHighway.Core.Services.Processings.ListenerEvents.V2
+namespace EventHighway.Core.Services.Processings.ListenerEvents.V1
 {
-    internal partial class ListenerEventV2ProcessingService
+    internal partial class ListenerEventV1ProcessingService
     {
-        private static void ValidateListenerEventV2IsNotNull(ListenerEventV1 listenerEventV2)
+        private static void ValidateListenerEventV1IsNotNull(ListenerEventV1 listenerEventV1)
         {
-            if (listenerEventV2 is null)
+            if (listenerEventV1 is null)
             {
-                throw new NullListenerEventV2ProcessingException(
+                throw new NullListenerEventV1ProcessingException(
                     message: "Listener event is null.");
             }
         }
 
-        private static void ValidateListenerEventV2Id(Guid listenerEventV2Id)
+        private static void ValidateListenerEventV1Id(Guid listenerEventV1Id)
         {
             Validate(
-                (Rule: IsInvalid(listenerEventV2Id),
+                (Rule: IsInvalid(listenerEventV1Id),
                 Parameter: nameof(ListenerEventV1.Id)));
         }
 
@@ -34,21 +34,21 @@ namespace EventHighway.Core.Services.Processings.ListenerEvents.V2
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
-            var invalidListenerEventV2ProcessingException =
-                new InvalidListenerEventV2ProcessingException(
+            var invalidListenerEventV1ProcessingException =
+                new InvalidListenerEventV1ProcessingException(
                     message: "Listener event is invalid, fix the errors and try again.");
 
             foreach ((dynamic rule, string parameter) in validations)
             {
                 if (rule.Condition)
                 {
-                    invalidListenerEventV2ProcessingException.UpsertDataList(
+                    invalidListenerEventV1ProcessingException.UpsertDataList(
                         key: parameter,
                         value: rule.Message);
                 }
             }
 
-            invalidListenerEventV2ProcessingException.ThrowIfContainsErrors();
+            invalidListenerEventV1ProcessingException.ThrowIfContainsErrors();
         }
     }
 }
