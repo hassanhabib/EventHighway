@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1.Exceptions;
-using EventHighway.Core.Services.Foundations.ListernEvents.V2;
+using EventHighway.Core.Services.Foundations.ListernEvents.V1;
 using EventHighway.Core.Services.Processings.ListenerEvents.V2;
 using Moq;
 using Tynamix.ObjectFiller;
@@ -18,13 +18,13 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.ListenerEvents.V2
 {
     public partial class ListenerEventV2ProcessingServiceTests
     {
-        private readonly Mock<IListenerEventV2Service> listenerEventV2ServiceMock;
+        private readonly Mock<IListenerEventV1Service> listenerEventV2ServiceMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly IListenerEventV2ProcessingService listenerEventV2ProcessingService;
 
         public ListenerEventV2ProcessingServiceTests()
         {
-            this.listenerEventV2ServiceMock = new Mock<IListenerEventV2Service>();
+            this.listenerEventV2ServiceMock = new Mock<IListenerEventV1Service>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
             this.listenerEventV2ProcessingService = new ListenerEventV2ProcessingService(
@@ -39,11 +39,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.ListenerEvents.V2
 
             return new TheoryData<Xeption>
             {
-                new ListenerEventV2ValidationException(
+                new ListenerEventV1ValidationException(
                     someMessage,
                     someInnerException),
 
-                new ListenerEventV2DependencyValidationException(
+                new ListenerEventV1DependencyValidationException(
                     someMessage,
                     someInnerException),
             };
@@ -56,11 +56,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.ListenerEvents.V2
 
             return new TheoryData<Xeption>
             {
-                new ListenerEventV2DependencyException(
+                new ListenerEventV1DependencyException(
                     someMessage,
                     someInnerException),
 
-                new ListenerEventV2ServiceException(
+                new ListenerEventV1ServiceException(
                     someMessage,
                     someInnerException),
             };
