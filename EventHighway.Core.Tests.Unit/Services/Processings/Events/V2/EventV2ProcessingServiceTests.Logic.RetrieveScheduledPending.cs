@@ -46,7 +46,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                 randomEventV2s.AsQueryable();
 
             this.eventV2ServiceMock.Setup(service =>
-                service.RetrieveAllEventV2sAsync())
+                service.RetrieveAllEventV1sAsync())
                     .ReturnsAsync(retrievedEventV2s);
 
             this.dateTimeBrokerMock.Setup(broker =>
@@ -62,7 +62,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
             actualEventV2s.Should().BeEquivalentTo(expectedEventV2s);
 
             this.eventV2ServiceMock.Verify(service =>
-                service.RetrieveAllEventV2sAsync(),
+                service.RetrieveAllEventV1sAsync(),
                     Times.Once);
 
             this.dateTimeBrokerMock.Verify(broker =>

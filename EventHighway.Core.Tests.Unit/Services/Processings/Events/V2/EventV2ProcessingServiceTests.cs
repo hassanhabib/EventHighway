@@ -9,7 +9,7 @@ using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Times;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1.Exceptions;
-using EventHighway.Core.Services.Foundations.Events.V2;
+using EventHighway.Core.Services.Foundations.Events.V1;
 using EventHighway.Core.Services.Processings.Events.V2;
 using Moq;
 using Tynamix.ObjectFiller;
@@ -19,14 +19,14 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
 {
     public partial class EventV2ProcessingServiceTests
     {
-        private readonly Mock<IEventV2Service> eventV2ServiceMock;
+        private readonly Mock<IEventV1Service> eventV2ServiceMock;
         private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly IEventV2ProcessingService eventV2ProcessingService;
 
         public EventV2ProcessingServiceTests()
         {
-            this.eventV2ServiceMock = new Mock<IEventV2Service>();
+            this.eventV2ServiceMock = new Mock<IEventV1Service>();
             this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
@@ -44,11 +44,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
 
             return new TheoryData<Xeption>
             {
-                new EventV2ValidationException(
+                new EventV1ValidationException(
                     someMessage,
                     someInnerException),
 
-                new EventV2DependencyValidationException(
+                new EventV1DependencyValidationException(
                     someMessage,
                     someInnerException),
             };
@@ -61,11 +61,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
 
             return new TheoryData<Xeption>
             {
-                new EventV2DependencyException(
+                new EventV1DependencyException(
                     someMessage,
                     someInnerException),
 
-                new EventV2ServiceException(
+                new EventV1ServiceException(
                     someMessage,
                     someInnerException),
             };

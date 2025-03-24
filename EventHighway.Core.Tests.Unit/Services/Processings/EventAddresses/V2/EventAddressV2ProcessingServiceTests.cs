@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions;
-using EventHighway.Core.Services.Foundations.EventAddresses.V2;
+using EventHighway.Core.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Services.Processings.EventAddresses.V2;
 using Moq;
 using Tynamix.ObjectFiller;
@@ -17,14 +17,14 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventAddresses.V2
 {
     public partial class EventAddressV2ProcessingServiceTests
     {
-        private readonly Mock<IEventAddressV2Service> eventAddressV2ServiceMock;
+        private readonly Mock<IEventAddressV1Service> eventAddressV2ServiceMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly IEventAddressV2ProcessingService eventAddressV2ProcessingService;
 
         public EventAddressV2ProcessingServiceTests()
         {
             this.eventAddressV2ServiceMock =
-                new Mock<IEventAddressV2Service>();
+                new Mock<IEventAddressV1Service>();
 
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
@@ -41,11 +41,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventAddresses.V2
 
             return new TheoryData<Xeption>
             {
-                new EventAddressV2ValidationException(
+                new EventAddressV1ValidationException(
                     someMessage,
                     someInnerException),
 
-                new EventAddressV2DependencyValidationException(
+                new EventAddressV1DependencyValidationException(
                     someMessage,
                     someInnerException),
             };
@@ -58,11 +58,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventAddresses.V2
 
             return new TheoryData<Xeption>
             {
-                new EventAddressV2DependencyException(
+                new EventAddressV1DependencyException(
                     someMessage,
                     someInnerException),
 
-                new EventAddressV2ServiceException(
+                new EventAddressV1ServiceException(
                     someMessage,
                     someInnerException),
             };

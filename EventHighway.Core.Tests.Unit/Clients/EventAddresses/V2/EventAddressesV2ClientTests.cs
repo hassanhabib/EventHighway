@@ -6,7 +6,7 @@ using System;
 using EventHighway.Core.Clients.EventAddresses.V2;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions;
-using EventHighway.Core.Services.Foundations.EventAddresses.V2;
+using EventHighway.Core.Services.Foundations.EventAddresses.V1;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
@@ -15,13 +15,13 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
 {
     public partial class EventAddressesV2ClientTests
     {
-        private readonly Mock<IEventAddressV2Service> eventAddressV2ServiceMock;
+        private readonly Mock<IEventAddressV1Service> eventAddressV2ServiceMock;
         private readonly IEventAddressesV2Client eventAddressesClient;
 
         public EventAddressesV2ClientTests()
         {
             this.eventAddressV2ServiceMock =
-                new Mock<IEventAddressV2Service>();
+                new Mock<IEventAddressV1Service>();
 
             this.eventAddressesClient =
                 new EventAddressesV2Client(
@@ -35,11 +35,11 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
 
             return new TheoryData<Xeption>
             {
-                new EventAddressV2ValidationException(
+                new EventAddressV1ValidationException(
                     someMessage,
                     someInnerException),
 
-                new EventAddressV2DependencyValidationException(
+                new EventAddressV1DependencyValidationException(
                     someMessage,
                     someInnerException),
             };

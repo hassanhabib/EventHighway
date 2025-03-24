@@ -7,43 +7,43 @@ using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.EventAddresses.V2.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions;
-using EventHighway.Core.Services.Foundations.EventAddresses.V2;
+using EventHighway.Core.Services.Foundations.EventAddresses.V1;
 using Xeptions;
 
 namespace EventHighway.Core.Clients.EventAddresses.V2
 {
     internal class EventAddressesV2Client : IEventAddressesV2Client
     {
-        private readonly IEventAddressV2Service eventAddressV2Service;
+        private readonly IEventAddressV1Service eventAddressV2Service;
 
-        public EventAddressesV2Client(IEventAddressV2Service eventAddressV2Service) =>
+        public EventAddressesV2Client(IEventAddressV1Service eventAddressV2Service) =>
             this.eventAddressV2Service = eventAddressV2Service;
 
         public async ValueTask<EventAddressV1> RegisterEventAddressV2Async(EventAddressV1 eventAddressV2)
         {
             try
             {
-                return await this.eventAddressV2Service.AddEventAddressV2Async(eventAddressV2);
+                return await this.eventAddressV2Service.AddEventAddressV1Async(eventAddressV2);
             }
-            catch (EventAddressV2ValidationException eventAddressV2ValidationException)
+            catch (EventAddressV1ValidationException eventAddressV2ValidationException)
             {
                 throw CreateEventAddressV2ClientDependencyValidationException(
                     eventAddressV2ValidationException.InnerException
                         as Xeption);
             }
-            catch (EventAddressV2DependencyValidationException eventAddressV2DependencyValidationException)
+            catch (EventAddressV1DependencyValidationException eventAddressV2DependencyValidationException)
             {
                 throw CreateEventAddressV2ClientDependencyValidationException(
                     eventAddressV2DependencyValidationException.InnerException
                         as Xeption);
             }
-            catch (EventAddressV2DependencyException eventV2DependencyException)
+            catch (EventAddressV1DependencyException eventV2DependencyException)
             {
                 throw CreateEventAddressV2ClientDependencyException(
                     eventV2DependencyException.InnerException
                         as Xeption);
             }
-            catch (EventAddressV2ServiceException eventV2ServiceException)
+            catch (EventAddressV1ServiceException eventV2ServiceException)
             {
                 throw CreateEventAddressV2ClientServiceException(
                     eventV2ServiceException.InnerException
@@ -55,28 +55,28 @@ namespace EventHighway.Core.Clients.EventAddresses.V2
         {
             try
             {
-                return await this.eventAddressV2Service.RemoveEventAddressV2ByIdAsync(
+                return await this.eventAddressV2Service.RemoveEventAddressV1ByIdAsync(
                     eventAddressV2Id);
             }
-            catch (EventAddressV2ValidationException eventAddressV2ValidationException)
+            catch (EventAddressV1ValidationException eventAddressV2ValidationException)
             {
                 throw CreateEventAddressV2ClientDependencyValidationException(
                     eventAddressV2ValidationException.InnerException
                         as Xeption);
             }
-            catch (EventAddressV2DependencyValidationException eventAddressV2DependencyValidationException)
+            catch (EventAddressV1DependencyValidationException eventAddressV2DependencyValidationException)
             {
                 throw CreateEventAddressV2ClientDependencyValidationException(
                     eventAddressV2DependencyValidationException.InnerException
                         as Xeption);
             }
-            catch (EventAddressV2DependencyException eventV2DependencyException)
+            catch (EventAddressV1DependencyException eventV2DependencyException)
             {
                 throw CreateEventAddressV2ClientDependencyException(
                     eventV2DependencyException.InnerException
                         as Xeption);
             }
-            catch (EventAddressV2ServiceException eventV2ServiceException)
+            catch (EventAddressV1ServiceException eventV2ServiceException)
             {
                 throw CreateEventAddressV2ClientServiceException(
                     eventV2ServiceException.InnerException

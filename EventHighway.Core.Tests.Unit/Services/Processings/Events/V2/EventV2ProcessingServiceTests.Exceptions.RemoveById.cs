@@ -28,7 +28,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                     innerException: validationException.InnerException as Xeption);
 
             this.eventV2ServiceMock.Setup(service =>
-                service.RemoveEventV2ByIdAsync(It.IsAny<Guid>()))
+                service.RemoveEventV1ByIdAsync(It.IsAny<Guid>()))
                     .ThrowsAsync(validationException);
 
             // when
@@ -46,7 +46,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                 .BeEquivalentTo(expectedEventV2ProcessingDependencyValidationException);
 
             this.eventV2ServiceMock.Verify(service =>
-                service.RemoveEventV2ByIdAsync(It.IsAny<Guid>()),
+                service.RemoveEventV1ByIdAsync(It.IsAny<Guid>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -72,7 +72,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                     innerException: dependencyException.InnerException as Xeption);
 
             this.eventV2ServiceMock.Setup(service =>
-                service.RemoveEventV2ByIdAsync(It.IsAny<Guid>()))
+                service.RemoveEventV1ByIdAsync(It.IsAny<Guid>()))
                     .ThrowsAsync(dependencyException);
 
             // when
@@ -90,7 +90,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                 .BeEquivalentTo(expectedEventV2ProcessingDependencyException);
 
             this.eventV2ServiceMock.Verify(service =>
-                service.RemoveEventV2ByIdAsync(It.IsAny<Guid>()),
+                service.RemoveEventV1ByIdAsync(It.IsAny<Guid>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -120,7 +120,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                     innerException: failedEventV2ProcessingServiceException);
 
             this.eventV2ServiceMock.Setup(service =>
-                service.RemoveEventV2ByIdAsync(It.IsAny<Guid>()))
+                service.RemoveEventV1ByIdAsync(It.IsAny<Guid>()))
                     .ThrowsAsync(serviceException);
 
             // when
@@ -138,7 +138,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V2
                 .BeEquivalentTo(expectedEventV2ProcessingExceptionException);
 
             this.eventV2ServiceMock.Verify(service =>
-                service.RemoveEventV2ByIdAsync(It.IsAny<Guid>()),
+                service.RemoveEventV1ByIdAsync(It.IsAny<Guid>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
