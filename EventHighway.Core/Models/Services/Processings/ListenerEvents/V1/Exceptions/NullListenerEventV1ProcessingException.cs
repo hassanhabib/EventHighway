@@ -4,12 +4,12 @@
 
 using Xeptions;
 
-namespace EventHighway.Core.Models.Services.Processings.ListenerEvents.V2.Exceptions
+namespace EventHighway.Core.Models.Services.Processings.ListenerEvents.V1.Exceptions
 {
-    public class ListenerEventV2ProcessingDependencyException : Xeption
+    public class NullListenerEventV1ProcessingException : Xeption
     {
-        public ListenerEventV2ProcessingDependencyException(string message, Xeption innerException)
-            : base(message, innerException)
+        public NullListenerEventV1ProcessingException(string message)
+            : base(message)
         { }
     }
 }

@@ -9,7 +9,7 @@ using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 using EventHighway.Core.Models.Services.Processings.EventListeners.V1.Exceptions;
-using EventHighway.Core.Models.Services.Processings.ListenerEvents.V2.Exceptions;
+using EventHighway.Core.Models.Services.Processings.ListenerEvents.V1.Exceptions;
 using Xeptions;
 
 namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
@@ -41,28 +41,28 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
                     nullEventListenerV2OrchestrationException);
             }
             catch (EventListenerV1ProcessingValidationException
-                eventListenerV2ProcessingValidationException)
+                eventListenerV1ProcessingValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
-                    eventListenerV2ProcessingValidationException);
+                    eventListenerV1ProcessingValidationException);
             }
             catch (EventListenerV1ProcessingDependencyValidationException
-                eventListenerV2ProcessingDependencyValidationException)
+                eventListenerV1ProcessingDependencyValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
-                    eventListenerV2ProcessingDependencyValidationException);
+                    eventListenerV1ProcessingDependencyValidationException);
             }
             catch (EventListenerV1ProcessingDependencyException
-                eventListenerV2ProcessingDependencyException)
+                eventListenerV1ProcessingDependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
-                    eventListenerV2ProcessingDependencyException);
+                    eventListenerV1ProcessingDependencyException);
             }
             catch (EventListenerV1ProcessingServiceException
-                eventListenerV2ProcessingServiceException)
+                eventListenerV1ProcessingServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
-                    eventListenerV2ProcessingServiceException);
+                    eventListenerV1ProcessingServiceException);
             }
             catch (Exception exception)
             {
@@ -90,22 +90,22 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
                     invalidEventListenerV2OrchestrationException);
             }
             catch (EventListenerV1ProcessingValidationException
-                eventListenerV2ProcessingValidationException)
+                eventListenerV1ProcessingValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
-                    eventListenerV2ProcessingValidationException);
+                    eventListenerV1ProcessingValidationException);
             }
             catch (EventListenerV1ProcessingDependencyException
-                eventListenerV2ProcessingDependencyException)
+                eventListenerV1ProcessingDependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
-                    eventListenerV2ProcessingDependencyException);
+                    eventListenerV1ProcessingDependencyException);
             }
             catch (EventListenerV1ProcessingServiceException
-                eventListenerV2ProcessingServiceException)
+                eventListenerV1ProcessingServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
-                    eventListenerV2ProcessingServiceException);
+                    eventListenerV1ProcessingServiceException);
             }
             catch (Exception exception)
             {
@@ -138,29 +138,29 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
                 throw await CreateAndLogValidationExceptionAsync(
                     invalidEventListenerV2OrchestrationException);
             }
-            catch (ListenerEventV2ProcessingValidationException
-                listenerEventV2ProcessingValidationException)
+            catch (ListenerEventV1ProcessingValidationException
+                listenerEventV1ProcessingValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
-                    listenerEventV2ProcessingValidationException);
+                    listenerEventV1ProcessingValidationException);
             }
-            catch (ListenerEventV2ProcessingDependencyValidationException
-                listenerEventV2ProcessingDependencyValidationException)
+            catch (ListenerEventV1ProcessingDependencyValidationException
+                listenerEventV1ProcessingDependencyValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
-                    listenerEventV2ProcessingDependencyValidationException);
+                    listenerEventV1ProcessingDependencyValidationException);
             }
-            catch (ListenerEventV2ProcessingDependencyException
-                listenerEventV2ProcessingDependencyException)
+            catch (ListenerEventV1ProcessingDependencyException
+                listenerEventV1ProcessingDependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
-                    listenerEventV2ProcessingDependencyException);
+                    listenerEventV1ProcessingDependencyException);
             }
-            catch (ListenerEventV2ProcessingServiceException
-                listenerEventV2ProcessingServiceException)
+            catch (ListenerEventV1ProcessingServiceException
+                listenerEventV1ProcessingServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
-                    listenerEventV2ProcessingServiceException);
+                    listenerEventV1ProcessingServiceException);
             }
             catch (Exception exception)
             {
@@ -181,17 +181,17 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
             {
                 return await returningListenerEventV2sFunction();
             }
-            catch (ListenerEventV2ProcessingDependencyException
-                listenerEventV2ProcessingDependencyException)
+            catch (ListenerEventV1ProcessingDependencyException
+                listenerEventV1ProcessingDependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
-                    listenerEventV2ProcessingDependencyException);
+                    listenerEventV1ProcessingDependencyException);
             }
-            catch (ListenerEventV2ProcessingServiceException
-                listenerEventV2ProcessingServiceException)
+            catch (ListenerEventV1ProcessingServiceException
+                listenerEventV1ProcessingServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
-                    listenerEventV2ProcessingServiceException);
+                    listenerEventV1ProcessingServiceException);
             }
             catch (Exception exception)
             {

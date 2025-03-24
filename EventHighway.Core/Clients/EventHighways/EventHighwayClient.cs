@@ -37,7 +37,7 @@ using EventHighway.Core.Services.Processings.EventListeners;
 using EventHighway.Core.Services.Processings.EventListeners.V1;
 using EventHighway.Core.Services.Processings.Events.V1;
 using EventHighway.Core.Services.Processings.ListenerEvents;
-using EventHighway.Core.Services.Processings.ListenerEvents.V2;
+using EventHighway.Core.Services.Processings.ListenerEvents.V1;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventHighway.Core.Clients.EventHighways
@@ -156,8 +156,8 @@ namespace EventHighway.Core.Clients.EventHighways
                 EventV1ProcessingService>();
 
             services.AddTransient<
-                IListenerEventV2ProcessingService,
-                ListenerEventV2ProcessingService>();
+                IListenerEventV1ProcessingService,
+                ListenerEventV1ProcessingService>();
 
             services.AddTransient<
                 IEventAddressV1ProcessingService,

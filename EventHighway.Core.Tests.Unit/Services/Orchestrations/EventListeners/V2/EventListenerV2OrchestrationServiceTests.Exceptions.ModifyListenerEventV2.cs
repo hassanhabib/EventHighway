@@ -28,7 +28,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                     innerException: listenerEventV2ValidationException.InnerException as Xeption);
 
             this.listenerEventV2ProcessingServiceMock.Setup(service =>
-                service.ModifyListenerEventV2Async(It.IsAny<ListenerEventV1>()))
+                service.ModifyListenerEventV1Async(It.IsAny<ListenerEventV1>()))
                     .ThrowsAsync(listenerEventV2ValidationException);
 
             // when
@@ -45,7 +45,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                 .BeEquivalentTo(expectedEventListenerV2OrchestrationDependencyValidationException);
 
             this.listenerEventV2ProcessingServiceMock.Verify(service =>
-                service.ModifyListenerEventV2Async(It.IsAny<ListenerEventV1>()),
+                service.ModifyListenerEventV1Async(It.IsAny<ListenerEventV1>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -72,7 +72,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                     innerException: listenerEventV2DependencyException.InnerException as Xeption);
 
             this.listenerEventV2ProcessingServiceMock.Setup(service =>
-                service.ModifyListenerEventV2Async(It.IsAny<ListenerEventV1>()))
+                service.ModifyListenerEventV1Async(It.IsAny<ListenerEventV1>()))
                     .ThrowsAsync(listenerEventV2DependencyException);
 
             // when
@@ -89,7 +89,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                 .BeEquivalentTo(expectedEventListenerV2OrchestrationDependencyException);
 
             this.listenerEventV2ProcessingServiceMock.Verify(service =>
-                service.ModifyListenerEventV2Async(It.IsAny<ListenerEventV1>()),
+                service.ModifyListenerEventV1Async(It.IsAny<ListenerEventV1>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -120,7 +120,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                     innerException: failedEventListenerV2OrchestrationServiceException);
 
             this.listenerEventV2ProcessingServiceMock.Setup(service =>
-                service.ModifyListenerEventV2Async(It.IsAny<ListenerEventV1>()))
+                service.ModifyListenerEventV1Async(It.IsAny<ListenerEventV1>()))
                     .ThrowsAsync(serviceException);
 
             // when
@@ -138,7 +138,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                 .BeEquivalentTo(expectedEventListenerV2OrchestrationServiceException);
 
             this.listenerEventV2ProcessingServiceMock.Verify(service =>
-                service.ModifyListenerEventV2Async(It.IsAny<ListenerEventV1>()),
+                service.ModifyListenerEventV1Async(It.IsAny<ListenerEventV1>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
