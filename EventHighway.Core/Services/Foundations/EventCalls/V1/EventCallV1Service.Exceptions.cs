@@ -9,191 +9,191 @@ using EventHighway.Core.Models.Services.Foundations.EventCall.V1.Exceptions;
 using RESTFulSense.Exceptions;
 using Xeptions;
 
-namespace EventHighway.Core.Services.Foundations.EventCalls.V2
+namespace EventHighway.Core.Services.Foundations.EventCalls.V1
 {
-    internal partial class EventCallV2Service
+    internal partial class EventCallV1Service
     {
-        private delegate ValueTask<EventCallV1> ReturningEventCallV2Function();
+        private delegate ValueTask<EventCallV1> ReturningEventCallV1Function();
 
-        private async ValueTask<EventCallV1> TryCatch(ReturningEventCallV2Function returningEventCallV2Function)
+        private async ValueTask<EventCallV1> TryCatch(ReturningEventCallV1Function returningEventCallV1Function)
         {
             try
             {
-                return await returningEventCallV2Function();
+                return await returningEventCallV1Function();
             }
-            catch (NullEventCallV2Exception nullEventCallV2Exception)
+            catch (NullEventCallV1Exception nullEventCallV1Exception)
             {
-                throw await CreateAndLogValidationExceptionAsync(nullEventCallV2Exception);
+                throw await CreateAndLogValidationExceptionAsync(nullEventCallV1Exception);
             }
-            catch (InvalidEventCallV2Exception invalidEventCallV2Exception)
+            catch (InvalidEventCallV1Exception invalidEventCallV1Exception)
             {
-                throw await CreateAndLogValidationExceptionAsync(invalidEventCallV2Exception);
+                throw await CreateAndLogValidationExceptionAsync(invalidEventCallV1Exception);
             }
             catch (HttpResponseUrlNotFoundException httpResponseUrlNotFoundException)
             {
-                var failedEventCallV2ConfigurationException =
-                    new FailedEventCallV2ConfigurationException(
+                var failedEventCallV1ConfigurationException =
+                    new FailedEventCallV1ConfigurationException(
                         message: "Failed event call configuration error occurred, contact support.",
                         innerException: httpResponseUrlNotFoundException);
 
                 throw await CreateAndLogCriticalDependencyExceptionAsync(
-                    failedEventCallV2ConfigurationException);
+                    failedEventCallV1ConfigurationException);
             }
             catch (HttpResponseUnauthorizedException httpResponseUnauthorizedException)
             {
-                var failedEventCallV2ConfigurationException =
-                    new FailedEventCallV2ConfigurationException(
+                var failedEventCallV1ConfigurationException =
+                    new FailedEventCallV1ConfigurationException(
                         message: "Failed event call configuration error occurred, contact support.",
                         innerException: httpResponseUnauthorizedException);
 
                 throw await CreateAndLogCriticalDependencyExceptionAsync(
-                    failedEventCallV2ConfigurationException);
+                    failedEventCallV1ConfigurationException);
             }
             catch (HttpResponseForbiddenException httpResponseForbiddenException)
             {
-                var failedEventCallV2ConfigurationException =
-                    new FailedEventCallV2ConfigurationException(
+                var failedEventCallV1ConfigurationException =
+                    new FailedEventCallV1ConfigurationException(
                         message: "Failed event call configuration error occurred, contact support.",
                         innerException: httpResponseForbiddenException);
 
                 throw await CreateAndLogCriticalDependencyExceptionAsync(
-                    failedEventCallV2ConfigurationException);
+                    failedEventCallV1ConfigurationException);
             }
             catch (HttpResponseMethodNotAllowedException httpResponseMethodNotAllowedException)
             {
-                var failedEventCallV2ConfigurationException =
-                    new FailedEventCallV2ConfigurationException(
+                var failedEventCallV1ConfigurationException =
+                    new FailedEventCallV1ConfigurationException(
                         message: "Failed event call configuration error occurred, contact support.",
                         innerException: httpResponseMethodNotAllowedException);
 
                 throw await CreateAndLogCriticalDependencyExceptionAsync(
-                    failedEventCallV2ConfigurationException);
+                    failedEventCallV1ConfigurationException);
             }
             catch (HttpResponseUnprocessableEntityException httpResponseUnprocessableEntityException)
             {
-                var failedEventCallV2RequestException =
-                    new FailedEventCallV2RequestException(
+                var failedEventCallV1RequestException =
+                    new FailedEventCallV1RequestException(
                         message: "Failed event call request error occurred, fix the errors and try again.",
                         innerException: httpResponseUnprocessableEntityException);
 
                 throw await CreateAndLogDependencyValidationExceptionAsync(
-                    failedEventCallV2RequestException);
+                    failedEventCallV1RequestException);
             }
             catch (HttpResponseBadRequestException httpResponseBadRequestException)
             {
-                var invalidEventCallV2Exception =
-                    new InvalidEventCallV2Exception(
+                var invalidEventCallV1Exception =
+                    new InvalidEventCallV1Exception(
                         message: "Event call is invalid, fix the errors and try again.",
                         innerException: httpResponseBadRequestException,
                         data: httpResponseBadRequestException.Data);
 
                 throw await CreateAndLogDependencyValidationExceptionAsync(
-                    invalidEventCallV2Exception);
+                    invalidEventCallV1Exception);
             }
             catch (HttpResponseConflictException httpResponseConflictException)
             {
-                var alreadyExistsEventCallV2Exception =
-                    new AlreadyExistsEventCallV2Exception(
+                var alreadyExistsEventCallV1Exception =
+                    new AlreadyExistsEventCallV1Exception(
                         message: "Event call with same id already exists, try again.",
                         innerException: httpResponseConflictException);
 
                 throw await CreateAndLogDependencyValidationExceptionAsync(
-                    alreadyExistsEventCallV2Exception);
+                    alreadyExistsEventCallV1Exception);
             }
             catch (HttpResponseFailedDependencyException httpResponseFailedDependencyException)
             {
-                var invalidEventCallV2ReferenceException =
-                    new InvalidEventCallV2ReferenceException(
+                var invalidEventCallV1ReferenceException =
+                    new InvalidEventCallV1ReferenceException(
                         message: "Invalid event call reference error occurred, fix the errors and try again.",
                         innerException: httpResponseFailedDependencyException);
 
                 throw await CreateAndLogDependencyValidationExceptionAsync(
-                    invalidEventCallV2ReferenceException);
+                    invalidEventCallV1ReferenceException);
             }
             catch (HttpResponseException httpResponseException)
             {
-                var failedEventCallV2DependencyException =
-                    new FailedEventCallV2DependencyException(
+                var failedEventCallV1DependencyException =
+                    new FailedEventCallV1DependencyException(
                         message: "Failed event call dependency error occurred, contact support.",
                         innerException: httpResponseException);
 
                 throw await CreateAndLogDependencyExceptionAsync(
-                    failedEventCallV2DependencyException);
+                    failedEventCallV1DependencyException);
             }
             catch (Exception serviceException)
             {
-                var failedEventCallV2ServiceException =
-                    new FailedEventCallV2ServiceException(
+                var failedEventCallV1ServiceException =
+                    new FailedEventCallV1ServiceException(
                         message: "Failed event call service error occurred, contact support.",
                         innerException: serviceException);
 
                 throw await CreateAndLogServiceExceptionAsync(
-                    failedEventCallV2ServiceException);
+                    failedEventCallV1ServiceException);
             }
         }
 
-        private async ValueTask<EventCallV2ValidationException> CreateAndLogValidationExceptionAsync(Xeption exception)
+        private async ValueTask<EventCallV1ValidationException> CreateAndLogValidationExceptionAsync(Xeption exception)
         {
-            var eventCallV2ValidationException =
-                new EventCallV2ValidationException(
+            var eventCallV1ValidationException =
+                new EventCallV1ValidationException(
                     message: "Event call validation error occurred, fix the errors and try again.",
                     innerException: exception);
 
-            await this.loggingBroker.LogErrorAsync(eventCallV2ValidationException);
+            await this.loggingBroker.LogErrorAsync(eventCallV1ValidationException);
 
-            return eventCallV2ValidationException;
+            return eventCallV1ValidationException;
         }
 
-        private async ValueTask<EventCallV2DependencyException> CreateAndLogCriticalDependencyExceptionAsync(
+        private async ValueTask<EventCallV1DependencyException> CreateAndLogCriticalDependencyExceptionAsync(
             Xeption exception)
         {
-            var eventCallV2DependencyException =
-                new EventCallV2DependencyException(
+            var eventCallV1DependencyException =
+                new EventCallV1DependencyException(
                     message: "Event call dependency error occurred, contact support.",
                     innerException: exception);
 
-            await this.loggingBroker.LogCriticalAsync(eventCallV2DependencyException);
+            await this.loggingBroker.LogCriticalAsync(eventCallV1DependencyException);
 
-            return eventCallV2DependencyException;
+            return eventCallV1DependencyException;
         }
 
-        private async ValueTask<EventCallV2DependencyValidationException>
+        private async ValueTask<EventCallV1DependencyValidationException>
             CreateAndLogDependencyValidationExceptionAsync(
                 Xeption exception)
         {
-            var eventCallV2DependencyValidationException =
-                new EventCallV2DependencyValidationException(
+            var eventCallV1DependencyValidationException =
+                new EventCallV1DependencyValidationException(
                     message: "Event call validation error occurred, fix the errors and try again.",
                     innerException: exception);
 
-            await this.loggingBroker.LogErrorAsync(eventCallV2DependencyValidationException);
+            await this.loggingBroker.LogErrorAsync(eventCallV1DependencyValidationException);
 
-            return eventCallV2DependencyValidationException;
+            return eventCallV1DependencyValidationException;
         }
 
-        private async ValueTask<EventCallV2DependencyException> CreateAndLogDependencyExceptionAsync(
+        private async ValueTask<EventCallV1DependencyException> CreateAndLogDependencyExceptionAsync(
             Xeption exception)
         {
-            var eventCallV2DependencyException =
-                new EventCallV2DependencyException(
+            var eventCallV1DependencyException =
+                new EventCallV1DependencyException(
                     message: "Event call dependency error occurred, contact support.",
                     innerException: exception);
 
-            await this.loggingBroker.LogErrorAsync(eventCallV2DependencyException);
+            await this.loggingBroker.LogErrorAsync(eventCallV1DependencyException);
 
-            return eventCallV2DependencyException;
+            return eventCallV1DependencyException;
         }
 
-        private async ValueTask<EventCallV2ServiceException> CreateAndLogServiceExceptionAsync(Xeption exception)
+        private async ValueTask<EventCallV1ServiceException> CreateAndLogServiceExceptionAsync(Xeption exception)
         {
-            var eventCallV2ServiceException =
-                new EventCallV2ServiceException(
+            var eventCallV1ServiceException =
+                new EventCallV1ServiceException(
                     message: "Event call service error occurred, contact support.",
                     innerException: exception);
 
-            await this.loggingBroker.LogErrorAsync(eventCallV2ServiceException);
+            await this.loggingBroker.LogErrorAsync(eventCallV1ServiceException);
 
-            return eventCallV2ServiceException;
+            return eventCallV1ServiceException;
         }
     }
 }

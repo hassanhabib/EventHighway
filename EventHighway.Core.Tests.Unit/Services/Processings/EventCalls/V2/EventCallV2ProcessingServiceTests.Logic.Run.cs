@@ -29,7 +29,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
                 inputEventCallV2.DeepClone();
 
             this.eventCallV2ServiceMock.Setup(service =>
-                service.RunEventCallV2Async(
+                service.RunEventCallV1Async(
                     inputEventCallV2))
                         .ReturnsAsync(ranEventCallV2);
 
@@ -43,7 +43,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
                 expectedEventCallV2);
 
             this.eventCallV2ServiceMock.Verify(service =>
-                service.RunEventCallV2Async(
+                service.RunEventCallV1Async(
                     inputEventCallV2),
                         Times.Once);
 

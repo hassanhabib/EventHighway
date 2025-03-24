@@ -2,13 +2,14 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
+using Xeptions;
 
-namespace EventHighway.Core.Services.Foundations.EventCalls.V2
+namespace EventHighway.Core.Models.Services.Foundations.EventCall.V1.Exceptions
 {
-    internal interface IEventCallV2Service
+    public class NullEventCallV1Exception : Xeption
     {
-        ValueTask<EventCallV1> RunEventCallV2Async(EventCallV1 eventCallV2);
+        public NullEventCallV1Exception(string message)
+            : base(message)
+        { }
     }
 }

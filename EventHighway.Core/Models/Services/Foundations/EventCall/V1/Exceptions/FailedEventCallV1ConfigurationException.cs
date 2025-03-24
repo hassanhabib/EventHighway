@@ -3,19 +3,14 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
 using Xeptions;
 
 namespace EventHighway.Core.Models.Services.Foundations.EventCall.V1.Exceptions
 {
-    public class InvalidEventCallV2Exception : Xeption
+    public class FailedEventCallV1ConfigurationException : Xeption
     {
-        public InvalidEventCallV2Exception(string message)
-            : base(message)
-        { }
-
-        public InvalidEventCallV2Exception(string message, Exception innerException, IDictionary data)
-            : base(message, innerException, data)
+        public FailedEventCallV1ConfigurationException(string message, Exception innerException)
+            : base(message, innerException)
         { }
     }
 }

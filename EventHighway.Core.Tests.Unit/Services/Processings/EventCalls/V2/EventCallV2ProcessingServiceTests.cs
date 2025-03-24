@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V1.Exceptions;
-using EventHighway.Core.Services.Foundations.EventCalls.V2;
+using EventHighway.Core.Services.Foundations.EventCalls.V1;
 using EventHighway.Core.Services.Processings.EventCalls.V2;
 using Moq;
 using Tynamix.ObjectFiller;
@@ -17,13 +17,13 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
 {
     public partial class EventCallV2ProcessingServiceTests
     {
-        private readonly Mock<IEventCallV2Service> eventCallV2ServiceMock;
+        private readonly Mock<IEventCallV1Service> eventCallV2ServiceMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly IEventCallV2ProcessingService eventCallV2ProcessingService;
 
         public EventCallV2ProcessingServiceTests()
         {
-            this.eventCallV2ServiceMock = new Mock<IEventCallV2Service>();
+            this.eventCallV2ServiceMock = new Mock<IEventCallV1Service>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
             this.eventCallV2ProcessingService = new EventCallV2ProcessingService(
@@ -38,11 +38,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
 
             return new TheoryData<Xeption>
             {
-                new EventCallV2ValidationException(
+                new EventCallV1ValidationException(
                     someMessage,
                     someInnerException),
 
-                new EventCallV2DependencyValidationException(
+                new EventCallV1DependencyValidationException(
                     someMessage,
                     someInnerException),
             };
@@ -55,11 +55,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
 
             return new TheoryData<Xeption>
             {
-                new EventCallV2DependencyException(
+                new EventCallV1DependencyException(
                     someMessage,
                     someInnerException),
 
-                new EventCallV2ServiceException(
+                new EventCallV1ServiceException(
                     someMessage,
                     someInnerException),
             };

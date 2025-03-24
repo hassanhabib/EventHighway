@@ -19,7 +19,7 @@ using EventHighway.Core.Services.Coordinations.Events.V2;
 using EventHighway.Core.Services.Foundations.EventAddresses;
 using EventHighway.Core.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Services.Foundations.EventCalls;
-using EventHighway.Core.Services.Foundations.EventCalls.V2;
+using EventHighway.Core.Services.Foundations.EventCalls.V1;
 using EventHighway.Core.Services.Foundations.EventListeners;
 using EventHighway.Core.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Services.Foundations.Events;
@@ -125,7 +125,7 @@ namespace EventHighway.Core.Clients.EventHighways
             services.AddTransient<IEventV1Service, EventV1Service>();
             services.AddTransient<IEventListenerV1Service, EventListenerV1Service>();
             services.AddTransient<IListenerEventV1Service, ListenerEventV1Service>();
-            services.AddTransient<IEventCallV2Service, EventCallV2Service>();
+            services.AddTransient<IEventCallV1Service, EventCallV1Service>();
             services.AddTransient<IEventAddressV1Service, EventAddressV1Service>();
         }
 

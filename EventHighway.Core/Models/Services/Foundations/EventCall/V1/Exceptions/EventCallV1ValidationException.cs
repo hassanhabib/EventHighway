@@ -6,9 +6,9 @@ using Xeptions;
 
 namespace EventHighway.Core.Models.Services.Foundations.EventCall.V1.Exceptions
 {
-    public class EventCallV2DependencyValidationException : Xeption
+    public class EventCallV1ValidationException : Xeption
     {
-        public EventCallV2DependencyValidationException(string message, Xeption innerException)
+        public EventCallV1ValidationException(string message, Xeption innerException)
             : base(message, innerException)
         { }
     }

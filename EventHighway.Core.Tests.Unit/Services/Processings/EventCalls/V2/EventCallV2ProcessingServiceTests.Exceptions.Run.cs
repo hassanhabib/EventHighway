@@ -28,7 +28,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
                     innerException: eventCallV2ValidationException.InnerException as Xeption);
 
             this.eventCallV2ServiceMock.Setup(service =>
-                service.RunEventCallV2Async(It.IsAny<EventCallV1>()))
+                service.RunEventCallV1Async(It.IsAny<EventCallV1>()))
                     .ThrowsAsync(eventCallV2ValidationException);
 
             // when
@@ -45,7 +45,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
                 .BeEquivalentTo(expectedEventCallV2ProcessingDependencyValidationException);
 
             this.eventCallV2ServiceMock.Verify(service =>
-                service.RunEventCallV2Async(It.IsAny<EventCallV1>()),
+                service.RunEventCallV1Async(It.IsAny<EventCallV1>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -71,7 +71,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
                     innerException: eventCallV2DependencyException.InnerException as Xeption);
 
             this.eventCallV2ServiceMock.Setup(service =>
-                service.RunEventCallV2Async(It.IsAny<EventCallV1>()))
+                service.RunEventCallV1Async(It.IsAny<EventCallV1>()))
                     .ThrowsAsync(eventCallV2DependencyException);
 
             // when
@@ -88,7 +88,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
                 .BeEquivalentTo(expectedEventCallV2ProcessingDependencyException);
 
             this.eventCallV2ServiceMock.Verify(service =>
-                service.RunEventCallV2Async(It.IsAny<EventCallV1>()),
+                service.RunEventCallV1Async(It.IsAny<EventCallV1>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -118,7 +118,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
                     innerException: failedEventCallV2ProcessingServiceException);
 
             this.eventCallV2ServiceMock.Setup(service =>
-                service.RunEventCallV2Async(It.IsAny<EventCallV1>()))
+                service.RunEventCallV1Async(It.IsAny<EventCallV1>()))
                     .ThrowsAsync(serviceException);
 
             // when
@@ -135,7 +135,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventCalls.V2
                 .BeEquivalentTo(expectedEventCallV2ProcessingExceptionException);
 
             this.eventCallV2ServiceMock.Verify(service =>
-                service.RunEventCallV2Async(It.IsAny<EventCallV1>()),
+                service.RunEventCallV1Async(It.IsAny<EventCallV1>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
