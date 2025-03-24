@@ -7,7 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 using FluentAssertions;
@@ -40,12 +40,12 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
             IQueryable<EventV1> storageEventV2s =
                 randomEventV2s;
 
-            IQueryable<EventListenerV2> randomEventListenerV2s =
+            IQueryable<EventListenerV1> randomEventListenerV2s =
                 await CreateRandomEventListenerV2sAsync(
                     inputEventAddressV2Id,
                     inputMockEndpoint);
 
-            IQueryable<EventListenerV2> storageEventListenerV2s =
+            IQueryable<EventListenerV1> storageEventListenerV2s =
                 randomEventListenerV2s;
 
             this.wireMockServer.Given(
@@ -81,7 +81,7 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
                     eventV2.Id);
             }
 
-            foreach (EventListenerV2 eventListenerV2 in storageEventListenerV2s)
+            foreach (EventListenerV1 eventListenerV2 in storageEventListenerV2s)
             {
                 await this.clientBroker.RemoveEventListenerV2ByIdAsync(
                     eventListenerV2.Id);

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Times;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 using EventHighway.Core.Services.Orchestrations.EventListeners.V2;
@@ -78,12 +78,12 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
 
         private async ValueTask ProcessEventListenersAsync(EventV1 eventV2)
         {
-            IQueryable<EventListenerV2> eventListenerV2s =
+            IQueryable<EventListenerV1> eventListenerV2s =
                 await this.eventListenerV2OrchestrationService
                     .RetrieveEventListenerV2sByEventAddressIdAsync(
                         eventV2.EventAddressId);
 
-            foreach (EventListenerV2 eventListenerV2 in eventListenerV2s)
+            foreach (EventListenerV1 eventListenerV2 in eventListenerV2s)
             {
                 ListenerEventV2 listenerEventV2 =
                     CreateEventListener(eventV2, eventListenerV2);
@@ -110,7 +110,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
 
         private async Task RunEventCallAsync(
             EventV1 eventV2,
-            EventListenerV2 eventListenerV2,
+            EventListenerV1 eventListenerV2,
             ListenerEventV2 listenerEventV2)
         {
             var eventCallV2 = new EventCallV2
@@ -145,7 +145,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
 
         private static ListenerEventV2 CreateEventListener(
             EventV1 eventV2,
-            EventListenerV2 eventListenerV2)
+            EventListenerV1 eventListenerV2)
         {
             return new ListenerEventV2
             {

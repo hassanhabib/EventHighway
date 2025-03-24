@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 using Force.DeepCloner;
@@ -24,10 +24,10 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             IQueryable<EventV1> randomEventV2s = CreateRandomEventV2s();
             IQueryable<EventV1> retrievedEventV2s = randomEventV2s;
 
-            IQueryable<EventListenerV2> randomEventListenerV2s =
+            IQueryable<EventListenerV1> randomEventListenerV2s =
                 CreateRandomEventListenerV2s();
 
-            IQueryable<EventListenerV2> retrievedEventListenerV2s =
+            IQueryable<EventListenerV1> retrievedEventListenerV2s =
                 randomEventListenerV2s;
 
             DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
@@ -173,10 +173,10 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             IQueryable<EventV1> randomEventV2s = CreateRandomEventV2s();
             IQueryable<EventV1> retrievedEventV2s = randomEventV2s;
 
-            IQueryable<EventListenerV2> randomEventListenerV2s =
+            IQueryable<EventListenerV1> randomEventListenerV2s =
                 CreateRandomEventListenerV2s();
 
-            IQueryable<EventListenerV2> retrievedEventListenerV2s =
+            IQueryable<EventListenerV1> retrievedEventListenerV2s =
                 randomEventListenerV2s;
 
             DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();

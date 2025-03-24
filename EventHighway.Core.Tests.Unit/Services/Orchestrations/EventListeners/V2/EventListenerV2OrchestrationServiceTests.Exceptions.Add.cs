@@ -4,7 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 using FluentAssertions;
 using Moq;
@@ -20,7 +20,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
             Xeption validationException)
         {
             // given
-            EventListenerV2 someEventListenerV2 = CreateRandomEventListenerV2();
+            EventListenerV1 someEventListenerV2 = CreateRandomEventListenerV2();
 
             var expectedEventListenerV2OrchestrationDependencyValidationException =
                 new EventListenerV2OrchestrationDependencyValidationException(
@@ -28,11 +28,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                     innerException: validationException.InnerException as Xeption);
 
             this.eventListenerV2ProcessingServiceMock.Setup(service =>
-                service.AddEventListenerV2Async(It.IsAny<EventListenerV2>()))
+                service.AddEventListenerV2Async(It.IsAny<EventListenerV1>()))
                     .ThrowsAsync(validationException);
 
             // when
-            ValueTask<EventListenerV2> addEventListenerV2Task =
+            ValueTask<EventListenerV1> addEventListenerV2Task =
                 this.eventListenerV2OrchestrationService.AddEventListenerV2Async(someEventListenerV2);
 
             EventListenerV2OrchestrationDependencyValidationException
@@ -45,7 +45,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                 .BeEquivalentTo(expectedEventListenerV2OrchestrationDependencyValidationException);
 
             this.eventListenerV2ProcessingServiceMock.Verify(service =>
-                service.AddEventListenerV2Async(It.IsAny<EventListenerV2>()),
+                service.AddEventListenerV2Async(It.IsAny<EventListenerV1>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -64,7 +64,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
             Xeption dependencyException)
         {
             // given
-            EventListenerV2 someEventListenerV2 = CreateRandomEventListenerV2();
+            EventListenerV1 someEventListenerV2 = CreateRandomEventListenerV2();
 
             var expectedEventListenerV2OrchestrationDependencyException =
                 new EventListenerV2OrchestrationDependencyException(
@@ -72,11 +72,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                     innerException: dependencyException.InnerException as Xeption);
 
             this.eventListenerV2ProcessingServiceMock.Setup(service =>
-                service.AddEventListenerV2Async(It.IsAny<EventListenerV2>()))
+                service.AddEventListenerV2Async(It.IsAny<EventListenerV1>()))
                     .ThrowsAsync(dependencyException);
 
             // when
-            ValueTask<EventListenerV2> addEventListenerV2Task =
+            ValueTask<EventListenerV1> addEventListenerV2Task =
                 this.eventListenerV2OrchestrationService.AddEventListenerV2Async(someEventListenerV2);
 
             EventListenerV2OrchestrationDependencyException
@@ -89,7 +89,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                 .BeEquivalentTo(expectedEventListenerV2OrchestrationDependencyException);
 
             this.eventListenerV2ProcessingServiceMock.Verify(service =>
-                service.AddEventListenerV2Async(It.IsAny<EventListenerV2>()),
+                service.AddEventListenerV2Async(It.IsAny<EventListenerV1>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -106,7 +106,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
         public async Task ShouldThrowServiceExceptionOnAddIfExceptionOccursAndLogItAsync()
         {
             // given
-            EventListenerV2 someEventListenerV2 = CreateRandomEventListenerV2();
+            EventListenerV1 someEventListenerV2 = CreateRandomEventListenerV2();
             var serviceException = new Exception();
 
             var failedEventListenerV2OrchestrationServiceException =
@@ -120,11 +120,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                     innerException: failedEventListenerV2OrchestrationServiceException);
 
             this.eventListenerV2ProcessingServiceMock.Setup(service =>
-                service.AddEventListenerV2Async(It.IsAny<EventListenerV2>()))
+                service.AddEventListenerV2Async(It.IsAny<EventListenerV1>()))
                     .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<EventListenerV2> addEventListenerV2Task =
+            ValueTask<EventListenerV1> addEventListenerV2Task =
                 this.eventListenerV2OrchestrationService.AddEventListenerV2Async(
                     someEventListenerV2);
 
@@ -138,7 +138,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                 .BeEquivalentTo(expectedEventListenerV2OrchestrationExceptionException);
 
             this.eventListenerV2ProcessingServiceMock.Verify(service =>
-                service.AddEventListenerV2Async(It.IsAny<EventListenerV2>()),
+                service.AddEventListenerV2Async(It.IsAny<EventListenerV1>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>

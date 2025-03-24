@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Storages;
 using EventHighway.Core.Brokers.Times;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 
 namespace EventHighway.Core.Services.Foundations.EventListeners.V2
 {
@@ -28,7 +28,7 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<EventListenerV2> AddEventListenerV2Async(EventListenerV2 eventListenerV2) =>
+        public ValueTask<EventListenerV1> AddEventListenerV2Async(EventListenerV1 eventListenerV2) =>
         TryCatch(async () =>
         {
             await ValidateEventListenerV2OnAddAsync(eventListenerV2);
@@ -36,15 +36,15 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
             return await this.storageBroker.InsertEventListenerV2Async(eventListenerV2);
         });
 
-        public ValueTask<IQueryable<EventListenerV2>> RetrieveAllEventListenerV2sAsync() =>
+        public ValueTask<IQueryable<EventListenerV1>> RetrieveAllEventListenerV2sAsync() =>
         TryCatch(async () => await storageBroker.SelectAllEventListenerV2sAsync());
 
-        public ValueTask<EventListenerV2> RemoveEventListenerV2ByIdAsync(Guid eventListenerV2Id) =>
+        public ValueTask<EventListenerV1> RemoveEventListenerV2ByIdAsync(Guid eventListenerV2Id) =>
         TryCatch(async () =>
         {
             ValidateEventListenerV2Id(eventListenerV2Id);
 
-            EventListenerV2 maybeEventListenerV2 =
+            EventListenerV1 maybeEventListenerV2 =
                 await this.storageBroker.SelectEventListenerV2ByIdAsync(eventListenerV2Id);
 
             ValidateEventListenerV2Exists(maybeEventListenerV2, eventListenerV2Id);

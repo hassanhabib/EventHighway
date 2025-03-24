@@ -2,7 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventHighway.Core.Brokers.Storages
@@ -11,7 +11,7 @@ namespace EventHighway.Core.Brokers.Storages
     {
         private void ConfigureEventListenerV2s(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<EventListenerV2>()
+            modelBuilder.Entity<EventListenerV1>()
                 .HasOne(eventListenerV2 => eventListenerV2.EventAddress)
                 .WithMany(eventAddressV2 => eventAddressV2.EventListeners)
                 .HasForeignKey(eventListenerV2 => eventListenerV2.EventAddressId)

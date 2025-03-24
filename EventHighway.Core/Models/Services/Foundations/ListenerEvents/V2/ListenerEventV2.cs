@@ -4,7 +4,7 @@
 
 using System;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 
 namespace EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2
@@ -24,6 +24,6 @@ namespace EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2
         public EventAddressV1 EventAddress { get; set; }
 
         public Guid EventListenerId { get; set; }
-        public EventListenerV2 EventListener { get; set; }
+        public EventListenerV1 EventListener { get; set; }
     }
 }

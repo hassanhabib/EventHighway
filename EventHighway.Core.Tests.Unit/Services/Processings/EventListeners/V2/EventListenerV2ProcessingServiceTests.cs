@@ -6,8 +6,8 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1.Exceptions;
 using EventHighway.Core.Services.Foundations.EventListeners.V2;
 using EventHighway.Core.Services.Processings.EventListeners.V2;
 using Moq;
@@ -76,16 +76,16 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventListeners.V2
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
-        private static IQueryable<EventListenerV2> CreateRandomEventListenerV2s() =>
+        private static IQueryable<EventListenerV1> CreateRandomEventListenerV2s() =>
             CreateEventListenerV2Filler().Create(count: GetRandomNumber()).AsQueryable();
 
-        private static EventListenerV2 CreateRandomEventListenerV2() =>
+        private static EventListenerV1 CreateRandomEventListenerV2() =>
             CreateEventListenerV2Filler().Create();
 
-        private static IQueryable<EventListenerV2> CreateRandomEventListenerV2s(
+        private static IQueryable<EventListenerV1> CreateRandomEventListenerV2s(
             Guid eventAddressId)
         {
-            IQueryable<EventListenerV2> randomEventListenerV2s =
+            IQueryable<EventListenerV1> randomEventListenerV2s =
                 CreateRandomEventListenerV2s();
 
             randomEventListenerV2s.ToList().ForEach(listener =>
@@ -105,9 +105,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.EventListeners.V2
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
-        private static Filler<EventListenerV2> CreateEventListenerV2Filler()
+        private static Filler<EventListenerV1> CreateEventListenerV2Filler()
         {
-            var filler = new Filler<EventListenerV2>();
+            var filler = new Filler<EventListenerV1>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>().Use(GetRandomDateTimeOffset)

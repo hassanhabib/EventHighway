@@ -4,7 +4,7 @@
 
 using Xeptions;
 
-namespace EventHighway.Core.Models.Services.Foundations.EventListeners.V2.Exceptions
+namespace EventHighway.Core.Models.Services.Foundations.EventListeners.V1.Exceptions
 {
     public class EventListenerV2DependencyValidationException : Xeption
     {

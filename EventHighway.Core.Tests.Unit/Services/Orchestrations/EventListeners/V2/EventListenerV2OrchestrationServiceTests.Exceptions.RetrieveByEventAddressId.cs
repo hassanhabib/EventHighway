@@ -5,7 +5,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 using EventHighway.Core.Models.Services.Processings.EventListeners.V2.Exceptions;
 using FluentAssertions;
@@ -39,7 +39,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                     .ThrowsAsync(eventListenerV2ProcessingValidationException);
 
             // when
-            ValueTask<IQueryable<EventListenerV2>> retrieveEventListenerV2sByEventAddressIdTask =
+            ValueTask<IQueryable<EventListenerV1>> retrieveEventListenerV2sByEventAddressIdTask =
                 this.eventListenerV2OrchestrationService.RetrieveEventListenerV2sByEventAddressIdAsync(
                     someEventAddressId);
 
@@ -84,7 +84,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                     .ThrowsAsync(eventListenerV2DependencyException);
 
             // when
-            ValueTask<IQueryable<EventListenerV2>> retrieveEventListenerV2sByEventAddressIdTask =
+            ValueTask<IQueryable<EventListenerV1>> retrieveEventListenerV2sByEventAddressIdTask =
                 this.eventListenerV2OrchestrationService.RetrieveEventListenerV2sByEventAddressIdAsync(
                     someEventAddressId);
 
@@ -132,7 +132,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.EventListeners.V2
                     .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<IQueryable<EventListenerV2>> retrieveEventListenerV2sByEventAddressIdTask =
+            ValueTask<IQueryable<EventListenerV1>> retrieveEventListenerV2sByEventAddressIdTask =
                 this.eventListenerV2OrchestrationService.RetrieveEventListenerV2sByEventAddressIdAsync(
                     someEventAddressId);
 

@@ -4,7 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
@@ -20,16 +20,16 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
             Guid randomEventListenerV2Id = GetRandomId();
             Guid inputEventListenerV2Id = randomEventListenerV2Id;
 
-            EventListenerV2 randomEventListenerV2 =
+            EventListenerV1 randomEventListenerV2 =
                 CreateRandomEventListenerV2();
 
-            EventListenerV2 retrievedEventListenerV2 =
+            EventListenerV1 retrievedEventListenerV2 =
                 randomEventListenerV2;
 
-            EventListenerV2 deletedEventListenerV2 =
+            EventListenerV1 deletedEventListenerV2 =
                 retrievedEventListenerV2;
 
-            EventListenerV2 expectedEventListenerV2 =
+            EventListenerV1 expectedEventListenerV2 =
                 deletedEventListenerV2.DeepClone();
 
             this.storageBrokerMock.Setup(broker =>
@@ -43,7 +43,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
                         .ReturnsAsync(deletedEventListenerV2);
 
             // when
-            EventListenerV2 actualEventListenerV2 =
+            EventListenerV1 actualEventListenerV2 =
                 await this.eventListenerV2Service
                     .RemoveEventListenerV2ByIdAsync(
                         inputEventListenerV2Id);

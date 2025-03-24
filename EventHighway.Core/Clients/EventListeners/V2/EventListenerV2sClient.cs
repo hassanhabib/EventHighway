@@ -5,7 +5,7 @@
 using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.EventListeners.V2.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 using EventHighway.Core.Services.Orchestrations.EventListeners.V2;
 using Xeptions;
@@ -19,8 +19,8 @@ namespace EventHighway.Core.Clients.EventListeners.V2
         public EventListenerV2sClient(IEventListenerV2OrchestrationService eventListenerV2OrchestrationService) =>
             this.eventListenerV2OrchestrationService = eventListenerV2OrchestrationService;
 
-        public async ValueTask<EventListenerV2> RegisterEventListenerV2Async(
-            EventListenerV2 eventListenerV2)
+        public async ValueTask<EventListenerV1> RegisterEventListenerV2Async(
+            EventListenerV1 eventListenerV2)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace EventHighway.Core.Clients.EventListeners.V2
             }
         }
 
-        public async ValueTask<EventListenerV2> RemoveEventListenerV2ByIdAsync(
+        public async ValueTask<EventListenerV1> RemoveEventListenerV2ByIdAsync(
             Guid eventListenerV2Id)
         {
             try

@@ -4,7 +4,7 @@
 
 using System.Linq;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
@@ -17,13 +17,13 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
         public async Task ShouldRetrieveAllEventListenerV2sAsync()
         {
             // given
-            IQueryable<EventListenerV2> randomEventListenerV2s =
+            IQueryable<EventListenerV1> randomEventListenerV2s =
                 CreateRandomEventListenerV2s();
 
-            IQueryable<EventListenerV2> retrievedEventListenerV2s =
+            IQueryable<EventListenerV1> retrievedEventListenerV2s =
                 randomEventListenerV2s;
 
-            IQueryable<EventListenerV2> expectedEventListenerV2s =
+            IQueryable<EventListenerV1> expectedEventListenerV2s =
                 randomEventListenerV2s.DeepClone();
 
             this.storageBrokerMock.Setup(broker =>
@@ -31,7 +31,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
                     .ReturnsAsync(retrievedEventListenerV2s);
 
             // when
-            IQueryable<EventListenerV2> actualEventListenerV2s =
+            IQueryable<EventListenerV1> actualEventListenerV2s =
                 await this.eventListenerV2Service
                     .RetrieveAllEventListenerV2sAsync();
 

@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Times;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
@@ -163,7 +163,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
         private static EventV1 CreateRandomEventV2() => 
             CreateEventV2Filler().Create();
 
-        private static IQueryable<EventListenerV2> CreateRandomEventListenerV2s() =>
+        private static IQueryable<EventListenerV1> CreateRandomEventListenerV2s() =>
             CreateEventListenerV2Filler().Create(count: GetRandomNumber()).AsQueryable();
 
         private static Guid GetRandomId() =>
@@ -221,9 +221,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             return filler;
         }
 
-        private static Filler<EventListenerV2> CreateEventListenerV2Filler()
+        private static Filler<EventListenerV1> CreateEventListenerV2Filler()
         {
-            var filler = new Filler<EventListenerV2>();
+            var filler = new Filler<EventListenerV1>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>().Use(GetRandomDateTimeOffset)

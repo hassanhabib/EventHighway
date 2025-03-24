@@ -4,62 +4,62 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1.Exceptions;
 
 namespace EventHighway.Core.Services.Foundations.EventListeners.V2
 {
     internal partial class EventListenerV2Service
     {
-        private async ValueTask ValidateEventListenerV2OnAddAsync(EventListenerV2 eventListenerV2)
+        private async ValueTask ValidateEventListenerV2OnAddAsync(EventListenerV1 eventListenerV2)
         {
             ValidateEventListenerV2IsNotNull(eventListenerV2);
 
             Validate(
                 (Rule: IsInvalid(eventListenerV2.Id),
-                Parameter: nameof(EventListenerV2.Id)),
+                Parameter: nameof(EventListenerV1.Id)),
 
                 (Rule: IsInvalid(eventListenerV2.Name),
-                Parameter: nameof(EventListenerV2.Name)),
+                Parameter: nameof(EventListenerV1.Name)),
 
                 (Rule: IsInvalid(eventListenerV2.Description),
-                Parameter: nameof(EventListenerV2.Description)),
+                Parameter: nameof(EventListenerV1.Description)),
 
                 (Rule: IsInvalid(eventListenerV2.HeaderSecret),
-                Parameter: nameof(EventListenerV2.HeaderSecret)),
+                Parameter: nameof(EventListenerV1.HeaderSecret)),
 
                 (Rule: IsInvalid(eventListenerV2.Endpoint),
-                Parameter: nameof(EventListenerV2.Endpoint)),
+                Parameter: nameof(EventListenerV1.Endpoint)),
 
                 (Rule: IsInvalid(eventListenerV2.EventAddressId),
-                Parameter: nameof(EventListenerV2.EventAddressId)),
+                Parameter: nameof(EventListenerV1.EventAddressId)),
 
                 (Rule: IsInvalid(eventListenerV2.CreatedDate),
-                Parameter: nameof(EventListenerV2.CreatedDate)),
+                Parameter: nameof(EventListenerV1.CreatedDate)),
 
                 (Rule: IsInvalid(eventListenerV2.UpdatedDate),
-                Parameter: nameof(EventListenerV2.UpdatedDate)),
+                Parameter: nameof(EventListenerV1.UpdatedDate)),
 
                 (Rule: IsNotSameAs(
                     firstDate: eventListenerV2.CreatedDate,
                     secondDate: eventListenerV2.UpdatedDate,
-                    secondDateName: nameof(EventListenerV2.UpdatedDate)),
+                    secondDateName: nameof(EventListenerV1.UpdatedDate)),
 
-                Parameter: nameof(EventListenerV2.CreatedDate)),
+                Parameter: nameof(EventListenerV1.CreatedDate)),
 
                 (Rule: await IsNotRecentAsync(eventListenerV2.CreatedDate),
-                Parameter: nameof(EventListenerV2.CreatedDate)));
+                Parameter: nameof(EventListenerV1.CreatedDate)));
         }
 
         private static void ValidateEventListenerV2Id(Guid eventListenerV2Id)
         {
             Validate(
                 (Rule: IsInvalid(eventListenerV2Id),
-                Parameter: nameof(EventListenerV2.Id)));
+                Parameter: nameof(EventListenerV1.Id)));
         }
 
         private static void ValidateEventListenerV2Exists(
-            EventListenerV2 eventListenerV2,
+            EventListenerV1 eventListenerV2,
             Guid eventListenerV2Id)
         {
             if (eventListenerV2 is null)
@@ -71,7 +71,7 @@ namespace EventHighway.Core.Services.Foundations.EventListeners.V2
             }
         }
 
-        private static void ValidateEventListenerV2IsNotNull(EventListenerV2 eventListenerV2)
+        private static void ValidateEventListenerV2IsNotNull(EventListenerV1 eventListenerV2)
         {
             if (eventListenerV2 is null)
             {

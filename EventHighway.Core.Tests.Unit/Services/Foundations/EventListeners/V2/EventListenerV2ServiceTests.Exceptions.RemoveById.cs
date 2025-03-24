@@ -4,8 +4,8 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +37,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
                     .ThrowsAsync(sqlException);
 
             // when
-            ValueTask<EventListenerV2> removeEventListenerV2ByIdTask =
+            ValueTask<EventListenerV1> removeEventListenerV2ByIdTask =
                 this.eventListenerV2Service.RemoveEventListenerV2ByIdAsync(
                     someEventListenerV2Id);
 
@@ -84,7 +84,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
                     .ThrowsAsync(dbUpdateConcurrencyException);
 
             // when
-            ValueTask<EventListenerV2> removeEventListenerV2ByIdTask =
+            ValueTask<EventListenerV1> removeEventListenerV2ByIdTask =
                 this.eventListenerV2Service.RemoveEventListenerV2ByIdAsync(
                     someEventListenerV2Id);
 
@@ -132,7 +132,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
                     .ThrowsAsync(dbUpdateException);
 
             // when
-            ValueTask<EventListenerV2> removeEventListenerV2ByIdTask =
+            ValueTask<EventListenerV1> removeEventListenerV2ByIdTask =
                 this.eventListenerV2Service.RemoveEventListenerV2ByIdAsync(someEventListenerV2Id);
 
             EventListenerV2DependencyException actualEventListenerV2DependencyException =
@@ -179,7 +179,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
                     .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<EventListenerV2> removeEventListenerV2ByIdTask =
+            ValueTask<EventListenerV1> removeEventListenerV2ByIdTask =
                 this.eventListenerV2Service.RemoveEventListenerV2ByIdAsync(
                     someEventListenerV2Id);
 
