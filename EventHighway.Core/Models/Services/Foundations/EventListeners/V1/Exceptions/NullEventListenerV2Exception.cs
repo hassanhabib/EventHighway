@@ -2,15 +2,14 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
-using System;
 using Xeptions;
 
-namespace EventHighway.Core.Models.Services.Foundations.EventListeners.V2.Exceptions
+namespace EventHighway.Core.Models.Services.Foundations.EventListeners.V1.Exceptions
 {
-    public class AlreadyExistsEventListenerV2Exception : Xeption
+    public class NullEventListenerV2Exception : Xeption
     {
-        public AlreadyExistsEventListenerV2Exception(string message, Exception innerException)
-            : base(message, innerException)
+        public NullEventListenerV2Exception(string message)
+            : base(message)
         { }
     }
 }

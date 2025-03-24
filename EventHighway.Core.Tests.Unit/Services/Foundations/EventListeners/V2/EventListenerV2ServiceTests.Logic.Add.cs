@@ -4,7 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
@@ -20,17 +20,17 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
             DateTimeOffset randomDateTimeOffset =
                 GetRandomDateTimeOffset();
 
-            EventListenerV2 randomEventListenerV2 =
+            EventListenerV1 randomEventListenerV2 =
                 CreateRandomEventListenerV2(
                     randomDateTimeOffset);
 
-            EventListenerV2 inputEventListenerV2 =
+            EventListenerV1 inputEventListenerV2 =
                 randomEventListenerV2;
 
-            EventListenerV2 storageEventListenerV2 =
+            EventListenerV1 storageEventListenerV2 =
                 inputEventListenerV2;
 
-            EventListenerV2 expectedEventListenerV2 =
+            EventListenerV1 expectedEventListenerV2 =
                 storageEventListenerV2.DeepClone();
 
             this.dateTimeBrokerMock.Setup(broker =>
@@ -43,7 +43,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
                         .ReturnsAsync(storageEventListenerV2);
 
             // when
-            EventListenerV2 actualEventListenerV2 =
+            EventListenerV1 actualEventListenerV2 =
                 await this.eventListenerV2Service
                     .AddEventListenerV2Async(
                         inputEventListenerV2);

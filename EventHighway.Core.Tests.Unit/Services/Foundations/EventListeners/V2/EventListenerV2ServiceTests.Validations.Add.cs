@@ -4,8 +4,8 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1.Exceptions;
 using FluentAssertions;
 using Moq;
 
@@ -17,7 +17,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
         public async Task ShouldThrowValidationExceptionOnAddIfEventListenerV2IsNullAndLogItAsync()
         {
             // given
-            EventListenerV2 nullEventListenerV2 = null;
+            EventListenerV1 nullEventListenerV2 = null;
 
             var nullEventListenerV2Exception =
                 new NullEventListenerV2Exception(message: "Event listener is null.");
@@ -28,7 +28,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
                     innerException: nullEventListenerV2Exception);
 
             // when
-            ValueTask<EventListenerV2> addEventListenerV2Task =
+            ValueTask<EventListenerV1> addEventListenerV2Task =
                 this.eventListenerV2Service.AddEventListenerV2Async(nullEventListenerV2);
 
             EventListenerV2ValidationException actualEventListenerV2ValidationException =
@@ -49,7 +49,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
                     Times.Never);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventListenerV2Async(It.IsAny<EventListenerV2>()),
+                broker.InsertEventListenerV2Async(It.IsAny<EventListenerV1>()),
                     Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
@@ -64,7 +64,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
         private async Task ShouldThrowValidationExceptionOnAddIfEventListenerV2IsInvalidAndLogItAsync(
             string invalidText)
         {
-            var invalidEventListenerV2 = new EventListenerV2
+            var invalidEventListenerV2 = new EventListenerV1
             {
                 Id = Guid.Empty,
                 Name = invalidText,
@@ -79,35 +79,35 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
                     message: "Event listener is invalid, fix the errors and try again.");
 
             invalidEventListenerV2Exception.AddData(
-                key: nameof(EventListenerV2.Id),
+                key: nameof(EventListenerV1.Id),
                 values: "Required");
 
             invalidEventListenerV2Exception.AddData(
-                key: nameof(EventListenerV2.Name),
+                key: nameof(EventListenerV1.Name),
                 values: "Required");
 
             invalidEventListenerV2Exception.AddData(
-                key: nameof(EventListenerV2.Description),
+                key: nameof(EventListenerV1.Description),
                 values: "Required");
 
             invalidEventListenerV2Exception.AddData(
-                key: nameof(EventListenerV2.HeaderSecret),
+                key: nameof(EventListenerV1.HeaderSecret),
                 values: "Required");
 
             invalidEventListenerV2Exception.AddData(
-                key: nameof(EventListenerV2.Endpoint),
+                key: nameof(EventListenerV1.Endpoint),
                 values: "Required");
 
             invalidEventListenerV2Exception.AddData(
-                key: nameof(EventListenerV2.EventAddressId),
+                key: nameof(EventListenerV1.EventAddressId),
                 values: "Required");
 
             invalidEventListenerV2Exception.AddData(
-                key: nameof(EventListenerV2.CreatedDate),
+                key: nameof(EventListenerV1.CreatedDate),
                 values: "Required");
 
             invalidEventListenerV2Exception.AddData(
-                key: nameof(EventListenerV2.UpdatedDate),
+                key: nameof(EventListenerV1.UpdatedDate),
                 values: "Required");
 
             var expectedEventListenerV2ValidationException =
@@ -116,7 +116,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
                     innerException: invalidEventListenerV2Exception);
 
             // when
-            ValueTask<EventListenerV2> addEventListenerV2Task =
+            ValueTask<EventListenerV1> addEventListenerV2Task =
                 this.eventListenerV2Service.AddEventListenerV2Async(invalidEventListenerV2);
 
             EventListenerV2ValidationException actualEventListenerV2ValidationException =
@@ -137,7 +137,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventListenerV2Async(It.IsAny<EventListenerV2>()),
+                broker.InsertEventListenerV2Async(It.IsAny<EventListenerV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -151,8 +151,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
             // given
             DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
             DateTimeOffset anotherRandomDateTimeOffset = GetRandomDateTimeOffset();
-            EventListenerV2 randomEventListenerV2 = CreateRandomEventListenerV2(dates: randomDateTimeOffset);
-            EventListenerV2 invalidEventListenerV2 = randomEventListenerV2;
+            EventListenerV1 randomEventListenerV2 = CreateRandomEventListenerV2(dates: randomDateTimeOffset);
+            EventListenerV1 invalidEventListenerV2 = randomEventListenerV2;
             invalidEventListenerV2.UpdatedDate = anotherRandomDateTimeOffset;
 
             var invalidEventListenerV2Exception =
@@ -160,8 +160,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
                     message: "Event listener is invalid, fix the errors and try again.");
 
             invalidEventListenerV2Exception.AddData(
-                key: nameof(EventListenerV2.CreatedDate),
-                values: $"Date is not the same as {nameof(EventListenerV2.UpdatedDate)}");
+                key: nameof(EventListenerV1.CreatedDate),
+                values: $"Date is not the same as {nameof(EventListenerV1.UpdatedDate)}");
 
             var expectedEventListenerV2ValidationException =
                 new EventListenerV2ValidationException(
@@ -173,7 +173,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
                     .ReturnsAsync(randomDateTimeOffset);
 
             // when
-            ValueTask<EventListenerV2> addEventListenerV2Task =
+            ValueTask<EventListenerV1> addEventListenerV2Task =
                 this.eventListenerV2Service.AddEventListenerV2Async(invalidEventListenerV2);
 
             EventListenerV2ValidationException actualEventListenerV2ValidationException =
@@ -194,7 +194,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventListenerV2Async(It.IsAny<EventListenerV2>()),
+                broker.InsertEventListenerV2Async(It.IsAny<EventListenerV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -210,18 +210,18 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
             // given
             DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
 
-            EventListenerV2 randomEventListenerV2 =
+            EventListenerV1 randomEventListenerV2 =
                 CreateRandomEventListenerV2(randomDateTimeOffset
                     .AddMinutes(minutesBeforeAndAfter));
 
-            EventListenerV2 invalidEventListenerV2 = randomEventListenerV2;
+            EventListenerV1 invalidEventListenerV2 = randomEventListenerV2;
 
             var invalidEventListenerV2Exception =
                 new InvalidEventListenerV2Exception(
                     message: "Event listener is invalid, fix the errors and try again.");
 
             invalidEventListenerV2Exception.AddData(
-                key: nameof(EventListenerV2.CreatedDate),
+                key: nameof(EventListenerV1.CreatedDate),
                 values: "Date is not recent");
 
             var expectedEventListenerV2ValidationException =
@@ -234,7 +234,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
                     .ReturnsAsync(randomDateTimeOffset);
 
             // when
-            ValueTask<EventListenerV2> addEventListenerV2Task =
+            ValueTask<EventListenerV1> addEventListenerV2Task =
                 this.eventListenerV2Service.AddEventListenerV2Async(invalidEventListenerV2);
 
             EventListenerV2ValidationException actualEventListenerV2ValidationException =
@@ -255,7 +255,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertEventListenerV2Async(It.IsAny<EventListenerV2>()),
+                broker.InsertEventListenerV2Async(It.IsAny<EventListenerV1>()),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();

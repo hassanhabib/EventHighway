@@ -5,7 +5,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 using EventHighway.Core.Models.Services.Processings.EventListeners.V2.Exceptions;
@@ -16,12 +16,12 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
 {
     internal partial class EventListenerV2OrchestrationService
     {
-        private delegate ValueTask<EventListenerV2> ReturningEventListenerV2Function();
-        private delegate ValueTask<IQueryable<EventListenerV2>> ReturningEventListenerV2sFunction();
+        private delegate ValueTask<EventListenerV1> ReturningEventListenerV2Function();
+        private delegate ValueTask<IQueryable<EventListenerV1>> ReturningEventListenerV2sFunction();
         private delegate ValueTask<ListenerEventV2> ReturningListenerEventV2Function();
         private delegate ValueTask<IQueryable<ListenerEventV2>> ReturningListenerEventV2sFunction();
 
-        private async ValueTask<EventListenerV2> TryCatch(
+        private async ValueTask<EventListenerV1> TryCatch(
             ReturningEventListenerV2Function returningEventListenerV2Function)
         {
             try
@@ -76,7 +76,7 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
             }
         }
 
-        private async ValueTask<IQueryable<EventListenerV2>> TryCatch(
+        private async ValueTask<IQueryable<EventListenerV1>> TryCatch(
             ReturningEventListenerV2sFunction returningEventListenerV2sFunction)
         {
             try

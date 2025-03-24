@@ -5,7 +5,7 @@
 using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.EventListeners.V2.Exceptions;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
 using FluentAssertions;
 using Moq;
@@ -33,7 +33,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventListeners.V2
                     .ThrowsAsync(validationException);
 
             // when
-            ValueTask<EventListenerV2> removeEventListenerV2ByIdTask =
+            ValueTask<EventListenerV1> removeEventListenerV2ByIdTask =
                 this.eventListenerV2SClient.RemoveEventListenerV2ByIdAsync(someEventListenerV2Id);
 
             EventListenerV2ClientDependencyValidationException
@@ -77,7 +77,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventListeners.V2
                     .ThrowsAsync(eventListenerV2OrchestrationDependencyException);
 
             // when
-            ValueTask<EventListenerV2> removeEventListenerV2ByIdTask =
+            ValueTask<EventListenerV1> removeEventListenerV2ByIdTask =
                 this.eventListenerV2SClient.RemoveEventListenerV2ByIdAsync(someEventListenerV2Id);
 
             EventListenerV2ClientDependencyException
@@ -121,7 +121,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventListeners.V2
                     .ThrowsAsync(eventListenerV2OrchestrationServiceException);
 
             // when
-            ValueTask<EventListenerV2> removeEventListenerV2ByIdTask =
+            ValueTask<EventListenerV1> removeEventListenerV2ByIdTask =
                 this.eventListenerV2SClient.RemoveEventListenerV2ByIdAsync(someEventListenerV2Id);
 
             EventListenerV2ClientServiceException actualEventListenerV2ClientServiceException =

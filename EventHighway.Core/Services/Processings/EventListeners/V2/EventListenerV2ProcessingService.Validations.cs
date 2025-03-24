@@ -3,7 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Processings.EventListeners.V2.Exceptions;
 
 namespace EventHighway.Core.Services.Processings.EventListeners.V2
@@ -14,17 +14,17 @@ namespace EventHighway.Core.Services.Processings.EventListeners.V2
         {
             Validate(
                 (Rule: IsInvalid(eventAddressId),
-                Parameter: nameof(EventListenerV2.EventAddressId)));
+                Parameter: nameof(EventListenerV1.EventAddressId)));
         }
 
         private static void ValidateEventListenerV2Id(Guid eventListenerV2Id)
         {
             Validate(
                 (Rule: IsInvalid(eventListenerV2Id),
-                Parameter: nameof(EventListenerV2.Id)));
+                Parameter: nameof(EventListenerV1.Id)));
         }
 
-        private static void ValidateEventListenerV2IsNotNull(EventListenerV2 eventListenerV2)
+        private static void ValidateEventListenerV2IsNotNull(EventListenerV1 eventListenerV2)
         {
             if (eventListenerV2 is null)
             {

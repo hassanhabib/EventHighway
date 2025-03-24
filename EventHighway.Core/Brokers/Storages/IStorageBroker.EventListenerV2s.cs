@@ -5,15 +5,15 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 
 namespace EventHighway.Core.Brokers.Storages
 {
     internal partial interface IStorageBroker
     {
-        ValueTask<EventListenerV2> InsertEventListenerV2Async(EventListenerV2 eventListenerV2);
-        ValueTask<IQueryable<EventListenerV2>> SelectAllEventListenerV2sAsync();
-        ValueTask<EventListenerV2> SelectEventListenerV2ByIdAsync(Guid eventListenerV2Id);
-        ValueTask<EventListenerV2> DeleteEventListenerV2Async(EventListenerV2 eventListenerV2);
+        ValueTask<EventListenerV1> InsertEventListenerV2Async(EventListenerV1 eventListenerV2);
+        ValueTask<IQueryable<EventListenerV1>> SelectAllEventListenerV2sAsync();
+        ValueTask<EventListenerV1> SelectEventListenerV2ByIdAsync(Guid eventListenerV2Id);
+        ValueTask<EventListenerV1> DeleteEventListenerV2Async(EventListenerV1 eventListenerV2);
     }
 }

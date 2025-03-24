@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Tests.Acceptance.Brokers;
 using Tynamix.ObjectFiller;
@@ -33,16 +33,16 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
 
-        private async ValueTask<IQueryable<EventListenerV2>> CreateRandomEventListenerV2sAsync(
+        private async ValueTask<IQueryable<EventListenerV1>> CreateRandomEventListenerV2sAsync(
             Guid eventAddressV2Id,
             string inputMockEndpoint)
         {
             int randomNumber = GetRandomNumber();
-            var randomEventListenerV2s = new List<EventListenerV2>();
+            var randomEventListenerV2s = new List<EventListenerV1>();
 
             for (int index = 0; index < randomNumber; index++)
             {
-                EventListenerV2 randomPostedEntitlementV2 =
+                EventListenerV1 randomPostedEntitlementV2 =
                     await RegisterEventListenerV2Async(
                         eventAddressV2Id,
                         inputMockEndpoint);
@@ -53,11 +53,11 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
             return randomEventListenerV2s.AsQueryable();
         }
 
-        private async ValueTask<EventListenerV2> RegisterEventListenerV2Async(
+        private async ValueTask<EventListenerV1> RegisterEventListenerV2Async(
             Guid eventAddressV2Id,
             string inputMockEndpoint)
         {
-            EventListenerV2 randomEventListenerV2 =
+            EventListenerV1 randomEventListenerV2 =
                 CreateRandomEventListenerV2(
                     eventAddressV2Id,
                     inputMockEndpoint);
@@ -105,7 +105,7 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
             return randomEventV2;
         }
 
-        private static EventListenerV2 CreateRandomEventListenerV2(
+        private static EventListenerV1 CreateRandomEventListenerV2(
             Guid eventAddressV2Id,
             string inputMockEndpoint)
         {
@@ -136,12 +136,12 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
             return randomEventAddressV2;
         }
 
-        private static Filler<EventListenerV2> CreateEventListenerV2Filler(
+        private static Filler<EventListenerV1> CreateEventListenerV2Filler(
             Guid eventAddressV2Id,
             string inputMockEndpoint)
         {
             DateTimeOffset now = DateTimeOffset.UtcNow;
-            var filler = new Filler<EventListenerV2>();
+            var filler = new Filler<EventListenerV1>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>().Use(now)

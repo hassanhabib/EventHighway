@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Loggings;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 using EventHighway.Core.Services.Processings.EventListeners.V2;
 using EventHighway.Core.Services.Processings.ListenerEvents.V2;
@@ -29,7 +29,7 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<EventListenerV2> AddEventListenerV2Async(EventListenerV2 eventListenerV2) =>
+        public ValueTask<EventListenerV1> AddEventListenerV2Async(EventListenerV1 eventListenerV2) =>
         TryCatch(async () =>
         {
             ValidateEventListenerV2IsNotNull(eventListenerV2);
@@ -38,7 +38,7 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
                 eventListenerV2);
         });
 
-        public ValueTask<IQueryable<EventListenerV2>> RetrieveEventListenerV2sByEventAddressIdAsync(
+        public ValueTask<IQueryable<EventListenerV1>> RetrieveEventListenerV2sByEventAddressIdAsync(
             Guid eventAddressId) => TryCatch(async () =>
         {
             ValidateEventAddressId(eventAddressId);
@@ -47,7 +47,7 @@ namespace EventHighway.Core.Services.Orchestrations.EventListeners.V2
                 .RetrieveEventListenerV2sByEventAddressIdAsync(eventAddressId);
         });
 
-        public ValueTask<EventListenerV2> RemoveEventListenerV2ByIdAsync(Guid eventListenerV2Id) =>
+        public ValueTask<EventListenerV1> RemoveEventListenerV2ByIdAsync(Guid eventListenerV2Id) =>
         TryCatch(async () =>
         {
             ValidateEventListenerV2Id(eventListenerV2Id);

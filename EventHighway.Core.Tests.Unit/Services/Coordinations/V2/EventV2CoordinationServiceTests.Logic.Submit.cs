@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventCall.V2;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 using FluentAssertions;
@@ -102,10 +102,10 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             EventV1 submittedEventV2 = inputImmediateEventV2;
             EventV1 expectedEventV2 = submittedEventV2.DeepClone();
 
-            IQueryable<EventListenerV2> randomEventListenerV2s =
+            IQueryable<EventListenerV1> randomEventListenerV2s =
                 CreateRandomEventListenerV2s();
 
-            IQueryable<EventListenerV2> retrievedEventListenerV2s =
+            IQueryable<EventListenerV1> retrievedEventListenerV2s =
                 randomEventListenerV2s;
 
             List<ListenerEventV2> inputListenerEventV2s =

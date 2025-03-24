@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Storages;
 using EventHighway.Core.Brokers.Times;
-using EventHighway.Core.Models.Services.Foundations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Services.Foundations.EventListeners.V2;
 using Microsoft.Data.SqlClient;
 using Moq;
@@ -64,7 +64,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
         private static Guid GetRandomId() =>
             Guid.NewGuid();
 
-        private static IQueryable<EventListenerV2> CreateRandomEventListenerV2s()
+        private static IQueryable<EventListenerV1> CreateRandomEventListenerV2s()
         {
             return CreateEventListenerV2Filler(
                 dates: GetRandomDateTimeOffset())
@@ -72,10 +72,10 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
                         .AsQueryable();
         }
 
-        private static EventListenerV2 CreateRandomEventListenerV2() =>
+        private static EventListenerV1 CreateRandomEventListenerV2() =>
             CreateEventListenerV2Filler(dates: GetRandomDateTimeOffset()).Create();
 
-        private static EventListenerV2 CreateRandomEventListenerV2(DateTimeOffset dates) =>
+        private static EventListenerV1 CreateRandomEventListenerV2(DateTimeOffset dates) =>
             CreateEventListenerV2Filler(dates).Create();
 
         private static string GetRandomString() =>
@@ -90,9 +90,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventListeners.V2
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
-        private static Filler<EventListenerV2> CreateEventListenerV2Filler(DateTimeOffset dates)
+        private static Filler<EventListenerV1> CreateEventListenerV2Filler(DateTimeOffset dates)
         {
-            var filler = new Filler<EventListenerV2>();
+            var filler = new Filler<EventListenerV1>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>().Use(dates)

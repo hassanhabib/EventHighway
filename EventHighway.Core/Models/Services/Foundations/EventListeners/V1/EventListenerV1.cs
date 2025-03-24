@@ -7,9 +7,9 @@ using System.Collections.Generic;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V2;
 
-namespace EventHighway.Core.Models.Services.Foundations.EventListeners.V2
+namespace EventHighway.Core.Models.Services.Foundations.EventListeners.V1
 {
-    public class EventListenerV2
+    public class EventListenerV1
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
