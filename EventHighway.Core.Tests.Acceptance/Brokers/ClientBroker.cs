@@ -12,7 +12,7 @@ namespace EventHighway.Core.Tests.Acceptance.Brokers
     public partial class ClientBroker : IAsyncDisposable
     {
         private readonly string connectionString = String.Concat(
-            "Server=(localdb)\\MSSQLLocalDB;Database=EventHighwayDb;",
+            "Server=(localdb)\\MSSQLLocalDB;Database=EventHighwayDbv0;",
             "Trusted_Connection=True;MultipleActiveResultSets=true;");
 
         private readonly SqlConnection sqlConnection;
