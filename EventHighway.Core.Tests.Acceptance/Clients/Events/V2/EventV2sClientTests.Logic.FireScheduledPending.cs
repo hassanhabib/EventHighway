@@ -83,11 +83,11 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
 
             foreach (EventListenerV1 eventListenerV2 in storageEventListenerV2s)
             {
-                await this.clientBroker.RemoveEventListenerV2ByIdAsync(
+                await this.clientBroker.RemoveEventListenerV1ByIdAsync(
                     eventListenerV2.Id);
             }
 
-            await this.clientBroker.RemoveEventAddressV2ByIdAsync(
+            await this.clientBroker.RemoveEventAddressV1ByIdAsync(
                 inputEventAddressV2Id);
         }
     }

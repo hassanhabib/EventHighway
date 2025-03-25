@@ -10,10 +10,10 @@ namespace EventHighway.Core.Tests.Acceptance.Brokers
 {
     public partial class ClientBroker
     {
-        public async ValueTask<EventAddressV1> RegisterEventAddressV2Async(EventAddressV1 eventAddressV2) =>
-            await this.eventHighwayClient.IEventAddressV2s.RegisterEventAddressV2Async(eventAddressV2);
+        public async ValueTask<EventAddressV1> RegisterEventAddressV1Async(EventAddressV1 eventAddressV1) =>
+            await this.eventHighwayClient.IEventAddressV1s.RegisterEventAddressV1Async(eventAddressV1);
 
-        public async ValueTask<EventAddressV1> RemoveEventAddressV2ByIdAsync(Guid eventAddressV2Id) =>
-            await this.eventHighwayClient.IEventAddressV2s.RemoveEventAddressV2ByIdAsync(eventAddressV2Id);
+        public async ValueTask<EventAddressV1> RemoveEventAddressV1ByIdAsync(Guid eventAddressV1Id) =>
+            await this.eventHighwayClient.IEventAddressV1s.RemoveEventAddressV1ByIdAsync(eventAddressV1Id);
     }
 }

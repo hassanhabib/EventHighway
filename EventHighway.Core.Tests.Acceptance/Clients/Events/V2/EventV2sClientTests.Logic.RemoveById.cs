@@ -50,7 +50,7 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
                 .BeEquivalentTo(expectedEventV2);
 
             await this.clientBroker
-                .RemoveEventAddressV2ByIdAsync(
+                .RemoveEventAddressV1ByIdAsync(
                     inputEventAddressV2Id);
         }
     }

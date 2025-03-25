@@ -6,11 +6,11 @@ using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 
-namespace EventHighway.Core.Clients.EventAddresses.V2
+namespace EventHighway.Core.Clients.EventAddresses.V1
 {
-    public interface IEventAddressesV2Client
+    public interface IEventAddressesV1Client
     {
-        ValueTask<EventAddressV1> RegisterEventAddressV2Async(EventAddressV1 eventAddressV2);
-        ValueTask<EventAddressV1> RemoveEventAddressV2ByIdAsync(Guid eventAddressV2Id);
+        ValueTask<EventAddressV1> RegisterEventAddressV1Async(EventAddressV1 eventAddressV1);
+        ValueTask<EventAddressV1> RemoveEventAddressV1ByIdAsync(Guid eventAddressV1Id);
     }
 }

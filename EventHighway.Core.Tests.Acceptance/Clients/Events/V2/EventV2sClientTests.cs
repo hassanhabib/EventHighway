@@ -62,7 +62,7 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
                     eventAddressV2Id,
                     inputMockEndpoint);
 
-            await this.clientBroker.RegisterEventListenerV2Async(
+            await this.clientBroker.RegisterEventListenerV1Async(
                 randomEventListenerV2);
 
             return randomEventListenerV2;
@@ -130,7 +130,7 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
             EventAddressV1 randomEventAddressV2 =
                 CreateEventAddressV2Filler().Create();
 
-            await this.clientBroker.RegisterEventAddressV2Async(
+            await this.clientBroker.RegisterEventAddressV1Async(
                 randomEventAddressV2);
 
             return randomEventAddressV2;

@@ -53,7 +53,7 @@ namespace EventHighway.Core.Tests.Acceptance.Clients.Events.V2
                     actualEventV2.Id);
 
             await this.clientBroker
-                .RemoveEventAddressV2ByIdAsync(
+                .RemoveEventAddressV1ByIdAsync(
                     inputEventAddressV2Id);
         }
     }
