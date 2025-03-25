@@ -57,7 +57,7 @@ namespace EventHighway.Core.Clients.EventHighways
         public IEventListenersClient EventListeners { get; set; }
         public IEventsClient Events { get; set; }
         public IEventV1sClient EventV1s { get; set; }
-        public IEventAddressesV1Client IEventAddressV1s { get; set; }
+        public IEventAddressesV1Client EventAddressV1s { get; set; }
         public IEventListenerV1sClient EventListenerV1s { get; set; }
         public IListenerEventV1sClient ListenerEventV1s { get; set; }
 
@@ -75,7 +75,7 @@ namespace EventHighway.Core.Clients.EventHighways
             this.EventV1s =
                 serviceProvider.GetRequiredService<IEventV1sClient>();
 
-            this.IEventAddressV1s =
+            this.EventAddressV1s =
                 serviceProvider.GetRequiredService<IEventAddressesV1Client>();
 
             this.EventListenerV1s =

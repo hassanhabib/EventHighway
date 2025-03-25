@@ -36,7 +36,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V1
 
             // when
             EventAddressV1 actualEventAddressV1 =
-                await this.eventAddressesClient
+                await this.eventAddressV1sClient
                     .RemoveEventAddressV1ByIdAsync(
                         inputEventAddressV1Id);
 
