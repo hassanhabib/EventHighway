@@ -4,94 +4,94 @@
 
 using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Coordinations.Events.V1.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V1.Exceptions;
 using EventHighway.Core.Models.Services.Orchestrations.Events.V1.Exceptions;
 using Xeptions;
 
-namespace EventHighway.Core.Services.Coordinations.Events.V2
+namespace EventHighway.Core.Services.Coordinations.Events.V1
 {
-    internal partial class EventV2CoordinationService
+    internal partial class EventV1CoordinationService
     {
-        private delegate ValueTask<EventV1> ReturningEventV2Function();
+        private delegate ValueTask<EventV1> ReturningEventV1Function();
         private delegate ValueTask ReturningNothingFunction();
 
-        private async ValueTask<EventV1> TryCatch(ReturningEventV2Function returningEventV2Function)
+        private async ValueTask<EventV1> TryCatch(ReturningEventV1Function returningEventV1Function)
         {
             try
             {
-                return await returningEventV2Function();
+                return await returningEventV1Function();
             }
-            catch (NullEventV2CoordinationException
-                nullEventV2CoordinationException)
+            catch (NullEventV1CoordinationException
+                nullEventV1CoordinationException)
             {
                 throw await CreateAndLogValidationExceptionAsync(
-                    nullEventV2CoordinationException);
+                    nullEventV1CoordinationException);
             }
-            catch (InvalidEventV2CoordinationException
-                invalidEventV2CoordinationException)
+            catch (InvalidEventV1CoordinationException
+                invalidEventV1CoordinationException)
             {
                 throw await CreateAndLogValidationExceptionAsync(
-                    invalidEventV2CoordinationException);
+                    invalidEventV1CoordinationException);
             }
             catch (EventV1OrchestrationValidationException
-                eventV2OrchestrationValidationException)
+                eventV1OrchestrationValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
-                    eventV2OrchestrationValidationException);
+                    eventV1OrchestrationValidationException);
             }
             catch (EventV1OrchestrationDependencyValidationException
-                eventV2OrchestrationDependencyValidationException)
+                eventV1OrchestrationDependencyValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
-                    eventV2OrchestrationDependencyValidationException);
+                    eventV1OrchestrationDependencyValidationException);
             }
             catch (EventListenerV1OrchestrationValidationException
-                eventListenerV2OrchestrationValidationException)
+                eventListenerV1OrchestrationValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
-                    eventListenerV2OrchestrationValidationException);
+                    eventListenerV1OrchestrationValidationException);
             }
             catch (EventListenerV1OrchestrationDependencyValidationException
-                eventListenerV2OrchestrationDependencyValidationException)
+                eventListenerV1OrchestrationDependencyValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
-                    eventListenerV2OrchestrationDependencyValidationException);
+                    eventListenerV1OrchestrationDependencyValidationException);
             }
             catch (EventV1OrchestrationDependencyException
-                eventV2OrchestrationDependencyException)
+                eventV1OrchestrationDependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
-                    eventV2OrchestrationDependencyException);
+                    eventV1OrchestrationDependencyException);
             }
             catch (EventV1OrchestrationServiceException
-                eventV2OrchestrationServiceException)
+                eventV1OrchestrationServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
-                    eventV2OrchestrationServiceException);
+                    eventV1OrchestrationServiceException);
             }
             catch (EventListenerV1OrchestrationDependencyException
-                eventListenerV2OrchestrationDependencyException)
+                eventListenerV1OrchestrationDependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
-                    eventListenerV2OrchestrationDependencyException);
+                    eventListenerV1OrchestrationDependencyException);
             }
             catch (EventListenerV1OrchestrationServiceException
-                eventListenerV2OrchestrationServiceException)
+                eventListenerV1OrchestrationServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
-                    eventListenerV2OrchestrationServiceException);
+                    eventListenerV1OrchestrationServiceException);
             }
             catch (Exception exception)
             {
-                var failedEventV2CoordinationServiceException =
-                    new FailedEventV2CoordinationServiceException(
+                var failedEventV1CoordinationServiceException =
+                    new FailedEventV1CoordinationServiceException(
                         message: "Failed event service error occurred, contact support.",
                         innerException: exception);
 
                 throw await CreateAndLogServiceExceptionAsync(
-                    failedEventV2CoordinationServiceException);
+                    failedEventV1CoordinationServiceException);
             }
         }
 
@@ -102,116 +102,116 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
                 await returningNothingFunction();
             }
             catch (EventV1OrchestrationDependencyException
-                eventV2OrchestrationDependencyException)
+                eventV1OrchestrationDependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
-                    eventV2OrchestrationDependencyException);
+                    eventV1OrchestrationDependencyException);
             }
             catch (EventV1OrchestrationServiceException
-                eventV2OrchestrationServiceException)
+                eventV1OrchestrationServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
-                    eventV2OrchestrationServiceException);
+                    eventV1OrchestrationServiceException);
             }
             catch (EventListenerV1OrchestrationDependencyException
-                eventListenerV2OrchestrationDependencyException)
+                eventListenerV1OrchestrationDependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
-                    eventListenerV2OrchestrationDependencyException);
+                    eventListenerV1OrchestrationDependencyException);
             }
             catch (EventListenerV1OrchestrationServiceException
-                eventListenerV2OrchestrationServiceException)
+                eventListenerV1OrchestrationServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
-                    eventListenerV2OrchestrationServiceException);
+                    eventListenerV1OrchestrationServiceException);
             }
             catch (EventV1OrchestrationValidationException
-                eventV2OrchestrationValidationException)
+                eventV1OrchestrationValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
-                    eventV2OrchestrationValidationException);
+                    eventV1OrchestrationValidationException);
             }
             catch (EventV1OrchestrationDependencyValidationException
-                eventV2OrchestrationDependencyValidationException)
+                eventV1OrchestrationDependencyValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
-                    eventV2OrchestrationDependencyValidationException);
+                    eventV1OrchestrationDependencyValidationException);
             }
             catch (EventListenerV1OrchestrationValidationException
-                eventListenerV2OrchestrationValidationException)
+                eventListenerV1OrchestrationValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
-                    eventListenerV2OrchestrationValidationException);
+                    eventListenerV1OrchestrationValidationException);
             }
             catch (EventListenerV1OrchestrationDependencyValidationException
-                eventListenerV2OrchestrationDependencyValidationException)
+                eventListenerV1OrchestrationDependencyValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
-                    eventListenerV2OrchestrationDependencyValidationException);
+                    eventListenerV1OrchestrationDependencyValidationException);
             }
             catch (Exception exception)
             {
-                var failedEventV2CoordinationServiceException =
-                    new FailedEventV2CoordinationServiceException(
+                var failedEventV1CoordinationServiceException =
+                    new FailedEventV1CoordinationServiceException(
                         message: "Failed event service error occurred, contact support.",
                         innerException: exception);
 
                 throw await CreateAndLogServiceExceptionAsync(
-                    failedEventV2CoordinationServiceException);
+                    failedEventV1CoordinationServiceException);
             }
         }
 
-        private async ValueTask<EventV2CoordinationValidationException> CreateAndLogValidationExceptionAsync(
+        private async ValueTask<EventV1CoordinationValidationException> CreateAndLogValidationExceptionAsync(
             Xeption exception)
         {
-            var eventV2CoordinationValidationException =
-                new EventV2CoordinationValidationException(
+            var eventV1CoordinationValidationException =
+                new EventV1CoordinationValidationException(
                     message: "Event validation error occurred, fix the errors and try again.",
                     innerException: exception);
 
-            await this.loggingBroker.LogErrorAsync(eventV2CoordinationValidationException);
+            await this.loggingBroker.LogErrorAsync(eventV1CoordinationValidationException);
 
-            return eventV2CoordinationValidationException;
+            return eventV1CoordinationValidationException;
         }
 
-        private async ValueTask<EventV2CoordinationDependencyValidationException>
+        private async ValueTask<EventV1CoordinationDependencyValidationException>
             CreateAndLogDependencyValidationExceptionAsync(
                 Xeption exception)
         {
-            var eventV2CoordinationDependencyValidationException =
-                new EventV2CoordinationDependencyValidationException(
+            var eventV1CoordinationDependencyValidationException =
+                new EventV1CoordinationDependencyValidationException(
                     message: "Event validation error occurred, fix the errors and try again.",
                     innerException: exception.InnerException as Xeption);
 
-            await this.loggingBroker.LogErrorAsync(eventV2CoordinationDependencyValidationException);
+            await this.loggingBroker.LogErrorAsync(eventV1CoordinationDependencyValidationException);
 
-            return eventV2CoordinationDependencyValidationException;
+            return eventV1CoordinationDependencyValidationException;
         }
 
-        private async ValueTask<EventV2CoordinationDependencyException> CreateAndLogDependencyExceptionAsync(
+        private async ValueTask<EventV1CoordinationDependencyException> CreateAndLogDependencyExceptionAsync(
             Xeption exception)
         {
-            var eventV2CoordinationDependencyException =
-                new EventV2CoordinationDependencyException(
+            var eventV1CoordinationDependencyException =
+                new EventV1CoordinationDependencyException(
                     message: "Event dependency error occurred, contact support.",
                     innerException: exception.InnerException as Xeption);
 
-            await this.loggingBroker.LogErrorAsync(eventV2CoordinationDependencyException);
+            await this.loggingBroker.LogErrorAsync(eventV1CoordinationDependencyException);
 
-            return eventV2CoordinationDependencyException;
+            return eventV1CoordinationDependencyException;
         }
 
-        private async ValueTask<EventV2CoordinationServiceException> CreateAndLogServiceExceptionAsync(
+        private async ValueTask<EventV1CoordinationServiceException> CreateAndLogServiceExceptionAsync(
             Xeption exception)
         {
-            var eventV2CoordinationServiceException =
-                new EventV2CoordinationServiceException(
+            var eventV1CoordinationServiceException =
+                new EventV1CoordinationServiceException(
                     message: "Event service error occurred, contact support.",
                     innerException: exception);
 
-            await this.loggingBroker.LogErrorAsync(eventV2CoordinationServiceException);
+            await this.loggingBroker.LogErrorAsync(eventV1CoordinationServiceException);
 
-            return eventV2CoordinationServiceException;
+            return eventV1CoordinationServiceException;
         }
     }
 }

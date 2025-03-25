@@ -13,7 +13,7 @@ using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
 using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V1.Exceptions;
 using EventHighway.Core.Models.Services.Orchestrations.Events.V1.Exceptions;
-using EventHighway.Core.Services.Coordinations.Events.V2;
+using EventHighway.Core.Services.Coordinations.Events.V1;
 using EventHighway.Core.Services.Orchestrations.EventListeners.V1;
 using EventHighway.Core.Services.Orchestrations.Events.V1;
 using KellermanSoftware.CompareNetObjects;
@@ -21,24 +21,24 @@ using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
 
-namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
+namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V1
 {
-    public partial class EventV2CoordinationServiceTests
+    public partial class EventV1CoordinationServiceTests
     {
-        private readonly Mock<IEventV1OrchestrationService> eventV2OrchestrationServiceMock;
-        private readonly Mock<IEventListenerV1OrchestrationService> eventListenerV2OrchestrationServiceMock;
+        private readonly Mock<IEventV1OrchestrationService> eventV1OrchestrationServiceMock;
+        private readonly Mock<IEventListenerV1OrchestrationService> eventListenerV1OrchestrationServiceMock;
         private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly ICompareLogic compareLogic;
-        private readonly IEventV2CoordinationService eventV2CoordinationService;
+        private readonly IEventV1CoordinationService eventV1CoordinationService;
 
-        public EventV2CoordinationServiceTests()
+        public EventV1CoordinationServiceTests()
         {
-            this.eventV2OrchestrationServiceMock =
+            this.eventV1OrchestrationServiceMock =
                 new Mock<IEventV1OrchestrationService>(
                     behavior: MockBehavior.Strict);
 
-            this.eventListenerV2OrchestrationServiceMock =
+            this.eventListenerV1OrchestrationServiceMock =
                 new Mock<IEventListenerV1OrchestrationService>(
                     behavior: MockBehavior.Strict);
 
@@ -48,20 +48,20 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
             var compareConfiguration = new ComparisonConfig();
 
-            compareConfiguration.IgnoreProperty<ListenerEventV1>(listenerEventV2 =>
-                listenerEventV2.Id);
+            compareConfiguration.IgnoreProperty<ListenerEventV1>(listenerEventV1 =>
+                listenerEventV1.Id);
 
             this.compareLogic = new CompareLogic(compareConfiguration);
 
-            this.eventV2CoordinationService =
-                new EventV2CoordinationService(
-                    eventV2OrchestrationService: this.eventV2OrchestrationServiceMock.Object,
-                    eventListenerV2OrchestrationService: this.eventListenerV2OrchestrationServiceMock.Object,
+            this.eventV1CoordinationService =
+                new EventV1CoordinationService(
+                    eventV1OrchestrationService: this.eventV1OrchestrationServiceMock.Object,
+                    eventListenerV1OrchestrationService: this.eventListenerV1OrchestrationServiceMock.Object,
                     dateTimeBroker: this.dateTimeBrokerMock.Object,
                     loggingBroker: this.loggingBrokerMock.Object);
         }
 
-        public static TheoryData<Xeption> EventV2ValidationExceptions()
+        public static TheoryData<Xeption> EventV1ValidationExceptions()
         {
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();
@@ -78,7 +78,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             };
         }
 
-        public static TheoryData<Xeption> EventV2DependencyExceptions()
+        public static TheoryData<Xeption> EventV1DependencyExceptions()
         {
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();
@@ -95,7 +95,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             };
         }
 
-        public static TheoryData<Xeption> EventListenerV2ValidationExceptions()
+        public static TheoryData<Xeption> EventListenerV1ValidationExceptions()
         {
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();
@@ -112,7 +112,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             };
         }
 
-        public static TheoryData<Xeption> EventListenerV2DependencyExceptions()
+        public static TheoryData<Xeption> EventListenerV1DependencyExceptions()
         {
             string someMessage = GetRandomString();
             var someInnerException = new Xeption();
@@ -153,18 +153,18 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
-        private static IQueryable<EventV1> CreateRandomEventV2s()
+        private static IQueryable<EventV1> CreateRandomEventV1s()
         {
-            return CreateEventV2Filler()
+            return CreateEventV1Filler()
                 .Create(count: GetRandomNumber())
                     .AsQueryable();
         }
         
-        private static EventV1 CreateRandomEventV2() => 
-            CreateEventV2Filler().Create();
+        private static EventV1 CreateRandomEventV1() => 
+            CreateEventV1Filler().Create();
 
-        private static IQueryable<EventListenerV1> CreateRandomEventListenerV2s() =>
-            CreateEventListenerV2Filler().Create(count: GetRandomNumber()).AsQueryable();
+        private static IQueryable<EventListenerV1> CreateRandomEventListenerV1s() =>
+            CreateEventListenerV1Filler().Create(count: GetRandomNumber()).AsQueryable();
 
         private static Guid GetRandomId() =>
             Guid.NewGuid();
@@ -182,26 +182,26 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             new MnemonicString().GetValue();
 
         private Expression<Func<ListenerEventV1, bool>> SameListenerEventAs(
-           ListenerEventV1 expectedListenerEventV2)
+           ListenerEventV1 expectedListenerEventV1)
         {
-            return actualListenerEventV2 =>
+            return actualListenerEventV1 =>
                 this.compareLogic.Compare(
-                    expectedListenerEventV2,
-                    actualListenerEventV2)
+                    expectedListenerEventV1,
+                    actualListenerEventV1)
                         .AreEqual;
         }
 
         private Expression<Func<EventCallV1, bool>> SameEventCallAs(
-           EventCallV1 expectedEventCallV2)
+           EventCallV1 expectedEventCallV1)
         {
-            return actualEventCallV2 =>
+            return actualEventCallV1 =>
                 this.compareLogic.Compare(
-                    expectedEventCallV2,
-                    actualEventCallV2)
+                    expectedEventCallV1,
+                    actualEventCallV1)
                         .AreEqual;
         }
 
-        private static Filler<EventV1> CreateEventV2Filler()
+        private static Filler<EventV1> CreateEventV1Filler()
         {
             var filler = new Filler<EventV1>();
 
@@ -212,27 +212,27 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                 .OnType<DateTimeOffset?>()
                     .Use(GetRandomDateTimeOffset())
 
-                .OnProperty(eventV2 =>
-                    eventV2.EventAddress).IgnoreIt()
+                .OnProperty(eventV1 =>
+                    eventV1.EventAddress).IgnoreIt()
 
-                .OnProperty(eventV2 =>
-                    eventV2.ListenerEvents).IgnoreIt();
+                .OnProperty(eventV1 =>
+                    eventV1.ListenerEvents).IgnoreIt();
 
             return filler;
         }
 
-        private static Filler<EventListenerV1> CreateEventListenerV2Filler()
+        private static Filler<EventListenerV1> CreateEventListenerV1Filler()
         {
             var filler = new Filler<EventListenerV1>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>().Use(GetRandomDateTimeOffset)
 
-                .OnProperty(eventListenerV2 =>
-                    eventListenerV2.EventAddress).IgnoreIt()
+                .OnProperty(eventListenerV1 =>
+                    eventListenerV1.EventAddress).IgnoreIt()
 
-                .OnProperty(eventListenerV2 =>
-                    eventListenerV2.ListenerEvents).IgnoreIt();
+                .OnProperty(eventListenerV1 =>
+                    eventListenerV1.ListenerEvents).IgnoreIt();
 
             return filler;
         }

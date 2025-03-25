@@ -4,7 +4,7 @@
 
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.Events.V2.Exceptions;
-using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Coordinations.Events.V1.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using FluentAssertions;
 using Moq;
@@ -28,7 +28,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                     innerException: validationException.InnerException as Xeption);
 
             this.eventV2CoordinationServiceMock.Setup(service =>
-                service.SubmitEventV2Async(It.IsAny<EventV1>()))
+                service.SubmitEventV1Async(It.IsAny<EventV1>()))
                     .ThrowsAsync(validationException);
 
             // when
@@ -44,7 +44,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                 .BeEquivalentTo(expectedEventV2ClientDependencyValidationException);
 
             this.eventV2CoordinationServiceMock.Verify(service =>
-                service.SubmitEventV2Async(It.IsAny<EventV1>()),
+                service.SubmitEventV1Async(It.IsAny<EventV1>()),
                     Times.Once);
 
             this.eventV2CoordinationServiceMock.VerifyNoOtherCalls();
@@ -59,7 +59,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
             var someInnerException = new Xeption();
 
             var eventV2CoordinationDependencyException =
-                new EventV2CoordinationDependencyException(
+                new EventV1CoordinationDependencyException(
                     someMessage,
                     someInnerException);
 
@@ -71,7 +71,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                         .InnerException as Xeption);
 
             this.eventV2CoordinationServiceMock.Setup(service =>
-                service.SubmitEventV2Async(It.IsAny<EventV1>()))
+                service.SubmitEventV1Async(It.IsAny<EventV1>()))
                     .ThrowsAsync(eventV2CoordinationDependencyException);
 
             // when
@@ -87,7 +87,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                 .BeEquivalentTo(expectedEventV2ClientDependencyException);
 
             this.eventV2CoordinationServiceMock.Verify(service =>
-                service.SubmitEventV2Async(It.IsAny<EventV1>()),
+                service.SubmitEventV1Async(It.IsAny<EventV1>()),
                     Times.Once);
 
             this.eventV2CoordinationServiceMock.VerifyNoOtherCalls();
@@ -102,7 +102,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
             var someInnerException = new Xeption();
 
             var eventV2CoordinationServiceException =
-                new EventV2CoordinationServiceException(
+                new EventV1CoordinationServiceException(
                     someMessage,
                     someInnerException);
 
@@ -114,7 +114,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                         .InnerException as Xeption);
 
             this.eventV2CoordinationServiceMock.Setup(service =>
-                service.SubmitEventV2Async(It.IsAny<EventV1>()))
+                service.SubmitEventV1Async(It.IsAny<EventV1>()))
                     .ThrowsAsync(eventV2CoordinationServiceException);
 
             // when
@@ -130,7 +130,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                 .BeEquivalentTo(expectedEventV2ClientServiceException);
 
             this.eventV2CoordinationServiceMock.Verify(service =>
-                service.SubmitEventV2Async(It.IsAny<EventV1>()),
+                service.SubmitEventV1Async(It.IsAny<EventV1>()),
                     Times.Once);
 
             this.eventV2CoordinationServiceMock.VerifyNoOtherCalls();

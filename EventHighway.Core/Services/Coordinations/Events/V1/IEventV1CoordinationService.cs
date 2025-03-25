@@ -6,12 +6,12 @@ using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 
-namespace EventHighway.Core.Services.Coordinations.Events.V2
+namespace EventHighway.Core.Services.Coordinations.Events.V1
 {
-    internal interface IEventV2CoordinationService
+    internal interface IEventV1CoordinationService
     {
-        ValueTask<EventV1> SubmitEventV2Async(EventV1 eventV2);
-        ValueTask FireScheduledPendingEventV2sAsync();
-        ValueTask<EventV1> RemoveEventV2ByIdAsync(Guid eventV2Id);
+        ValueTask<EventV1> SubmitEventV1Async(EventV1 eventV1);
+        ValueTask FireScheduledPendingEventV1sAsync();
+        ValueTask<EventV1> RemoveEventV1ByIdAsync(Guid eventV1Id);
     }
 }

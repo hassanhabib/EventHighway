@@ -4,7 +4,7 @@
 
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.Events.V2.Exceptions;
-using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Coordinations.Events.V1.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xeptions;
@@ -21,7 +21,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
             var someInnerException = new Xeption();
 
             var eventV2CoordinationDependencyValidationException =
-                new EventV2CoordinationDependencyValidationException(
+                new EventV1CoordinationDependencyValidationException(
                     someMessage,
                     someInnerException);
 
@@ -33,7 +33,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                         .InnerException as Xeption);
 
             this.eventV2CoordinationServiceMock.Setup(service =>
-                service.FireScheduledPendingEventV2sAsync())
+                service.FireScheduledPendingEventV1sAsync())
                     .ThrowsAsync(eventV2CoordinationDependencyValidationException);
 
             // when
@@ -49,7 +49,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                 .BeEquivalentTo(expectedEventV2ClientDependencyValidationException);
 
             this.eventV2CoordinationServiceMock.Verify(service =>
-                service.FireScheduledPendingEventV2sAsync(),
+                service.FireScheduledPendingEventV1sAsync(),
                     Times.Once);
 
             this.eventV2CoordinationServiceMock.VerifyNoOtherCalls();
@@ -63,7 +63,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
             var someInnerException = new Xeption();
 
             var eventV2CoordinationDependencyException =
-                new EventV2CoordinationDependencyException(
+                new EventV1CoordinationDependencyException(
                     someMessage,
                     someInnerException);
 
@@ -75,7 +75,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                         .InnerException as Xeption);
 
             this.eventV2CoordinationServiceMock.Setup(service =>
-                service.FireScheduledPendingEventV2sAsync())
+                service.FireScheduledPendingEventV1sAsync())
                     .ThrowsAsync(eventV2CoordinationDependencyException);
 
             // when
@@ -91,7 +91,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                 .BeEquivalentTo(expectedEventV2ClientDependencyException);
 
             this.eventV2CoordinationServiceMock.Verify(service =>
-                service.FireScheduledPendingEventV2sAsync(),
+                service.FireScheduledPendingEventV1sAsync(),
                     Times.Once);
 
             this.eventV2CoordinationServiceMock.VerifyNoOtherCalls();
@@ -105,7 +105,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
             var someInnerException = new Xeption();
 
             var eventV2CoordinationServiceException =
-                new EventV2CoordinationServiceException(
+                new EventV1CoordinationServiceException(
                     someMessage,
                     someInnerException);
 
@@ -117,7 +117,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                         .InnerException as Xeption);
 
             this.eventV2CoordinationServiceMock.Setup(service =>
-                service.FireScheduledPendingEventV2sAsync())
+                service.FireScheduledPendingEventV1sAsync())
                     .ThrowsAsync(eventV2CoordinationServiceException);
 
             // when
@@ -133,7 +133,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                 .BeEquivalentTo(expectedEventV2ClientServiceException);
 
             this.eventV2CoordinationServiceMock.Verify(service =>
-                service.FireScheduledPendingEventV2sAsync(),
+                service.FireScheduledPendingEventV1sAsync(),
                     Times.Once);
 
             this.eventV2CoordinationServiceMock.VerifyNoOtherCalls();

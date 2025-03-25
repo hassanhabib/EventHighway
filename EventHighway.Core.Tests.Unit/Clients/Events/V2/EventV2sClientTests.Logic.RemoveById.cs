@@ -26,7 +26,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                 removedEventV2.DeepClone();
 
             this.eventV2CoordinationServiceMock.Setup(service =>
-                service.RemoveEventV2ByIdAsync(inputEventV2Id))
+                service.RemoveEventV1ByIdAsync(inputEventV2Id))
                     .ReturnsAsync(removedEventV2);
 
             // when
@@ -39,7 +39,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
                 .BeEquivalentTo(expectedEventV2);
 
             this.eventV2CoordinationServiceMock.Verify(service =>
-                service.RemoveEventV2ByIdAsync(inputEventV2Id),
+                service.RemoveEventV1ByIdAsync(inputEventV2Id),
                     Times.Once);
 
             this.eventV2CoordinationServiceMock
