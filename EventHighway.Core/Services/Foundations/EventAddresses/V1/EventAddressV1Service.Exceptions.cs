@@ -90,7 +90,7 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V1
                     failedEventAddressV1ServiceException);
             }
         }
-        
+
         private async ValueTask<IQueryable<EventAddressV1>> TryCatch(
             ReturningEventAddressV1sFunction returningEventAddressV1sFunction)
         {
@@ -107,6 +107,16 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V1
 
                 throw await CreateAndLogCriticalDependencyExceptionAsync(
                     failedEventAddressV1StorageException);
+            }
+            catch (Exception serviceException)
+            {
+                var failedEventAddressV1ServiceException =
+                    new FailedEventAddressV1ServiceException(
+                        message: "Failed event address service error occurred, contact support.",
+                        innerException: serviceException);
+
+                throw await CreateAndLogServiceExceptionAsync(
+                    failedEventAddressV1ServiceException);
             }
         }
 
