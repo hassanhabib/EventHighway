@@ -25,11 +25,11 @@ namespace EventHighway.Core.Brokers.Storages
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             ConfigureEvents(modelBuilder);
-            ConfigureEventV2s(modelBuilder);
+            ConfigureEventV1s(modelBuilder);
             ConfigureEventListeners(modelBuilder);
-            ConfigureEventListenerV2s(modelBuilder);
+            ConfigureEventListenerV1s(modelBuilder);
             ConfigureListenerEvents(modelBuilder);
-            ConfigureListenerEventV2s(modelBuilder);
+            ConfigureListenerEventV1s(modelBuilder);
         }
 
         private async ValueTask<T> InsertAsync<T>(T @object)
