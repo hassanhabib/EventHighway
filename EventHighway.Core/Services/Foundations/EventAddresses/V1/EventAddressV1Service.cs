@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Brokers.Loggings;
 using EventHighway.Core.Brokers.Storages;
@@ -34,6 +35,9 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V1
 
             return await this.storageBroker.InsertEventAddressV1Async(eventAddressV1);
         });
+
+        public async ValueTask<IQueryable<EventAddressV1>> RetrieveAllEventAddressV1sAsync() =>
+            await this.storageBroker.SelectAllEventAddressV1sAsync();
 
         public ValueTask<EventAddressV1> RetrieveEventAddressV1ByIdAsync(Guid eventAddressV1Id) =>
         TryCatch(async () =>
