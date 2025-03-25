@@ -9,12 +9,12 @@ namespace EventHighway.Core.Brokers.Storages
 {
     internal partial class StorageBroker
     {
-        private void ConfigureEventListenerV2s(ModelBuilder modelBuilder)
+        private void ConfigureEventListenerV1s(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<EventListenerV1>()
-                .HasOne(eventListenerV2 => eventListenerV2.EventAddress)
-                .WithMany(eventAddressV2 => eventAddressV2.EventListeners)
-                .HasForeignKey(eventListenerV2 => eventListenerV2.EventAddressId)
+                .HasOne(eventListenerV1 => eventListenerV1.EventAddress)
+                .WithMany(eventAddressV1 => eventAddressV1.EventListeners)
+                .HasForeignKey(eventListenerV1 => eventListenerV1.EventAddressId)
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }

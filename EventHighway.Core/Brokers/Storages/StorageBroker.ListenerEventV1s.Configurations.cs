@@ -9,24 +9,24 @@ namespace EventHighway.Core.Brokers.Storages
 {
     internal partial class StorageBroker
     {
-        private void ConfigureListenerEventV2s(ModelBuilder modelBuilder)
+        private void ConfigureListenerEventV1s(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ListenerEventV1>()
-                .HasOne(listenerEventV2 => listenerEventV2.Event)
-                .WithMany(eventV2 => eventV2.ListenerEvents)
-                .HasForeignKey(listenerEventV2 => listenerEventV2.EventId)
+                .HasOne(listenerEventV1 => listenerEventV1.Event)
+                .WithMany(eventV1 => eventV1.ListenerEvents)
+                .HasForeignKey(listenerEventV1 => listenerEventV1.EventId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<ListenerEventV1>()
-                .HasOne(listenerEventV2 => listenerEventV2.EventAddress)
-                .WithMany(eventAddressV2 => eventAddressV2.ListenerEvents)
-                .HasForeignKey(listenerEventV2 => listenerEventV2.EventAddressId)
+                .HasOne(listenerEventV1 => listenerEventV1.EventAddress)
+                .WithMany(eventAddressV1 => eventAddressV1.ListenerEvents)
+                .HasForeignKey(listenerEventV1 => listenerEventV1.EventAddressId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<ListenerEventV1>()
-                .HasOne(listenerEventV2 => listenerEventV2.EventListener)
-                .WithMany(eventListenerV2 => eventListenerV2.ListenerEvents)
-                .HasForeignKey(listenerEventV2 => listenerEventV2.EventListenerId)
+                .HasOne(listenerEventV1 => listenerEventV1.EventListener)
+                .WithMany(eventListenerV1 => eventListenerV1.ListenerEvents)
+                .HasForeignKey(listenerEventV1 => listenerEventV1.EventListenerId)
                 .OnDelete(DeleteBehavior.NoAction); ;
         }
     }
