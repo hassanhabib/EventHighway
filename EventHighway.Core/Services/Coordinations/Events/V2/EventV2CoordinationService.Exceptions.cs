@@ -6,7 +6,7 @@ using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
-using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
+using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V1.Exceptions;
 using EventHighway.Core.Models.Services.Orchestrations.Events.V1.Exceptions;
 using Xeptions;
 
@@ -47,13 +47,13 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventV2OrchestrationDependencyValidationException);
             }
-            catch (EventListenerV2OrchestrationValidationException
+            catch (EventListenerV1OrchestrationValidationException
                 eventListenerV2OrchestrationValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventListenerV2OrchestrationValidationException);
             }
-            catch (EventListenerV2OrchestrationDependencyValidationException
+            catch (EventListenerV1OrchestrationDependencyValidationException
                 eventListenerV2OrchestrationDependencyValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
@@ -71,13 +71,13 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
                 throw await CreateAndLogDependencyExceptionAsync(
                     eventV2OrchestrationServiceException);
             }
-            catch (EventListenerV2OrchestrationDependencyException
+            catch (EventListenerV1OrchestrationDependencyException
                 eventListenerV2OrchestrationDependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
                     eventListenerV2OrchestrationDependencyException);
             }
-            catch (EventListenerV2OrchestrationServiceException
+            catch (EventListenerV1OrchestrationServiceException
                 eventListenerV2OrchestrationServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
@@ -113,13 +113,13 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
                 throw await CreateAndLogDependencyExceptionAsync(
                     eventV2OrchestrationServiceException);
             }
-            catch (EventListenerV2OrchestrationDependencyException
+            catch (EventListenerV1OrchestrationDependencyException
                 eventListenerV2OrchestrationDependencyException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
                     eventListenerV2OrchestrationDependencyException);
             }
-            catch (EventListenerV2OrchestrationServiceException
+            catch (EventListenerV1OrchestrationServiceException
                 eventListenerV2OrchestrationServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(
@@ -137,13 +137,13 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventV2OrchestrationDependencyValidationException);
             }
-            catch (EventListenerV2OrchestrationValidationException
+            catch (EventListenerV1OrchestrationValidationException
                 eventListenerV2OrchestrationValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(
                     eventListenerV2OrchestrationValidationException);
             }
-            catch (EventListenerV2OrchestrationDependencyValidationException
+            catch (EventListenerV1OrchestrationDependencyValidationException
                 eventListenerV2OrchestrationDependencyValidationException)
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(

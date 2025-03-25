@@ -7,17 +7,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.ListenerEvents.V2.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
-using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
-using EventHighway.Core.Services.Orchestrations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V1.Exceptions;
+using EventHighway.Core.Services.Orchestrations.EventListeners.V1;
 using Xeptions;
 
 namespace EventHighway.Core.Clients.ListenerEvents.V2
 {
     internal class ListenerEventV2sClient : IListenerEventV2sClient
     {
-        private readonly IEventListenerV2OrchestrationService eventListenerV2OrchestrationService;
+        private readonly IEventListenerV1OrchestrationService eventListenerV2OrchestrationService;
 
-        public ListenerEventV2sClient(IEventListenerV2OrchestrationService eventListenerV2OrchestrationService) =>
+        public ListenerEventV2sClient(IEventListenerV1OrchestrationService eventListenerV2OrchestrationService) =>
             this.eventListenerV2OrchestrationService = eventListenerV2OrchestrationService;
 
         public async ValueTask<IQueryable<ListenerEventV1>> RetrieveAllListenerEventV2sAsync()
@@ -25,16 +25,16 @@ namespace EventHighway.Core.Clients.ListenerEvents.V2
             try
             {
                 return await this.eventListenerV2OrchestrationService
-                    .RetrieveAllListenerEventV2sAsync();
+                    .RetrieveAllListenerEventV1sAsync();
             }
-            catch (EventListenerV2OrchestrationDependencyException
+            catch (EventListenerV1OrchestrationDependencyException
                 eventListenerV2OrchestrationDependencyException)
             {
                 throw CreateListenerEventV2ClientDependencyException(
                     eventListenerV2OrchestrationDependencyException.InnerException
                         as Xeption);
             }
-            catch (EventListenerV2OrchestrationServiceException
+            catch (EventListenerV1OrchestrationServiceException
                 eventListenerV2OrchestrationServiceException)
             {
                 throw CreateListenerEventV2ClientServiceException(
@@ -47,31 +47,31 @@ namespace EventHighway.Core.Clients.ListenerEvents.V2
         {
             try
             {
-                return await this.eventListenerV2OrchestrationService.RemoveListenerEventV2ByIdAsync(
+                return await this.eventListenerV2OrchestrationService.RemoveListenerEventV1ByIdAsync(
                     listenerEventV2Id);
             }
-            catch (EventListenerV2OrchestrationValidationException
+            catch (EventListenerV1OrchestrationValidationException
                 eventListenerV2OrchestrationValidationException)
             {
                 throw CreateListenerEventV2ClientDependencyValidationException(
                     eventListenerV2OrchestrationValidationException.InnerException
                         as Xeption);
             }
-            catch (EventListenerV2OrchestrationDependencyValidationException
+            catch (EventListenerV1OrchestrationDependencyValidationException
                 eventListenerV2OrchestrationDependencyValidationException)
             {
                 throw CreateListenerEventV2ClientDependencyValidationException(
                     eventListenerV2OrchestrationDependencyValidationException.InnerException
                         as Xeption);
             }
-            catch (EventListenerV2OrchestrationDependencyException
+            catch (EventListenerV1OrchestrationDependencyException
                 eventListenerV2OrchestrationDependencyException)
             {
                 throw CreateListenerEventV2ClientDependencyException(
                     eventListenerV2OrchestrationDependencyException.InnerException
                         as Xeption);
             }
-            catch (EventListenerV2OrchestrationServiceException
+            catch (EventListenerV1OrchestrationServiceException
                 eventListenerV2OrchestrationServiceException)
             {
                 throw CreateListenerEventV2ClientServiceException(

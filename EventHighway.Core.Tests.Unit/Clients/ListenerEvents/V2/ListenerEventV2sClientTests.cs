@@ -6,8 +6,8 @@ using System;
 using System.Linq;
 using EventHighway.Core.Clients.ListenerEvents.V2;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
-using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
-using EventHighway.Core.Services.Orchestrations.EventListeners.V2;
+using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V1.Exceptions;
+using EventHighway.Core.Services.Orchestrations.EventListeners.V1;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
@@ -16,13 +16,13 @@ namespace EventHighway.Core.Tests.Unit.Clients.ListenerEvents.V2
 {
     public partial class ListenerEventV2sClientTests
     {
-        private readonly Mock<IEventListenerV2OrchestrationService> eventListenerV2OrchestrationServiceMock;
+        private readonly Mock<IEventListenerV1OrchestrationService> eventListenerV2OrchestrationServiceMock;
         private readonly IListenerEventV2sClient listenerEventV2SClient;
 
         public ListenerEventV2sClientTests()
         {
             this.eventListenerV2OrchestrationServiceMock =
-                new Mock<IEventListenerV2OrchestrationService>();
+                new Mock<IEventListenerV1OrchestrationService>();
 
             this.listenerEventV2SClient =
                 new ListenerEventV2sClient(
@@ -37,11 +37,11 @@ namespace EventHighway.Core.Tests.Unit.Clients.ListenerEvents.V2
 
             return new TheoryData<Xeption>
             {
-                new EventListenerV2OrchestrationValidationException(
+                new EventListenerV1OrchestrationValidationException(
                     someMessage,
                     someInnerException),
 
-                new EventListenerV2OrchestrationDependencyValidationException(
+                new EventListenerV1OrchestrationDependencyValidationException(
                     someMessage,
                     someInnerException),
             };

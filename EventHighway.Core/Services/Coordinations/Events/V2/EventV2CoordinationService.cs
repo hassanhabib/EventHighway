@@ -11,7 +11,7 @@ using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
-using EventHighway.Core.Services.Orchestrations.EventListeners.V2;
+using EventHighway.Core.Services.Orchestrations.EventListeners.V1;
 using EventHighway.Core.Services.Orchestrations.Events.V1;
 
 namespace EventHighway.Core.Services.Coordinations.Events.V2
@@ -19,13 +19,13 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
     internal partial class EventV2CoordinationService : IEventV2CoordinationService
     {
         private readonly IEventV1OrchestrationService eventV2OrchestrationService;
-        private readonly IEventListenerV2OrchestrationService eventListenerV2OrchestrationService;
+        private readonly IEventListenerV1OrchestrationService eventListenerV2OrchestrationService;
         private readonly IDateTimeBroker dateTimeBroker;
         private readonly ILoggingBroker loggingBroker;
 
         public EventV2CoordinationService(
             IEventV1OrchestrationService eventV2OrchestrationService,
-            IEventListenerV2OrchestrationService eventListenerV2OrchestrationService,
+            IEventListenerV1OrchestrationService eventListenerV2OrchestrationService,
             IDateTimeBroker dateTimeBroker,
             ILoggingBroker loggingBroker)
         {
@@ -80,7 +80,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
         {
             IQueryable<EventListenerV1> eventListenerV2s =
                 await this.eventListenerV2OrchestrationService
-                    .RetrieveEventListenerV2sByEventAddressIdAsync(
+                    .RetrieveEventListenerV1sByEventAddressIdAsync(
                         eventV2.EventAddressId);
 
             foreach (EventListenerV1 eventListenerV2 in eventListenerV2s)
@@ -90,7 +90,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
 
                 ListenerEventV1 addedListenerEventV2 =
                     await this.eventListenerV2OrchestrationService
-                        .AddListenerEventV2Async(listenerEventV2);
+                        .AddListenerEventV1Async(listenerEventV2);
 
                 await RunEventCallAsync(
                     eventV2,
@@ -140,7 +140,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
                 await this.dateTimeBroker.GetDateTimeOffsetAsync();
 
             await this.eventListenerV2OrchestrationService
-                .ModifyListenerEventV2Async(listenerEventV2);
+                .ModifyListenerEventV1Async(listenerEventV2);
         }
 
         private static ListenerEventV1 CreateEventListener(
