@@ -33,7 +33,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V1
 
             // when
             ValueTask<EventAddressV1> registerEventAddressV1Task =
-                this.eventAddressesClient.RegisterEventAddressV1Async(someEventAddressV1);
+                this.eventAddressV1sClient.RegisterEventAddressV1Async(someEventAddressV1);
 
             EventAddressV1ClientDependencyValidationException
                 actualEventAddressV1ClientDependencyValidationException =
@@ -75,7 +75,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V1
 
             // when
             ValueTask<EventAddressV1> registerEventAddressV1Task =
-                this.eventAddressesClient.RegisterEventAddressV1Async(someEventAddressV1);
+                this.eventAddressV1sClient.RegisterEventAddressV1Async(someEventAddressV1);
 
             EventAddressV1ClientDependencyException
                 actualEventAddressV1ClientDependencyException =
@@ -117,7 +117,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V1
 
             // when
             ValueTask<EventAddressV1> registerEventAddressV1Task =
-                this.eventAddressesClient.RegisterEventAddressV1Async(someEventAddressV1);
+                this.eventAddressV1sClient.RegisterEventAddressV1Async(someEventAddressV1);
 
             EventAddressV1ClientServiceException actualEventAddressV1ClientServiceException =
                 await Assert.ThrowsAsync<EventAddressV1ClientServiceException>(

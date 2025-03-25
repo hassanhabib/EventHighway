@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using EventHighway.Core.Clients.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions;
@@ -16,14 +17,14 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V1
     public partial class EventAddressesV1ClientTests
     {
         private readonly Mock<IEventAddressV1Service> eventAddressV1ServiceMock;
-        private readonly IEventAddressesV1Client eventAddressesClient;
+        private readonly IEventAddressesV1Client eventAddressV1sClient;
 
         public EventAddressesV1ClientTests()
         {
             this.eventAddressV1ServiceMock =
                 new Mock<IEventAddressV1Service>();
 
-            this.eventAddressesClient =
+            this.eventAddressV1sClient =
                 new EventAddressesV1Client(
                     eventAddressV1Service: this.eventAddressV1ServiceMock.Object);
         }
@@ -48,14 +49,20 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V1
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
-        private static Guid GetRandomId() => 
+        private static Guid GetRandomId() =>
             Guid.NewGuid();
+
+        private static int GetRandomNumber() =>
+            new IntRange(min: 2, max: 9).GetValue();
 
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
         private static EventAddressV1 CreateRandomEventAddressV1() =>
             CreateEventAddressV1Filler().Create();
+
+        private static IQueryable<EventAddressV1> CreateRandomEventAddressV1s() =>
+            CreateEventAddressV1Filler().Create(count: GetRandomNumber()).AsQueryable();
 
         private static Filler<EventAddressV1> CreateEventAddressV1Filler()
         {
