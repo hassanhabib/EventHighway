@@ -5,18 +5,18 @@
 using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.Events.V2.Exceptions;
-using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Coordinations.Events.V1.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
-using EventHighway.Core.Services.Coordinations.Events.V2;
+using EventHighway.Core.Services.Coordinations.Events.V1;
 using Xeptions;
 
 namespace EventHighway.Core.Clients.Events.V2
 {
     internal class EventV2sClient : IEventV2sClient
     {
-        private readonly IEventV2CoordinationService eventV2CoordinationService;
+        private readonly IEventV1CoordinationService eventV2CoordinationService;
 
-        public EventV2sClient(IEventV2CoordinationService eventV2CoordinationService) =>
+        public EventV2sClient(IEventV1CoordinationService eventV2CoordinationService) =>
             this.eventV2CoordinationService = eventV2CoordinationService;
 
         public async ValueTask<EventV1> SubmitEventV2Async(EventV1 eventV2)
@@ -24,30 +24,30 @@ namespace EventHighway.Core.Clients.Events.V2
             try
             {
                 return await this.eventV2CoordinationService
-                    .SubmitEventV2Async(eventV2);
+                    .SubmitEventV1Async(eventV2);
             }
-            catch (EventV2CoordinationValidationException
+            catch (EventV1CoordinationValidationException
                 eventV2CoordinationValidationException)
             {
                 throw CreateEventV2ClientDependencyValidationException(
                     eventV2CoordinationValidationException.InnerException
                         as Xeption);
             }
-            catch (EventV2CoordinationDependencyValidationException
+            catch (EventV1CoordinationDependencyValidationException
                 eventV2CoordinationDependencyValidationException)
             {
                 throw CreateEventV2ClientDependencyValidationException(
                     eventV2CoordinationDependencyValidationException.InnerException
                         as Xeption);
             }
-            catch (EventV2CoordinationDependencyException
+            catch (EventV1CoordinationDependencyException
                 eventV2CoordinationDependencyException)
             {
                 throw CreateEventV2ClientDependencyException(
                     eventV2CoordinationDependencyException.InnerException
                         as Xeption);
             }
-            catch (EventV2CoordinationServiceException
+            catch (EventV1CoordinationServiceException
                 eventV2CoordinationServiceException)
             {
                 throw CreateEventV2ClientServiceException(
@@ -61,23 +61,23 @@ namespace EventHighway.Core.Clients.Events.V2
             try
             {
                 await this.eventV2CoordinationService
-                    .FireScheduledPendingEventV2sAsync();
+                    .FireScheduledPendingEventV1sAsync();
             }
-            catch (EventV2CoordinationDependencyValidationException
+            catch (EventV1CoordinationDependencyValidationException
                 eventV2CoordinationDependencyValidationException)
             {
                 throw CreateEventV2ClientDependencyValidationException(
                     eventV2CoordinationDependencyValidationException.InnerException
                         as Xeption);
             }
-            catch (EventV2CoordinationDependencyException
+            catch (EventV1CoordinationDependencyException
                 eventV2CoordinationDependencyException)
             {
                 throw CreateEventV2ClientDependencyException(
                     eventV2CoordinationDependencyException.InnerException
                         as Xeption);
             }
-            catch (EventV2CoordinationServiceException
+            catch (EventV1CoordinationServiceException
                 eventV2CoordinationServiceException)
             {
                 throw CreateEventV2ClientServiceException(
@@ -91,30 +91,30 @@ namespace EventHighway.Core.Clients.Events.V2
             try
             {
                 return await this.eventV2CoordinationService
-                    .RemoveEventV2ByIdAsync(eventV2Id);
+                    .RemoveEventV1ByIdAsync(eventV2Id);
             }
-            catch (EventV2CoordinationValidationException
+            catch (EventV1CoordinationValidationException
                 eventV2CoordinationValidationException)
             {
                 throw CreateEventV2ClientDependencyValidationException(
                     eventV2CoordinationValidationException.InnerException
                         as Xeption);
             }
-            catch (EventV2CoordinationDependencyValidationException
+            catch (EventV1CoordinationDependencyValidationException
                 eventV2CoordinationDependencyValidationException)
             {
                 throw CreateEventV2ClientDependencyValidationException(
                     eventV2CoordinationDependencyValidationException.InnerException
                         as Xeption);
             }
-            catch (EventV2CoordinationDependencyException
+            catch (EventV1CoordinationDependencyException
                 eventV2CoordinationDependencyException)
             {
                 throw CreateEventV2ClientDependencyException(
                     eventV2CoordinationDependencyException.InnerException
                         as Xeption);
             }
-            catch (EventV2CoordinationServiceException
+            catch (EventV1CoordinationServiceException
                 eventV2CoordinationServiceException)
             {
                 throw CreateEventV2ClientServiceException(

@@ -18,7 +18,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
 
             // then
             this.eventV2CoordinationServiceMock.Verify(service =>
-                service.FireScheduledPendingEventV2sAsync(),
+                service.FireScheduledPendingEventV1sAsync(),
                     Times.Once);
 
             this.eventV2CoordinationServiceMock.VerifyNoOtherCalls();

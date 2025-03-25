@@ -3,25 +3,25 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Coordinations.Events.V1.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 
-namespace EventHighway.Core.Services.Coordinations.Events.V2
+namespace EventHighway.Core.Services.Coordinations.Events.V1
 {
-    internal partial class EventV2CoordinationService
+    internal partial class EventV1CoordinationService
     {
-        private static void ValidateEventV2Id(Guid eventV2Id)
+        private static void ValidateEventV1Id(Guid eventV1Id)
         {
             Validate(
-                (Rule: IsInvalid(eventV2Id),
+                (Rule: IsInvalid(eventV1Id),
                 Parameter: nameof(EventV1.Id)));
         }
 
-        private static void ValidateEventV2IsNotNull(EventV1 eventV2)
+        private static void ValidateEventV1IsNotNull(EventV1 eventV1)
         {
-            if (eventV2 is null)
+            if (eventV1 is null)
             {
-                throw new NullEventV2CoordinationException(
+                throw new NullEventV1CoordinationException(
                     message: "Event is null.");
             }
         }
@@ -34,21 +34,21 @@ namespace EventHighway.Core.Services.Coordinations.Events.V2
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
-            var invalidEventV2CoordinationException =
-                new InvalidEventV2CoordinationException(
+            var invalidEventV1CoordinationException =
+                new InvalidEventV1CoordinationException(
                     message: "Event is invalid, fix the errors and try again.");
 
             foreach ((dynamic rule, string parameter) in validations)
             {
                 if (rule.Condition)
                 {
-                    invalidEventV2CoordinationException.UpsertDataList(
+                    invalidEventV1CoordinationException.UpsertDataList(
                         key: parameter,
                         value: rule.Message);
                 }
             }
 
-            invalidEventV2CoordinationException.ThrowIfContainsErrors();
+            invalidEventV1CoordinationException.ThrowIfContainsErrors();
         }
     }
 }

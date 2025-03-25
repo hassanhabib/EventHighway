@@ -4,11 +4,11 @@
 
 using Xeptions;
 
-namespace EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions
+namespace EventHighway.Core.Models.Services.Coordinations.Events.V1.Exceptions
 {
-    public class EventV2CoordinationServiceException : Xeption
+    public class EventV1CoordinationValidationException : Xeption
     {
-        public EventV2CoordinationServiceException(string message, Xeption innerException)
+        public EventV1CoordinationValidationException(string message, Xeption innerException)
             : base(message, innerException)
         { }
     }

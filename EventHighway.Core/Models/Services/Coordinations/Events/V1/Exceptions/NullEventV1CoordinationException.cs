@@ -2,14 +2,15 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using Xeptions;
 
-namespace EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions
+namespace EventHighway.Core.Models.Services.Coordinations.Events.V1.Exceptions
 {
-    public class EventV2CoordinationDependencyValidationException : Xeption
+    public class NullEventV1CoordinationException : Xeption
     {
-        public EventV2CoordinationDependencyValidationException(string message, Xeption innerException)
-            : base(message, innerException)
+        public NullEventV1CoordinationException(string message)
+            : base(message)
         { }
     }
 }

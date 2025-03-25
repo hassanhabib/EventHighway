@@ -4,10 +4,10 @@
 
 using System;
 using EventHighway.Core.Clients.Events.V2;
-using EventHighway.Core.Models.Services.Coordinations.Events.V2.Exceptions;
+using EventHighway.Core.Models.Services.Coordinations.Events.V1.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
-using EventHighway.Core.Services.Coordinations.Events.V2;
+using EventHighway.Core.Services.Coordinations.Events.V1;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
@@ -16,13 +16,13 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
 {
     public partial class EventV2sClientTests
     {
-        private readonly Mock<IEventV2CoordinationService> eventV2CoordinationServiceMock;
+        private readonly Mock<IEventV1CoordinationService> eventV2CoordinationServiceMock;
         private readonly IEventV2sClient eventV2SClient;
 
         public EventV2sClientTests()
         {
             this.eventV2CoordinationServiceMock =
-                new Mock<IEventV2CoordinationService>();
+                new Mock<IEventV1CoordinationService>();
 
             this.eventV2SClient =
                 new EventV2sClient(
@@ -37,11 +37,11 @@ namespace EventHighway.Core.Tests.Unit.Clients.Events.V2
 
             return new TheoryData<Xeption>
             {
-                new EventV2CoordinationValidationException(
+                new EventV1CoordinationValidationException(
                     someMessage,
                     someInnerException),
 
-                new EventV2CoordinationDependencyValidationException(
+                new EventV1CoordinationDependencyValidationException(
                     someMessage,
                     someInnerException),
             };
