@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
@@ -53,6 +54,52 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V1
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCriticalAsync(It.Is(SameExceptionAs(
                     expectedEventAddressV1DependencyException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRetrieveAllIfExceptionOccursAndLogItAsync()
+        {
+            // given
+            var serviceException = new Exception();
+
+            var failedEventAddressV1ServiceException =
+                new FailedEventAddressV1ServiceException(
+                    message: "Failed event address service error occurred, contact support.",
+                    innerException: serviceException);
+
+            var expectedEventAddressV1ServiceException =
+                new EventAddressV1ServiceException(
+                    message: "Event address service error occurred, contact support.",
+                    innerException: failedEventAddressV1ServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectAllEventAddressV1sAsync())
+                    .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<IQueryable<EventAddressV1>> retrieveAllEventAddressV1sTask =
+                this.eventAddressV1Service.RetrieveAllEventAddressV1sAsync();
+
+            EventAddressV1ServiceException actualEventAddressV1ServiceException =
+                await Assert.ThrowsAsync<EventAddressV1ServiceException>(
+                    retrieveAllEventAddressV1sTask.AsTask);
+
+            // then
+            actualEventAddressV1ServiceException.Should()
+                .BeEquivalentTo(expectedEventAddressV1ServiceException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectAllEventAddressV1sAsync(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventAddressV1ServiceException))),
                         Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
