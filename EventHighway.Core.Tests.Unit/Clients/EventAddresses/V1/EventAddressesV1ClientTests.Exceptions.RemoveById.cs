@@ -1,0 +1,138 @@
+﻿// ---------------------------------------------------------------------------------- 
+// Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
+// ----------------------------------------------------------------------------------
+
+using System;
+using System.Threading.Tasks;
+using EventHighway.Core.Models.Clients.EventAddresses.V1.Exceptions;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
+using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions;
+using FluentAssertions;
+using Moq;
+using Xeptions;
+
+namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V1
+{
+    public partial class EventAddressesV1ClientTests
+    {
+        [Theory]
+        [MemberData(nameof(ValidationExceptions))]
+        public async Task ShouldThrowDependencyValidationExceptionOnRemoveByIdIfDependencyValidationErrorOccursAsync(
+            Xeption validationException)
+        {
+            // given
+            Guid someEventAddressV1Id = GetRandomId();
+
+            var expectedEventAddressV1ClientDependencyValidationException =
+                new EventAddressV1ClientDependencyValidationException(
+                    message: "Event address client validation error occurred, fix the errors and try again.",
+                    innerException: validationException.InnerException as Xeption);
+
+            this.eventAddressV1ServiceMock.Setup(service =>
+                service.RemoveEventAddressV1ByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(validationException);
+
+            // when
+            ValueTask<EventAddressV1> removeEventAddressV1ByIdTask =
+                this.eventAddressesClient.RemoveEventAddressV1ByIdAsync(someEventAddressV1Id);
+
+            EventAddressV1ClientDependencyValidationException
+                actualEventAddressV1ClientDependencyValidationException =
+                    await Assert.ThrowsAsync<EventAddressV1ClientDependencyValidationException>(
+                        removeEventAddressV1ByIdTask.AsTask);
+
+            // then
+            actualEventAddressV1ClientDependencyValidationException.Should()
+                .BeEquivalentTo(expectedEventAddressV1ClientDependencyValidationException);
+
+            this.eventAddressV1ServiceMock.Verify(service =>
+                service.RemoveEventAddressV1ByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.eventAddressV1ServiceMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyExceptionOnRemoveByIdIfDependencyErrorOccursAsync()
+        {
+            // given
+            Guid someEventAddressV1Id = GetRandomId();
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            var eventV1DependencyException =
+                new EventAddressV1DependencyException(
+                    someMessage,
+                    someInnerException);
+
+            var expectedEventAddressV1ClientDependencyException =
+                new EventAddressV1ClientDependencyException(
+                    message: "Event address client dependency error occurred, contact support.",
+                    innerException: eventV1DependencyException.InnerException as Xeption);
+
+            this.eventAddressV1ServiceMock.Setup(service =>
+                service.RemoveEventAddressV1ByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(eventV1DependencyException);
+
+            // when
+            ValueTask<EventAddressV1> removeEventAddressV1ByIdTask =
+                this.eventAddressesClient.RemoveEventAddressV1ByIdAsync(someEventAddressV1Id);
+
+            EventAddressV1ClientDependencyException
+                actualEventAddressV1ClientDependencyException =
+                    await Assert.ThrowsAsync<EventAddressV1ClientDependencyException>(
+                        removeEventAddressV1ByIdTask.AsTask);
+
+            // then
+            actualEventAddressV1ClientDependencyException.Should()
+                .BeEquivalentTo(expectedEventAddressV1ClientDependencyException);
+
+            this.eventAddressV1ServiceMock.Verify(service =>
+                service.RemoveEventAddressV1ByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.eventAddressV1ServiceMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRemoveByIdIfServiceErrorOccursAsync()
+        {
+            // given
+            Guid someEventAddressV1Id = GetRandomId();
+            string someMessage = GetRandomString();
+            var someInnerException = new Xeption();
+
+            var eventV1ServiceException =
+                new EventAddressV1ServiceException(
+                    someMessage,
+                    someInnerException);
+
+            var expectedEventAddressV1ClientServiceException =
+                new EventAddressV1ClientServiceException(
+                    message: "Event address client service error occurred, contact support.",
+                    innerException: eventV1ServiceException.InnerException as Xeption);
+
+            this.eventAddressV1ServiceMock.Setup(service =>
+                service.RemoveEventAddressV1ByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(eventV1ServiceException);
+
+            // when
+            ValueTask<EventAddressV1> removeEventAddressV1ByIdTask =
+                this.eventAddressesClient.RemoveEventAddressV1ByIdAsync(someEventAddressV1Id);
+
+            EventAddressV1ClientServiceException actualEventAddressV1ClientServiceException =
+                await Assert.ThrowsAsync<EventAddressV1ClientServiceException>(
+                    removeEventAddressV1ByIdTask.AsTask);
+
+            // then
+            actualEventAddressV1ClientServiceException.Should()
+                .BeEquivalentTo(expectedEventAddressV1ClientServiceException);
+
+            this.eventAddressV1ServiceMock.Verify(service =>
+                service.RemoveEventAddressV1ByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.eventAddressV1ServiceMock.VerifyNoOtherCalls();
+        }
+    }
+}

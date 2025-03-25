@@ -3,7 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using EventHighway.Core.Clients.EventListeners.V2;
+using EventHighway.Core.Clients.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V1.Exceptions;
 using EventHighway.Core.Services.Orchestrations.EventListeners.V1;
@@ -11,22 +11,22 @@ using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
 
-namespace EventHighway.Core.Tests.Unit.Clients.EventListeners.V2
+namespace EventHighway.Core.Tests.Unit.Clients.EventListeners.V1
 {
-    public partial class EventListenerV2sClientTests
+    public partial class EventListenerV1sClientTests
     {
-        private readonly Mock<IEventListenerV1OrchestrationService> eventListenerV2OrchestrationServiceMock;
-        private readonly IEventListenerV2sClient eventListenerV2SClient;
+        private readonly Mock<IEventListenerV1OrchestrationService> eventListenerV1OrchestrationServiceMock;
+        private readonly IEventListenerV1sClient eventListenerV1SClient;
 
-        public EventListenerV2sClientTests()
+        public EventListenerV1sClientTests()
         {
-            this.eventListenerV2OrchestrationServiceMock =
+            this.eventListenerV1OrchestrationServiceMock =
                 new Mock<IEventListenerV1OrchestrationService>();
 
-            this.eventListenerV2SClient =
-                new EventListenerV2sClient(
-                    eventListenerV2OrchestrationService:
-                        this.eventListenerV2OrchestrationServiceMock.Object);
+            this.eventListenerV1SClient =
+                new EventListenerV1sClient(
+                    eventListenerV1OrchestrationService:
+                        this.eventListenerV1OrchestrationServiceMock.Object);
         }
 
         public static TheoryData<Xeption> ValidationExceptions()
@@ -55,20 +55,20 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventListeners.V2
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
-        private static EventListenerV1 CreateRandomEventListenerV2() =>
-            CreateEventListenerV2Filler().Create();
+        private static EventListenerV1 CreateRandomEventListenerV1() =>
+            CreateEventListenerV1Filler().Create();
 
-        private static Filler<EventListenerV1> CreateEventListenerV2Filler()
+        private static Filler<EventListenerV1> CreateEventListenerV1Filler()
         {
             var filler = new Filler<EventListenerV1>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>().Use(GetRandomDateTimeOffset)
 
-                .OnProperty(eventListenerV2 => eventListenerV2.EventAddress)
+                .OnProperty(eventListenerV1 => eventListenerV1.EventAddress)
                     .IgnoreIt()
 
-                .OnProperty(eventListenerV2 => eventListenerV2.ListenerEvents)
+                .OnProperty(eventListenerV1 => eventListenerV1.ListenerEvents)
                     .IgnoreIt();
 
             return filler;

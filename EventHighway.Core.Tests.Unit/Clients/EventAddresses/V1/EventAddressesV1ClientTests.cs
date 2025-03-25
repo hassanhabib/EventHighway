@@ -3,7 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using EventHighway.Core.Clients.EventAddresses.V2;
+using EventHighway.Core.Clients.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions;
 using EventHighway.Core.Services.Foundations.EventAddresses.V1;
@@ -11,21 +11,21 @@ using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
 
-namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
+namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V1
 {
-    public partial class EventAddressesV2ClientTests
+    public partial class EventAddressesV1ClientTests
     {
-        private readonly Mock<IEventAddressV1Service> eventAddressV2ServiceMock;
-        private readonly IEventAddressesV2Client eventAddressesClient;
+        private readonly Mock<IEventAddressV1Service> eventAddressV1ServiceMock;
+        private readonly IEventAddressesV1Client eventAddressesClient;
 
-        public EventAddressesV2ClientTests()
+        public EventAddressesV1ClientTests()
         {
-            this.eventAddressV2ServiceMock =
+            this.eventAddressV1ServiceMock =
                 new Mock<IEventAddressV1Service>();
 
             this.eventAddressesClient =
-                new EventAddressesV2Client(
-                    eventAddressV2Service: this.eventAddressV2ServiceMock.Object);
+                new EventAddressesV1Client(
+                    eventAddressV1Service: this.eventAddressV1ServiceMock.Object);
         }
 
         public static TheoryData<Xeption> ValidationExceptions()
@@ -54,23 +54,23 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventAddresses.V2
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
-        private static EventAddressV1 CreateRandomEventAddressV2() =>
-            CreateEventAddressV2Filler().Create();
+        private static EventAddressV1 CreateRandomEventAddressV1() =>
+            CreateEventAddressV1Filler().Create();
 
-        private static Filler<EventAddressV1> CreateEventAddressV2Filler()
+        private static Filler<EventAddressV1> CreateEventAddressV1Filler()
         {
             var filler = new Filler<EventAddressV1>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>().Use(GetRandomDateTimeOffset)
 
-                .OnProperty(eventAddressV2 => eventAddressV2.Events)
+                .OnProperty(eventAddressV1 => eventAddressV1.Events)
                     .IgnoreIt()
 
-                .OnProperty(eventAddressV2 => eventAddressV2.EventListeners)
+                .OnProperty(eventAddressV1 => eventAddressV1.EventListeners)
                     .IgnoreIt()
 
-                .OnProperty(eventAddressV2 => eventAddressV2.ListenerEvents)
+                .OnProperty(eventAddressV1 => eventAddressV1.ListenerEvents)
                     .IgnoreIt();
 
             return filler;

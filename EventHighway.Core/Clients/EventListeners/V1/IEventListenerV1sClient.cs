@@ -6,11 +6,11 @@ using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 
-namespace EventHighway.Core.Clients.EventListeners.V2
+namespace EventHighway.Core.Clients.EventListeners.V1
 {
-    public interface IEventListenerV2sClient
+    public interface IEventListenerV1sClient
     {
-        ValueTask<EventListenerV1> RegisterEventListenerV2Async(EventListenerV1 eventListenerV2);
-        ValueTask<EventListenerV1> RemoveEventListenerV2ByIdAsync(Guid eventListenerV2Id);
+        ValueTask<EventListenerV1> RegisterEventListenerV1Async(EventListenerV1 eventListenerV1);
+        ValueTask<EventListenerV1> RemoveEventListenerV1ByIdAsync(Guid eventListenerV1Id);
     }
 }
