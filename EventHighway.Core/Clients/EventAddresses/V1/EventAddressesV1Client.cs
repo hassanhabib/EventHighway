@@ -3,10 +3,12 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.EventAddresses.V1.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1.Exceptions;
+using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V1.Exceptions;
 using EventHighway.Core.Services.Foundations.EventAddresses.V1;
 using Xeptions;
 
@@ -47,6 +49,29 @@ namespace EventHighway.Core.Clients.EventAddresses.V1
             {
                 throw CreateEventAddressV1ClientServiceException(
                     eventV1ServiceException.InnerException
+                        as Xeption);
+            }
+        }
+
+        public async ValueTask<IQueryable<EventAddressV1>> RetrieveAllEventAddressV1sAsync()
+        {
+            try
+            {
+                return await this.eventAddressV1Service
+                    .RetrieveAllEventAddressV1sAsync();
+            }
+            catch (EventListenerV1OrchestrationDependencyException
+                eventListenerV1OrchestrationDependencyException)
+            {
+                throw CreateEventAddressV1ClientDependencyException(
+                    eventListenerV1OrchestrationDependencyException.InnerException
+                        as Xeption);
+            }
+            catch (EventListenerV1OrchestrationServiceException
+                eventListenerV1OrchestrationServiceException)
+            {
+                throw CreateEventAddressV1ClientServiceException(
+                    eventListenerV1OrchestrationServiceException.InnerException
                         as Xeption);
             }
         }
