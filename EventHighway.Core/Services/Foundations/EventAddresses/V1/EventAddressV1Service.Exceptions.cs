@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using EFxceptions.Models.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.EventAddresses.V1;
@@ -16,6 +17,7 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V1
     internal partial class EventAddressV1Service
     {
         private delegate ValueTask<EventAddressV1> ReturningEventAddressV1Function();
+        private delegate ValueTask<IQueryable<EventAddressV1>> ReturningEventAddressV1sFunction();
 
         private async ValueTask<EventAddressV1> TryCatch(
             ReturningEventAddressV1Function returningEventAddressV1Function)
@@ -76,6 +78,35 @@ namespace EventHighway.Core.Services.Foundations.EventAddresses.V1
                         innerException: dbUpdateException);
 
                 throw await CreateAndLogDependencyExceptionAsync(failedEventAddressV1StorageException);
+            }
+            catch (Exception serviceException)
+            {
+                var failedEventAddressV1ServiceException =
+                    new FailedEventAddressV1ServiceException(
+                        message: "Failed event address service error occurred, contact support.",
+                        innerException: serviceException);
+
+                throw await CreateAndLogServiceExceptionAsync(
+                    failedEventAddressV1ServiceException);
+            }
+        }
+
+        private async ValueTask<IQueryable<EventAddressV1>> TryCatch(
+            ReturningEventAddressV1sFunction returningEventAddressV1sFunction)
+        {
+            try
+            {
+                return await returningEventAddressV1sFunction();
+            }
+            catch (SqlException sqlException)
+            {
+                var failedEventAddressV1StorageException =
+                    new FailedEventAddressV1StorageException(
+                        message: "Failed event address storage error occurred, contact support.",
+                        innerException: sqlException);
+
+                throw await CreateAndLogCriticalDependencyExceptionAsync(
+                    failedEventAddressV1StorageException);
             }
             catch (Exception serviceException)
             {

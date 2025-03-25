@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using EventHighway.Core.Brokers.Loggings;
@@ -74,6 +75,13 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.EventAddresses.V1
 
         private static EventAddressV1 CreateRandomEventAddressV1() =>
             CreateEventAddressV1Filler(dates: GetRandomDateTimeOffset()).Create();
+
+        private static IQueryable<EventAddressV1> CreateRandomEventAddressV1s()
+        {
+            return CreateEventAddressV1Filler(dates: GetRandomDateTimeOffset())
+                .Create(count: GetRandomNumber())
+                    .AsQueryable();
+        }
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
