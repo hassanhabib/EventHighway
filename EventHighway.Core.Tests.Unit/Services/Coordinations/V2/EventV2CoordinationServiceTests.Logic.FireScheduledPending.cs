@@ -69,7 +69,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             foreach (EventV1 eventV2 in retrievedEventV2s)
             {
                 this.eventListenerV2OrchestrationServiceMock.Setup(service =>
-                    service.RetrieveEventListenerV2sByEventAddressIdAsync(
+                    service.RetrieveEventListenerV1sByEventAddressIdAsync(
                         eventV2.EventAddressId))
                             .ReturnsAsync(retrievedEventListenerV2s);
             }
@@ -81,7 +81,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             foreach (ListenerEventV1 expectedListenerEventV2 in inputListenerEventV2s)
             {
                 this.eventListenerV2OrchestrationServiceMock.Setup(service =>
-                    service.AddListenerEventV2Async(
+                    service.AddListenerEventV1Async(
                         It.Is(SameListenerEventAs(expectedListenerEventV2))))
                             .ReturnsAsync(expectedListenerEventV2.DeepClone());
             }
@@ -110,7 +110,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                 expectedListenerEventV2s[index].Response = ranEventCallV2s[index].Response;
 
                 this.eventListenerV2OrchestrationServiceMock.Setup(service =>
-                    service.ModifyListenerEventV2Async(
+                    service.ModifyListenerEventV1Async(
                         It.Is(SameListenerEventAs(expectedListenerEventV2s[index]))))
                             .ReturnsAsync(expectedListenerEventV2s[index]);
             }
@@ -127,7 +127,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             foreach (EventV1 eventV2 in retrievedEventV2s)
             {
                 this.eventListenerV2OrchestrationServiceMock.Verify(service =>
-                    service.RetrieveEventListenerV2sByEventAddressIdAsync(
+                    service.RetrieveEventListenerV1sByEventAddressIdAsync(
                         eventV2.EventAddressId),
                             Times.Once);
             }
@@ -139,7 +139,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             foreach (ListenerEventV1 expectedListenerEventV2 in inputListenerEventV2s)
             {
                 this.eventListenerV2OrchestrationServiceMock.Verify(service =>
-                    service.AddListenerEventV2Async(
+                    service.AddListenerEventV1Async(
                         It.Is(SameListenerEventAs(expectedListenerEventV2))),
                             Times.Once);
             }
@@ -155,7 +155,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             foreach (ListenerEventV1 expectedListenerEventV2 in expectedListenerEventV2s)
             {
                 this.eventListenerV2OrchestrationServiceMock.Verify(service =>
-                    service.ModifyListenerEventV2Async(
+                    service.ModifyListenerEventV1Async(
                         It.Is(SameListenerEventAs(expectedListenerEventV2))),
                             Times.Once);
             }
@@ -224,7 +224,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             foreach (EventV1 eventV2 in retrievedEventV2s)
             {
                 this.eventListenerV2OrchestrationServiceMock.Setup(service =>
-                    service.RetrieveEventListenerV2sByEventAddressIdAsync(
+                    service.RetrieveEventListenerV1sByEventAddressIdAsync(
                         eventV2.EventAddressId))
                             .ReturnsAsync(retrievedEventListenerV2s);
             }
@@ -236,7 +236,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             foreach (ListenerEventV1 expectedListenerEventV2 in expectedListenerEventV2s)
             {
                 this.eventListenerV2OrchestrationServiceMock.Setup(service =>
-                    service.AddListenerEventV2Async(
+                    service.AddListenerEventV1Async(
                         It.Is(SameListenerEventAs(expectedListenerEventV2))))
                             .ReturnsAsync(expectedListenerEventV2.DeepClone());
             }
@@ -265,7 +265,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                 expectedListenerEventV2sOnModify[index].Response = ranEventCallV2s[index].Response;
 
                 this.eventListenerV2OrchestrationServiceMock.Setup(service =>
-                    service.ModifyListenerEventV2Async(
+                    service.ModifyListenerEventV1Async(
                         It.Is(SameListenerEventAs(expectedListenerEventV2sOnModify[index]))))
                             .ReturnsAsync(expectedListenerEventV2sOnModify[index]);
             }
@@ -282,7 +282,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             foreach (EventV1 eventV2 in retrievedEventV2s)
             {
                 this.eventListenerV2OrchestrationServiceMock.Verify(service =>
-                    service.RetrieveEventListenerV2sByEventAddressIdAsync(
+                    service.RetrieveEventListenerV1sByEventAddressIdAsync(
                         eventV2.EventAddressId),
                             Times.Once);
             }
@@ -294,7 +294,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             foreach (ListenerEventV1 expectedListenerEventV2 in expectedListenerEventV2s)
             {
                 this.eventListenerV2OrchestrationServiceMock.Verify(service =>
-                    service.AddListenerEventV2Async(
+                    service.AddListenerEventV1Async(
                         It.Is(SameListenerEventAs(expectedListenerEventV2))),
                             Times.Once);
             }
@@ -310,7 +310,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
             foreach (ListenerEventV1 expectedListenerEventV2 in expectedListenerEventV2sOnModify)
             {
                 this.eventListenerV2OrchestrationServiceMock.Verify(service =>
-                    service.ModifyListenerEventV2Async(
+                    service.ModifyListenerEventV1Async(
                         It.Is(SameListenerEventAs(expectedListenerEventV2))),
                             Times.Once);
             }

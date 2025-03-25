@@ -54,7 +54,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                         Times.Once);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
-                service.RetrieveEventListenerV2sByEventAddressIdAsync(
+                service.RetrieveEventListenerV1sByEventAddressIdAsync(
                     It.IsAny<Guid>()),
                         Times.Never);
 
@@ -63,7 +63,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                     Times.Never);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
-                service.AddListenerEventV2Async(
+                service.AddListenerEventV1Async(
                     It.IsAny<ListenerEventV1>()),
                         Times.Never);
 
@@ -73,7 +73,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                         Times.Never);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
-                service.ModifyListenerEventV2Async(
+                service.ModifyListenerEventV1Async(
                     It.IsAny<ListenerEventV1>()),
                         Times.Never);
 
@@ -121,7 +121,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                         Times.Once);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
-                service.RetrieveEventListenerV2sByEventAddressIdAsync(
+                service.RetrieveEventListenerV1sByEventAddressIdAsync(
                     It.IsAny<Guid>()),
                         Times.Never);
 
@@ -130,7 +130,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                     Times.Never);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
-                service.AddListenerEventV2Async(
+                service.AddListenerEventV1Async(
                     It.IsAny<ListenerEventV1>()),
                         Times.Never);
 
@@ -140,7 +140,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                         Times.Never);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
-                service.ModifyListenerEventV2Async(
+                service.ModifyListenerEventV1Async(
                     It.IsAny<ListenerEventV1>()),
                         Times.Never);
 
@@ -192,7 +192,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                         Times.Once);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
-                service.RetrieveEventListenerV2sByEventAddressIdAsync(
+                service.RetrieveEventListenerV1sByEventAddressIdAsync(
                     It.IsAny<Guid>()),
                         Times.Never);
 
@@ -201,7 +201,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                     Times.Never);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
-                service.AddListenerEventV2Async(
+                service.AddListenerEventV1Async(
                     It.IsAny<ListenerEventV1>()),
                         Times.Never);
 
@@ -211,7 +211,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                         Times.Never);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
-                service.ModifyListenerEventV2Async(
+                service.ModifyListenerEventV1Async(
                     It.IsAny<ListenerEventV1>()),
                         Times.Never);
 

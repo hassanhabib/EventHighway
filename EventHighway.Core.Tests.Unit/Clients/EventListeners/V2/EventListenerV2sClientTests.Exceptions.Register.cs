@@ -5,7 +5,7 @@
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Clients.EventListeners.V2.Exceptions;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
-using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
+using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V1.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xeptions;
@@ -28,7 +28,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventListeners.V2
                     innerException: validationException.InnerException as Xeption);
 
             this.eventListenerV2OrchestrationServiceMock.Setup(service =>
-                service.AddEventListenerV2Async(It.IsAny<EventListenerV1>()))
+                service.AddEventListenerV1Async(It.IsAny<EventListenerV1>()))
                     .ThrowsAsync(validationException);
 
             // when
@@ -45,7 +45,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventListeners.V2
                 .BeEquivalentTo(expectedEventListenerV2ClientDependencyValidationException);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
-                service.AddEventListenerV2Async(It.IsAny<EventListenerV1>()),
+                service.AddEventListenerV1Async(It.IsAny<EventListenerV1>()),
                     Times.Once);
 
             this.eventListenerV2OrchestrationServiceMock.VerifyNoOtherCalls();
@@ -60,7 +60,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventListeners.V2
             var someInnerException = new Xeption();
 
             var eventListenerV2OrchestrationDependencyException =
-                new EventListenerV2OrchestrationDependencyException(
+                new EventListenerV1OrchestrationDependencyException(
                     someMessage,
                     someInnerException);
 
@@ -72,7 +72,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventListeners.V2
                         .InnerException as Xeption);
 
             this.eventListenerV2OrchestrationServiceMock.Setup(service =>
-                service.AddEventListenerV2Async(It.IsAny<EventListenerV1>()))
+                service.AddEventListenerV1Async(It.IsAny<EventListenerV1>()))
                     .ThrowsAsync(eventListenerV2OrchestrationDependencyException);
 
             // when
@@ -89,7 +89,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventListeners.V2
                 .BeEquivalentTo(expectedEventListenerV2ClientDependencyException);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
-                service.AddEventListenerV2Async(It.IsAny<EventListenerV1>()),
+                service.AddEventListenerV1Async(It.IsAny<EventListenerV1>()),
                     Times.Once);
 
             this.eventListenerV2OrchestrationServiceMock.VerifyNoOtherCalls();
@@ -104,7 +104,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventListeners.V2
             var someInnerException = new Xeption();
 
             var eventListenerV2OrchestrationServiceException =
-                new EventListenerV2OrchestrationServiceException(
+                new EventListenerV1OrchestrationServiceException(
                     someMessage,
                     someInnerException);
 
@@ -116,7 +116,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventListeners.V2
                         .InnerException as Xeption);
 
             this.eventListenerV2OrchestrationServiceMock.Setup(service =>
-                service.AddEventListenerV2Async(It.IsAny<EventListenerV1>()))
+                service.AddEventListenerV1Async(It.IsAny<EventListenerV1>()))
                     .ThrowsAsync(eventListenerV2OrchestrationServiceException);
 
             // when
@@ -132,7 +132,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.EventListeners.V2
                 .BeEquivalentTo(expectedEventListenerV2ClientServiceException);
 
             this.eventListenerV2OrchestrationServiceMock.Verify(service =>
-                service.AddEventListenerV2Async(It.IsAny<EventListenerV1>()),
+                service.AddEventListenerV1Async(It.IsAny<EventListenerV1>()),
                     Times.Once);
 
             this.eventListenerV2OrchestrationServiceMock.VerifyNoOtherCalls();

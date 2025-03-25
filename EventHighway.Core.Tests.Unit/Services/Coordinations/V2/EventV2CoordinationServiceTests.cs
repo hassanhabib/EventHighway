@@ -11,10 +11,10 @@ using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Foundations.EventListeners.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.ListenerEvents.V1;
-using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V2.Exceptions;
+using EventHighway.Core.Models.Services.Orchestrations.EventListeners.V1.Exceptions;
 using EventHighway.Core.Models.Services.Orchestrations.Events.V1.Exceptions;
 using EventHighway.Core.Services.Coordinations.Events.V2;
-using EventHighway.Core.Services.Orchestrations.EventListeners.V2;
+using EventHighway.Core.Services.Orchestrations.EventListeners.V1;
 using EventHighway.Core.Services.Orchestrations.Events.V1;
 using KellermanSoftware.CompareNetObjects;
 using Moq;
@@ -26,7 +26,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
     public partial class EventV2CoordinationServiceTests
     {
         private readonly Mock<IEventV1OrchestrationService> eventV2OrchestrationServiceMock;
-        private readonly Mock<IEventListenerV2OrchestrationService> eventListenerV2OrchestrationServiceMock;
+        private readonly Mock<IEventListenerV1OrchestrationService> eventListenerV2OrchestrationServiceMock;
         private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly ICompareLogic compareLogic;
@@ -39,7 +39,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
                     behavior: MockBehavior.Strict);
 
             this.eventListenerV2OrchestrationServiceMock =
-                new Mock<IEventListenerV2OrchestrationService>(
+                new Mock<IEventListenerV1OrchestrationService>(
                     behavior: MockBehavior.Strict);
 
             this.dateTimeBrokerMock = new Mock<IDateTimeBroker>(
@@ -102,11 +102,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
             return new TheoryData<Xeption>
             {
-                new EventListenerV2OrchestrationValidationException(
+                new EventListenerV1OrchestrationValidationException(
                     someMessage,
                     someInnerException),
 
-                new EventListenerV2OrchestrationDependencyValidationException(
+                new EventListenerV1OrchestrationDependencyValidationException(
                     someMessage,
                     someInnerException)
             };
@@ -119,11 +119,11 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V2
 
             return new TheoryData<Xeption>
             {
-                new EventListenerV2OrchestrationDependencyException(
+                new EventListenerV1OrchestrationDependencyException(
                     someMessage,
                     someInnerException),
 
-                new EventListenerV2OrchestrationServiceException(
+                new EventListenerV1OrchestrationServiceException(
                     someMessage,
                     someInnerException),
             };
