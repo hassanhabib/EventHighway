@@ -32,7 +32,7 @@ namespace EventHighway.Core.Tests.Unit.Clients.ListenerEvents.V1
 
             // when
             IQueryable<ListenerEventV1> actualListenerEventV1s =
-                await this.listenerEventV1SClient
+                await this.listenerEventV1sClient
                     .RetrieveAllListenerEventV1sAsync();
 
             // then

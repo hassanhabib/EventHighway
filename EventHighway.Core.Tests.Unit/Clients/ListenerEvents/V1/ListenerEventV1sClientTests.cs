@@ -17,14 +17,14 @@ namespace EventHighway.Core.Tests.Unit.Clients.ListenerEvents.V1
     public partial class ListenerEventV1sClientTests
     {
         private readonly Mock<IEventListenerV1OrchestrationService> eventListenerV1OrchestrationServiceMock;
-        private readonly IListenerEventV1sClient listenerEventV1SClient;
+        private readonly IListenerEventV1sClient listenerEventV1sClient;
 
         public ListenerEventV1sClientTests()
         {
             this.eventListenerV1OrchestrationServiceMock =
                 new Mock<IEventListenerV1OrchestrationService>();
 
-            this.listenerEventV1SClient =
+            this.listenerEventV1sClient =
                 new ListenerEventV1sClient(
                     eventListenerV1OrchestrationService:
                         this.eventListenerV1OrchestrationServiceMock.Object);
