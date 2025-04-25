@@ -116,8 +116,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V1
                         EventId = inputImmediateEventV1.Id,
                         Status = ListenerEventV1Status.Pending,
                         EventAddressId = inputImmediateEventV1.EventAddressId,
-                        CreatedDate = inputImmediateEventV1.CreatedDate,
-                        UpdatedDate = inputImmediateEventV1.UpdatedDate
+                        CreatedDate = randomDateTimeOffset,
+                        UpdatedDate = randomDateTimeOffset
                     }).ToList();
 
             List<ListenerEventV1> addedListenerEventV1s =
@@ -158,6 +158,10 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V1
 
             for (int index = 0; index < inputListenerEventV1s.Count; index++)
             {
+                this.dateTimeBrokerMock.InSequence(mockSequence).Setup(broker =>
+                    broker.GetDateTimeOffsetAsync())
+                        .ReturnsAsync(randomDateTimeOffset);
+
                 this.eventListenerV1OrchestrationServiceMock
                     .InSequence(mockSequence).Setup(service =>
                         service.AddListenerEventV1Async(
@@ -178,10 +182,6 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V1
                                 .ReturnsAsync(ranEventCall);
 
                 ranEventCallV1s.Add(item: ranEventCall);
-
-                this.dateTimeBrokerMock.InSequence(mockSequence).Setup(broker =>
-                    broker.GetDateTimeOffsetAsync())
-                        .ReturnsAsync(randomDateTimeOffset);
 
                 addedListenerEventV1s[index].UpdatedDate = randomDateTimeOffset;
                 addedListenerEventV1s[index].Status = ListenerEventV1Status.Success;

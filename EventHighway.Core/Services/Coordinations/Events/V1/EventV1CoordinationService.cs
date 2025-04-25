@@ -85,8 +85,14 @@ namespace EventHighway.Core.Services.Coordinations.Events.V1
 
             foreach (EventListenerV1 eventListenerV1 in eventListenerV1s)
             {
+                DateTimeOffset now =
+                    await this.dateTimeBroker.GetDateTimeOffsetAsync();
+
                 ListenerEventV1 listenerEventV1 =
-                    CreateEventListenerV1(eventV1, eventListenerV1);
+                    CreateEventListenerV1(
+                        eventV1,
+                        eventListenerV1,
+                        now);
 
                 ListenerEventV1 addedListenerEventV1 =
                     await this.eventListenerV1OrchestrationService
@@ -95,7 +101,8 @@ namespace EventHighway.Core.Services.Coordinations.Events.V1
                 await RunEventCallV1Async(
                     eventV1,
                     eventListenerV1,
-                    addedListenerEventV1);
+                    addedListenerEventV1,
+                    now);
             }
         }
 
@@ -111,7 +118,8 @@ namespace EventHighway.Core.Services.Coordinations.Events.V1
         private async Task RunEventCallV1Async(
             EventV1 eventV1,
             EventListenerV1 eventListenerV1,
-            ListenerEventV1 listenerEventV1)
+            ListenerEventV1 listenerEventV1,
+            DateTimeOffset now)
         {
             var eventCallV1 = new EventCallV1
             {
@@ -136,8 +144,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V1
                 listenerEventV1.Status = ListenerEventV1Status.Error;
             }
 
-            listenerEventV1.UpdatedDate =
-                await this.dateTimeBroker.GetDateTimeOffsetAsync();
+            listenerEventV1.UpdatedDate = now;
 
             await this.eventListenerV1OrchestrationService
                 .ModifyListenerEventV1Async(listenerEventV1);
@@ -145,7 +152,8 @@ namespace EventHighway.Core.Services.Coordinations.Events.V1
 
         private static ListenerEventV1 CreateEventListenerV1(
             EventV1 eventV1,
-            EventListenerV1 eventListenerV1)
+            EventListenerV1 eventListenerV1,
+            DateTimeOffset now)
         {
             return new ListenerEventV1
             {
@@ -154,8 +162,8 @@ namespace EventHighway.Core.Services.Coordinations.Events.V1
                 EventListenerId = eventListenerV1.Id,
                 EventAddressId = eventV1.EventAddressId,
                 Status = ListenerEventV1Status.Pending,
-                CreatedDate = eventV1.CreatedDate,
-                UpdatedDate = eventV1.UpdatedDate,
+                CreatedDate = now,
+                UpdatedDate = now,
             };
         }
     }
