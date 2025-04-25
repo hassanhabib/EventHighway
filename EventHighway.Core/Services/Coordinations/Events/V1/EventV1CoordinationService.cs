@@ -89,8 +89,8 @@ namespace EventHighway.Core.Services.Coordinations.Events.V1
                     await this.dateTimeBroker.GetDateTimeOffsetAsync();
 
                 ListenerEventV1 listenerEventV1 =
-                    await CreateEventListenerV1Async(
-                        eventV1, 
+                    CreateEventListenerV1(
+                        eventV1,
                         eventListenerV1,
                         now);
 
@@ -150,7 +150,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V1
                 .ModifyListenerEventV1Async(listenerEventV1);
         }
 
-        private async ValueTask<ListenerEventV1> CreateEventListenerV1Async(
+        private static ListenerEventV1 CreateEventListenerV1(
             EventV1 eventV1,
             EventListenerV1 eventListenerV1,
             DateTimeOffset now)
