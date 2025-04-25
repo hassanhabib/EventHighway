@@ -134,7 +134,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V1
 
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetDateTimeOffsetAsync(),
-                    Times.Exactly(callCount: inputListenerEventV1s.Count * 2));
+                    Times.Exactly(callCount: inputListenerEventV1s.Count));
 
             foreach (ListenerEventV1 expectedListenerEventV1 in inputListenerEventV1s)
             {
@@ -289,7 +289,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V1
 
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetDateTimeOffsetAsync(),
-                    Times.Exactly(callCount: expectedListenerEventV1s.Count * 2));
+                    Times.Exactly(callCount: expectedListenerEventV1s.Count));
 
             foreach (ListenerEventV1 expectedListenerEventV1 in expectedListenerEventV1s)
             {
