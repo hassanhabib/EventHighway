@@ -86,7 +86,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V1
             foreach (EventListenerV1 eventListenerV1 in eventListenerV1s)
             {
                 ListenerEventV1 listenerEventV1 =
-                    CreateEventListenerV1(eventV1, eventListenerV1);
+                    await CreateEventListenerV1Async(eventV1, eventListenerV1);
 
                 ListenerEventV1 addedListenerEventV1 =
                     await this.eventListenerV1OrchestrationService
@@ -143,10 +143,13 @@ namespace EventHighway.Core.Services.Coordinations.Events.V1
                 .ModifyListenerEventV1Async(listenerEventV1);
         }
 
-        private static ListenerEventV1 CreateEventListenerV1(
+        private async ValueTask<ListenerEventV1> CreateEventListenerV1Async(
             EventV1 eventV1,
             EventListenerV1 eventListenerV1)
         {
+            DateTimeOffset now = 
+                await this.dateTimeBroker.GetDateTimeOffsetAsync();
+
             return new ListenerEventV1
             {
                 Id = Guid.NewGuid(),
@@ -154,8 +157,8 @@ namespace EventHighway.Core.Services.Coordinations.Events.V1
                 EventListenerId = eventListenerV1.Id,
                 EventAddressId = eventV1.EventAddressId,
                 Status = ListenerEventV1Status.Pending,
-                CreatedDate = eventV1.CreatedDate,
-                UpdatedDate = eventV1.UpdatedDate,
+                CreatedDate = now,
+                UpdatedDate = now,
             };
         }
     }
