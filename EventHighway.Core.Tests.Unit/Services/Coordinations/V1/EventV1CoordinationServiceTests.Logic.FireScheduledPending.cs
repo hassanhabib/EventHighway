@@ -42,8 +42,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V1
                             EventId = eventV1.Id,
                             Status = ListenerEventV1Status.Pending,
                             EventAddressId = eventV1.EventAddressId,
-                            CreatedDate = eventV1.CreatedDate,
-                            UpdatedDate = eventV1.UpdatedDate
+                            CreatedDate = retrievedDateTimeOffset,
+                            UpdatedDate = retrievedDateTimeOffset
                         })).ToList();
 
             List<ListenerEventV1> expectedListenerEventV1s =
@@ -134,7 +134,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V1
 
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetDateTimeOffsetAsync(),
-                    Times.Exactly(callCount: inputListenerEventV1s.Count));
+                    Times.Exactly(callCount: inputListenerEventV1s.Count * 2));
 
             foreach (ListenerEventV1 expectedListenerEventV1 in inputListenerEventV1s)
             {
