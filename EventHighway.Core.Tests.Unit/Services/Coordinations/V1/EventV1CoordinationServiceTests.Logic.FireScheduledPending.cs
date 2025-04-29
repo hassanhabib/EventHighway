@@ -60,6 +60,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V1
                                 Secret = retrievedEventListenerV1.HeaderSecret,
                             })).ToList();
 
+            int expectedDateTimeBrokerCalls =
+                inputListenerEventV1s.Count + expectedListenerEventV1s.Count;
+
             var ranEventCallV1s = new List<EventCallV1>();
 
             this.eventV1OrchestrationServiceMock.Setup(service =>
@@ -138,7 +141,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V1
 
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetDateTimeOffsetAsync(),
-                    Times.Exactly(callCount: inputListenerEventV1s.Count * 2));
+                    Times.Exactly(callCount: expectedDateTimeBrokerCalls));
 
             foreach (ListenerEventV1 expectedListenerEventV1 in inputListenerEventV1s)
             {
@@ -219,6 +222,9 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V1
                     new Exception(message: GetRandomString()))
                         .ToList();
 
+            int expectedDateTimeBrokerCalls =
+                expectedListenerEventV1s.Count + expectedListenerEventV1sOnModify.Count;
+
             var ranEventCallV1s = new List<EventCallV1>();
 
             this.eventV1OrchestrationServiceMock.Setup(service =>
@@ -297,7 +303,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V1
 
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetDateTimeOffsetAsync(),
-                    Times.Exactly(callCount: expectedListenerEventV1s.Count * 2));
+                    Times.Exactly(callCount: expectedDateTimeBrokerCalls));
 
             foreach (ListenerEventV1 expectedListenerEventV1 in expectedListenerEventV1s)
             {
