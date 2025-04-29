@@ -9,7 +9,7 @@
     <Authors>Hassan Habib</Authors>
     <Company>The Standard Community</Company>
     <Product>EventHighway</Product>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <PackageId>EventHighway</PackageId>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Copyright>Hassan Habib 2025 (c)</Copyright>
