@@ -101,8 +101,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V1
                 await RunEventCallV1Async(
                     eventV1,
                     eventListenerV1,
-                    addedListenerEventV1,
-                    now);
+                    addedListenerEventV1);
             }
         }
 
@@ -118,8 +117,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V1
         private async Task RunEventCallV1Async(
             EventV1 eventV1,
             EventListenerV1 eventListenerV1,
-            ListenerEventV1 listenerEventV1,
-            DateTimeOffset now)
+            ListenerEventV1 listenerEventV1)
         {
             var eventCallV1 = new EventCallV1
             {
@@ -144,7 +142,8 @@ namespace EventHighway.Core.Services.Coordinations.Events.V1
                 listenerEventV1.Status = ListenerEventV1Status.Error;
             }
 
-            listenerEventV1.UpdatedDate = now;
+            listenerEventV1.UpdatedDate = 
+                await this.dateTimeBroker.GetDateTimeOffsetAsync();
 
             await this.eventListenerV1OrchestrationService
                 .ModifyListenerEventV1Async(listenerEventV1);
