@@ -109,6 +109,10 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V1
                 expectedListenerEventV1s[index].Status = ListenerEventV1Status.Success;
                 expectedListenerEventV1s[index].Response = ranEventCallV1s[index].Response;
 
+                this.dateTimeBrokerMock.Setup(broker =>
+                    broker.GetDateTimeOffsetAsync())
+                        .ReturnsAsync(retrievedDateTimeOffset);
+
                 this.eventListenerV1OrchestrationServiceMock.Setup(service =>
                     service.ModifyListenerEventV1Async(
                         It.Is(SameListenerEventAs(expectedListenerEventV1s[index]))))
@@ -134,7 +138,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V1
 
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetDateTimeOffsetAsync(),
-                    Times.Exactly(callCount: inputListenerEventV1s.Count));
+                    Times.Exactly(callCount: inputListenerEventV1s.Count * 2));
 
             foreach (ListenerEventV1 expectedListenerEventV1 in inputListenerEventV1s)
             {
