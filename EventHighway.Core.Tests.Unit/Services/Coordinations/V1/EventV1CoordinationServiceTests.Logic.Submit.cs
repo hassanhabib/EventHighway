@@ -140,8 +140,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V1
                         }).ToList();
 
             int expectedDateTimeBrokerCalls = 
-                inputListenerEventV1s.Count + 
-                    inputListenerEventV1s.Count + 1;
+                inputListenerEventV1s.Count +
+                    modifiedListenerEventV1s.Count + 1;
 
             var ranEventCallV1s = new List<EventCallV1>();
 
