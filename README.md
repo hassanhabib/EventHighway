@@ -81,6 +81,9 @@ await eventHighway.Events.PublishEventAsync(event);
 
 When an event is published, a notification will be sent to all registered `EventListeners` that are listening to the event's `EventAddress`. A record of the status of the published event per listener will be available through the `ListenerEvent` table in the database.
 
+# Walk-through Video
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/z3_wx29Cs9U/0.jpg)](https://www.youtube.com/watch?v=z3_wx29Cs9U)
+
 # Note
 This is an early release of a Pub/Sub pattern core library which can be deployed within an API or simple Console Application. It was intentionally built to be platform agnostic so it can process events from anywhere to anywhere.
 
