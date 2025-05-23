@@ -13,7 +13,7 @@
     <PackageId>EventHighway</PackageId>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Copyright>Hassan Habib 2025 (c)</Copyright>
-    <PackageIcon>EventHighwayLogo.png</PackageIcon>
+    <PackageIcon>eventhighwaylogo.png</PackageIcon>
     <PackageLicenseFile>license.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageReadmeFile>README.md</PackageReadmeFile>
