@@ -2,9 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
-using System;
 using System.Threading.Tasks;
-using EventHighway.Core.Models.Services.Foundations.EventCall.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Orchestrations.Events.V1.Exceptions;
 using FluentAssertions;
@@ -51,14 +49,6 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V1
                 broker.AddEventV1Async(
                     It.IsAny<EventV1>()),
                         Times.Never);
-
-            this.eventAddressV1ProcessingServiceMock.Verify(service =>
-                service.RetrieveEventAddressV1ByIdAsync(It.IsAny<Guid>()),
-                    Times.Never);
-
-            this.eventCallV1ProcessingServiceMock.Verify(service =>
-                service.RunEventCallV1Async(It.IsAny<EventCallV1>()),
-                    Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.eventV1ProcessingServiceMock.VerifyNoOtherCalls();
