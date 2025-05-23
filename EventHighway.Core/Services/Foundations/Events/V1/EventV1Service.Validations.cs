@@ -45,6 +45,33 @@ namespace EventHighway.Core.Services.Foundations.Events.V1
                 Parameter: nameof(EventV1.CreatedDate)));
         }
 
+        private async ValueTask ValidateEventV1OnModifyAsync(EventV1 eventV1)
+        {
+            await this.dateTimeBroker
+                .GetDateTimeOffsetAsync();
+
+            ValidateEventV1IsNotNull(eventV1);
+
+            Validate(
+                (Rule: IsInvalid(eventV1.Id),
+                Parameter: nameof(EventV1.Id)),
+
+                (Rule: IsInvalid(eventV1.Content),
+                Parameter: nameof(EventV1.Content)),
+
+                (Rule: IsInvalid(eventV1.EventAddressId),
+                Parameter: nameof(EventV1.EventAddressId)),
+
+                (Rule: IsInvalid(eventV1.Type),
+                Parameter: nameof(EventV1.Type)),
+
+                (Rule: IsInvalid(eventV1.CreatedDate),
+                Parameter: nameof(EventV1.CreatedDate)),
+
+                (Rule: IsInvalid(eventV1.UpdatedDate),
+                Parameter: nameof(EventV1.UpdatedDate)));
+        }
+
         private static void ValidateEventV1Id(Guid eventV1Id)
         {
             Validate(
