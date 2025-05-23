@@ -336,6 +336,13 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V1
                             Times.Once);
             }
 
+            foreach (EventV1 retreivedEventV1 in retrievedEventV1s)
+            {
+                this.eventV1OrchestrationServiceMock.Verify(service =>
+                    service.MarkEventV1AsImmediateAsync(retreivedEventV1),
+                        Times.Once);
+            }
+
             this.eventV1OrchestrationServiceMock.VerifyNoOtherCalls();
             this.eventListenerV1OrchestrationServiceMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
