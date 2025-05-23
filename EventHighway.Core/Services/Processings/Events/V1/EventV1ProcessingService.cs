@@ -50,9 +50,9 @@ namespace EventHighway.Core.Services.Processings.Events.V1
                 eventV1.ScheduledDate < now);
         });
 
-        public ValueTask<EventV1> ModifyEventV1Async(EventV1 eventV1)
+        public async ValueTask<EventV1> ModifyEventV1Async(EventV1 eventV1)
         {
-            throw new NotImplementedException();
+            return await this.eventV1Service.ModifyEventV1Async(eventV1);
         }
 
         public ValueTask<EventV1> RemoveEventV1ByIdAsync(Guid eventV1Id) =>
