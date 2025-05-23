@@ -95,6 +95,22 @@ namespace EventHighway.Core.Services.Foundations.Events.V1
             }
         }
 
+        private static void alidateEventV1AgainstStorage(
+            EventV1 incomingEventV1,
+            EventV1 storageEventV1)
+        {
+            ValidateEventV1Exists(
+                eventV1: storageEventV1,
+                eventV1Id: incomingEventV1.Id);
+
+            Validate(
+                (Rule: IsNotSameAsStorage(
+                    firstDate: incomingEventV1.CreatedDate,
+                    secondDate: storageEventV1.CreatedDate),
+
+                Parameter: nameof(EventV1.CreatedDate)));
+        }
+
         private static void ValidateEventV1Exists(
             EventV1 eventV1,
             Guid eventV1Id)
@@ -107,6 +123,22 @@ namespace EventHighway.Core.Services.Foundations.Events.V1
                         $"with id: {eventV1Id}.");
             }
         }
+
+        private static dynamic IsNotSameAsStorage(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate) => new
+            {
+                Condition = firstDate != secondDate,
+                Message = $"Date is not the same as storage."
+            };
+
+        private static dynamic IsEarlierThan(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate) => new
+            {
+                Condition = firstDate < secondDate,
+                Message = $"Date is earlier than storage."
+            };
 
         private static dynamic IsInvalid(Guid id) => new
         {
