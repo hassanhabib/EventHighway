@@ -44,6 +44,10 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V1
                     expectedEventV1ProcessingValidationException))),
                         Times.Once);
 
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetDateTimeOffsetAsync(),
+                    Times.Never);
+
             this.eventV1ServiceMock.Verify(broker =>
                 broker.ModifyEventV1Async(
                     It.IsAny<EventV1>()),
