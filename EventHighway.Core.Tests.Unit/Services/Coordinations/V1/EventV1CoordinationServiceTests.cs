@@ -35,8 +35,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V1
         public EventV1CoordinationServiceTests()
         {
             this.eventV1OrchestrationServiceMock =
-                new Mock<IEventV1OrchestrationService>(
-                    behavior: MockBehavior.Strict);
+                new Mock<IEventV1OrchestrationService>();
 
             this.eventListenerV1OrchestrationServiceMock =
                 new Mock<IEventListenerV1OrchestrationService>(
@@ -133,7 +132,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V1
         {
             int randomNegativeDays = GetRandomNegativeNumber();
             DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
-             
+
             DateTimeOffset scheduledNegativeDate =
                 randomDateTimeOffset.AddDays(randomNegativeDays);
 
@@ -159,8 +158,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Coordinations.V1
                 .Create(count: GetRandomNumber())
                     .AsQueryable();
         }
-        
-        private static EventV1 CreateRandomEventV1() => 
+
+        private static EventV1 CreateRandomEventV1() =>
             CreateEventV1Filler().Create();
 
         private static IQueryable<EventListenerV1> CreateRandomEventListenerV1s() =>
