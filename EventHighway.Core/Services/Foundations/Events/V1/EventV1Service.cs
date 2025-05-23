@@ -44,6 +44,10 @@ namespace EventHighway.Core.Services.Foundations.Events.V1
         {
             await ValidateEventV1OnModifyAsync(eventV1);
 
+            EventV1 maybeEventV1 =
+                await this.storageBroker.SelectEventV1ByIdAsync(
+                    eventV1.Id);
+
             return await storageBroker.UpdateEventV1Async(eventV1);
         });
 
