@@ -54,6 +54,7 @@ namespace EventHighway.Core.Services.Processings.Events.V1
         TryCatch(async () =>
         {
             ValidateEventV1IsNotNull(eventV1);
+            eventV1.Type = EventV1Type.Immediate;
 
             return await this.eventV1Service.ModifyEventV1Async(eventV1);
         });
