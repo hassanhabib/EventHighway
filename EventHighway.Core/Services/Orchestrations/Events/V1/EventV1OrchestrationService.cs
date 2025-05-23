@@ -64,7 +64,8 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V1
         {
             ValidateEventV1IsNotNull(eventV1);
 
-            return await this.eventV1ProcessingService.ModifyEventV1Async(eventV1);
+            return await this.eventV1ProcessingService
+                .MarkEventV1AsImmediateAsync(eventV1);
         });
 
         public ValueTask<EventV1> RemoveEventV1ByIdAsync(Guid eventV1Id) =>
