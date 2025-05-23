@@ -17,31 +17,61 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V1
         public async Task ShouldModifyEventV1Async()
         {
             // given
-            DateTimeOffset randomDateTimeOffset =
+            DateTimeOffset randomDateTime =
                 GetRandomDateTimeOffset();
 
-            EventV1 randomEventV1 =
-                CreateRandomEventV1(
-                    dates: randomDateTimeOffset);
+            int randomDaysAgo = GetRandomNegativeNumber();
 
-            EventV1 inputEventV1 = randomEventV1;
-            EventV1 updatedEventV1 = inputEventV1;
+            EventV1 randomEventV1 =
+                CreateRandomEventV1(randomDateTime);
+
+            EventV1 inputEventV1 =
+                randomEventV1;
+
+            inputEventV1.CreatedDate =
+                randomDateTime.AddDays(randomDaysAgo);
+
+            EventV1 storageEventV1 =
+                inputEventV1.DeepClone();
+
+            int randomSecondsAgo =
+                GetRandomNegativeNumber();
+
+            DateTimeOffset storageUpdatedDate =
+                randomDateTime.AddSeconds(
+                    randomSecondsAgo);
+
+            storageEventV1.UpdatedDate =
+                storageUpdatedDate;
+
+            EventV1 persistedEventV1 =
+                inputEventV1;
 
             EventV1 expectedEventV1 =
-                updatedEventV1.DeepClone();
+                persistedEventV1.DeepClone();
+
+            Guid eventV1Id = inputEventV1.Id;
 
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetDateTimeOffsetAsync())
-                    .ReturnsAsync(randomDateTimeOffset);
+                    .ReturnsAsync(randomDateTime);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.UpdateEventV1Async(inputEventV1))
-                    .ReturnsAsync(updatedEventV1);
+                broker.SelectEventV1ByIdAsync(
+                    eventV1Id))
+                        .ReturnsAsync(
+                            storageEventV1);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.UpdateEventV1Async(
+                    inputEventV1))
+                        .ReturnsAsync(persistedEventV1);
 
             // when
             EventV1 actualEventV1 =
                 await this.eventV1Service
-                    .ModifyEventV1Async(inputEventV1);
+                    .ModifyEventV1Async(
+                        inputEventV1);
 
             // then
             actualEventV1.Should().BeEquivalentTo(
@@ -52,8 +82,14 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V1
                     Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.UpdateEventV1Async(inputEventV1),
-                    Times.Once);
+                broker.SelectEventV1ByIdAsync(
+                    eventV1Id),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateEventV1Async(
+                    inputEventV1),
+                        Times.Once);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();

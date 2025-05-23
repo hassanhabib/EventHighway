@@ -45,6 +45,40 @@ namespace EventHighway.Core.Services.Foundations.Events.V1
                 Parameter: nameof(EventV1.CreatedDate)));
         }
 
+        private async ValueTask ValidateEventV1OnModifyAsync(EventV1 eventV1)
+        {
+            ValidateEventV1IsNotNull(eventV1);
+
+            Validate(
+                (Rule: IsInvalid(eventV1.Id),
+                Parameter: nameof(EventV1.Id)),
+
+                (Rule: IsInvalid(eventV1.Content),
+                Parameter: nameof(EventV1.Content)),
+
+                (Rule: IsInvalid(eventV1.EventAddressId),
+                Parameter: nameof(EventV1.EventAddressId)),
+
+                (Rule: IsInvalid(eventV1.Type),
+                Parameter: nameof(EventV1.Type)),
+
+                (Rule: IsInvalid(eventV1.CreatedDate),
+                Parameter: nameof(EventV1.CreatedDate)),
+
+                (Rule: IsInvalid(eventV1.UpdatedDate),
+                Parameter: nameof(EventV1.UpdatedDate)),
+
+                (Rule: IsSameAs(
+                    firstDate: eventV1.CreatedDate,
+                    secondDate: eventV1.UpdatedDate,
+                    secondDateName: nameof(EventV1.CreatedDate)),
+
+                Parameter: nameof(EventV1.UpdatedDate)),
+
+                (Rule: await IsNotRecentAsync(eventV1.UpdatedDate),
+                Parameter: nameof(EventV1.UpdatedDate)));
+        }
+
         private static void ValidateEventV1Id(Guid eventV1Id)
         {
             Validate(
@@ -61,6 +95,27 @@ namespace EventHighway.Core.Services.Foundations.Events.V1
             }
         }
 
+        private static void ValidateEventV1AgainstStorage(
+            EventV1 incomingEventV1,
+            EventV1 storageEventV1)
+        {
+            ValidateEventV1Exists(
+                eventV1: storageEventV1,
+                eventV1Id: incomingEventV1.Id);
+
+            Validate(
+                (Rule: IsNotSameAsStorage(
+                    firstDate: incomingEventV1.CreatedDate,
+                    secondDate: storageEventV1.CreatedDate),
+                Parameter: nameof(EventV1.CreatedDate)),
+
+                (Rule: IsEarlierThan(
+                    firstDate: incomingEventV1.UpdatedDate,
+                    secondDate: storageEventV1.UpdatedDate),
+
+                Parameter: nameof(EventV1.UpdatedDate)));
+        }
+
         private static void ValidateEventV1Exists(
             EventV1 eventV1,
             Guid eventV1Id)
@@ -73,6 +128,22 @@ namespace EventHighway.Core.Services.Foundations.Events.V1
                         $"with id: {eventV1Id}.");
             }
         }
+
+        private static dynamic IsNotSameAsStorage(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate) => new
+            {
+                Condition = firstDate != secondDate,
+                Message = $"Date is not the same as storage."
+            };
+
+        private static dynamic IsEarlierThan(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate) => new
+            {
+                Condition = firstDate < secondDate,
+                Message = $"Date is earlier than storage."
+            };
 
         private static dynamic IsInvalid(Guid id) => new
         {
@@ -105,6 +176,15 @@ namespace EventHighway.Core.Services.Foundations.Events.V1
             {
                 Condition = firstDate != secondDate,
                 Message = $"Date is not the same as {secondDateName}"
+            };
+
+        private static dynamic IsSameAs(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string secondDateName) => new
+            {
+                Condition = firstDate == secondDate,
+                Message = $"Date is the same as {secondDateName}."
             };
 
         private async ValueTask<dynamic> IsNotRecentAsync(DateTimeOffset date) => new
