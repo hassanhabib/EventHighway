@@ -58,7 +58,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V1
 
             this.eventCallV1ProcessingServiceMock.Verify(service =>
                 service.RunEventCallV1Async(It.IsAny<EventCallV1>()),
-                    Times.Once);
+                    Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.eventV1ProcessingServiceMock.VerifyNoOtherCalls();

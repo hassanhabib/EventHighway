@@ -59,10 +59,13 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V1
                 .RetrieveScheduledPendingEventV1sAsync();
         });
 
-        public async ValueTask<EventV1> ModifyEventV1Async(EventV1 eventV1)
+        public ValueTask<EventV1> ModifyEventV1Async(EventV1 eventV1) =>
+        TryCatch(async () =>
         {
+            ValidateEventV1IsNotNull(eventV1);
+
             return await this.eventV1ProcessingService.ModifyEventV1Async(eventV1);
-        }
+        });
 
         public ValueTask<EventV1> RemoveEventV1ByIdAsync(Guid eventV1Id) =>
         TryCatch(async () =>
