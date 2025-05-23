@@ -69,6 +69,13 @@ namespace EventHighway.Core.Services.Foundations.Events.V1
                 Parameter: nameof(EventV1.CreatedDate)),
 
                 (Rule: IsInvalid(eventV1.UpdatedDate),
+                Parameter: nameof(EventV1.UpdatedDate)),
+
+                (Rule: IsSameAs(
+                    firstDate: eventV1.CreatedDate,
+                    secondDate: eventV1.UpdatedDate,
+                    secondDateName: nameof(EventV1.CreatedDate)),
+
                 Parameter: nameof(EventV1.UpdatedDate)));
         }
 
@@ -132,6 +139,15 @@ namespace EventHighway.Core.Services.Foundations.Events.V1
             {
                 Condition = firstDate != secondDate,
                 Message = $"Date is not the same as {secondDateName}"
+            };
+
+        private static dynamic IsSameAs(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string secondDateName) => new
+            {
+                Condition = firstDate == secondDate,
+                Message = $"Date is the same as {secondDateName}."
             };
 
         private async ValueTask<dynamic> IsNotRecentAsync(DateTimeOffset date) => new

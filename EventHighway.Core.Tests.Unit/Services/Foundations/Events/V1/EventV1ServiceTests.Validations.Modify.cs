@@ -49,6 +49,10 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V1
                     Times.Never);
 
             this.storageBrokerMock.Verify(broker =>
+                broker.SelectEventV1ByIdAsync(It.IsAny<Guid>()),
+                    Times.Never);
+
+            this.storageBrokerMock.Verify(broker =>
                 broker.UpdateEventV1Async(It.IsAny<EventV1>()),
                     Times.Never);
 
@@ -129,6 +133,10 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V1
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
+                broker.SelectEventV1ByIdAsync(It.IsAny<Guid>()),
+                    Times.Never);
+
+            this.storageBrokerMock.Verify(broker =>
                 broker.UpdateEventV1Async(It.IsAny<EventV1>()),
                     Times.Never);
 
@@ -147,7 +155,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V1
 
             var invalidEventV1Exception =
                 new InvalidEventV1Exception(
-                    message: "Variant product is invalid, fix the errors and try again.");
+                    message: "Event is invalid, fix the errors and try again.");
 
             invalidEventV1Exception.AddData(
                 key: nameof(EventV1.UpdatedDate),
@@ -155,7 +163,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V1
 
             var expectedEventV1ValidationException =
                 new EventV1ValidationException(
-                    message: "Variant product validation error occurred, fix the errors and try again.",
+                    message: "Event validation error occurred, fix the errors and try again.",
                     innerException: invalidEventV1Exception);
 
             this.dateTimeBrokerMock.Setup(broker =>
