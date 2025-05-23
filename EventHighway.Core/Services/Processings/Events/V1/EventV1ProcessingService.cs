@@ -54,9 +54,8 @@ namespace EventHighway.Core.Services.Processings.Events.V1
         TryCatch(async () =>
         {
             ValidateEventV1IsNotNull(eventV1);
-            eventV1.Type = EventV1Type.Immediate;
 
-            return await this.eventV1Service.ModifyEventV1Async(eventV1);
+            return await SetEventV1AsImmediateAsync(eventV1);
         });
 
         public ValueTask<EventV1> RemoveEventV1ByIdAsync(Guid eventV1Id) =>
@@ -67,5 +66,16 @@ namespace EventHighway.Core.Services.Processings.Events.V1
             return await this.eventV1Service.RemoveEventV1ByIdAsync(
                 eventV1Id);
         });
+
+        private async ValueTask<EventV1> SetEventV1AsImmediateAsync(EventV1 eventV1)
+        {
+            DateTimeOffset now =
+                await this.dateTimeBroker.GetDateTimeOffsetAsync();
+
+            eventV1.Type = EventV1Type.Immediate;
+            eventV1.UpdatedDate = now;
+
+            return await this.eventV1Service.ModifyEventV1Async(eventV1);
+        }
     }
 }
