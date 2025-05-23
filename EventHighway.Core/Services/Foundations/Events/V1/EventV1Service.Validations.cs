@@ -95,7 +95,7 @@ namespace EventHighway.Core.Services.Foundations.Events.V1
             }
         }
 
-        private static void alidateEventV1AgainstStorage(
+        private static void ValidateEventV1AgainstStorage(
             EventV1 incomingEventV1,
             EventV1 storageEventV1)
         {
@@ -107,8 +107,13 @@ namespace EventHighway.Core.Services.Foundations.Events.V1
                 (Rule: IsNotSameAsStorage(
                     firstDate: incomingEventV1.CreatedDate,
                     secondDate: storageEventV1.CreatedDate),
+                Parameter: nameof(EventV1.CreatedDate)),
 
-                Parameter: nameof(EventV1.CreatedDate)));
+                (Rule: IsEarlierThan(
+                    firstDate: incomingEventV1.UpdatedDate,
+                    secondDate: storageEventV1.UpdatedDate),
+
+                Parameter: nameof(EventV1.UpdatedDate)));
         }
 
         private static void ValidateEventV1Exists(

@@ -46,9 +46,9 @@ namespace EventHighway.Core.Services.Foundations.Events.V1
 
             EventV1 maybeEventV1 =
                 await this.storageBroker.SelectEventV1ByIdAsync(
-            eventV1.Id);
+                    eventV1.Id);
 
-            alidateEventV1AgainstStorage(maybeEventV1, eventV1);
+            ValidateEventV1AgainstStorage(eventV1, maybeEventV1);
 
             return await storageBroker.UpdateEventV1Async(eventV1);
         });

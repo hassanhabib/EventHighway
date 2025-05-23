@@ -105,7 +105,12 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V1
 
             invalidEventV1Exception.AddData(
                 key: nameof(EventV1.UpdatedDate),
-                values: "Required");
+
+                values:
+                [
+                    "Required",
+                    $"Date is the same as {nameof(EventV1.CreatedDate)}."
+                ]);
 
             var expectedEventV1ValidationException =
                 new EventV1ValidationException(
