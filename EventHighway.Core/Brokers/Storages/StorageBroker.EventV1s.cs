@@ -23,6 +23,9 @@ namespace EventHighway.Core.Brokers.Storages
         public async ValueTask<EventV1> SelectEventV1ByIdAsync(Guid eventV1Id) =>
             await SelectAsync<EventV1>(eventV1Id);
 
+        public async ValueTask<EventV1> UpdateEventV1Async(EventV1 eventV1) =>
+            await UpdateAsync(eventV1);
+
         public async ValueTask<EventV1> DeleteEventV1Async(EventV1 eventV1) =>
             await DeleteAsync(eventV1);
     }
