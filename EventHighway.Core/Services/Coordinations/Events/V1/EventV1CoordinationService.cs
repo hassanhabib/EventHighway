@@ -73,6 +73,9 @@ namespace EventHighway.Core.Services.Coordinations.Events.V1
             foreach (EventV1 eventV1 in eventV1s)
             {
                 await ProcessEventListenerV1sAsync(eventV1);
+
+                await this.eventV1OrchestrationService
+                    .MarkEventV1AsImmediateAsync(eventV1);
             }
         });
 
@@ -103,9 +106,6 @@ namespace EventHighway.Core.Services.Coordinations.Events.V1
                     eventListenerV1,
                     addedListenerEventV1);
             }
-
-            await this.eventV1OrchestrationService
-                .MarkEventV1AsImmediateAsync(eventV1);
         }
 
         public ValueTask<EventV1> RemoveEventV1ByIdAsync(Guid eventV1Id) =>
