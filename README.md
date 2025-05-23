@@ -1,5 +1,5 @@
 <div style="margin: 15px" align=center>
-	<img style="width: 30%; margin: 15px;" src="https://raw.githubusercontent.com/hassanhabib/EventHighway/refs/heads/main/EventHighway.Core/EventHighwayLogo.png"/>
+	<img style="width: 30%; margin: 15px;" src="https://raw.githubusercontent.com/hassanhabib/EventHighway/main/EventHighway.Core/EventHighwayLogo.png"/>
 </div>
 
 [![.NET](https://github.com/hassanhabib/EventHighway/actions/workflows/dotnet.yml/badge.svg)](https://github.com/hassanhabib/RESTFulSense/actions/workflows/dotnet.yml)
