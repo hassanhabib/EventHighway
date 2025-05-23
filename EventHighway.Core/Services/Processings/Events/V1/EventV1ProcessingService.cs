@@ -50,7 +50,7 @@ namespace EventHighway.Core.Services.Processings.Events.V1
                 eventV1.ScheduledDate < now);
         });
 
-        public ValueTask<EventV1> ModifyEventV1Async(EventV1 eventV1) =>
+        public ValueTask<EventV1> MarkEventV1AsImmediateAsync(EventV1 eventV1) =>
         TryCatch(async () =>
         {
             ValidateEventV1IsNotNull(eventV1);

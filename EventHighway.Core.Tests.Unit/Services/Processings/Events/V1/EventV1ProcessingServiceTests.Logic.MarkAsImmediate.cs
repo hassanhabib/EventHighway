@@ -13,13 +13,15 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V1
     public partial class EventV1ProcessingServiceTests
     {
         [Fact]
-        public async Task ShouldModifyEventV1Async()
+        public async Task ShouldMarkEventV1AsImmediateAsync()
         {
             // given
             EventV1 randomEventV1 =
-                CreateRandomEventV1();
+                CreateRandomEventV1(
+                    eventV1Type: EventV1Type.Scheduled);
 
             EventV1 inputEventV1 = randomEventV1;
+            inputEventV1.Type = EventV1Type.Immediate;
             EventV1 modifiedEventV1 = inputEventV1;
 
             EventV1 expectedEventV1 =
@@ -33,7 +35,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V1
             // when
             EventV1 actualEventV1 =
                 await this.eventV1ProcessingService
-                    .ModifyEventV1Async(
+                    .MarkEventV1AsImmediateAsync(
                         inputEventV1);
 
             // then
