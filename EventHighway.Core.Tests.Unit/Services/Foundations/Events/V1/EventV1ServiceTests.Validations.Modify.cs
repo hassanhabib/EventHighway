@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Foundations.Events.V1.Exceptions;
@@ -53,6 +54,86 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V1
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        private async Task ShouldThrowValidationExceptionOnModifyIfEventV1IsInvalidAndLogItAsync(
+            string invalidText)
+        {
+            EventV1Type invalidEventV1Type = GetInvalidEnum<EventV1Type>();
+
+            var invalidEventV1 = new EventV1
+            {
+                Id = Guid.Empty,
+                Content = invalidText,
+                Type = invalidEventV1Type,
+                EventAddressId = Guid.Empty
+            };
+
+            var invalidEventV1Exception =
+                new InvalidEventV1Exception(
+                    message: "Event is invalid, fix the errors and try again.");
+
+            invalidEventV1Exception.AddData(
+                key: nameof(EventV1.Id),
+                values: "Required");
+
+            invalidEventV1Exception.AddData(
+                key: nameof(EventV1.Content),
+                values: "Required");
+
+            invalidEventV1Exception.AddData(
+                key: nameof(EventV1.EventAddressId),
+                values: "Required");
+
+            invalidEventV1Exception.AddData(
+                key: nameof(EventV1.Type),
+                values: "Value is not recognized");
+
+            invalidEventV1Exception.AddData(
+                key: nameof(EventV1.CreatedDate),
+                values: "Required");
+
+            invalidEventV1Exception.AddData(
+                key: nameof(EventV1.UpdatedDate),
+                values: "Required");
+
+            var expectedEventV1ValidationException =
+                new EventV1ValidationException(
+                    message: "Event validation error occurred, fix the errors and try again.",
+                    innerException: invalidEventV1Exception);
+
+            // when
+            ValueTask<EventV1> modifyEventV1Task =
+                this.eventV1Service.ModifyEventV1Async(invalidEventV1);
+
+            EventV1ValidationException actualEventV1ValidationException =
+                await Assert.ThrowsAsync<EventV1ValidationException>(
+                    modifyEventV1Task.AsTask);
+
+            // then
+            actualEventV1ValidationException.Should().BeEquivalentTo(
+                expectedEventV1ValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetDateTimeOffsetAsync(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventV1ValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateEventV1Async(It.IsAny<EventV1>()),
+                    Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
     }
