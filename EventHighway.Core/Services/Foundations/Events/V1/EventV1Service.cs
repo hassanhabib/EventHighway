@@ -39,6 +39,20 @@ namespace EventHighway.Core.Services.Foundations.Events.V1
         public ValueTask<IQueryable<EventV1>> RetrieveAllEventV1sAsync() =>
         TryCatch(async () => await this.storageBroker.SelectAllEventV1sAsync());
 
+        public ValueTask<EventV1> ModifyEventV1Async(EventV1 eventV1) =>
+        TryCatch(async () =>
+        {
+            await ValidateEventV1OnModifyAsync(eventV1);
+
+            EventV1 maybeEventV1 =
+                await this.storageBroker.SelectEventV1ByIdAsync(
+                    eventV1.Id);
+
+            ValidateEventV1AgainstStorage(eventV1, maybeEventV1);
+
+            return await storageBroker.UpdateEventV1Async(eventV1);
+        });
+
         public ValueTask<EventV1> RemoveEventV1ByIdAsync(Guid eventV1Id) =>
         TryCatch(async () =>
         {
