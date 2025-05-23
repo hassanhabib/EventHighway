@@ -267,5 +267,67 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V1
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnModifyIfEventV1DoesNotExistAndLogItAsync()
+        {
+            // given
+            DateTimeOffset randomDateTime = GetRandomDateTimeOffset();
+            int randomDaysAgo = GetRandomNegativeNumber();
+            EventV1 randomEventV1 = CreateRandomEventV1(randomDateTime);
+            EventV1 nonExistingEventV1 = randomEventV1;
+            nonExistingEventV1.CreatedDate = randomDateTime.AddDays(randomDaysAgo);
+            EventV1 nullEventV1 = null;
+
+            var notFoundEventV1Exception =
+                new NotFoundEventV1Exception(
+                    message: $"Could not find event with id: {nonExistingEventV1.Id}.");
+
+            var expectedEventV1ValidationException =
+                new EventV1ValidationException(
+                    message: "Event validation error occurred, fix the errors and try again.",
+                    innerException: notFoundEventV1Exception);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetDateTimeOffsetAsync())
+                    .ReturnsAsync(randomDateTime);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectEventV1ByIdAsync(nonExistingEventV1.Id))
+                    .ReturnsAsync(nullEventV1);
+
+            // when
+            ValueTask<EventV1> modifyEventV1Task =
+                this.eventV1Service.ModifyEventV1Async(nonExistingEventV1);
+
+            EventV1ValidationException actualEventV1ValidationException =
+                await Assert.ThrowsAsync<EventV1ValidationException>(
+                    modifyEventV1Task.AsTask);
+
+            // then
+            actualEventV1ValidationException.Should()
+                .BeEquivalentTo(expectedEventV1ValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetDateTimeOffsetAsync(),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectEventV1ByIdAsync(nonExistingEventV1.Id),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventV1ValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateEventV1Async(It.IsAny<EventV1>()),
+                    Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
