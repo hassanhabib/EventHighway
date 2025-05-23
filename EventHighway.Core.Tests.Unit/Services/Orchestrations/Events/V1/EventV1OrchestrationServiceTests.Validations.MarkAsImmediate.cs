@@ -13,7 +13,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V1
     public partial class EventV1OrchestrationServiceTests
     {
         [Fact]
-        public async Task ShouldThrowValidationExceptionOnModifyIfEventV1IsNullAndLogItAsync()
+        public async Task ShouldThrowValidationExceptionOnMarkAsImmediateIfEventV1IsNullAndLogItAsync()
         {
             // given
             EventV1 nullEventV1 = null;
@@ -28,13 +28,13 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V1
                     innerException: nullEventV1OrchestrationException);
 
             // when
-            ValueTask<EventV1> modifyEventV1Task =
-                this.eventV1OrchestrationService.ModifyEventV1Async(nullEventV1);
+            ValueTask<EventV1> markEventV1AsImmediateTask =
+                this.eventV1OrchestrationService.MarkEventV1AsImmediateAsync(nullEventV1);
 
             EventV1OrchestrationValidationException
                 actualEventV1OrchestrationValidationException =
                     await Assert.ThrowsAsync<EventV1OrchestrationValidationException>(
-                        modifyEventV1Task.AsTask);
+                        markEventV1AsImmediateTask.AsTask);
 
             // then
             actualEventV1OrchestrationValidationException.Should().BeEquivalentTo(

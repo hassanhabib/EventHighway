@@ -59,7 +59,7 @@ namespace EventHighway.Core.Services.Orchestrations.Events.V1
                 .RetrieveScheduledPendingEventV1sAsync();
         });
 
-        public ValueTask<EventV1> ModifyEventV1Async(EventV1 eventV1) =>
+        public ValueTask<EventV1> MarkEventV1AsImmediateAsync(EventV1 eventV1) =>
         TryCatch(async () =>
         {
             ValidateEventV1IsNotNull(eventV1);

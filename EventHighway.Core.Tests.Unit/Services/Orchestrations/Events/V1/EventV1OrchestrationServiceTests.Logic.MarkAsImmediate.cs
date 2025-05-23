@@ -13,7 +13,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V1
     public partial class EventV1OrchestrationServiceTests
     {
         [Fact]
-        public async Task ShouldModifyEventV1Async()
+        public async Task ShouldMarkEventV1AsImmediateAsync()
         {
             // given
             EventV1 randomEventV1 =
@@ -32,7 +32,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V1
             // when
             EventV1 actualEventV1 =
                 await this.eventV1OrchestrationService
-                    .ModifyEventV1Async(
+                    .MarkEventV1AsImmediateAsync(
                         inputEventV1);
 
             // then

@@ -16,7 +16,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V1
     {
         [Theory]
         [MemberData(nameof(EventV1ValidationExceptions))]
-        public async Task ShouldThrowDependencyValidationExceptionOnModifyIfValidationExceptionOccursAndLogItAsync(
+        public async Task ShouldThrowDependencyValidationExceptionOnMarkAsImmediateIfValidationErrorAndLogItAsync(
             Xeption validationException)
         {
             // given
@@ -32,14 +32,14 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V1
                     .ThrowsAsync(validationException);
 
             // when
-            ValueTask<EventV1> modifyEventV1Task =
-                this.eventV1OrchestrationService.ModifyEventV1Async(
+            ValueTask<EventV1> markEventV1AsImmediateTask =
+                this.eventV1OrchestrationService.MarkEventV1AsImmediateAsync(
                     someEventV1);
 
             EventV1OrchestrationDependencyValidationException
                 actualEventV1OrchestrationDependencyValidationException =
                     await Assert.ThrowsAsync<EventV1OrchestrationDependencyValidationException>(
-                        modifyEventV1Task.AsTask);
+                        markEventV1AsImmediateTask.AsTask);
 
             // then
             actualEventV1OrchestrationDependencyValidationException.Should()
@@ -62,7 +62,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V1
 
         [Theory]
         [MemberData(nameof(EventV1DependencyExceptions))]
-        public async Task ShouldThrowDependencyExceptionOnModifyIfDependencyExceptionOccursAndLogItAsync(
+        public async Task ShouldThrowDependencyExceptionOnMarkAsImmediateIfDependencyExceptionOccursAndLogItAsync(
             Xeption dependencyException)
         {
             // given
@@ -78,14 +78,14 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V1
                     .ThrowsAsync(dependencyException);
 
             // when
-            ValueTask<EventV1> modifyEventV1Task =
-                this.eventV1OrchestrationService.ModifyEventV1Async(
+            ValueTask<EventV1> markEventV1AsImmediateTask =
+                this.eventV1OrchestrationService.MarkEventV1AsImmediateAsync(
                     someEventV1);
 
             EventV1OrchestrationDependencyException
                 actualEventV1OrchestrationDependencyException =
                     await Assert.ThrowsAsync<EventV1OrchestrationDependencyException>(
-                        modifyEventV1Task.AsTask);
+                        markEventV1AsImmediateTask.AsTask);
 
             // then
             actualEventV1OrchestrationDependencyException.Should()
@@ -107,7 +107,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V1
         }
 
         [Fact]
-        public async Task ShouldThrowServiceExceptionOnModifyIfExceptionOccursAndLogItAsync()
+        public async Task ShouldThrowServiceExceptionOnMarkAsImmediateIfExceptionOccursAndLogItAsync()
         {
             // given
             EventV1 someEventV1 = CreateRandomEventV1();
@@ -128,14 +128,14 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V1
                     .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<EventV1> modifyEventV1Task =
-                this.eventV1OrchestrationService.ModifyEventV1Async(
+            ValueTask<EventV1> markEventV1AsImmediateTask =
+                this.eventV1OrchestrationService.MarkEventV1AsImmediateAsync(
                     someEventV1);
 
             EventV1OrchestrationServiceException
                 actualEventV1OrchestrationServiceException =
                     await Assert.ThrowsAsync<EventV1OrchestrationServiceException>(
-                        modifyEventV1Task.AsTask);
+                        markEventV1AsImmediateTask.AsTask);
 
             // then
             actualEventV1OrchestrationServiceException.Should()
