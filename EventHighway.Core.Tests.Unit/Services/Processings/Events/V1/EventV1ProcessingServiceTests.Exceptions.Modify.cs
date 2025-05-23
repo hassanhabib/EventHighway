@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers 
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using EventHighway.Core.Models.Services.Foundations.Events.V1;
 using EventHighway.Core.Models.Services.Processings.Events.V1.Exceptions;
@@ -93,6 +94,54 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V1
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogErrorAsync(It.Is(SameExceptionAs(
                     expectedEventV1ProcessingDependencyException))),
+                        Times.Once);
+
+            this.eventV1ServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnModifyIfExceptionOccursAndLogItAsync()
+        {
+            // given
+            EventV1 someEventV1 = CreateRandomEventV1();
+            var serviceException = new Exception();
+
+            var failedEventV1ProcessingServiceException =
+                new FailedEventV1ProcessingServiceException(
+                    message: "Failed event service error occurred, contact support.",
+                    innerException: serviceException);
+
+            var expectedEventV1ProcessingExceptionException =
+                new EventV1ProcessingServiceException(
+                    message: "Event service error occurred, contact support.",
+                    innerException: failedEventV1ProcessingServiceException);
+
+            this.eventV1ServiceMock.Setup(service =>
+                service.ModifyEventV1Async(It.IsAny<EventV1>()))
+                    .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<EventV1> modifyEventV1Task =
+                this.eventV1ProcessingService.ModifyEventV1Async(
+                    someEventV1);
+
+            EventV1ProcessingServiceException
+                actualEventV1ProcessingServiceException =
+                    await Assert.ThrowsAsync<EventV1ProcessingServiceException>(
+                        modifyEventV1Task.AsTask);
+
+            // then
+            actualEventV1ProcessingServiceException.Should()
+                .BeEquivalentTo(expectedEventV1ProcessingExceptionException);
+
+            this.eventV1ServiceMock.Verify(service =>
+                service.ModifyEventV1Async(It.IsAny<EventV1>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventV1ProcessingExceptionException))),
                         Times.Once);
 
             this.eventV1ServiceMock.VerifyNoOtherCalls();
