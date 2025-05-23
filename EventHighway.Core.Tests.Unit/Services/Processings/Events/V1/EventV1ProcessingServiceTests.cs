@@ -94,6 +94,14 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V1
                     .Create();
         }
 
+        private static EventV1 CreateRandomEventV1(EventV1Type eventV1Type)
+        {
+            return CreateEventV1Filler(
+                dates: GetRandomDateTimeOffset(),
+                eventV1Type: eventV1Type)
+                    .Create();
+        }
+
         private static IQueryable<EventV1> CreateRandomEventV1s()
         {
             return CreateEventV1Filler(
