@@ -103,6 +103,9 @@ namespace EventHighway.Core.Services.Coordinations.Events.V1
                     eventListenerV1,
                     addedListenerEventV1);
             }
+
+            await this.eventV1OrchestrationService
+                .MarkEventV1AsImmediateAsync(eventV1);
         }
 
         public ValueTask<EventV1> RemoveEventV1ByIdAsync(Guid eventV1Id) =>
@@ -142,7 +145,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V1
                 listenerEventV1.Status = ListenerEventV1Status.Error;
             }
 
-            listenerEventV1.UpdatedDate = 
+            listenerEventV1.UpdatedDate =
                 await this.dateTimeBroker.GetDateTimeOffsetAsync();
 
             await this.eventListenerV1OrchestrationService
