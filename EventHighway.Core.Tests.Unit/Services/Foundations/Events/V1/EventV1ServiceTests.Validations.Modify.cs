@@ -203,5 +203,69 @@ namespace EventHighway.Core.Tests.Unit.Services.Foundations.Events.V1
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Theory]
+        [MemberData(nameof(MinutesBeforeAndAfterNow))]
+        public async Task ShouldThrowValidationExceptionOnModifyIfUpdatedDateIsNotRecentAndLogItAsync(
+            int minutesBeforeOrAfter)
+        {
+            // given
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
+            EventV1 randomEventV1 = CreateRandomEventV1(randomDateTimeOffset);
+            EventV1 invalidEventV1 = randomEventV1;
+
+            invalidEventV1.UpdatedDate =
+                invalidEventV1.UpdatedDate.AddMinutes(minutesBeforeOrAfter);
+
+            var invalidEventV1Exception =
+                new InvalidEventV1Exception(
+                    message: "Event is invalid, fix the errors and try again.");
+
+            invalidEventV1Exception.AddData(
+                key: nameof(EventV1.UpdatedDate),
+                values: "Date is not recent");
+
+            var expectedEventV1ValidationException =
+                new EventV1ValidationException(
+                    message: "Event validation error occurred, fix the errors and try again.",
+                    innerException: invalidEventV1Exception);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetDateTimeOffsetAsync())
+                    .ReturnsAsync(randomDateTimeOffset);
+
+            // when
+            ValueTask<EventV1> modifyEventV1Task =
+                this.eventV1Service.ModifyEventV1Async(invalidEventV1);
+
+            EventV1ValidationException actualEventV1ValidationException =
+                await Assert.ThrowsAsync<EventV1ValidationException>(
+                    modifyEventV1Task.AsTask);
+
+            // then
+            actualEventV1ValidationException.Should()
+                .BeEquivalentTo(expectedEventV1ValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetDateTimeOffsetAsync(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogErrorAsync(It.Is(SameExceptionAs(
+                    expectedEventV1ValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectEventV1ByIdAsync(It.IsAny<Guid>()),
+                    Times.Never);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateEventV1Async(It.IsAny<EventV1>()),
+                    Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
