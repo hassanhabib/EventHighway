@@ -42,7 +42,7 @@ namespace EventHighway.Core.Services.Foundations.Events.V1
         public ValueTask<EventV1> ModifyEventV1Async(EventV1 eventV1) =>
         TryCatch(async () =>
         {
-            await this.dateTimeBroker.GetDateTimeOffsetAsync();
+            ValidateEventV1IsNotNull(eventV1);
 
             return await storageBroker.UpdateEventV1Async(eventV1);
         });
