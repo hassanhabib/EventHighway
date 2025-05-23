@@ -26,7 +26,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V1
                 modifiedEventV1.DeepClone();
 
             this.eventV1ProcessingServiceMock.Setup(service =>
-                service.ModifyEventV1Async(inputEventV1))
+                service.MarkEventV1AsImmediateAsync(inputEventV1))
                     .ReturnsAsync(modifiedEventV1);
 
             // when
@@ -40,7 +40,7 @@ namespace EventHighway.Core.Tests.Unit.Services.Orchestrations.Events.V1
                 expectedEventV1);
 
             this.eventV1ProcessingServiceMock.Verify(broker =>
-                broker.ModifyEventV1Async(inputEventV1),
+                broker.MarkEventV1AsImmediateAsync(inputEventV1),
                     Times.Once);
 
             this.eventV1ProcessingServiceMock
