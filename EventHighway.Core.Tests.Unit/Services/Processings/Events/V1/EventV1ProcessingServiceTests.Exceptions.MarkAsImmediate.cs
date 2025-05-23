@@ -27,8 +27,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V1
                     message: "Event validation error occurred, fix the errors and try again.",
                     innerException: validationException.InnerException as Xeption);
 
-            this.eventV1ServiceMock.Setup(service =>
-                service.ModifyEventV1Async(It.IsAny<EventV1>()))
+            this.dateTimeBrokerMock.Setup(service =>
+                service.GetDateTimeOffsetAsync())
                     .ThrowsAsync(validationException);
 
             // when
@@ -44,14 +44,18 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V1
             actualEventV1ProcessingDependencyValidationException.Should()
                 .BeEquivalentTo(expectedEventV1ProcessingDependencyValidationException);
 
-            this.eventV1ServiceMock.Verify(service =>
-                service.ModifyEventV1Async(It.IsAny<EventV1>()),
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetDateTimeOffsetAsync(),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogErrorAsync(It.Is(SameExceptionAs(
                     expectedEventV1ProcessingDependencyValidationException))),
                         Times.Once);
+
+            this.eventV1ServiceMock.Verify(service =>
+                service.ModifyEventV1Async(It.IsAny<EventV1>()),
+                    Times.Never);
 
             this.eventV1ServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
@@ -70,8 +74,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V1
                     message: "Event dependency error occurred, contact support.",
                     innerException: dependencyException.InnerException as Xeption);
 
-            this.eventV1ServiceMock.Setup(service =>
-                service.ModifyEventV1Async(It.IsAny<EventV1>()))
+            this.dateTimeBrokerMock.Setup(service =>
+                service.GetDateTimeOffsetAsync())
                     .ThrowsAsync(dependencyException);
 
             // when
@@ -87,14 +91,18 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V1
             actualEventV1ProcessingDependencyException.Should()
                 .BeEquivalentTo(expectedEventV1ProcessingDependencyException);
 
-            this.eventV1ServiceMock.Verify(service =>
-                service.ModifyEventV1Async(It.IsAny<EventV1>()),
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetDateTimeOffsetAsync(),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogErrorAsync(It.Is(SameExceptionAs(
                     expectedEventV1ProcessingDependencyException))),
                         Times.Once);
+
+            this.eventV1ServiceMock.Verify(service =>
+                service.ModifyEventV1Async(It.IsAny<EventV1>()),
+                    Times.Never);
 
             this.eventV1ServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
@@ -117,8 +125,8 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V1
                     message: "Event service error occurred, contact support.",
                     innerException: failedEventV1ProcessingServiceException);
 
-            this.eventV1ServiceMock.Setup(service =>
-                service.ModifyEventV1Async(It.IsAny<EventV1>()))
+            this.dateTimeBrokerMock.Setup(service =>
+                service.GetDateTimeOffsetAsync())
                     .ThrowsAsync(serviceException);
 
             // when
@@ -135,14 +143,18 @@ namespace EventHighway.Core.Tests.Unit.Services.Processings.Events.V1
             actualEventV1ProcessingServiceException.Should()
                 .BeEquivalentTo(expectedEventV1ProcessingExceptionException);
 
-            this.eventV1ServiceMock.Verify(service =>
-                service.ModifyEventV1Async(It.IsAny<EventV1>()),
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetDateTimeOffsetAsync(),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogErrorAsync(It.Is(SameExceptionAs(
                     expectedEventV1ProcessingExceptionException))),
                         Times.Once);
+
+            this.eventV1ServiceMock.Verify(service =>
+                service.ModifyEventV1Async(It.IsAny<EventV1>()),
+                    Times.Never);
 
             this.eventV1ServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();

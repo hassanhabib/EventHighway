@@ -73,6 +73,9 @@ namespace EventHighway.Core.Services.Coordinations.Events.V1
             foreach (EventV1 eventV1 in eventV1s)
             {
                 await ProcessEventListenerV1sAsync(eventV1);
+
+                await this.eventV1OrchestrationService
+                    .MarkEventV1AsImmediateAsync(eventV1);
             }
         });
 
@@ -142,7 +145,7 @@ namespace EventHighway.Core.Services.Coordinations.Events.V1
                 listenerEventV1.Status = ListenerEventV1Status.Error;
             }
 
-            listenerEventV1.UpdatedDate = 
+            listenerEventV1.UpdatedDate =
                 await this.dateTimeBroker.GetDateTimeOffsetAsync();
 
             await this.eventListenerV1OrchestrationService
