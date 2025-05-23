@@ -47,9 +47,6 @@ namespace EventHighway.Core.Services.Foundations.Events.V1
 
         private async ValueTask ValidateEventV1OnModifyAsync(EventV1 eventV1)
         {
-            await this.dateTimeBroker
-                .GetDateTimeOffsetAsync();
-
             ValidateEventV1IsNotNull(eventV1);
 
             Validate(
@@ -76,6 +73,9 @@ namespace EventHighway.Core.Services.Foundations.Events.V1
                     secondDate: eventV1.UpdatedDate,
                     secondDateName: nameof(EventV1.CreatedDate)),
 
+                Parameter: nameof(EventV1.UpdatedDate)),
+
+                (Rule: await IsNotRecentAsync(eventV1.UpdatedDate),
                 Parameter: nameof(EventV1.UpdatedDate)));
         }
 
