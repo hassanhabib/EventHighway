@@ -1,5 +1,5 @@
 
-![EventHighway](https://raw.githubusercontent.com/hassanhabib/EventHighway.Core/main/Resources/Images/eventhighway-gitlogo.png)
+![EventHighway](https://raw.githubusercontent.com/hassanhabib/EventHighway/refs/heads/main/EventHighway.Core/Resources/Images/eventhighway-gitlogo.png)
 
 [![.NET](https://github.com/hassanhabib/EventHighway/actions/workflows/dotnet.yml/badge.svg)](https://github.com/hassanhabib/RESTFulSense/actions/workflows/dotnet.yml)
 [![Nuget](https://img.shields.io/nuget/v/EventHighway?logo=nuget&style=default)](https://www.nuget.org/packages/EventHighway)
@@ -14,11 +14,11 @@ EventHighway is Standard-Compliant .NET library for event-driven programming. It
 
 ## 0.1/ High-Level Flow
 
-![High-Level Flow](https://raw.githubusercontent.com/hassanhabib/EventHighway.Core/main/Resources/Diagrams/highlevel-flow.png)
+![High-Level Flow](https://raw.githubusercontent.com/hassanhabib/EventHighway/refs/heads/main/EventHighway.Core/Resources/Diagrams/highlevel-flow.png)
 
 ## 0.2/ In-Depth Architecture
 
-![In-Depth Architecture](https://raw.githubusercontent.com/hassanhabib/EventHighway.Core/main/Resources/Diagrams/indepth-architecture.png)
+![In-Depth Architecture](https://raw.githubusercontent.com/hassanhabib/EventHighway/refs/heads/main/EventHighway.Core/Resources/Diagrams/indepth-architecture.png)
 
 # 1/ How to Use
 
@@ -88,7 +88,7 @@ When an event is published, a notification will be sent to all registered `Event
 
 # Walk-through Video
 
-![YouTube EventHighway Introduction](https://raw.githubusercontent.com/hassanhabib/EventHighway.Core/main/Resources/Images/YT/intro-eventhighway.jpg)
+[![YouTube EventHighway Introduction](https://raw.githubusercontent.com/hassanhabib/EventHighway/refs/heads/main/EventHighway.Core/Resources/Images/YT/intro-eventhighway.jpg)](https://www.youtube.com/watch?v=z3_wx29Cs9U)
 
 # Note
 
